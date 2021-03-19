@@ -1,0 +1,2239 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="DsoDHJ1Km7LX7l7UnoG8dB2QrygUWW345_JkdBOj1Vw">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="ahe2m7RGVx">
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italicRoboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/solar-system-16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/solar-system-32.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Z是噪声，也就是G的输入，可以是高斯噪声，一般为均匀噪声； 从贝叶斯的角度上做，生成模型可以认为是都是属于ML(最大化似然）的过程，因为，ML就是找到能使样本数据的类条件概率最大化的分布参数。那如果经过训练集训练，我们找到该参数,此时我们的模型是有最大可能生成和样本训练数据具有同样分布的数据，这个也是生成模型的一个目标。当然这个方法的前提就是对数据的分布进行一个假设，然后才能求参数。比如假设数据">
+<meta name="keywords" content="GAN,生成模型,Adversarial Training">
+<meta property="og:type" content="article">
+<meta property="og:title" content="对GAN再次学习">
+<meta property="og:url" content="http://haokailong.top/2020/12/23/对GAN再次学习/index.html">
+<meta property="og:site_name" content="Hold the Torch">
+<meta property="og:description" content="Z是噪声，也就是G的输入，可以是高斯噪声，一般为均匀噪声； 从贝叶斯的角度上做，生成模型可以认为是都是属于ML(最大化似然）的过程，因为，ML就是找到能使样本数据的类条件概率最大化的分布参数。那如果经过训练集训练，我们找到该参数,此时我们的模型是有最大可能生成和样本训练数据具有同样分布的数据，这个也是生成模型的一个目标。当然这个方法的前提就是对数据的分布进行一个假设，然后才能求参数。比如假设数据">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/generative_model.webp">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/CGAN/conditionalGAN.webp">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/DCGAN/infoGAN1.png">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/DCGAN/infoGAN2.png">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/CGAN/AC-GAN.png">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/DCGAN/CycleGAN.png">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/DCGAN/cg.png">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/DCGAN/BigGAN.jpg">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/DCGAN/BigGANR.jpg">
+<meta property="og:updated_time" content="2020-12-24T07:11:56.286Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="对GAN再次学习">
+<meta name="twitter:description" content="Z是噪声，也就是G的输入，可以是高斯噪声，一般为均匀噪声； 从贝叶斯的角度上做，生成模型可以认为是都是属于ML(最大化似然）的过程，因为，ML就是找到能使样本数据的类条件概率最大化的分布参数。那如果经过训练集训练，我们找到该参数,此时我们的模型是有最大可能生成和样本训练数据具有同样分布的数据，这个也是生成模型的一个目标。当然这个方法的前提就是对数据的分布进行一个假设，然后才能求参数。比如假设数据">
+<meta name="twitter:image" content="http://haokailong.top/images/blog/2020/generative_model.webp">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://haokailong.top/2020/12/23/对GAN再次学习/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>对GAN再次学习 | Hold the Torch</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-138297445-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-138297445-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hold the Torch</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-wordcloud">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/wordcloud/" rel="section"><i class="menu-item-icon fa fa-fw fa-cloud"></i> <br>词云</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/23/对GAN再次学习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">对GAN再次学习
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-24 15:11:56" itemprop="dateModified" datetime="2020-12-24T15:11:56+08:00">2020-12-24</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/12/23/对GAN再次学习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/23/对GAN再次学习/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ol>
+<li>Z是噪声，也就是G的输入，可以是高斯噪声，一般为均匀噪声；</li>
+<li>从贝叶斯的角度上做，生成模型可以认为是都是属于ML(最大化似然）的过程，因为，ML就是找到能使样本数据的类条件概率最大化的分布参数。那如果经过训练集训练，我们找到该参数,此时我们的模型是有最大可能生成和样本训练数据具有同样分布的数据，这个也是生成模型的一个目标。当然这个方法的前提就是对数据的分布进行一个假设，然后才能求参数。比如假设数据分布是符合高斯分布的。</li>
+</ol>
+<p><img src="/images/blog/2020/generative_model.webp" alt></p>
+<ol>
+<li>GoodFellow的论文证明了Gans 全局最小点的充分必要条件是:</li>
+</ol>
+<script type="math/tex; mode=display">
+p_g = p_{real}</script><p>pg表示generate 生成数据的分布函数</p>
+<p>pdata表示真实data的分布函数</p>
+<ol>
+<li>我们知道，G和D是一个对抗的过程，而这个对抗是，G不断的学习，D也不断的学习，而且需要保证两者学习速率基本一致，也就是都能不断的从对方那里学习到“知识”来提升自己。否则，就是这两者哪一个学习的过快，或过慢，以至于双方的实力不再均衡，就会导致实力差的那一方的“loss”不再能“下降”，也就不在学到“知识”。一般的对抗模型中的G和D的网络框架大小基本上是相似(可能存在较小的差异)，而且，训练的过程就是先训练G一次，再训练D一次，这也是为了稳定训练的一个保证。当然这并不能完全稳定训练，所以，对抗网络的稳定训练，依然是一个研究的热点和方向。</li>
+<li>这是DCGAN的生成网络模型的架构 (5层反卷积)，对于LSUN，Imagenet-1k大小的数据集，我们可以使用这个架构，但并不是说对于任何数据集，都可以，比如，更大，或者更小的，那对应的卷积架构就需要进行改变。<strong>比如，对于mnist数据集，G和D的网络架构都相应地减小了，否则不能拟合</strong>，产生不了好的结果(亲测)。</li>
+<li>因为“反卷积”存在于卷积的反向传播中。<font color="red">其中反向传播的滤波器矩阵，是前向传播(卷积)的转置</font> (<strong>如何理解？</strong>)，所以，这就是它的名字的由来。只不过我们把反向传播的操作拿到了前向传播来做，就产生了所谓的反卷积一说。但是transport-convolution只能还原信号的大小，不能还原其value，所以，不能叫做反卷积，不是真正的逆操作。</li>
+</ol>
+<a id="more"></a>
+<hr>
+<p>DCGAN之我的测试</p>
+<p>我对自己编写的代码也进行了一些测试，修改了一些参数。得到的启发如下。</p>
+<p>(1)如果模型太大，则会出现训练不稳定。</p>
+<p>什么是模型过大，模型过大是同样大小的数据集的分类任务情况下，比监督训练的模型较大，如果较大的话，会出现，生成图片的不稳定。主要体现就是生成的图片，在开始的时候有趋于变优的过程，最后却变得越来越模糊。</p>
+<p>(2)采样的噪声如果为10时，和100有何区别。</p>
+<p>发现，采样噪声维度越小，产生的图片的共性越大。</p>
+<p>(3)将测试采样进行变动，发现高斯和均匀分布采样基本兼容，其他是乱的。</p>
+<p>(4)训练G和D的顺序似乎没有什么关系。(值得思考)</p>
+<hr>
+<p><img src="/images/blog/2020/CGAN/conditionalGAN.webp" alt></p>
+<p>可视化的介绍</p>
+<p>深度学习的参数可视化是了解深度学习的学习过程或者结果的方法或者工具。那一般分为三种方法。</p>
+<p>1.权重可视化</p>
+<p>这个比较直观，一般都是对卷积权重进行可视化。</p>
+<p>操作流程:直接取参数，然后进行一定的归一化，然后转化为RGB图片。</p>
+<p>2.激活值可视化</p>
+<p>这个是对激活函数的输出进行可视化，那么就需要进行NN的前向传播。</p>
+<p>操作流程:先进行前向传播，取某一层的激活值，然后进行归一化，最后转化为RGB图片。</p>
+<p>3.反卷积的可视化</p>
+<p>这篇论文介绍的可视化，是需要经过训练，然后经过反卷积 (反卷积层+反pooling层) 的输出值的可视化。详细的请看论文。</p>
+<h1 id="对于DCGAN的实现细节以及一些tricks，可以查看："><a href="#对于DCGAN的实现细节以及一些tricks，可以查看：" class="headerlink" title="对于DCGAN的实现细节以及一些tricks，可以查看："></a>对于DCGAN的实现细节以及一些tricks，可以查看：</h1><p><a href="https://blog.csdn.net/c2a2o2/article/details/78535795" target="_blank" rel="noopener">https://blog.csdn.net/c2a2o2/article/details/78535795</a></p>
+<h1 id="InfoGAN"><a href="#InfoGAN" class="headerlink" title="InfoGAN"></a>InfoGAN</h1><p>既然原始的噪声是杂乱无章的，那就人为地加上一些限制，于是作者把原来的噪声输入分解成两部分：一是原来的<strong>z</strong>；二是由若干个latent variables拼接而成的latent code <strong>c</strong>，这些latent variables会有一个先验的概率分布，且可以是离散的或连续的，用于代表生成数据的不同特征维度，比如MNIST实验的latent variables就可以由一个取值范围为0-9的离散随机变量（用于表示数字）和两个连续的随机变量（分别用于表示倾斜度和粗细度）构成。</p>
+<p><font color="orange">但仅有这个设定还不够，因为GAN中Generator的学习具有很高的自由度，</font>它很容易找到一个解，使得:</p>
+<script type="math/tex; mode=display">
+p_G(x|c) = p_G(x)</script><p>导致<strong>c</strong>完全不起作用。</p>
+<p><strong>mutual information</strong></p>
+<p>作者从信息论中得到启发，提出了基于互信息（<strong>mutual information</strong>）的正则化项。<strong>c</strong>的作用是对生成数据的分布施加影响，于是需要对这两者的关系建模，在信息论中，互信息<em>I(X;Y)</em>用来衡量“已知<em>Y</em>的情况下可获取多少有关<em>X</em>的信息”，计算公式为：</p>
+<script type="math/tex; mode=display">
+I(X;Y) = H(X) - H(X|Y) = H(Y) - H(Y|X)</script><p>其中<em>H</em>表示计算entropy，<em>H(X|Y)</em>衡量的是“给定<em>Y</em>的情况下，<em>X</em>的不确定性”。从公式可以得知，当<em>X</em>和<em>Y</em>毫无关联时，<em>H(X|Y)</em> = <em>H(X)</em>，<em>I(X;Y)</em> = 0，取得最小值；当<em>X</em>和<em>Y</em>有明确的关联时，已知<em>Y</em>时，<em>X</em>没有不确定性，因而<em>H(X|Y)</em> = 0，此时<em>I(X;Y)</em>取得最大值。</p>
+<p>所以，现在优化目标就很明确了：要让<strong>c</strong>和Generator分布<strong>G(z, c)</strong>的互信息达到最大值。现在目标函数可改写为：</p>
+<script type="math/tex; mode=display">
+\min _G \max_D  V_I(D,G) = V(D,G) - \lambda I(c;G(z,c))</script><p><strong>Variational Mutual Information Maximization</strong></p>
+<p>上述的推导看似已经很充足了，然而上面互信息的计算涉及后验概率分布<strong>P(c|x)</strong>，而后者在实际中是很难获取的，所以需要定义一个辅助性的概率分布<strong>Q(c|x)</strong>，采用一种叫作Variational Information Maximization的技巧对互信息进行下界拟合：</p>
+<p><img src="/images/blog/2020/DCGAN/infoGAN1.png" alt></p>
+<p>再<strong>利用概率积分公式</strong>，可把这个下界转化成如下的形式：</p>
+<script type="math/tex; mode=display">
+L_I(G,Q) = E_{c \sim P(c), x \sim G(z,c)} [\log  Q(c|x)] + H(c)</script><p>很容易在现有的框架中进行优化，当它取得最大值<em>H(c)</em>时，我们也获得了互信息的最大值，达到最优结果。</p>
+<p>现在目标函数改为：</p>
+<script type="math/tex; mode=display">
+\min_{G,Q}\max_{D} V_{\mathrm{InfoGAN}}(D,G,Q) = V(D,G) -  \lambda L_I(G,Q)</script><p><strong>网络模型概览</strong></p>
+<p>最终的网络模型示意图为：</p>
+<p><img src="/images/blog/2020/DCGAN/infoGAN2.png" alt></p>
+<p>网络是基于DC-GAN（Deep Convolutional GAN）的，G和D都由CNN构成。在此基础上，Q和D共享卷积网络，然后分别通过各自的全连接层输出不同的内容：Q输出对应于fake data的<strong>c</strong>的概率分布，D则仍然判别真伪。</p>
+<h1 id="AC-GAN"><a href="#AC-GAN" class="headerlink" title="AC-GAN"></a>AC-GAN</h1><p><img src="/images/blog/2020/CGAN/AC-GAN.png" alt></p>
+<h1 id="CycleGAN"><a href="#CycleGAN" class="headerlink" title="CycleGAN"></a>CycleGAN</h1><p>怎么实现两个domain的数据迁移呢？下面以图像为例来阐述吧。</p>
+<p>实现图像间的翻译，借助GAN，应该有两个domain的discriminator，每个discriminator单独判断各自domain的数据是否是真实数据。至于generator，图像的翻译需要将domain A的图像翻成domain B的图像，所以generator有点像autoencoder结构，只是decoder的输出不是domain A的图像，而是domain B的图像。为了充分利用两个discriminator，还应该有一个翻译回去的过程，也就是说，还有一个generator，它将domain B的数据翻译到domain A。如果你看过对偶学习（dual learning）那篇文章，你应该对此很熟悉。感觉有点绕？还是看图吧。</p>
+<p><img src="/images/blog/2020/DCGAN/CycleGAN.png" alt></p>
+<p>图中的虚线箭头表示『将箭头起始的图像当做箭头结束的图像，按照流程图继续走 』，什么意思呢？对于Real A，它的完整流程是这样的：$A<em>{real} \to B</em>{fake} \to A<em>{fake}$，对于Real B，它的流程是这样的：$B</em>{real} \to A<em>{fake} \to B</em>{fake}$。可以看到，无论是domain A还是domain B的图像，整个流程就是一个cycle啊！所以叫CycleGAN。整个cycle可以看成是一个autoencoder，两个generator看成是encoder和decoder。而两个discriminator则是准则。(<font color="orange">PS：这里的虚线真的给人误导，想了半天…</font>)</p>
+<p>一般来说，两个generator的设计是这样的：</p>
+<p><img src="/images/blog/2020/DCGAN/cg.png" alt></p>
+<p>z在G中控制一些属性，使得生成的结果不是唯一的，可以是多种多样的。</p>
+<p>明确了CycleGAN的流程，我们就能写出它的目标函数了：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/26995910" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/26995910</a></p>
+<p>相比于普通的GAN网络，主要是增加了一个重构误差，用于限制图像的语义偏移不要太大。<strong>举个栗子：将一张苹果的图片 → 一张橘子的漫画 → 一张香蕉的照片</strong>，整个过程都符合损失函数的限制，但是造成了语义偏移。</p>
+<p>重构误差采用以下写法：</p>
+<script type="math/tex; mode=display">
+\mathbb{E}_{x \in \mathbb{P}} ||x - G_{AB}(G_{BA}(x))||</script><p>对于generator添加重构误差项，跟对偶学习一样，能够引导两个generator更好地完成encode和decode的任务。而两个D则起到纠正编码结果符合某个domain的风格的作用。结构很简答，但是很有效。并且，你<strong>并不需要pair的数据</strong>。</p>
+<h2 id="1-去掉重构误差，模型是否还有效？"><a href="#1-去掉重构误差，模型是否还有效？" class="headerlink" title="1. 去掉重构误差，模型是否还有效？"></a>1. 去掉重构误差，模型是否还有效？</h2><p>模型仍然有效，只是收敛比较慢，毕竟缺少了重构误差这样的强引导信息。以及，虽然实现了风格迁移，但是人物的一些属性改变了，比如可能出现『变性』、『变脸』，而姿态在转换的时候一般不出现错误。<strong>这表明，对偶重构误差能够引导模型在迁移的时候保留图像固有的属性；而对抗loss则负责确定模型该学什么，该怎么迁移</strong>。</p>
+<h2 id="2-能不能不要完整的cycle，只做一半？"><a href="#2-能不能不要完整的cycle，只做一半？" class="headerlink" title="2. 能不能不要完整的cycle，只做一半？"></a>2. 能不能不要完整的cycle，只做一半？</h2><p>结论是不行，缺少了对偶的部分，就少了重构误差，仅仅依靠$D<em>B$来纠正$G</em>{AB}$是不够的。从讨论1来看，对偶的作用还是很大的，即使缺少了重构误差。以上面CelebA的cartoonize为例，迁移的图像全是随机噪声。这里就不放结果了。</p>
+<h1 id="cedGAN"><a href="#cedGAN" class="headerlink" title="cedGAN"></a>cedGAN</h1><p><a href="http://www.360doc.com/content/19/0417/21/32196507_829507680.shtml" target="_blank" rel="noopener">http://www.360doc.com/content/19/0417/21/32196507_829507680.shtml</a></p>
+<h1 id="ProGAN"><a href="#ProGAN" class="headerlink" title="ProGAN"></a>ProGAN</h1><p>主要贡献是提出了一种循序渐进的生成高质量图片的方法，</p>
+<h2 id="StyleGAN"><a href="#StyleGAN" class="headerlink" title="StyleGAN"></a>StyleGAN</h2><p>而StyleGAN则是在此基础上添加了对各个属性的控制，例如性别、发色、是否戴眼镜等。</p>
+<blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/93748098" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/93748098</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/63230738" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/63230738</a></p>
+</blockquote>
+<p>感觉StyleGAN的实现非常复杂，有时间的时候去仔细的精读。</p>
+<h1 id="BigGAN"><a href="#BigGAN" class="headerlink" title="BigGAN"></a>BigGAN</h1><p><strong>按照原文，总结一下 BigGAN 的贡献：</strong></p>
+<ul>
+<li>通过大规模 GAN 的应用，BigGAN 实现了生成上的巨大突破；</li>
+<li>采用先验分布 z 的“截断技巧”，允许对样本多样性和保真度进行精细控制；</li>
+<li>在大规模 GAN 的实现上不断克服模型训练问题，采用技巧减小训练的不稳定。</li>
+</ul>
+<p>其中一个很大的原因就是 BigGAN 如它题目 <strong><em>Large Scale GAN Training for High Fidelity Natural Image Synthesis</em></strong> 描述的 <strong>Large Scale</strong>，在训练中 Batch 采用了很大的 Batch，已经达到了 2048（我们平常训练 Batch 正常都是 64 居多），在卷积的通道上也是变大了，还有就是网络的参数变多了，在 2048 的 Batch 下整个网络的参数达到了接近 16 亿（看了一下自己还在用的 GTX 1080 突然沉默了）。</p>
+<p>BigGAN 在先验分布 z 的嵌入上做了改进，普遍的 GAN 都是将 z 作为输入直接嵌入生成网络，而 BigGAN 将噪声向量 z 送到 G 的多个层而不仅仅是初始层。<strong>文章认为潜在空间 z 可以直接影响不同分辨率和层次结构级别的特征</strong>，对于 BigGAN 的条件生成上通过将 z 分成每个分辨率的一个块，并将每个块连接到条件向量 c 来实现，这样提供约 4％ 的适度性能提升，并将训练速度提高 18％。</p>
+<p><img src="/images/blog/2020/DCGAN/BigGAN.jpg" alt></p>
+<p>如左图所示将噪声向量 z 通过 split 等分成多块，然后和条件标签 c 连接后一起送入到生成网络的各个层中，对于生成网络的每一个残差块又可以进一步展开为右图的结构。可以看到噪声向量 z 的块和条件标签 c 在残差块下是通过 concat 操作后送入 BatchNorm 层，其中这种嵌入是共享嵌入，线性投影到每个层的 bias 和 weight。</p>
+<p><strong>“截断技巧”</strong></p>
+<p><strong>对于先验分布z，一般情况下都是选用标准正态分布 N(0,I) 或者均匀分布 U[−1,1]，文章对此存在疑惑，难道别的分布不行吗？通过实验，为了适合后续的“截断”要求，文章最终选择了 z∼N(0,I)。</strong></p>
+<p>所谓的“截断技巧”就是通过对从先验分布 z 采样，通过设置阈值的方式来截断 z 的采样，其中超出范围的值被重新采样以落入该范围内。这个阈值可以根据生成质量指标 IS 和 FID 决定。</p>
+<p>通过实验可以知道通过对阈值的设定，随着阈值的下降生成的质量会越来越好，但是<strong>由于阈值的下降、采样的范围变窄，就会造成生成上取向单一化，造成生成的多样性不足的问题。</strong></p>
+<p>随着截断的阈值下降，生成的质量在提高，但是生成也趋近于单一化。所以根据实验的生成要求，权衡生成质量和生成多样性是一个抉择，往往阈值的下降会带来 IS 的一路上涨，但是 FID 会先变好后一路变差。</p>
+<h2 id="插值"><a href="#插值" class="headerlink" title="插值"></a>插值</h2><p>为了进一步说明 G 网络并非是记住训练集，在固定 z 下通过调节条件标签 c 做插值生成，通过下图的实验结果可以发现，整个插值过程是流畅的，也能说明 G 并非是记住训练集，而是真正做到了图像生成。</p>
+<p><img src="/images/blog/2020/DCGAN/BigGANR.jpg" alt></p>
+<h3 id="如何对C进行插值呢？"><a href="#如何对C进行插值呢？" class="headerlink" title="如何对C进行插值呢？"></a>如何对C进行插值呢？</h3><p>C是以连续的形式实现的吗？如何实现的？是以离散的形式实现的吗？那如何进行插值呢？</p>
+<blockquote>
+<p>class embeddings c used for the conditional BatchNorm layers in G contain a large number of weights. Instead of having a separate layer for each embedding (Miyato et al., 2018; Zhang et al., 2018), we opt to use a shared embedding, which is linearly projected to each layer’s gains and biases</p>
+</blockquote>
+<p>是采用embedding的形式实现的。</p>
+<h2 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h2><p>文章的另一大亮点是把实验的 NG 结果做了分析，把自己趟的坑和大家分享了，这个真是很良心有没有，我们截取其中一些坑分享一下：</p>
+<ul>
+<li>一味加深网络可能会妨碍生成的性能；</li>
+<li>共享类的思想在控制超参数上是很麻烦的，虽然可能会提高训练速度；</li>
+<li>WeightNorm 替换 G 中的 BatchNorm 并没有达到好的效果；</li>
+<li>除了频谱规范化之外，尝试将 BatchNorm 添加到 D（包括类条件和无条件），但并未取的好的效果；</li>
+<li>在 G 或 D 或两者中使用 5 或 7 而不是 3 的滤波器大小，5 的滤波器可能会有些许提升，但是计算成本也上去了；</li>
+<li>尝试在 128×128 的 G 和 D 中改变卷积滤波器的扩张，但发现在任一网络中即使少量的扩张也会降低性能；</li>
+<li>尝试用 G 中的双线性上采样代替最近领近的上采样，但这降低了性能。</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/GAN/" rel="tag"><i class="fa fa-tag"></i> GAN</a>
+          
+            <a href="/tags/生成模型/" rel="tag"><i class="fa fa-tag"></i> 生成模型</a>
+          
+            <a href="/tags/Adversarial-Training/" rel="tag"><i class="fa fa-tag"></i> Adversarial Training</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/12/21/RESIDE-实体类型-Entity-Type-质量考察/" rel="next" title="RESIDE 实体类型 (Entity Type) 质量考察">
+                <i class="fa fa-chevron-left"></i> RESIDE 实体类型 (Entity Type) 质量考察
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/12/23/pip虚拟环境-使用virtualenv/" rel="prev" title="pip虚拟环境-使用virtualenv">
+                pip虚拟环境-使用virtualenv <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/漫画脸1vs1.jpg" alt="dinosaur">
+            
+              <p class="site-author-name" itemprop="name">dinosaur</p>
+              <div class="site-description motion-element" itemprop="description">闪耀的群星，颠覆着黑夜</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">371</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hao-Kailong" title="GitHub &rarr; https://github.com/Hao-Kailong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/klhao.nju@gmail.com" title="Email &rarr; klhao.nju@gmail.com"><i class="fa fa-fw fa-envelope"></i>Email</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#对于DCGAN的实现细节以及一些tricks，可以查看："><span class="nav-text">对于DCGAN的实现细节以及一些tricks，可以查看：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#InfoGAN"><span class="nav-text">InfoGAN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AC-GAN"><span class="nav-text">AC-GAN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CycleGAN"><span class="nav-text">CycleGAN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-去掉重构误差，模型是否还有效？"><span class="nav-text">1. 去掉重构误差，模型是否还有效？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-能不能不要完整的cycle，只做一半？"><span class="nav-text">2. 能不能不要完整的cycle，只做一半？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cedGAN"><span class="nav-text">cedGAN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ProGAN"><span class="nav-text">ProGAN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#StyleGAN"><span class="nav-text">StyleGAN</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#BigGAN"><span class="nav-text">BigGAN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#插值"><span class="nav-text">插值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何对C进行插值呢？"><span class="nav-text">如何对C进行插值呢？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#踩坑"><span class="nav-text">踩坑</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dinosaur</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+      <div>
+        <div class="addthis_inline_share_toolbox">
+  <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cb429b1d763f1d4" async="async"></script>
+</div>
+
+      </div>
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script id="dsq-count-scr" src="https://dinosaur7.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://haokailong.top/2020/12/23/对GAN再次学习/";
+    this.page.identifier = "2020/12/23/对GAN再次学习/";
+    this.page.title = '对GAN再次学习';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dinosaur7.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

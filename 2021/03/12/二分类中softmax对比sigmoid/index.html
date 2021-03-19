@@ -1,0 +1,2173 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="DsoDHJ1Km7LX7l7UnoG8dB2QrygUWW345_JkdBOj1Vw">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="ahe2m7RGVx">
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italicRoboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/solar-system-16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/solar-system-32.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="题外话：在Pycharm中Ctrl+左键就可以跳转到源码！用了这么多年竟然都不知道！😓  本文引用自：https://www.aiuai.cn/aifarm679.html  1. 理论分析[1] Sigmoid  \begin{equation} \begin{cases} p(y=1|x) = \frac{1}{1 + e ^{-\theta ^ T x}} \\ p(y=0|x) = 1">
+<meta name="keywords" content="pytorch,softmax,sigmoid,binary classification">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二分类中softmax对比sigmoid">
+<meta property="og:url" content="http://haokailong.top/2021/03/12/二分类中softmax对比sigmoid/index.html">
+<meta property="og:site_name" content="Hold the Torch">
+<meta property="og:description" content="题外话：在Pycharm中Ctrl+左键就可以跳转到源码！用了这么多年竟然都不知道！😓  本文引用自：https://www.aiuai.cn/aifarm679.html  1. 理论分析[1] Sigmoid  \begin{equation} \begin{cases} p(y=1|x) = \frac{1}{1 + e ^{-\theta ^ T x}} \\ p(y=0|x) = 1">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://haokailong.top/images/blog/2021/sigmoid_softmax_loss.jpg">
+<meta property="og:image" content="http://haokailong.top/images/blog/2021/loss_difference.jpg">
+<meta property="og:updated_time" content="2021-03-12T15:04:21.908Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="二分类中softmax对比sigmoid">
+<meta name="twitter:description" content="题外话：在Pycharm中Ctrl+左键就可以跳转到源码！用了这么多年竟然都不知道！😓  本文引用自：https://www.aiuai.cn/aifarm679.html  1. 理论分析[1] Sigmoid  \begin{equation} \begin{cases} p(y=1|x) = \frac{1}{1 + e ^{-\theta ^ T x}} \\ p(y=0|x) = 1">
+<meta name="twitter:image" content="http://haokailong.top/images/blog/2021/sigmoid_softmax_loss.jpg">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://haokailong.top/2021/03/12/二分类中softmax对比sigmoid/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>二分类中softmax对比sigmoid | Hold the Torch</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-138297445-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-138297445-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hold the Torch</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-wordcloud">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/wordcloud/" rel="section"><i class="menu-item-icon fa fa-fw fa-cloud"></i> <br>词云</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/03/12/二分类中softmax对比sigmoid/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">二分类中softmax对比sigmoid
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-03-12 23:04:21" itemprop="dateModified" datetime="2021-03-12T23:04:21+08:00">2021-03-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/03/12/二分类中softmax对比sigmoid/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/12/二分类中softmax对比sigmoid/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>题外话：在Pycharm中<code>Ctrl+左键</code>就可以跳转到源码！用了这么多年竟然都不知道！😓</p>
+<blockquote>
+<p>本文引用自：<a href="https://www.aiuai.cn/aifarm679.html" target="_blank" rel="noopener">https://www.aiuai.cn/aifarm679.html</a></p>
+</blockquote>
+<h1 id="1-理论分析"><a href="#1-理论分析" class="headerlink" title="1. 理论分析"></a>1. 理论分析</h1><p>[1] Sigmoid</p>
+<script type="math/tex; mode=display">
+\begin{equation} \begin{cases} p(y=1|x) = \frac{1}{1 + e ^{-\theta ^ T x}} \\ p(y=0|x) = 1 - p(y=1|x) = \frac{e ^{-\theta ^ T x}}{1 + e ^{-\theta ^ T x}} \end{cases} \end{equation}</script><p>[2] Softmax</p>
+<script type="math/tex; mode=display">
+\begin{equation} \begin{cases} p(y=0|x) = \frac{e ^{\theta _0^T x} }{e ^{\theta _0^T x} + e ^{\theta _1^T x} } = \frac{e ^{(\theta _0^T - \theta _1^T)x} }{1 + e ^{(\theta _0^T - \theta _1^T) x} } \\ p(y=1|x) = 1 - p(y=0|x) \end{cases} \end{equation}</script><p>令 $\beta = -(\theta_0^T - \theta _1^T)$，则有：</p>
+<script type="math/tex; mode=display">\begin{equation} \begin{cases} p(y=1|x) = \frac{1}{1 + e ^{-\beta ^ T x}} \\ p(y=0|x) = \frac{e ^{-\beta ^ T x}}{1 + e ^{-\beta ^ T x}} \end{cases} \end{equation}</script><p>可见，此时，Softmax 与 Sigmoid 二者理论公式的等价性.</p>
+<h1 id="2-基于Keras的实验对比"><a href="#2-基于Keras的实验对比" class="headerlink" title="2. 基于Keras的实验对比"></a>2. 基于Keras的实验对比</h1><a id="more"></a>
+<p>以猫狗分类的数据集为例，采用在 ImageNet 上预训练的 Xception 模型导出的特征.( <strong>复制于</strong> <a href="https://gist.github.com/ypwhs/6905ebbda99d04621f9fc00417657ae2" target="_blank" rel="noopener">ypwhs/sigmoid_and_softmax.ipynb</a> 中的代码. )</p>
+<blockquote>
+<p><a href="https://github.com/ypwhs/dogs_vs_cats/releases/download/gap/gap_Xception.h5" target="_blank" rel="noopener">gap_Xception.h5</a></p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> h5py</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> keras.models <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> keras.optimizers <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> keras.utils <span class="keyword">import</span> to_categorical</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">np.random.seed(<span class="number">20180520</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#---------------------------------</span></span><br><span class="line"><span class="comment">#      加载猫狗分类的特征数据</span></span><br><span class="line"><span class="comment">#---------------------------------</span></span><br><span class="line"><span class="keyword">with</span> h5py.File(<span class="string">"gap_Xception.h5"</span>, <span class="string">'r'</span>) <span class="keyword">as</span> h:</span><br><span class="line">    X = np.array(h[<span class="string">'train'</span>])</span><br><span class="line">    y = np.array(h[<span class="string">'label'</span>])</span><br><span class="line"></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>)</span><br><span class="line"></span><br><span class="line">y_train_softmax = to_categorical(y_train) <span class="comment"># ont-hot</span></span><br><span class="line">y_test_softmax = to_categorical(y_test)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#---------------------------------</span></span><br><span class="line"><span class="comment">#           Softmax</span></span><br><span class="line"><span class="comment">#---------------------------------</span></span><br><span class="line"><span class="comment"># loss: Softmax Cross Entropy Loss</span></span><br><span class="line">input_tensor = Input(X.shape[<span class="number">1</span>:])</span><br><span class="line">x = input_tensor</span><br><span class="line">x = Dropout(<span class="number">0.5</span>)(x)</span><br><span class="line">softmax = Dense(<span class="number">2</span>, activation=<span class="string">'softmax'</span>)</span><br><span class="line">x = softmax(x)</span><br><span class="line">model = Model(input_tensor, x)</span><br><span class="line">model.compile(optimizer=SGD(<span class="number">1e-3</span>),  <span class="comment"># lr = 1e-3</span></span><br><span class="line">              loss=<span class="string">'categorical_crossentropy'</span>,</span><br><span class="line">              metrics=[<span class="string">'accuracy'</span>])</span><br><span class="line"></span><br><span class="line">softmax_weights, softmax_bias = softmax.get_weights()</span><br><span class="line"></span><br><span class="line">history_softmax = model.fit(X_train, y_train_softmax, batch_size=<span class="number">128</span>, epochs=<span class="number">5</span>,</span><br><span class="line">                            validation_data=(X_test, y_test_softmax))</span><br><span class="line"></span><br><span class="line"><span class="comment">#---------------------------------</span></span><br><span class="line"><span class="comment">#           Sigmoid</span></span><br><span class="line"><span class="comment">#---------------------------------</span></span><br><span class="line"><span class="comment"># loss: Binary(Sigmoid) Cross Entropy Loss</span></span><br><span class="line">np.random.seed(<span class="number">20180520</span>)</span><br><span class="line">input_tensor = Input(X.shape[<span class="number">1</span>:])</span><br><span class="line">x = input_tensor</span><br><span class="line">x = Dropout(<span class="number">0.5</span>)(x)</span><br><span class="line">sigmoid = Dense(<span class="number">1</span>, activation=<span class="string">'sigmoid'</span>)</span><br><span class="line">x = sigmoid(x)</span><br><span class="line">model = Model(input_tensor, x)</span><br><span class="line">model.compile(optimizer=SGD(<span class="number">2e-3</span>),  <span class="comment"># lr = 2e-3</span></span><br><span class="line">              loss=<span class="string">'binary_crossentropy'</span>,</span><br><span class="line">              metrics=[<span class="string">'accuracy'</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Sigmoid 权重初始化为 Softmax 的权重计算差值</span></span><br><span class="line"><span class="comment"># beta = sigmoid weights</span></span><br><span class="line">beta = -(softmax_weights[:,<span class="number">0</span>] - softmax_weights[:,<span class="number">1</span>]).reshape((<span class="number">-1</span>, <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">sigmoid.set_weights([beta, np.zeros(<span class="number">1</span>)]) <span class="comment"># set beta to sigmoid weights</span></span><br><span class="line"></span><br><span class="line">history_sigmoid = model.fit(X_train, y_train, batch_size=<span class="number">128</span>, epochs=<span class="number">5</span>, validation_data=(X_test, y_test))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#---------------------------------</span></span><br><span class="line"><span class="comment">#           Sigmoid</span></span><br><span class="line"><span class="comment">#---------------------------------</span></span><br><span class="line">input_tensor = Input(X.shape[<span class="number">1</span>:])</span><br><span class="line">x = input_tensor</span><br><span class="line">x = Dropout(<span class="number">0.5</span>)(x)</span><br><span class="line">sigmoid = Dense(<span class="number">1</span>, activation=<span class="string">'sigmoid'</span>)</span><br><span class="line">x = sigmoid(x)</span><br><span class="line">model = Model(input_tensor, x)</span><br><span class="line">model.compile(optimizer=SGD(<span class="number">2e-3</span>),  <span class="comment"># lr = 2e-3</span></span><br><span class="line">              loss=<span class="string">'binary_crossentropy'</span>,</span><br><span class="line">              metrics=[<span class="string">'accuracy'</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># random init Sigmoid weights</span></span><br><span class="line"><span class="comment"># 随机初始化 Sigmoid 权重</span></span><br><span class="line">history_sigmoid_2 = model.fit(X_train, y_train, batch_size=<span class="number">128</span>, epochs=<span class="number">5</span>, validation_data=(X_test, y_test))</span><br></pre></td></tr></table></figure>
+<p>训练过程输出：</p>
+<p><strong>Softmax</strong>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Train on 20000 samples, validate on 5000 samples</span><br><span class="line">Epoch 1/5</span><br><span class="line">20000/20000 [==============================] - 1s 68us/step - loss: 0.4711 - acc: 0.8535 - val_loss: 0.3765 - val_acc: 0.9642</span><br><span class="line">Epoch 2/5</span><br><span class="line">20000/20000 [==============================] - 0s 13us/step - loss: 0.3338 - acc: 0.9486 - val_loss: 0.2825 - val_acc: 0.9816</span><br><span class="line">Epoch 3/5</span><br><span class="line">20000/20000 [==============================] - 0s 11us/step - loss: 0.2594 - acc: 0.9726 - val_loss: 0.2279 - val_acc: 0.9858</span><br><span class="line">Epoch 4/5</span><br><span class="line">20000/20000 [==============================] - 0s 11us/step - loss: 0.2160 - acc: 0.9799 - val_loss: 0.1923 - val_acc: 0.9866</span><br><span class="line">Epoch 5/5</span><br><span class="line">20000/20000 [==============================] - 0s 13us/step - loss: 0.1860 - acc: 0.9825 - val_loss: 0.1677 - val_acc: 0.9868</span><br></pre></td></tr></table></figure>
+<p><strong>Sigmoid With Softmax Weights</strong>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Train on 20000 samples, validate on 5000 samples</span><br><span class="line">Epoch 1/5</span><br><span class="line">20000/20000 [==============================] - 0s 18us/step - loss: 0.4706 - acc: 0.8544 - val_loss: 0.3766 - val_acc: 0.9644</span><br><span class="line">Epoch 2/5</span><br><span class="line">20000/20000 [==============================] - 0s 12us/step - loss: 0.3346 - acc: 0.9476 - val_loss: 0.2824 - val_acc: 0.9816</span><br><span class="line">Epoch 3/5</span><br><span class="line">20000/20000 [==============================] - 0s 14us/step - loss: 0.2613 - acc: 0.9709 - val_loss: 0.2275 - val_acc: 0.9860</span><br><span class="line">Epoch 4/5</span><br><span class="line">20000/20000 [==============================] - 0s 14us/step - loss: 0.2151 - acc: 0.9789 - val_loss: 0.1923 - val_acc: 0.9868</span><br><span class="line">Epoch 5/5</span><br><span class="line">20000/20000 [==============================] - 0s 11us/step - loss: 0.1857 - acc: 0.9825 - val_loss: 0.1676 - val_acc: 0.9872</span><br></pre></td></tr></table></figure>
+<p><strong>Sigmoid With Random Init Weight</strong>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Train on 20000 samples, validate on 5000 samples</span><br><span class="line">Epoch 1/5</span><br><span class="line">20000/20000 [==============================] - 0s 18us/step - loss: 0.5690 - acc: 0.7607 - val_loss: 0.4415 - val_acc: 0.9718</span><br><span class="line">Epoch 2/5</span><br><span class="line">20000/20000 [==============================] - 0s 11us/step - loss: 0.3753 - acc: 0.9576 - val_loss: 0.3151 - val_acc: 0.9852</span><br><span class="line">Epoch 3/5</span><br><span class="line">20000/20000 [==============================] - 0s 12us/step - loss: 0.2819 - acc: 0.9814 - val_loss: 0.2464 - val_acc: 0.9878</span><br><span class="line">Epoch 4/5</span><br><span class="line">20000/20000 [==============================] - 0s 12us/step - loss: 0.2267 - acc: 0.9858 - val_loss: 0.2042 - val_acc: 0.9882</span><br><span class="line">Epoch 5/5</span><br><span class="line">20000/20000 [==============================] - 0s 11us/step - loss: 0.1921 - acc: 0.9872 - val_loss: 0.1759 - val_acc: 0.9882</span><br></pre></td></tr></table></figure>
+<h3 id="2-1-训练-loss-曲线变化情况对比"><a href="#2-1-训练-loss-曲线变化情况对比" class="headerlink" title="2.1 训练 loss 曲线变化情况对比"></a>2.1 训练 loss 曲线变化情况对比</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">plt.plot(history_sigmoid.history[<span class="string">'loss'</span>])</span><br><span class="line">plt.plot(history_softmax.history[<span class="string">'loss'</span>])</span><br><span class="line"></span><br><span class="line">plt.plot(history_sigmoid.history[<span class="string">'val_loss'</span>])</span><br><span class="line">plt.plot(history_softmax.history[<span class="string">'val_loss'</span>])</span><br><span class="line"></span><br><span class="line">plt.ylabel(<span class="string">'loss'</span>)</span><br><span class="line">plt.xlabel(<span class="string">'epoch'</span>)</span><br><span class="line"></span><br><span class="line">plt.legend([<span class="string">'sigmoid_loss'</span>, <span class="string">'softmax_loss'</span>, </span><br><span class="line">            <span class="string">'sigmoid_val_loss'</span>, <span class="string">'softmax_val_loss'</span>], loc=<span class="string">'upper right'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="/images/blog/2021/sigmoid_softmax_loss.jpg" alt></p>
+<p>从图中可知，Sigmoid 和 Softmax 的训练曲线几乎完全重合.</p>
+<h3 id="2-2-Loss-差值可视化对比"><a href="#2-2-Loss-差值可视化对比" class="headerlink" title="2.2 Loss 差值可视化对比"></a>2.2 Loss 差值可视化对比</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">plt.plot(np.array(history_sigmoid.history[<span class="string">'val_loss'</span>]) - np.array(history_softmax.history[<span class="string">'val_loss'</span>]))</span><br><span class="line">plt.plot(np.array(history_sigmoid.history[<span class="string">'val_loss'</span>]) - np.array(history_sigmoid_2.history[<span class="string">'val_loss'</span>]))</span><br><span class="line"></span><br><span class="line">plt.ylabel(<span class="string">'loss'</span>)</span><br><span class="line">plt.xlabel(<span class="string">'epoch'</span>)</span><br><span class="line"></span><br><span class="line">plt.legend([<span class="string">'sigmoid_softmax_beta_gap'</span>, <span class="string">'sigmoid_random_weight_gap'</span>], loc=<span class="string">'upper right'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="/images/blog/2021/loss_difference.jpg" alt></p>
+<p>图中<strong>蓝色曲线</strong>几乎一直是 0，其表示 Sigmoid 和 Softmax 训练的模型的 loss 差异性很小. 但<strong>黄色曲线</strong> 的差值相对就较大，其采用的随机初始化 Sigmoid 权重值，影响了训练过程中的 loss 曲线的变化.</p>
+<p>也就是说，如果设置了正确的 beta 值，Sigmoid 与 Softmax 的效果可认为是等价的.</p>
+<h1 id="3-总结"><a href="#3-总结" class="headerlink" title="3. 总结"></a>3. 总结</h1><p>对于二分类问题，</p>
+<p>[1] - Sigmoid 与 Softmax 完全等价.</p>
+<p>[2] - Sigmoid 与 Softmax 分类器的权值可以相互转换.</p>
+<p>[3] - Softmax 的学习率是 Sigmoid 学习率的2倍. (如：1e-3与2e-3)</p>
+<p>[4] - Softmax 会比 Sigmoid 浪费 2 倍的权值空间(权重参数是两倍).</p>
+<hr color="blue">
+
+<p><strong>PS: 根据任务需要，手动修改损失函数，是一项必要的技能。</strong></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/pytorch/" rel="tag"><i class="fa fa-tag"></i> pytorch</a>
+          
+            <a href="/tags/softmax/" rel="tag"><i class="fa fa-tag"></i> softmax</a>
+          
+            <a href="/tags/sigmoid/" rel="tag"><i class="fa fa-tag"></i> sigmoid</a>
+          
+            <a href="/tags/binary-classification/" rel="tag"><i class="fa fa-tag"></i> binary classification</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/03/12/The-log-sum-exp-trick/" rel="next" title="The log-sum-exp trick">
+                <i class="fa fa-chevron-left"></i> The log-sum-exp trick
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/03/13/pandas-merge-函数/" rel="prev" title="pandas.merge()函数">
+                pandas.merge()函数 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/漫画脸1vs1.jpg" alt="dinosaur">
+            
+              <p class="site-author-name" itemprop="name">dinosaur</p>
+              <div class="site-description motion-element" itemprop="description">闪耀的群星，颠覆着黑夜</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">371</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hao-Kailong" title="GitHub &rarr; https://github.com/Hao-Kailong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/klhao.nju@gmail.com" title="Email &rarr; klhao.nju@gmail.com"><i class="fa fa-fw fa-envelope"></i>Email</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-理论分析"><span class="nav-text">1. 理论分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-基于Keras的实验对比"><span class="nav-text">2. 基于Keras的实验对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-训练-loss-曲线变化情况对比"><span class="nav-text">2.1 训练 loss 曲线变化情况对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Loss-差值可视化对比"><span class="nav-text">2.2 Loss 差值可视化对比</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#3-总结"><span class="nav-text">3. 总结</span></a></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dinosaur</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+      <div>
+        <div class="addthis_inline_share_toolbox">
+  <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cb429b1d763f1d4" async="async"></script>
+</div>
+
+      </div>
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script id="dsq-count-scr" src="https://dinosaur7.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://haokailong.top/2021/03/12/二分类中softmax对比sigmoid/";
+    this.page.identifier = "2021/03/12/二分类中softmax对比sigmoid/";
+    this.page.title = '二分类中softmax对比sigmoid';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dinosaur7.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

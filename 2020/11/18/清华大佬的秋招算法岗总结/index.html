@@ -1,0 +1,2209 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="DsoDHJ1Km7LX7l7UnoG8dB2QrygUWW345_JkdBOj1Vw">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="ahe2m7RGVx">
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italicRoboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/solar-system-16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/solar-system-32.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="作者 | 对白 个人简介 | 清华大学，工学硕士在读 原文链接，点击文末阅读原文直达： https://zhuanlan.zhihu.com/p/296551038   一晃接近三个月过去了，秋招也到了尾声，之前一直忙于写毕业论文，现在在这里想总结一些自己求职互联网大厂算法岗的面经和心得，希望帮助后来的学弟学妹们收获自己心仪的offer。 今年的算法岗求职较往年竞争也更加激烈，可以预见以后进大厂">
+<meta name="keywords" content="NLP,Interview,Job">
+<meta property="og:type" content="article">
+<meta property="og:title" content="清华大佬的秋招算法岗总结">
+<meta property="og:url" content="http://haokailong.top/2020/11/18/清华大佬的秋招算法岗总结/index.html">
+<meta property="og:site_name" content="Hold the Torch">
+<meta property="og:description" content="作者 | 对白 个人简介 | 清华大学，工学硕士在读 原文链接，点击文末阅读原文直达： https://zhuanlan.zhihu.com/p/296551038   一晃接近三个月过去了，秋招也到了尾声，之前一直忙于写毕业论文，现在在这里想总结一些自己求职互联网大厂算法岗的面经和心得，希望帮助后来的学弟学妹们收获自己心仪的offer。 今年的算法岗求职较往年竞争也更加激烈，可以预见以后进大厂">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_jpg/nW2ZPfuYqSJh4l4lBnLYbAN7PVarFvVRcXWRCQB1dEbc4GgibJGibzibluMRCYgTX0v398v4H7GyRTcm5b5Az4mGg/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:updated_time" content="2020-11-18T02:42:51.735Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="清华大佬的秋招算法岗总结">
+<meta name="twitter:description" content="作者 | 对白 个人简介 | 清华大学，工学硕士在读 原文链接，点击文末阅读原文直达： https://zhuanlan.zhihu.com/p/296551038   一晃接近三个月过去了，秋招也到了尾声，之前一直忙于写毕业论文，现在在这里想总结一些自己求职互联网大厂算法岗的面经和心得，希望帮助后来的学弟学妹们收获自己心仪的offer。 今年的算法岗求职较往年竞争也更加激烈，可以预见以后进大厂">
+<meta name="twitter:image" content="https://mmbiz.qpic.cn/mmbiz_jpg/nW2ZPfuYqSJh4l4lBnLYbAN7PVarFvVRcXWRCQB1dEbc4GgibJGibzibluMRCYgTX0v398v4H7GyRTcm5b5Az4mGg/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://haokailong.top/2020/11/18/清华大佬的秋招算法岗总结/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>清华大佬的秋招算法岗总结 | Hold the Torch</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-138297445-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-138297445-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hold the Torch</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-wordcloud">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/wordcloud/" rel="section"><i class="menu-item-icon fa fa-fw fa-cloud"></i> <br>词云</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/18/清华大佬的秋招算法岗总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">清华大佬的秋招算法岗总结
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-18 10:42:51" itemprop="dateModified" datetime="2020-11-18T10:42:51+08:00">2020-11-18</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Interview/" itemprop="url" rel="index"><span itemprop="name">Interview</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/18/清华大佬的秋招算法岗总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/18/清华大佬的秋招算法岗总结/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>作者 | 对白</p>
+<p>个人简介 | 清华大学，工学硕士在读</p>
+<p>原文链接，点击文末阅读原文直达：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/296551038" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/296551038</a></p>
+</blockquote>
+<p><br></p>
+<p>一晃接近三个月过去了，秋招也到了尾声，之前一直忙于写毕业论文，现在在这里想总结一些自己求职互联网大厂算法岗的面经和心得，希望帮助后来的学弟学妹们收获自己心仪的offer。</p>
+<p>今年的算法岗求职较往年竞争也更加激烈，可以预见以后进大厂的算法岗会变得越来越难，比如美团北斗去年的准入门槛是一篇CCF A，而今年直接提升到了两篇CCF A，难度提高了一倍，加之疫情的影响，我认识的很多手握顶会的本科学弟们以及海外的同学们也加入到了找工作的大军中，因此今年算法岗的竞争堪称史上巅峰，真的是八仙过海，各显神通。不过，找工作不仅需要实力，运气和方法也缺一不可，下面我就谈谈我自己的心路历程。</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>本人Top2硕士在读，非计算机科班，两篇论文在投，投递岗位的方向主要为推荐/广告/机器学习，在整个秋招的过程中，共参加了8场面试，阿里、百度、京东、美团、拼多多、快手、小红书、平安。最后侥幸获得了7家公司的offer，其中6家ssp，1家sp，薪资待遇40+W-70+W不等。</p>
+<p>可能很多人会觉得我应该有多家大厂的实习，但其实我并没有，由于父母的工作受到了疫情的影响，导致我今年从疫情开始到7月初一直都在家里帮父母的忙，从而错过了暑期实习，看到周围的同学都拿到了大厂实习的offer，当时的我只感觉自己的秋招应该和互联网无缘了。每个人的秋招只有一次，如果不奋力一搏，又怎会知道最终的结果。抱着这个念头，我在7月初就赶紧放下了父母的工作，全身心的备战秋招。在这里，我就要讲一讲我的方法了，大部分互联网公司算法岗基本是三轮技术面+一轮HR面，技术面每轮的面试时间大致是一个小时，主要考察coding能力、基础知识和项目/竞赛。由于时间的不足，在这三个方向上我做了时间的分配，我的复习顺序是基础知识-&gt;项目/竞赛-&gt;coding能力。<a id="more"></a></p>
+<p>1.基础知识</p>
+<p>除了极少数公司会在一上来就要求你做一道编程题以外，大部分互联网公司都会在你的自我介绍和论文之后开始进行基础知识的考察，因此它的重要性不言而喻。基础知识的复习有两种途径，一是看书，二是看视频，这取决于你对哪一种途径接受知识的速度更快。我选择的是看书，一是因为视频不一定讲得面面俱到，二是视频质量如果不过关，很有可能某些细节的讲述是错误的。以推荐/广告岗位为例，我主要看如下书籍。</p>
+<ul>
+<li>周志华的西瓜书《机器学习》</li>
+<li>李航老师的《统计机器学习》第二版</li>
+<li>DL圣经《深度学习》，又名花书。</li>
+<li>《百面机器学习》</li>
+<li>《概率论与数理统计》、《线性代数》、《凸优化》</li>
+<li>推荐/广告：《深度学习推荐系统》、《计算广告》等</li>
+</ul>
+<p>如果时间有限，可以直接去看第二本蓝皮书和第三本花书，这两本书一定要从头到尾仔仔细细的过一遍，因为基础知识的考察无外乎就是机器学习或深度学习里的知识。当这两本书过完一遍之后，再看西瓜书的效率就会快很多了。除此之外，第四本书可以留在你将要面试的那几天着重去学习，因为你有了前几本书的知识做铺垫，第四本书就可以当成八股文去背了。前提是一定要在你理解这些知识之后，因为单纯的死记硬背面试官其实很容易就会发现破绽，毕竟现在每个人都会背。对于本科学习过的线代和概率论，建议大家也复习一遍，因为在我的面试过程中就有面试官残忍的提问了，虽然概率不高。对于学有余力的同学，可以去看一些推荐/广告方向的工业界人士出版的书籍，这一块的知识考察往往会穿插在整个面试中，有的面试官会在最后当成开放题进行考察。</p>
+<p>其次，基础知识的复习也很容易会遗忘，面对这个问题，我一般会将高频考点的知识写在ipad中，然后每晚会去复习一遍，这样一个月下来，基础知识应该就可以烂熟于心了，这一段的复习就可以告一段落了。</p>
+<p>2.项目/竞赛</p>
+<p>项目/竞赛一般会在基础知识之后进行考察，这些一定要提前准备好，写在简历里的项目一定是要自己亲自做过的，因为一旦面试官问到了项目中某一个部分的代码是如何实现而你又回答不上来的话，在他心里对你的印象就会非常减分，并且会怀疑候选人的诚信问题。所以，我的方法是将之前做过的项目重新再做一遍，包括代码部分。这一块看似会花费大量时间，实则并没有那么长。具体来说，我会先将做过的项目重新梳理一遍，画出整个项目的流程图，然后再逐行复习自己的代码。等代码复习完之后，再删掉重新写一遍，这一步骤因人而异，取决于你的记忆能力。</p>
+<p>竞赛方面，常用的竞赛模型如GBDT、XGBoost、LightGBM、FFM、DeepFFM等一定要了解。最后，如果你的论文或项目与面试官所做的方向非常的match，你通过这一面的概率也将会大很多。</p>
+<p>3.coding能力</p>
+<p>代码能力是计算机专业学生的基础能力，求职技术方向的同学，无论是测试、开发或算法，互联网公司在这一块的考察都是重中之重。一般而言，大厂在每一轮的技术面中，至少会出一道编程题，多的会直接上三道编程题让你做（我就遇到了…），难度主要集中在easy和medium，少数丧心病狂（褒义词）的面试官会出hard题。而考察范围已是圈内公开的秘密，就在《剑指offer》和Leetcode上，因此刷题成为了大家求职路上必须要迈过的一道坎，这个坎没有人可以帮到你，只有靠你自己。我在硕士阶段也没有刻意的去刷过题，只有本科时刷过洛谷，下面是我Leetcode账号上提交次数的统计：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/nW2ZPfuYqSJh4l4lBnLYbAN7PVarFvVRcXWRCQB1dEbc4GgibJGibzibluMRCYgTX0v398v4H7GyRTcm5b5Az4mGg/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
+<p>我是从8月初开始集中在Leetcode上刷题，一直刷到了10月份，《剑指offer》也是在Leetcode上刷的，平均每个月刷题数是300。可能很多人都觉得300道根本不可能完成，确实，如果你按照Leecode官方的题号顺序去刷根本不可能，但如果是按照题目类型（标签）去刷，每天刷10道，一个月也就完成了300道。一开始可能会很慢，但基本上每个类型的题目当你刷够20道以后，都可以总结出该类题目的代码模板，所以前期会慢一点，越往后则会发现刷题速度越来越快，可以理解为先苦后甜。而对于刷题的方法，可以分为三轮进行：</p>
+<p>a.第一轮：优先效率。当一道题花了十五分钟去思考也没有思路时，则果断选择直接看答案。</p>
+<p>b.第二轮：培养思路。你需要对以前做过的每一道题都要有一个大致的映像，并且知道解题的方法是什么。这一轮其实最难度过，因为人对事物的遗忘是有规律的，而我们需要想办法客服这个规律。在这里推荐一下我的方法。我在刷完每一道题之后，会在ipad上注明题号以及题目名称，然后将该题的解题思路写下来，最后还会重写一遍代码。这样，以天和周为单位不断地复习之前的题目，就可以做到以后遇见它们时可以迅速反映出是用什么方法解决这道题的。</p>
+<p>c.第三轮：完善思路。当我们顺利度过了第二轮之后，第三轮则需要学习每道题目的多种解法，比如TopK问题可以用快排变形/堆/二叉查找树/计数排序四种方法解决。在我的面试过程中，有些面试官会在你AC一道题后还会要求写出最优解，这往往决定你的面评是否能达到较高级别，也就是能否拿到sp以上级别的offer，并且一道题如果学会了多种解法，也会让你加深对这道题的理解。因此，我建议大家要学会用多种解法解决一道题，并且要培养出能快速AC的能力。</p>
+<p>PS：在这里，我要推荐一下自己免费加入的Leetcode每日打卡和竞赛群，圈内俗称残酷群。国服前一百位的选手在该群都有好几十人。规则很简单，每日完成题主发布的Leetcode题号以及每周在美服上打Leetcode周赛，但周赛排名靠后的小伙伴会要求发红包，这个机制也是为了督促大家快速成长。所以秋招不是刷题之路的终点，而仅仅只是开始。</p>
+<h2 id="面试投递"><a href="#面试投递" class="headerlink" title="面试投递"></a>面试投递</h2><p>在完成了基础知识-&gt;项目/竞赛-&gt;coding能力的复习后，时间节点也移动到了八月中下旬，这时很多公司的秋招正式批即将开始。由于我错过了提前批的投递，而提前批往往都没有笔试，所以正式批只能先参加笔试再进行面试。经过血与泪的磨练后，在这里给大家的建议是，有提前批投提前批，无提前批投特殊计划，重要的事情说三百遍。原因有两点：1、提前批的竞争压力小，投的人少，先拿到offer的概率很大；2、正式批的笔试题一般有一定难度，且刷人主要看AC题目的数量，比较残酷。而且据我身边同学的例子，有很多人笔试完之后公司就杳无音信了，要问就是在筛选，实际上你已经妥妥变成了备胎（有恋爱经验的人都懂），然后在公司的池子里欢快的游动。除此之外，若感觉自己还没有准备好，则可以等待几天再投递，但千万不要错过提前批的截止时间。</p>
+<p>所以提前批的面试能把握的还是尽量要把握，哪怕你觉得自己只准备了60%，但万一成功了呢？因为面试通过这个事情，实力与运气都需要， 在你的实力和别人差距不大的情况下，实力不够，也可以运气来凑不是吗。</p>
+<h2 id="部分面经"><a href="#部分面经" class="headerlink" title="部分面经"></a>部分面经</h2><p>以下面经均为各个公司的正式批，由于时间有点久远，有些考点已经不记得了。</p>
+<blockquote>
+<p>京东</p>
+</blockquote>
+<p>一面：</p>
+<p>1、介绍论文、项目，很详细。包括每一个环节是怎么实现的，损失函数是如何设计的，模型是如何训练的等等。</p>
+<p>2、代码题：Leetcode 713：乘积小于k的子数组；Leetcode 297：二叉树的序列化和反序列化。</p>
+<p>3、GBDT、XGBoost、LigthGBM的区别与联系。</p>
+<p>4、送入LR前，如何处理数据（特征工程）。</p>
+<p>二面：</p>
+<p>1、介绍论文、项目，很详细。</p>
+<p>2、Transformer中的Scaled Dot-Product Attention为什么要缩放（两点）。</p>
+<p>3、Transformer中的Position Embedding是怎么实现的？为什么？</p>
+<p>4、bagging和boosting与偏差和方差的关系以及原因。</p>
+<p>5、如何解决数据不平衡的问题。</p>
+<p>6、假设检验的两类错误。</p>
+<p>7、MSE、MAE与贝叶斯估计的区别。</p>
+<p>8、为什么快排比堆排快？</p>
+<p>9、口述算法题：对一个商品的价格、数量、购买人数进行分次排序，不改变之前的排序结果。</p>
+<p>三面：</p>
+<p>由于一、二面表现好，三面直接过了。</p>
+<blockquote>
+<p>美团：</p>
+</blockquote>
+<p>一面：</p>
+<p>1、介绍论文和项目，很详细。</p>
+<p>2、代码题：面试题17.24：最大子矩阵；Leetcode 695：岛屿的最大面积。</p>
+<p>3、介绍一下DSSM。</p>
+<p>4、开放题：关于双塔模型的应用。</p>
+<p>二面：</p>
+<p>1、介绍论文和项目，以及论文中的涉及到的baseline模型。</p>
+<p>2、代码题：面试题01.08：零矩阵，写出两种解法。</p>
+<p>3、XGBoost 如果损失函数没有二阶导，该怎么办。</p>
+<p>4、聊天+反问。</p>
+<p>三面：</p>
+<p>1、介绍论文和项目，非常详细。</p>
+<p>2、介绍实习，说说实习印象中最深的点。</p>
+<p>3、开放题：部门中的某个应用场景你会怎么解决。</p>
+<p>4、职业规划，个人希望做的方向。</p>
+<blockquote>
+<p>拼多多：</p>
+</blockquote>
+<p>一面：</p>
+<p>1、介绍论文和项目。</p>
+<p>2、AUC是如何实现的，它对均匀正负样本采样是否敏感，并用代码实现。</p>
+<p>3、BERT与ALBERT的区别。</p>
+<p>4、介绍一下DKN模型。</p>
+<p>二面：</p>
+<p>1、介绍论文和项目。</p>
+<p>2、过拟合如何解决+具体方法追问。</p>
+<p>3、代码题：Leetcode 42：接雨水。</p>
+<p>4、知识图谱表示学习有哪些模型。</p>
+<p>5、聊天+反问。</p>
+<blockquote>
+<p>阿里：</p>
+</blockquote>
+<p>一面：</p>
+<p>1、介绍论文和项目。</p>
+<p>2、代码题：Leetcode 382：链表随机节点，并口述蓄水池采样算法的推导。</p>
+<p>3、概率题：将一根木棍分成三段，求这三段构成三角形的概率。</p>
+<p>4、开放题：一个超级大文件，每一行有一个 ip 地址，内存有限，如何找出其中重复次数最多的 ip 地址。</p>
+<p>二面：</p>
+<p>1、介绍论文和项目。</p>
+<p>2、论文后续可能提升的点以及想法探讨。</p>
+<p>3、说一说Graph Embedding和GNN的区别。</p>
+<p>4、代码题：Leetcode 23：合并K个升序链表。</p>
+<p>5、聊天+反问。</p>
+<p>三面：</p>
+<p>1、介绍论文和项目。</p>
+<p>2、介绍一下最能体现自己工程能力的项目。</p>
+<p>3、如何提高推荐线上的性能。</p>
+<p>4、强化学习在推荐中的应用及探讨。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>最后，我想谈一谈自己对于面试的看法。无论是竞赛、论文还是大厂实习，这些都是为了方便你拿到面试的资格，哪怕你三者都没有，但只要公司愿意向你发起面试，你都应该好好努力。而最终是否能顺利拿到offer以及offer的等级，主要还是取决于你的面评，一个非常好的面评是帮助你拿下大厂sp以上offer至关重要的因素，因此切忌面试紧张，如果你紧张，可以心中默念欧米豆腐。</p>
+<p>祝愿大家都能拿到自己心仪的offer！</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NLP/" rel="tag"><i class="fa fa-tag"></i> NLP</a>
+          
+            <a href="/tags/Interview/" rel="tag"><i class="fa fa-tag"></i> Interview</a>
+          
+            <a href="/tags/Job/" rel="tag"><i class="fa fa-tag"></i> Job</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/11/18/谈谈未来：NLP路在何方？/" rel="next" title="谈谈未来：NLP路在何方？">
+                <i class="fa fa-chevron-left"></i> 谈谈未来：NLP路在何方？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/11/18/致2021届金融毕业生/" rel="prev" title="致2021届金融毕业生">
+                致2021届金融毕业生 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/漫画脸1vs1.jpg" alt="dinosaur">
+            
+              <p class="site-author-name" itemprop="name">dinosaur</p>
+              <div class="site-description motion-element" itemprop="description">闪耀的群星，颠覆着黑夜</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">371</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hao-Kailong" title="GitHub &rarr; https://github.com/Hao-Kailong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/klhao.nju@gmail.com" title="Email &rarr; klhao.nju@gmail.com"><i class="fa fa-fw fa-envelope"></i>Email</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#面试投递"><span class="nav-text">面试投递</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部分面经"><span class="nav-text">部分面经</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dinosaur</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+      <div>
+        <div class="addthis_inline_share_toolbox">
+  <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cb429b1d763f1d4" async="async"></script>
+</div>
+
+      </div>
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script id="dsq-count-scr" src="https://dinosaur7.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://haokailong.top/2020/11/18/清华大佬的秋招算法岗总结/";
+    this.page.identifier = "2020/11/18/清华大佬的秋招算法岗总结/";
+    this.page.title = '清华大佬的秋招算法岗总结';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dinosaur7.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

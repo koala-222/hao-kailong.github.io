@@ -1,0 +1,2162 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="DsoDHJ1Km7LX7l7UnoG8dB2QrygUWW345_JkdBOj1Vw">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="ahe2m7RGVx">
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italicRoboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/solar-system-16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/solar-system-32.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="使用huggingface的BertForMaskedLM做预训练后的二次预训练，即fine-tuning，在NYT数据集上。 具体的代码实现可以参考官方的github, 有很多的例子可以学习，非常不错~ 插曲在询问学长后得知，使用wwm，即whole-word-masking，可以比较显著的提高效果。但是，在huggingface的网站上，目前只有bert-large-cased-whole-w">
+<meta name="keywords" content="BERT,MLM,Pretrain,BertForPreTraining,BertForMaskedLM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用预训练语言模型计算句子相似度">
+<meta property="og:url" content="http://haokailong.top/2020/12/21/利用预训练语言模型计算句子相似度/index.html">
+<meta property="og:site_name" content="Hold the Torch">
+<meta property="og:description" content="使用huggingface的BertForMaskedLM做预训练后的二次预训练，即fine-tuning，在NYT数据集上。 具体的代码实现可以参考官方的github, 有很多的例子可以学习，非常不错~ 插曲在询问学长后得知，使用wwm，即whole-word-masking，可以比较显著的提高效果。但是，在huggingface的网站上，目前只有bert-large-cased-whole-w">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/run_mlm.png">
+<meta property="og:updated_time" content="2020-12-31T08:38:50.451Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="利用预训练语言模型计算句子相似度">
+<meta name="twitter:description" content="使用huggingface的BertForMaskedLM做预训练后的二次预训练，即fine-tuning，在NYT数据集上。 具体的代码实现可以参考官方的github, 有很多的例子可以学习，非常不错~ 插曲在询问学长后得知，使用wwm，即whole-word-masking，可以比较显著的提高效果。但是，在huggingface的网站上，目前只有bert-large-cased-whole-w">
+<meta name="twitter:image" content="http://haokailong.top/images/blog/2020/run_mlm.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://haokailong.top/2020/12/21/利用预训练语言模型计算句子相似度/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>利用预训练语言模型计算句子相似度 | Hold the Torch</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-138297445-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-138297445-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hold the Torch</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-wordcloud">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/wordcloud/" rel="section"><i class="menu-item-icon fa fa-fw fa-cloud"></i> <br>词云</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/21/利用预训练语言模型计算句子相似度/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">利用预训练语言模型计算句子相似度
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-31 16:38:50" itemprop="dateModified" datetime="2020-12-31T16:38:50+08:00">2020-12-31</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/Pretrained-Language-Model/" itemprop="url" rel="index"><span itemprop="name">Pretrained Language Model</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/12/21/利用预训练语言模型计算句子相似度/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/21/利用预训练语言模型计算句子相似度/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>使用huggingface的BertForMaskedLM做预训练后的二次预训练，即fine-tuning，在NYT数据集上。</p>
+<p>具体的代码实现可以参考官方的<a href="https://github.com/huggingface/transformers/tree/master/examples" target="_blank" rel="noopener">github</a>, 有很多的例子可以学习，非常不错~</p>
+<h1 id="插曲"><a href="#插曲" class="headerlink" title="插曲"></a>插曲</h1><p>在询问学长后得知，使用wwm，即whole-word-masking，可以比较显著的提高效果。但是，在<a href="https://huggingface.co/transformers/pretrained_models.html" target="_blank" rel="noopener">huggingface的网站</a>上，目前只有bert-large-cased-whole-word-masking，考虑到对比的方法目前用到的是bert-base和gpt，而且预训练语言模型不是我们的创新点，<strong>所以最终采用bert-base-cased，暂时不用wwm</strong></p>
+<p>另外，在训练的时候整个进度条显示的是全部训练需要花费的时间，举个栗子，如果训练epoch数为3，则显示的为3个epoch对应的所有步数。</p>
+<p><img src="/images/blog/2020/run_mlm.png" alt></p>
+<p>在150MB的文本语料上训练，利用两个RTX 24GB显卡，batch_size设为16，epoch为3，每张卡显存占用为11GB左右，整个训练过程耗时9个小时。</p>
+<h1 id="run-mlm-py"><a href="#run-mlm-py" class="headerlink" title="run_mlm.py"></a>run_mlm.py</h1><p>我们采用<a href="https://github.com/huggingface/transformers/tree/master/examples/language-modeling" target="_blank" rel="noopener">run_mlm.py</a>来进行bert的fine-tuning过程。</p>
+<h2 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h2><p>在进行MLM任务之前，是否需要对文本进行预处理呢？常见的预处理技术有转换为小写、去除标点、去除停用词、提取词干等等，<font color="orange">但是，考虑到预训练语言模型词表足够大，见过的语料足够多，能力足够强</font>，所以，<strong>不进行任何的文本预处理工作</strong>，直接丢给BERT。</p>
+<h2 id="sh"><a href="#sh" class="headerlink" title=".sh"></a>.sh</h2><p>使用以下命令运行程序：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">python run_mlm.py \</span><br><span class="line">  --model_name_or_path /data/klhao/BERT/bert-base-cased \</span><br><span class="line">  --train_file nyt_corpus_train.txt \</span><br><span class="line">  --validation_file nyt_corpus_valid.txt \</span><br><span class="line">  --do_train \</span><br><span class="line">  --do_eval \</span><br><span class="line">  --output_dir output \</span><br><span class="line">  --line_by_line \</span><br><span class="line">  --max_seq_length 500</span><br></pre></td></tr></table></figure>
+<p>程序开始愉快的运行了！~</p>
+<a id="more"></a>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[INFO|trainer.py:677] 2020-12-21 19:27:58,439 &gt;&gt; ***** Running training *****</span><br><span class="line">[INFO|trainer.py:678] 2020-12-21 19:27:58,439 &gt;&gt;   Num examples = 660306</span><br><span class="line">[INFO|trainer.py:679] 2020-12-21 19:27:58,440 &gt;&gt;   Num Epochs = 3</span><br><span class="line">[INFO|trainer.py:680] 2020-12-21 19:27:58,440 &gt;&gt;   Instantaneous batch size per device = 8</span><br><span class="line">[INFO|trainer.py:681] 2020-12-21 19:27:58,440 &gt;&gt;   Total train batch size (w. parallel, distributed &amp; accumulation) = 16</span><br><span class="line">[INFO|trainer.py:682] 2020-12-21 19:27:58,440 &gt;&gt;   Gradient Accumulation steps = 1</span><br><span class="line">[INFO|trainer.py:683] 2020-12-21 19:27:58,440 &gt;&gt;   Total optimization steps = 123810</span><br></pre></td></tr></table></figure>
+<p><strong>训练了3个epoch，最终在loss为1.40左右的时候就降不下去了，线性学习率调度器此时也将学习率降到了1e-7这个数量级。</strong></p>
+<h1 id="run-mlm-wwm-py"><a href="#run-mlm-wwm-py" class="headerlink" title="run_mlm_wwm.py"></a>run_mlm_wwm.py</h1><p>由于pypi更新不及时，需要从git安装transformers，命令为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/huggingface/transformers.git</span><br><span class="line"><span class="built_in">cd</span> transformers</span><br><span class="line">pip install -e .</span><br></pre></td></tr></table></figure>
+<p>运行命令为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CUDA_VISIBLE_DEVICES=1 python run_mlm_wwm.py --model_name_or_path ../BERT/bert-large-cased-whole-word-masking --train_file nyt_corpus.txt --do_train --output_dir output --max_seq_length 200 --num_train_epochs 5  --per_device_train_batch_size 20 --save_steps 10000 --save_total_limit 8</span><br></pre></td></tr></table></figure>
+<p>在NYT上训练耗时24H，采用bert-large-cased-whole-word-masking。</p>
+<p><strong>每一个checkpoint占用内存为4G左右。</strong></p>
+<p><strong>运行结束后，最终loss降到了1.15左右，说明我们之前的预训练可能还不够充分，下面我准备调到10个epoch再次进行尝试</strong></p>
+<h2 id="10个epoch"><a href="#10个epoch" class="headerlink" title="10个epoch"></a>10个epoch</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python run_mlm_wwm.py --model_name_or_path ../BERT/bert-large-cased-whole-word-masking --train_file nyt_corpus.txt --do_train --output_dir output --max_seq_length 200 --num_train_epochs 10  --per_device_train_batch_size 20 --save_steps 10000 --save_total_limit 3</span><br></pre></td></tr></table></figure>
+<font color="orange">尝试看是否还会由效果的提升~</font>
+
+<h2 id="运行log"><a href="#运行log" class="headerlink" title="运行log"></a>运行log</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line">[INFO|trainer.py:395] 2020-12-28 18:28:39,231 &gt;&gt; The following columns <span class="keyword">in</span> the training <span class="built_in">set</span> don<span class="string">'t have a corresponding argument in `BertForMaskedLM.forward` and have been ignored: .</span></span><br><span class="line"><span class="string">[INFO|trainer.py:718] 2020-12-28 18:28:39,238 &gt;&gt; ***** Running training *****</span></span><br><span class="line"><span class="string">[INFO|trainer.py:719] 2020-12-28 18:28:39,239 &gt;&gt;   Num examples = 695059</span></span><br><span class="line"><span class="string">[INFO|trainer.py:720] 2020-12-28 18:28:39,239 &gt;&gt;   Num Epochs = 5</span></span><br><span class="line"><span class="string">[INFO|trainer.py:721] 2020-12-28 18:28:39,239 &gt;&gt;   Instantaneous batch size per device = 20</span></span><br><span class="line"><span class="string">[INFO|trainer.py:722] 2020-12-28 18:28:39,239 &gt;&gt;   Total train batch size (w. parallel, distributed &amp; accumulation) = 20</span></span><br><span class="line"><span class="string">[INFO|trainer.py:723] 2020-12-28 18:28:39,239 &gt;&gt;   Gradient Accumulation steps = 1</span></span><br><span class="line"><span class="string">[INFO|trainer.py:724] 2020-12-28 18:28:39,239 &gt;&gt;   Total optimization steps = 173765</span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 2.065851318359375, '</span>learning_rate<span class="string">': 4.985612752855869e-05, '</span>epoch<span class="string">': 0.014387247144131442&#125;</span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 2.04491845703125, '</span>learning_rate<span class="string">': 4.9712255057117375e-05, '</span>epoch<span class="string">': 0.028774494288262883&#125;</span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 2.058274658203125, '</span>learning_rate<span class="string">': 4.956838258567606e-05, '</span>epoch<span class="string">': 0.043161741432394325&#125;                                                                                           </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 2.0292010498046875, '</span>learning_rate<span class="string">': 4.942451011423475e-05, '</span>epoch<span class="string">': 0.05754898857652577&#125;                                                                                           </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 2.0228314208984375, '</span>learning_rate<span class="string">': 4.9280637642793434e-05, '</span>epoch<span class="string">': 0.07193623572065722&#125;                                                                                          </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 2.018800048828125, '</span>learning_rate<span class="string">': 4.913676517135212e-05, '</span>epoch<span class="string">': 0.08632348286478865&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 2.0110439453125, '</span>learning_rate<span class="string">': 4.89928926999108e-05, '</span>epoch<span class="string">': 0.1007107300089201&#125;                                                                                                </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 2.0043060302734377, '</span>learning_rate<span class="string">': 4.8849020228469486e-05, '</span>epoch<span class="string">': 0.11509797715305153&#125;                                                                                          </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.9853199462890625, '</span>learning_rate<span class="string">': 4.870514775702817e-05, '</span>epoch<span class="string">': 0.12948522429718298&#125;                                                                                           </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.9929195556640624, '</span>learning_rate<span class="string">': 4.856127528558686e-05, '</span>epoch<span class="string">': 0.14387247144131443&#125;                                                                                           </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.9991339111328126, '</span>learning_rate<span class="string">': 4.8417402814145545e-05, '</span>epoch<span class="string">': 0.15825971858544585&#125;                                                                                          </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.98677978515625, '</span>learning_rate<span class="string">': 4.827353034270423e-05, '</span>epoch<span class="string">': 0.1726469657295773&#125;                                                                                              </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 2.007623291015625, '</span>learning_rate<span class="string">': 4.812965787126292e-05, '</span>epoch<span class="string">': 0.18703421287370875&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.9972188720703126, '</span>learning_rate<span class="string">': 4.79857853998216e-05, '</span>epoch<span class="string">': 0.2014214600178402&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.9690428466796874, '</span>learning_rate<span class="string">': 4.7841912928380284e-05, '</span>epoch<span class="string">': 0.21580870716197162&#125;                                                                                          </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.959529052734375, '</span>learning_rate<span class="string">': 4.769804045693897e-05, '</span>epoch<span class="string">': 0.23019595430610307&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.9772723388671876, '</span>learning_rate<span class="string">': 4.7554167985497656e-05, '</span>epoch<span class="string">': 0.24458320145023452&#125;                                                                                          </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.956650146484375, '</span>learning_rate<span class="string">': 4.741029551405634e-05, '</span>epoch<span class="string">': 0.25897044859436597&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.9764119873046875, '</span>learning_rate<span class="string">': 4.726642304261503e-05, '</span>epoch<span class="string">': 0.2733576957384974&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.9451396484375, '</span>learning_rate<span class="string">': 4.7122550571173715e-05, '</span>epoch<span class="string">': 0.28774494288262886&#125;                                                                                             </span></span><br><span class="line"><span class="string">  6%|████████                                                                                                                                    | 10000/173765 [1:29:26&lt;27:18:00,  1.67it/s][INFO|trainer.py:1248] 2020-12-28 19:58:05,894 &gt;&gt; Saving model checkpoint to output/checkpoint-10000</span></span><br><span class="line"><span class="string">[INFO|configuration_utils.py:289] 2020-12-28 19:58:05,896 &gt;&gt; Configuration saved in output/checkpoint-10000/config.json</span></span><br><span class="line"><span class="string">[INFO|modeling_utils.py:814] 2020-12-28 19:58:09,676 &gt;&gt; Model weights saved in output/checkpoint-10000/pytorch_model.bin</span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.967901123046875, '</span>learning_rate<span class="string">': 4.69786780997324e-05, '</span>epoch<span class="string">': 0.3021321900267603&#125;                                                                                              </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.9398819580078126, '</span>learning_rate<span class="string">': 4.683480562829108e-05, '</span>epoch<span class="string">': 0.3165194371708917&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.9575858154296875, '</span>learning_rate<span class="string">': 4.669093315684977e-05, '</span>epoch<span class="string">': 0.3309066843150232&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.935358642578125, '</span>learning_rate<span class="string">': 4.6547060685408454e-05, '</span>epoch<span class="string">': 0.3452939314591546&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.920288330078125, '</span>learning_rate<span class="string">': 4.640318821396714e-05, '</span>epoch<span class="string">': 0.359681178603286&#125;                                                                                              </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.9564296875, '</span>learning_rate<span class="string">': 4.6259315742525826e-05, '</span>epoch<span class="string">': 0.3740684257474175&#125;                                                                                                 </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.9050736083984374, '</span>learning_rate<span class="string">': 4.611544327108451e-05, '</span>epoch<span class="string">': 0.3884556728915489&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.9197130126953126, '</span>learning_rate<span class="string">': 4.59715707996432e-05, '</span>epoch<span class="string">': 0.4028429200356804&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.9287261962890625, '</span>learning_rate<span class="string">': 4.5827698328201885e-05, '</span>epoch<span class="string">': 0.4172301671798118&#125;                                                                                           </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.897843017578125, '</span>learning_rate<span class="string">': 4.568382585676057e-05, '</span>epoch<span class="string">': 0.43161741432394324&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.918166015625, '</span>learning_rate<span class="string">': 4.553995338531926e-05, '</span>epoch<span class="string">': 0.4460046614680747&#125;                                                                                                </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.9367061767578124, '</span>learning_rate<span class="string">': 4.5396080913877944e-05, '</span>epoch<span class="string">': 0.46039190861220614&#125;                                                                                          </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.93353662109375, '</span>learning_rate<span class="string">': 4.525220844243663e-05, '</span>epoch<span class="string">': 0.47477915575633756&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.894266357421875, '</span>learning_rate<span class="string">': 4.510833597099532e-05, '</span>epoch<span class="string">': 0.48916640290046903&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.89986474609375, '</span>learning_rate<span class="string">': 4.4964463499553996e-05, '</span>epoch<span class="string">': 0.5035536500446005&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.89962744140625, '</span>learning_rate<span class="string">': 4.482059102811268e-05, '</span>epoch<span class="string">': 0.5179408971887319&#125;                                                                                              </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.8909339599609376, '</span>learning_rate<span class="string">': 4.467671855667137e-05, '</span>epoch<span class="string">': 0.5323281443328634&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.865968505859375, '</span>learning_rate<span class="string">': 4.4532846085230055e-05, '</span>epoch<span class="string">': 0.5467153914769948&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.881063232421875, '</span>learning_rate<span class="string">': 4.438897361378874e-05, '</span>epoch<span class="string">': 0.5611026386211262&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.879991943359375, '</span>learning_rate<span class="string">': 4.424510114234742e-05, '</span>epoch<span class="string">': 0.5754898857652577&#125;                                                                                             </span></span><br><span class="line"><span class="string"> 12%|████████████████                                                                                                                            | 20000/173765 [2:59:09&lt;24:13:30,  1.76it/s][INFO|trainer.py:1248] 2020-12-28 21:27:48,397 &gt;&gt; Saving model checkpoint to output/checkpoint-20000</span></span><br><span class="line"><span class="string">[INFO|configuration_utils.py:289] 2020-12-28 21:27:48,399 &gt;&gt; Configuration saved in output/checkpoint-20000/config.json</span></span><br><span class="line"><span class="string">[INFO|modeling_utils.py:814] 2020-12-28 21:27:52,186 &gt;&gt; Model weights saved in output/checkpoint-20000/pytorch_model.bin</span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.8942625732421876, '</span>learning_rate<span class="string">': 4.410122867090611e-05, '</span>epoch<span class="string">': 0.5898771329093891&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.889036376953125, '</span>learning_rate<span class="string">': 4.3957356199464794e-05, '</span>epoch<span class="string">': 0.6042643800535206&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.867447998046875, '</span>learning_rate<span class="string">': 4.381348372802348e-05, '</span>epoch<span class="string">': 0.618651627197652&#125;                                                                                              </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.859236328125, '</span>learning_rate<span class="string">': 4.3669611256582166e-05, '</span>epoch<span class="string">': 0.6330388743417834&#125;                                                                                               </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.8667769775390626, '</span>learning_rate<span class="string">': 4.352573878514085e-05, '</span>epoch<span class="string">': 0.6474261214859149&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.864222900390625, '</span>learning_rate<span class="string">': 4.338186631369954e-05, '</span>epoch<span class="string">': 0.6618133686300464&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.876696044921875, '</span>learning_rate<span class="string">': 4.3237993842258225e-05, '</span>epoch<span class="string">': 0.6762006157741778&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.8643328857421875, '</span>learning_rate<span class="string">': 4.309412137081691e-05, '</span>epoch<span class="string">': 0.6905878629183092&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.8401954345703124, '</span>learning_rate<span class="string">': 4.29502488993756e-05, '</span>epoch<span class="string">': 0.7049751100624406&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.83107666015625, '</span>learning_rate<span class="string">': 4.280637642793428e-05, '</span>epoch<span class="string">': 0.719362357206572&#125;                                                                                               </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.841105712890625, '</span>learning_rate<span class="string">': 4.2662503956492964e-05, '</span>epoch<span class="string">': 0.7337496043507036&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.849765625, '</span>learning_rate<span class="string">': 4.251863148505165e-05, '</span>epoch<span class="string">': 0.748136851494835&#125;                                                                                                    </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.832751220703125, '</span>learning_rate<span class="string">': 4.2374759013610336e-05, '</span>epoch<span class="string">': 0.7625240986389664&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.828905517578125, '</span>learning_rate<span class="string">': 4.223088654216902e-05, '</span>epoch<span class="string">': 0.7769113457830978&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.853523193359375, '</span>learning_rate<span class="string">': 4.208701407072771e-05, '</span>epoch<span class="string">': 0.7912985929272293&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.835915771484375, '</span>learning_rate<span class="string">': 4.1943141599286395e-05, '</span>epoch<span class="string">': 0.8056858400713608&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.845493896484375, '</span>learning_rate<span class="string">': 4.179926912784508e-05, '</span>epoch<span class="string">': 0.8200730872154922&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.833302490234375, '</span>learning_rate<span class="string">': 4.165539665640377e-05, '</span>epoch<span class="string">': 0.8344603343596236&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.7969888916015626, '</span>learning_rate<span class="string">': 4.1511524184962454e-05, '</span>epoch<span class="string">': 0.848847581503755&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.813013671875, '</span>learning_rate<span class="string">': 4.136765171352114e-05, '</span>epoch<span class="string">': 0.8632348286478865&#125;                                                                                                </span></span><br><span class="line"><span class="string"> 17%|████████████████████████▏                                                                                                                   | 30000/173765 [4:28:54&lt;26:16:01,  1.52it/s][INFO|trainer.py:1248] 2020-12-28 22:57:34,191 &gt;&gt; Saving model checkpoint to output/checkpoint-30000</span></span><br><span class="line"><span class="string">[INFO|configuration_utils.py:289] 2020-12-28 22:57:34,193 &gt;&gt; Configuration saved in output/checkpoint-30000/config.json</span></span><br><span class="line"><span class="string">[INFO|modeling_utils.py:814] 2020-12-28 22:57:37,929 &gt;&gt; Model weights saved in output/checkpoint-30000/pytorch_model.bin</span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.8161768798828124, '</span>learning_rate<span class="string">': 4.122377924207983e-05, '</span>epoch<span class="string">': 0.877622075792018&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.800627197265625, '</span>learning_rate<span class="string">': 4.107990677063851e-05, '</span>epoch<span class="string">': 0.8920093229361494&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.80393505859375, '</span>learning_rate<span class="string">': 4.093603429919719e-05, '</span>epoch<span class="string">': 0.9063965700802809&#125;                                                                                              </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.8064656982421874, '</span>learning_rate<span class="string">': 4.079216182775588e-05, '</span>epoch<span class="string">': 0.9207838172244123&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.800693359375, '</span>learning_rate<span class="string">': 4.0648289356314565e-05, '</span>epoch<span class="string">': 0.9351710643685437&#125;                                                                                               </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.8068582763671874, '</span>learning_rate<span class="string">': 4.050441688487325e-05, '</span>epoch<span class="string">': 0.9495583115126751&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.8205863037109375, '</span>learning_rate<span class="string">': 4.036054441343193e-05, '</span>epoch<span class="string">': 0.9639455586568066&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.83301171875, '</span>learning_rate<span class="string">': 4.021667194199062e-05, '</span>epoch<span class="string">': 0.9783328058009381&#125;                                                                                                 </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.8173153076171875, '</span>learning_rate<span class="string">': 4.0072799470549304e-05, '</span>epoch<span class="string">': 0.9927200529450695&#125;                                                                                           </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.782671630859375, '</span>learning_rate<span class="string">': 3.992892699910799e-05, '</span>epoch<span class="string">': 1.007107300089201&#125;                                                                                              </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.7521663818359374, '</span>learning_rate<span class="string">': 3.9785054527666676e-05, '</span>epoch<span class="string">': 1.0214945472333323&#125;                                                                                           </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.767458740234375, '</span>learning_rate<span class="string">': 3.964118205622536e-05, '</span>epoch<span class="string">': 1.0358817943774639&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.7407720947265626, '</span>learning_rate<span class="string">': 3.949730958478405e-05, '</span>epoch<span class="string">': 1.0502690415215952&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.78615087890625, '</span>learning_rate<span class="string">': 3.9353437113342735e-05, '</span>epoch<span class="string">': 1.0646562886657267&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.7433726806640626, '</span>learning_rate<span class="string">': 3.920956464190142e-05, '</span>epoch<span class="string">': 1.0790435358098582&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.7276751708984375, '</span>learning_rate<span class="string">': 3.906569217046011e-05, '</span>epoch<span class="string">': 1.0934307829539895&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.7605506591796876, '</span>learning_rate<span class="string">': 3.8921819699018794e-05, '</span>epoch<span class="string">': 1.107818030098121&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.75696728515625, '</span>learning_rate<span class="string">': 3.8777947227577474e-05, '</span>epoch<span class="string">': 1.1222052772422524&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.7471634521484376, '</span>learning_rate<span class="string">': 3.863407475613616e-05, '</span>epoch<span class="string">': 1.136592524386384&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.72530859375, '</span>learning_rate<span class="string">': 3.8490202284694846e-05, '</span>epoch<span class="string">': 1.1509797715305154&#125;                                                                                                </span></span><br><span class="line"><span class="string"> 23%|████████████████████████████████▏                                                                                                           | 40000/173765 [5:58:08&lt;24:17:23,  1.53it/s][INFO|trainer.py:1248] 2020-12-29 00:26:47,669 &gt;&gt; Saving model checkpoint to output/checkpoint-40000</span></span><br><span class="line"><span class="string">[INFO|configuration_utils.py:289] 2020-12-29 00:26:47,672 &gt;&gt; Configuration saved in output/checkpoint-40000/config.json</span></span><br><span class="line"><span class="string">[INFO|modeling_utils.py:814] 2020-12-29 00:26:51,427 &gt;&gt; Model weights saved in output/checkpoint-40000/pytorch_model.bin</span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.7199117431640625, '</span>learning_rate<span class="string">': 3.834632981325353e-05, '</span>epoch<span class="string">': 1.1653670186746468&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.74417578125, '</span>learning_rate<span class="string">': 3.820245734181222e-05, '</span>epoch<span class="string">': 1.1797542658187783&#125;                                                                                                 </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.718279296875, '</span>learning_rate<span class="string">': 3.8058584870370905e-05, '</span>epoch<span class="string">': 1.1941415129629096&#125;                                                                                               </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.739827392578125, '</span>learning_rate<span class="string">': 3.791471239892959e-05, '</span>epoch<span class="string">': 1.2085287601070411&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.7394217529296876, '</span>learning_rate<span class="string">': 3.777083992748828e-05, '</span>epoch<span class="string">': 1.2229160072511727&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.7399776611328126, '</span>learning_rate<span class="string">': 3.7626967456046964e-05, '</span>epoch<span class="string">': 1.237303254395304&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.7402420654296875, '</span>learning_rate<span class="string">': 3.748309498460565e-05, '</span>epoch<span class="string">': 1.2516905015394355&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.7499097900390626, '</span>learning_rate<span class="string">': 3.733922251316434e-05, '</span>epoch<span class="string">': 1.2660777486835668&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.731468994140625, '</span>learning_rate<span class="string">': 3.719535004172302e-05, '</span>epoch<span class="string">': 1.2804649958276983&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.7096973876953125, '</span>learning_rate<span class="string">': 3.705147757028171e-05, '</span>epoch<span class="string">': 1.2948522429718299&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.715921875, '</span>learning_rate<span class="string">': 3.690760509884039e-05, '</span>epoch<span class="string">': 1.3092394901159612&#125;                                                                                                   </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.7501182861328124, '</span>learning_rate<span class="string">': 3.6763732627399075e-05, '</span>epoch<span class="string">': 1.3236267372600927&#125;                                                                                           </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.75416552734375, '</span>learning_rate<span class="string">': 3.6619860155957755e-05, '</span>epoch<span class="string">': 1.338013984404224&#125;                                                                                              </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.7309554443359374, '</span>learning_rate<span class="string">': 3.647598768451644e-05, '</span>epoch<span class="string">': 1.3524012315483556&#125;                                                                                            </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.7114766845703124, '</span>learning_rate<span class="string">': 3.633211521307513e-05, '</span>epoch<span class="string">': 1.366788478692487&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.71192626953125, '</span>learning_rate<span class="string">': 3.6188242741633814e-05, '</span>epoch<span class="string">': 1.3811757258366184&#125;                                                                                             </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.72509228515625, '</span>learning_rate<span class="string">': 3.60443702701925e-05, '</span>epoch<span class="string">': 1.39556297298075&#125;                                                                                                 </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.6887713623046876, '</span>learning_rate<span class="string">': 3.5900497798751186e-05, '</span>epoch<span class="string">': 1.4099502201248812&#125;                                                                                           </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.70512939453125, '</span>learning_rate<span class="string">': 3.575662532730987e-05, '</span>epoch<span class="string">': 1.4243374672690128&#125;                                                                                              </span></span><br><span class="line"><span class="string">&#123;'</span>loss<span class="string">': 1.6820177001953125, '</span>learning_rate<span class="string">': 3.561275285586856e-05, '</span>epoch<span class="string">': 1.4387247144131443&#125;</span></span><br></pre></td></tr></table></figure>
+<h1 id="DEBUG"><a href="#DEBUG" class="headerlink" title="DEBUG"></a>DEBUG</h1><h2 id="1-Import-Error"><a href="#1-Import-Error" class="headerlink" title="1. Import Error"></a>1. Import Error</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ImportError: cannot import name <span class="string">'is_main_process'</span> from <span class="string">'transformers.trainer_utils'</span></span><br></pre></td></tr></table></figure>
+<p>原因是安装transformer的时候一些辅助代码是没有安装的 ，有两种<a href="https://github.com/huggingface/transformers/issues/8210" target="_blank" rel="noopener">解决方案</a>：</p>
+<ol>
+<li>从github安装transformer，使用命令：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/huggingface/transformers.git</span><br><span class="line"><span class="built_in">cd</span> transformers</span><br><span class="line">pip install -e .</span><br></pre></td></tr></table></figure>
+<ol>
+<li>直接去找到对应的函数，复制粘贴到当前文件中。</li>
+</ol>
+<p>为了简单起见，我采用第二种方法。</p>
+<h2 id="2-ConnectionError-text-py"><a href="#2-ConnectionError-text-py" class="headerlink" title="2. ConnectionError: text.py"></a>2. ConnectionError: text.py</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Couldn<span class="string">'t reach https://raw.githubusercontent.com/huggingface/datasets/1.1.3/datasets/text/text.py</span></span><br></pre></td></tr></table></figure>
+<p>在服务器上使用的代理问题，导致不能自动联网下载需要的py文件。</p>
+<p>手动下载text.py文件，然后放置在当前目录下的<code>text/text.py</code>中。再次尝试运行。</p>
+<p>Problem Solved !!!</p>
+<h2 id="3-tensor-size"><a href="#3-tensor-size" class="headerlink" title="3. tensor size"></a>3. tensor size</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RuntimeError: The size of tensor a (762) must match the size of tensor b (512) at non-singleton dimension 1</span><br></pre></td></tr></table></figure>
+<p>可以利用<code>python run_mlm.py --help</code>来查看帮助。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">max_seq_length: Optional[int] = field(</span><br><span class="line">    default=<span class="literal">None</span>,</span><br><span class="line">    metadata=&#123;</span><br><span class="line">        <span class="string">"help"</span>: <span class="string">"The maximum total input sequence length after tokenization. Sequences longer "</span></span><br><span class="line">        <span class="string">"than this will be truncated."</span></span><br><span class="line">    &#125;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>原因是由于句子长度过长，超过了512的最大限制，在运行时指定<code>--max_seq_length</code>就可以解决问题。</p>
+<h2 id="4-Evaluation"><a href="#4-Evaluation" class="headerlink" title="4. Evaluation"></a>4. Evaluation</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"run_mlm.py"</span>, line 420, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    main()</span><br><span class="line">  File <span class="string">"run_mlm.py"</span>, line 398, <span class="keyword">in</span> main</span><br><span class="line">    eval_output = trainer.evaluate()</span><br><span class="line">  File <span class="string">"/home/klhao/.conda/envs/klhao-pytorch/lib/python3.7/site-packages/transformers/trainer.py"</span>, line 1251, <span class="keyword">in</span> evaluate</span><br><span class="line">    output = self.prediction_loop(eval_dataloader, description=<span class="string">"Evaluation"</span>)</span><br><span class="line">  File <span class="string">"/home/klhao/.conda/envs/klhao-pytorch/lib/python3.7/site-packages/transformers/trainer.py"</span>, line 1353, <span class="keyword">in</span> prediction_loop</span><br><span class="line">    preds_host = logits <span class="keyword">if</span> preds_host is None <span class="keyword">else</span> nested_concat(preds_host, logits, dim=0)</span><br><span class="line">  File <span class="string">"/home/klhao/.conda/envs/klhao-pytorch/lib/python3.7/site-packages/transformers/trainer_pt_utils.py"</span>, line 49, <span class="keyword">in</span> nested_concat</span><br><span class="line">    <span class="built_in">return</span> torch.cat((tensors, new_tensors), dim=dim)</span><br><span class="line">RuntimeError: Sizes of tensors must match except <span class="keyword">in</span> dimension 1. Got 77 and 111 (The offending index is 0)</span><br></pre></td></tr></table></figure>
+<p>原因是测试的时候对preds进行拼接，向量维度不匹配。</p>
+<p>修改方法为在.sh加入命令, <code>--pad_to_max_length</code>，就可以确保句子长度一致。在NYT数据集上，max_length设为150就可以了。</p>
+<p>但是，依然会出现爆显存的情况，可以修改<code>/home/klhao/.conda/envs/klhao-pytorch/lib/python3.7/site-packages/transformers/trainer.py</code>的1353行附近：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> loss <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">    losses = loss.repeat(batch_size)</span><br><span class="line">    losses_host = losses <span class="keyword">if</span> losses_host <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> torch.cat((losses_host, losses), dim=<span class="number">0</span>)</span><br><span class="line"><span class="keyword">if</span> logits <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">    logits = logits.cpu().numpy()  <span class="comment"># 减少显存</span></span><br><span class="line">    preds_host = logits <span class="keyword">if</span> preds_host <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> nested_concat(preds_host, logits, dim=<span class="number">0</span>)</span><br><span class="line"><span class="keyword">if</span> labels <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">    labels = labels.cpu().numpy()  <span class="comment"># 减少显存</span></span><br><span class="line">    labels_host = labels <span class="keyword">if</span> labels_host <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> nested_concat(labels_host, labels, dim=<span class="number">0</span>)</span><br><span class="line">self.control = self.callback_handler.on_prediction_step(self.args, self.state, self.control)</span><br></pre></td></tr></table></figure>
+<p>Perfect! 完美~🎊🎗🎗🎃🎃✨🎉</p>
+<h1 id="计算相似度"><a href="#计算相似度" class="headerlink" title="计算相似度"></a>计算相似度</h1><p>将句子转化为向量，然后计算cosine相似度，分为以下两种：</p>
+<ol>
+<li>relation phrase 直接投入BERT</li>
+<li>句子取头尾实体之间以及两侧距离为k 的投入BERT</li>
+</ol>
+<p>取[CLS]对应的向量，计算得到cosine相似度即可~</p>
+<h1 id="其他补充"><a href="#其他补充" class="headerlink" title="其他补充"></a>其他补充</h1><p>在Trainer.py代码中可以看到默认的optimizer和scheduler，为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_optimizer_and_scheduler</span><span class="params">(self, num_training_steps: int)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        Setup the optimizer and the learning rate scheduler.</span></span><br><span class="line"><span class="string">        We provide a reasonable default that works well. If you want to use something else, you can pass a tuple in the</span></span><br><span class="line"><span class="string">        Trainer's init through :obj:`optimizers`, or subclass and override this method in a subclass.</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">if</span> self.optimizer <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            no_decay = [<span class="string">"bias"</span>, <span class="string">"LayerNorm.weight"</span>]</span><br><span class="line">            optimizer_grouped_parameters = [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="string">"params"</span>: [p <span class="keyword">for</span> n, p <span class="keyword">in</span> self.model.named_parameters() <span class="keyword">if</span> <span class="keyword">not</span> any(nd <span class="keyword">in</span> n <span class="keyword">for</span> nd <span class="keyword">in</span> no_decay)],</span><br><span class="line">                    <span class="string">"weight_decay"</span>: self.args.weight_decay,</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="string">"params"</span>: [p <span class="keyword">for</span> n, p <span class="keyword">in</span> self.model.named_parameters() <span class="keyword">if</span> any(nd <span class="keyword">in</span> n <span class="keyword">for</span> nd <span class="keyword">in</span> no_decay)],</span><br><span class="line">                    <span class="string">"weight_decay"</span>: <span class="number">0.0</span>,</span><br><span class="line">                &#125;,</span><br><span class="line">            ]</span><br><span class="line">            <span class="keyword">if</span> self.sharded_dpp:</span><br><span class="line">                self.optimizer = OSS(</span><br><span class="line">                    params=optimizer_grouped_parameters,</span><br><span class="line">                    optim=AdamW,</span><br><span class="line">                    lr=self.args.learning_rate,</span><br><span class="line">                    betas=(self.args.adam_beta1, self.args.adam_beta2),</span><br><span class="line">                    eps=self.args.adam_epsilon,</span><br><span class="line">                )</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                self.optimizer = AdamW(</span><br><span class="line">                    optimizer_grouped_parameters,</span><br><span class="line">                    lr=self.args.learning_rate,</span><br><span class="line">                    betas=(self.args.adam_beta1, self.args.adam_beta2),</span><br><span class="line">                    eps=self.args.adam_epsilon,</span><br><span class="line">                )</span><br><span class="line">        <span class="keyword">if</span> self.lr_scheduler <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            self.lr_scheduler = get_linear_schedule_with_warmup(</span><br><span class="line">                self.optimizer, num_warmup_steps=self.args.warmup_steps, num_training_steps=num_training_steps</span><br><span class="line">            )</span><br></pre></td></tr></table></figure>
+<p>而线性调节器代码为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_linear_schedule_with_warmup</span><span class="params">(optimizer, num_warmup_steps, num_training_steps, last_epoch=<span class="number">-1</span>)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Create a schedule with a learning rate that decreases linearly from the initial lr set in the optimizer to 0, after</span></span><br><span class="line"><span class="string">    a warmup period during which it increases linearly from 0 to the initial lr set in the optimizer.</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        optimizer (:class:`~torch.optim.Optimizer`):</span></span><br><span class="line"><span class="string">            The optimizer for which to schedule the learning rate.</span></span><br><span class="line"><span class="string">        num_warmup_steps (:obj:`int`):</span></span><br><span class="line"><span class="string">            The number of steps for the warmup phase.</span></span><br><span class="line"><span class="string">        num_training_steps (:obj:`int`):</span></span><br><span class="line"><span class="string">            The total number of training steps.</span></span><br><span class="line"><span class="string">        last_epoch (:obj:`int`, `optional`, defaults to -1):</span></span><br><span class="line"><span class="string">            The index of the last epoch when resuming training.</span></span><br><span class="line"><span class="string">    Return:</span></span><br><span class="line"><span class="string">        :obj:`torch.optim.lr_scheduler.LambdaLR` with the appropriate schedule.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">lr_lambda</span><span class="params">(current_step: int)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> current_step &lt; num_warmup_steps:</span><br><span class="line">            <span class="keyword">return</span> float(current_step) / float(max(<span class="number">1</span>, num_warmup_steps))</span><br><span class="line">        <span class="keyword">return</span> max(</span><br><span class="line">            <span class="number">0.0</span>, float(num_training_steps - current_step) / float(max(<span class="number">1</span>, num_training_steps - num_warmup_steps))</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> LambdaLR(optimizer, lr_lambda, last_epoch)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/BERT/" rel="tag"><i class="fa fa-tag"></i> BERT</a>
+          
+            <a href="/tags/MLM/" rel="tag"><i class="fa fa-tag"></i> MLM</a>
+          
+            <a href="/tags/Pretrain/" rel="tag"><i class="fa fa-tag"></i> Pretrain</a>
+          
+            <a href="/tags/BertForPreTraining/" rel="tag"><i class="fa fa-tag"></i> BertForPreTraining</a>
+          
+            <a href="/tags/BertForMaskedLM/" rel="tag"><i class="fa fa-tag"></i> BertForMaskedLM</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/12/20/DISTRE-debug-记录/" rel="next" title="DISTRE debug 记录">
+                <i class="fa fa-chevron-left"></i> DISTRE debug 记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/12/21/RESIDE-实体类型-Entity-Type-质量考察/" rel="prev" title="RESIDE 实体类型 (Entity Type) 质量考察">
+                RESIDE 实体类型 (Entity Type) 质量考察 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/漫画脸1vs1.jpg" alt="dinosaur">
+            
+              <p class="site-author-name" itemprop="name">dinosaur</p>
+              <div class="site-description motion-element" itemprop="description">闪耀的群星，颠覆着黑夜</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">371</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hao-Kailong" title="GitHub &rarr; https://github.com/Hao-Kailong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/klhao.nju@gmail.com" title="Email &rarr; klhao.nju@gmail.com"><i class="fa fa-fw fa-envelope"></i>Email</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#插曲"><span class="nav-text">插曲</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#run-mlm-py"><span class="nav-text">run_mlm.py</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据预处理"><span class="nav-text">数据预处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sh"><span class="nav-text">.sh</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#run-mlm-wwm-py"><span class="nav-text">run_mlm_wwm.py</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#10个epoch"><span class="nav-text">10个epoch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行log"><span class="nav-text">运行log</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DEBUG"><span class="nav-text">DEBUG</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Import-Error"><span class="nav-text">1. Import Error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ConnectionError-text-py"><span class="nav-text">2. ConnectionError: text.py</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-tensor-size"><span class="nav-text">3. tensor size</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Evaluation"><span class="nav-text">4. Evaluation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算相似度"><span class="nav-text">计算相似度</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他补充"><span class="nav-text">其他补充</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dinosaur</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+      <div>
+        <div class="addthis_inline_share_toolbox">
+  <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cb429b1d763f1d4" async="async"></script>
+</div>
+
+      </div>
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script id="dsq-count-scr" src="https://dinosaur7.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://haokailong.top/2020/12/21/利用预训练语言模型计算句子相似度/";
+    this.page.identifier = "2020/12/21/利用预训练语言模型计算句子相似度/";
+    this.page.title = '利用预训练语言模型计算句子相似度';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dinosaur7.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,2412 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="DsoDHJ1Km7LX7l7UnoG8dB2QrygUWW345_JkdBOj1Vw">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="ahe2m7RGVx">
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italicRoboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/solar-system-16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/solar-system-32.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="内容来自于：https://developers.google.com/freebase/v1/search-cookbook  Search CookbookThis page contains a list of recipes for different ways to constrain search queries using the Search Service. Textual c">
+<meta name="keywords" content="Freebase,知识图谱,SPARQL,Knowledge Graph,search">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Freebase Search Cookbook">
+<meta property="og:url" content="http://haokailong.top/2020/09/15/Freebase-Search-Cookbook/index.html">
+<meta property="og:site_name" content="Hold the Torch">
+<meta property="og:description" content="内容来自于：https://developers.google.com/freebase/v1/search-cookbook  Search CookbookThis page contains a list of recipes for different ways to constrain search queries using the Search Service. Textual c">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-09-15T11:29:55.788Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Freebase Search Cookbook">
+<meta name="twitter:description" content="内容来自于：https://developers.google.com/freebase/v1/search-cookbook  Search CookbookThis page contains a list of recipes for different ways to constrain search queries using the Search Service. Textual c">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://haokailong.top/2020/09/15/Freebase-Search-Cookbook/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Freebase Search Cookbook | Hold the Torch</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-138297445-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-138297445-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hold the Torch</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-wordcloud">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/wordcloud/" rel="section"><i class="menu-item-icon fa fa-fw fa-cloud"></i> <br>词云</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/15/Freebase-Search-Cookbook/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Freebase Search Cookbook
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-15 19:29:55" itemprop="dateModified" datetime="2020-09-15T19:29:55+08:00">2020-09-15</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Knowledge-Graph/" itemprop="url" rel="index"><span itemprop="name">Knowledge Graph</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/09/15/Freebase-Search-Cookbook/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/15/Freebase-Search-Cookbook/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>内容来自于：<a href="https://developers.google.com/freebase/v1/search-cookbook" target="_blank" rel="noopener">https://developers.google.com/freebase/v1/search-cookbook</a></p>
+</blockquote>
+<h1 id="Search-Cookbook"><a href="#Search-Cookbook" class="headerlink" title="Search Cookbook"></a>Search Cookbook</h1><p>This page contains a list of recipes for different ways to constrain search queries using the <a href="https://developers.google.com/freebase/v1/search-overview" target="_blank" rel="noopener">Search Service</a>.</p>
+<h2 id="Textual-constraints"><a href="#Textual-constraints" class="headerlink" title="Textual constraints"></a>Textual constraints</h2><p>Textual data for a Freebase entity comes first from its name and its aliases, then from its keys and other textual properties, and finally from its Wikipedia anchor data if it was reconciled with a language-specific Wikipedia topic.</p>
+<p>Textual constraints are language-specific; currently, 18 languages are supported. English has by far the most coverage and is the default language.</p>
+<p>For a list of all currently supported language codes, visit the following:</p>
+<p><a href="https://www.googleapis.com/freebase/v1/search?help=langs&amp;indent=true" target="_blank" rel="noopener">https://www.googleapis.com/freebase/v1/search?help=langs&amp;indent=true</a></p>
+<p>A textual constraint is specified with the <code>query</code> parameter. Its language is specified with the <code>lang</code> parameter. For example:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;gore&quot;</span><br><span class="line">query: &quot;gore&quot; lang: &quot;fr&quot;</span><br><span class="line">query: &quot;gore&quot; lang: &quot;de&quot;</span><br></pre></td></tr></table></figure>
+<p>During indexing, <strong>textual data is normalized</strong> in a language-specific way. For example, in English, text is converted to lowercase and accents are removed. At query time, the same language-specific normalization is performed on the query text. For example:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;beyoncé&quot;</span><br><span class="line">query: &quot;beyonce&quot;</span><br></pre></td></tr></table></figure>
+<p>Several parameters control how a textual constraint is matched. Setting the <code>prefixed</code> parameter to <code>true</code> triggers a prefix match on name and aliases only (and a regular match on other textual data). For example:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;bob dy&quot; prefixed: true</span><br></pre></td></tr></table></figure>
+<p>Setting <code>stemmed</code> to <code>true</code> triggers a stemmed match on name and aliases only (and a regular match on other textual data). Stemmed matches may be used to paste over language-specific suffix differences introduced by plurals or other grammatical forms. For example:<a id="more"></a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;potatos&quot; stemmed: true</span><br></pre></td></tr></table></figure>
+<p>Surrounding the query text with double quotation marks (“”) triggers a phrase match. The text tokens in the query must appear next to each other in the matching entity’s textual data. For example:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;\&quot;to be or not to be\&quot;&quot;</span><br></pre></td></tr></table></figure>
+<p>Use the <code>name</code>, <code>alias</code>, and <code>type</code> parameters to match against people and person entities whose name contains the word you want to match. For example:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">filter: &quot;(all name:gore alias:gore type:/people/person)&quot;</span><br></pre></td></tr></table></figure>
+<p>Similarly, the following example matches <code>/people/person</code> entities with a matching <code>alias</code> only and <em>not</em> their <code>name</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">filter: &quot;(all (not name:gore) alias:gore type:/people/person)&quot;</span><br></pre></td></tr></table></figure>
+<p>In addition to specifying what text fields should be matched, it is also possible to specify how the match should occur by inserting one of the following modifiers between the operand and the text field:</p>
+<ul>
+<li><code>{word}</code>: require that the words in the string match words in the corresponding text field in the document. <em>(default)</em></li>
+<li><code>{phrase}</code>: require that the words occur next to each other in the same order in the corresponding text field in the document.</li>
+<li><code>{full}</code>: like <code>{phrase}</code> but also require that the phrase completely match the text field, not just within the text field. In other words, a full match.</li>
+</ul>
+<p>For example, to find the musical single called Home by Marc Broussard, use a filter like the following:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">filter: &quot;(all type:/music/single name&#123;full&#125;:home /music/track/artist:&quot;Marc Broussard&quot;)&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="Language-constraints"><a href="#Language-constraints" class="headerlink" title="Language constraints"></a>Language constraints</h2><p>As described with textual constraints, the <code>lang</code> parameter is used to specify what language normalization rules to use to transform text into query tokens. The language of the query also conditions result ranking as freebase-search gets a language-specific relevance signal from the corresponding language Wikipedia.</p>
+<p>Currently, nine languages are supported: English (en), Spanish (es), French (fr), German (de), Italian (it), Portuguese (pt), Chinese (zh), Japanese (ja) and Korean (ko). English has by far the most coverage and is the default language.</p>
+<h3 id="Searching-with-multiple-languages-at-the-same-time"><a href="#Searching-with-multiple-languages-at-the-same-time" class="headerlink" title="Searching with multiple languages at the same time"></a>Searching with multiple languages at the same time</h3><p>The <code>lang</code> parameter accepts a comma-separated list of language codes that cause the search to be done in all the languages specified and the results to be ranked in the first language listed and displayed in the first language of the list that has a name for the entity.</p>
+<p>For example:</p>
+<p>The following searches for the German word “Sonnenblume” in German and French. It ranks and displays the results in French:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;Sonnenblume&quot; lang: &quot;fr,de&quot;</span><br></pre></td></tr></table></figure>
+<p>The following searches in English for movies whose language is Korean and displays their Korean name. The English part of the query is the word “korean” in the <code>expressed_by</code> constraint:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">filter: &quot;(all expressed_by:korean type:/film/film)&quot; lang: &quot;ko,en&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="Schema-constraints"><a href="#Schema-constraints" class="headerlink" title="Schema constraints"></a>Schema constraints</h2><p>Schema constraints are specified with the <code>type</code> and the <code>domain</code> parameters. <code>type</code> corresponds to the <code>/type/object/type</code> property values of an entity.</p>
+<p>For example, the following restricts a search to people only:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;gore&quot; type: &quot;/people/person&quot;</span><br></pre></td></tr></table></figure>
+<p><code>domain</code> corresponds to the <code>/type/type/domain</code> values of all <code>/type/object/type</code> values of an entity.</p>
+<p>For example, the following restricts a search to entities in French in the <code>/film</code> domain only:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;babar&quot; domain: &quot;/film&quot; lang: &quot;fr&quot;</span><br></pre></td></tr></table></figure>
+<p>You can also use individual Freebase properties to filter a query. For example, the following restricts a search to people who are from Canada:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">query &quot;john&quot; filter: &quot;(all type:/people/person /people/person/nationality:&quot;Canada&quot;)&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="Metaschema-constraints"><a href="#Metaschema-constraints" class="headerlink" title="Metaschema constraints"></a>Metaschema constraints</h2><p><a href="https://developers.google.com/freebase/v1/search-metaschema" target="_blank" rel="noopener">Metaschema</a> constraints filter entities by semantic predicates. These predicates are higher level concepts built from collections of Freebase properties describing similar semantic relationships.</p>
+<p>Metaschema constraints are specified using the <code>filter</code> parameter operands combined with an entity name or MID constraint.</p>
+<h3 id="Supported-Metaschema-filter-operands"><a href="#Supported-Metaschema-filter-operands" class="headerlink" title="Supported Metaschema filter operands"></a>Supported Metaschema filter operands</h3><p>The following Metaschema filter operands are supported by Freebase Search. Try out each example by clicking on the link in the table, or by using the <a href="http://api-examples.freebaseapps.com/search" target="_blank" rel="noopener">Freebase Search Example App</a>.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Operand Name</th>
+<th style="text-align:left">Example(s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>abstraction</code></td>
+<td style="text-align:left"><em>“fettuccine dishes”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;filter=(all+abstraction%3Afettuccine" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all abstraction:fettuccine)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>abstraction_of</code></td>
+<td style="text-align:left"><em>“class of the Western Bulwark locomotive”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+abstraction_of%3A&quot;Western+Bulwark&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all abstraction_of:&quot;Western Bulwark&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>adaptation</code></td>
+<td style="text-align:left"><em>“Works La Traviata is an adaptation of”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+adaptation_of%3A&quot;La+Traviata&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all adaptation_of:&quot;La Traviata&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>administered_by</code></td>
+<td style="text-align:left"><em>“Cannes awards”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Aawards+administered_by%3Acannes" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:awards administered_by:cannes)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>administers</code></td>
+<td style="text-align:left"><em>“Who runs the Synapse newspaper?”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+administers%3Asynapse" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all administers:synapse)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>appears_in</code></td>
+<td style="text-align:left"><em>“characters in the Magic Flute”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+appears_in%3A&quot;magic+flute&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all appears_in:&quot;magic flute&quot;)&quot;</code><em>“Figuren in der Zauberflöte”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+appears_in%3A&quot;Die+Zauberflöte&quot;" target="_blank" rel="noopener">Try it.</a>“+lang%3A+”de”&amp;indent=true))<code>filter: &quot;(all appears_in:&quot;Die Zauberflöte&quot;)&quot; lang: &quot;de&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>broader_than</code></td>
+<td style="text-align:left"><em>“line of aircraft that the Airbus 319 belongs to”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+broader_than%3A&quot;Airbus+A319&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all broader_than:&quot;Airbus A319&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>category</code></td>
+<td style="text-align:left"><em>“french actresses”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+category%3Afemale+origin%3Afrance+notable%3Aactor" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all category:female origin:france notable:actor)&quot;</code><em>“french actresses” (variant)</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+category%3Afemale+origin%3Afrance+practitioner_of%3Aactor" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all category:female origin:france practitioner_of:actor)&quot;</code><em>“california or french volcanos”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+category%3Avolcano+(any+part_of%3Acalifornia+part_of%3Afrance" target="_blank" rel="noopener">Try it.</a>)&amp;indent=true))<code>filter: &quot;(all category:volcano (any part_of:california part_of:france))&quot;</code><em>“pasta dishes”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+category%3Apasta" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all category:pasta)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>center</code></td>
+<td style="text-align:left"><em>“airlines with a hub in San Francisco”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Aairline+center%3A&quot;San+Francisco&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:airline center:&quot;San Francisco&quot;)&quot;</code><em>“airlines with hubs in San Francisco and Atlanta”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Aairline+center%3A&quot;San+Francisco&quot;+center%3Aatlanta" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:airline center:&quot;San Francisco&quot; center:atlanta)&quot;</code><em>“newspapers centered in San Francisco”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3A%2Fbook%2Fnewspaper+center%3A%2Fm%2F0d6lp" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:/book/newspaper center:/m/0d6lp)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>center_for</code></td>
+<td style="text-align:left"><em>“sports facilities for the San Francisco 49ers”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+center_for%3A&quot;san+francisco+49ers&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all center_for:&quot;san francisco 49ers&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>certification</code></td>
+<td style="text-align:left"><em>“R-rated movies by Wim Wenders”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3A%2Ffilm%2Ffilm+contributor%3Awenders+certification%3Ar" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:/film/film contributor:wenders certification:r)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>character</code></td>
+<td style="text-align:left"><em>“works which have Papageno as character”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+character%3Apapageno" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all character:papageno)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>child</code></td>
+<td style="text-align:left"><em>“parents of Bill Clinton”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+child%3A&quot;bill+clinton&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all child:&quot;bill clinton&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>contributed_to</code></td>
+<td style="text-align:left"><em>“Who contributed to Blade Runner?”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+contributed_to%3A&quot;Blade+Runner&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all contributed_to:&quot;Blade Runner&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>contributor</code></td>
+<td style="text-align:left"><em>“movies by Steven Spielberg”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3A%2Ffilm%2Ffilm+contributor%3A&quot;Steven+Spielberg&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:/film/film contributor:&quot;Steven Spielberg&quot;)&quot;</code><em>“movies by Steven Spielberg”</em> using the MID instead of the contributor’s name. (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3A%2Ffilm%2Ffilm+contributor%3A%2Fm%2F06pj8" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:/film/film contributor:/m/06pj8)&quot;</code><em>“movies with Harrison Ford”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3A%2Ffilm%2Ffilm+contributor%3A&quot;Harrison+Ford&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:/film/film contributor:&quot;Harrison Ford&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>created</code></td>
+<td style="text-align:left"><em>“who created ‘for whom the bell tolls’”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+created%3A&quot;for+whom+the+bell+tolls&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all created:&quot;for whom the bell tolls&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>created_by</code></td>
+<td style="text-align:left"><em>“software by Google”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+notable%3Asoftware+created_by%3Agoogle" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all notable:software created_by:google)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>discovered</code></td>
+<td style="text-align:left"><em>“discoverers of radium”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+discovered%3Aradium" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all discovered:radium)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>discovered_by</code></td>
+<td style="text-align:left"><em>“discoveries by Curie”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+discovered_by%3Acurie" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all discovered_by:curie)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>distributed_by</code></td>
+<td style="text-align:left"><em>“NPR shows”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Ashow+distributed_by%3Anpr" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:show distributed_by:npr)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>exhibited</code></td>
+<td style="text-align:left"><em>“where was ‘down by law’ presented ?”</em> (<a href="https://developers.google.com/freebase/v1/&amp;indent=true" target="_blank" rel="noopener">Try it.</a>)<code>filter: &quot;(all exhibited:&quot;down by law&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>exhibited_at</code></td>
+<td style="text-align:left"><em>“nominated works shown at the 2010 Cannes Film Festival”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3A&quot;nominated+work&quot;+exhibited_at%3A&quot;2010+Cannes+Film+festival&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:&quot;nominated work&quot; exhibited_at:&quot;2010 Cannes Film festival&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>expressed_by</code></td>
+<td style="text-align:left"><em>“books in esperanto”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Abook+expressed_by%3Aesperanto" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:book expressed_by:esperanto)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>fictional_link</code></td>
+<td style="text-align:left"><em>“fictional characters related to Mickey Mouse”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3A%2Ffictional_universe%2Ffictional_character+fiction_link%3A&quot;mickey+mouse&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:/fictional_universe/fictional_character fiction_link:&quot;mickey mouse&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>genre</code></td>
+<td style="text-align:left"><em>“gothic cathedrals”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+category%3Acathedral+genre%3Agothic" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all category:cathedral genre:gothic)&quot;</code><em>“gothic cathedrals by Viollet-le-duc”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+category%3Acathedral+genre%3Agothic+created_by%3Aviollet" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all category:cathedral genre:gothic created_by:viollet)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>identifies</code></td>
+<td style="text-align:left"><em>“What identifies Southwest Airlines?”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+identifies%3A&quot;Southwest+Airlines&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all identifies:&quot;Southwest Airlines&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>leader</code></td>
+<td style="text-align:left"><em>“Mitch Kapor companies”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Acompany+leader%3Akapor" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:company leader:kapor)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>leader_of</code></td>
+<td style="text-align:left"><em>“Paris mayors”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+title%3Amayor+leader_of%3Aparis" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all title:mayor leader_of:paris)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>made_of</code></td>
+<td style="text-align:left"><em>“wax paintings”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Apainting+made_of%3Awax" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:painting made_of:wax)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>means_of_demise</code></td>
+<td style="text-align:left"><em>“executed politicians”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Apolitician+means_of_demise%3A&quot;capital+punishment&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:politician means_of_demise:&quot;capital punishment&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>member_of</code></td>
+<td style="text-align:left"><em>“african monarchs”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Amonarch+member_of%3Aafrica" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:monarch member_of:africa)&quot;</code><em>“Democratic politicians and notable actors”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Apolitician+member_of%3Ademocratic+notable%3Aactor" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:politician member_of:democratic notable:actor)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>narrower_than</code></td>
+<td style="text-align:left"><em>“examples of v8 engines”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Aengine+narrower_than%3A&quot;v8+engine&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:engine narrower_than:&quot;v8 engine&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>occurs_in</code></td>
+<td style="text-align:left"><em>“languages spoken in Romania”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Alanguage+occurs_in%3Aromania" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:language occurs_in:romania)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>origin</code></td>
+<td style="text-align:left"><em>“Republican governors from Austria”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+title%3Agovernor+member_of%3Arepublican+origin%3Aaustria" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all title:governor member_of:republican origin:austria)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>owner</code></td>
+<td style="text-align:left"><em>“makes owned by Ford”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Amake+owner%3Aford" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:make owner:ford)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>owns</code></td>
+<td style="text-align:left"><em>“Who owns the Mavericks?”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+owns%3Amavericks" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all owns:mavericks)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>parent</code></td>
+<td style="text-align:left"><em>“Al Gore’s children”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+parent%3A&quot;al+gore&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all parent:&quot;al gore&quot;)&quot;</code><em>“descendants of the Lisp programming language”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3A%2Fcomputer%2Fprogramming_language+parent%3Alisp" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:/computer/programming_language parent:lisp)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>part_of</code></td>
+<td style="text-align:left"><em>“swedish lakes”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Alake+part_of%3Asweden" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:lake part_of:sweden)&quot;</code><em>“competitions at the 2008 summer olympics”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Acompetition+part_of%3A&quot;2008+summer+olympics&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:competition part_of:&quot;2008 summer olympics&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>participant</code></td>
+<td style="text-align:left"><em>“Bowie concerts”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+participant%3Abowie+type%3Aconcert" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all participant:bowie type:concert)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>participated_in</code></td>
+<td style="text-align:left"><em>“Notable austrian skiers who participated in Olympics”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+notable%3Askier+member_of%3Aaustria+participated_in%3Aolympics" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all notable:skier member_of:austria participated_in:olympics)&quot;&#39;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>peer_of</code></td>
+<td style="text-align:left"><em>“politicians peers of Al Gore”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+notable%3Apolitician+peer_of%3Agore" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all notable:politician peer_of:gore)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>permits_use_of</code></td>
+<td style="text-align:left"><em>“Diesel engines”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+permits_use_of%3Adiesel" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all permits_use_of:diesel)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>portrayed</code></td>
+<td style="text-align:left"><em>“actors who portrayed John Lennon”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+notable%3Aactor+portrayed%3A&quot;john+lennon&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all notable:actor portrayed:&quot;john lennon&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>portrayed_by</code></td>
+<td style="text-align:left"><em>“characters portrayed by Harrison Ford”</em> (<a href="https://developers.google.com/freebase/v1/&amp;indent=true" target="_blank" rel="noopener">Try it.</a>)<code>filter: &quot;(all portrayed_by:&quot;Harrison Ford&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>practitioner_of</code></td>
+<td style="text-align:left"><em>“female african american lawyers”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+category%3Afemale+category%3A&quot;african+american&quot;+practitioner_of%3Alawyer" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all category:female category:&quot;african american&quot; practitioner_of:lawyer)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>preceeding</code></td>
+<td style="text-align:left"><em>“sequels to The Lord of the Rings, the two Towers”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3A%2Ffilm%2Ffilm+preceeding%3A&quot;The+Lord+of+the+Rings%2C+the+two+Towers&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:/film/film preceeding:&quot;The Lord of the Rings, the two Towers&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>produced_by</code></td>
+<td style="text-align:left"><em>“Apple computers”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Acomputers+produced_by%3Aapple" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:computers produced_by:apple)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>publication</code></td>
+<td style="text-align:left"><em>“which book has /m/0clw238 as first edition ?”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+publication%3A%2Fm%2F0clw238" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all publication:/m/0clw238)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>publication_of</code></td>
+<td style="text-align:left"><em>“releases of La Traviata”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+publication_of%3A&quot;La+Traviata&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all publication_of:&quot;La Traviata&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>service_area</code></td>
+<td style="text-align:left"><em>“California broadcasters”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Abroadcaster+service_area%3Acalifornia" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:broadcaster service_area:california)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>status</code></td>
+<td style="text-align:left"><em>“retreating swiss glaciers”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Aglacier+status%3Aretreating+part_of%3Aswitzerland" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:glacier status:retreating part_of:switzerland)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>subclass_of</code></td>
+<td style="text-align:left"><em>“kinds of swimwear”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+subclass_of%3Aswimwear" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all subclass_of:swimwear)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>subject</code></td>
+<td style="text-align:left"><em>“movies about the Holocaust”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Afilm+subject%3Aholocaust" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:film subject:holocaust)&quot;</code><em>“books about mathematics”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Abook+subject%3Amathematics" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:book subject:mathematics)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>subsequent</code></td>
+<td style="text-align:left"><em>“prequels to The Lord of the Rings, the two Towers”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3A%2Ffilm%2Ffilm+subsequent%3A&quot;The+Lord+of+the+Rings%2C+the+two+Towers&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:/film/film subsequent:&quot;The Lord of the Rings, the two Towers&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>succeeded_by</code></td>
+<td style="text-align:left"><em>“Which automotive platform was succeeded by the Ford B3 platform ?”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+succeeded_by%3A&quot;ford+b3+platform&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all succeeded_by:&quot;ford b3 platform&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>succeeds</code></td>
+<td style="text-align:left"><em>“Who succeeded the House of Stuart ?”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+succeeds%3Astuart" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all succeeds:stuart)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>superclass_of</code></td>
+<td style="text-align:left"><em>“Classes coronary heart disease belongs to”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+superclass_of%3A&quot;coronary+heart+disease&quot;" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all superclass_of:&quot;coronary heart disease&quot;)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>title</code></td>
+<td style="text-align:left"><em>“Google engineers”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+title%3Aengineer+member_of%3Agoogle" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all title:engineer member_of:google)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>tookplace_at</code></td>
+<td style="text-align:left"><em>“battles that took place at Marengo”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3Abattles+tookplace_at%3Amarengo" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:battles tookplace_at:marengo)&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>use_permitted_by</code></td>
+<td style="text-align:left"><em>“File formats supported on an iPhone”</em> (<a href="https://www.googleapis.com/freebase/v1/search?query=&amp;limit=10&amp;filter=(all+type%3A&quot;file+format&quot;+use_permitted_by%3Aiphone" target="_blank" rel="noopener">Try it.</a>&amp;indent=true))<code>filter: &quot;(all type:&quot;file format&quot; use_permitted_by:iphone)&quot;</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="Scoring-and-ranking"><a href="#Scoring-and-ranking" class="headerlink" title="Scoring and ranking"></a>Scoring and ranking</h2><p>Freebase entities have an inherent relevance score (ranking) computed during indexing that is function of its inbound and outbound link counts in Freebase and Wikipedia. Some popular Freebase entities also have a popularity score computed by Google. By default, both scores are combined together during queries.</p>
+<p>When a textual constraint is present, a textual match score is computed from the number of hits returned by the search index and is combined with the relevance score.</p>
+<p>FreebaseSearch results are always sorted by the final score, highest score first.</p>
+<p>The scoring parameter makes it possible to control what relevance score components are used to compute the final score:</p>
+<p><strong>freebase</strong>: Use only the Freebase relevance score.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;beyoncé&quot; scoring: freebase</span><br></pre></td></tr></table></figure>
+<p><strong>entity</strong>: Use both relevance scores, which replaces any missing Google scores to 1.0. This is the default.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;beyoncé&quot; scoring: entity</span><br></pre></td></tr></table></figure>
+<p><strong>schema</strong>: Use when looking for schema entities like types, properties or domains. The link counts of schema entities is computed differently.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;performance&quot; scoring: schema</span><br></pre></td></tr></table></figure>
+<h2 id="Other-constraints"><a href="#Other-constraints" class="headerlink" title="Other constraints"></a>Other constraints</h2><p>Entities can be filtered by index tag using the with or without parameters. Entities are tagged during indexing, each tag corresponding to one or several Freebase queries that would be too expensive to run during search:</p>
+<p><code>commons</code> is a tag that can be used to restrict a schema search to returning only Freebase Commons schema. For example, Freebase Commons types matching the word “color”</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;color&quot; type: &quot;/type/type&quot; with: &quot;commons&quot;</span><br></pre></td></tr></table></figure>
+<p><code>gg</code> is a tag that can be used to restrict a search to entities for which there is or isn’t a Google popularity score.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;1923&quot; type: &quot;/people/person&quot; with: &quot;gg&quot;</span><br><span class="line">query: &quot;1923&quot; type: &quot;/people/person&quot; without: &quot;gg&quot;</span><br></pre></td></tr></table></figure>
+<p>The <code>without</code> parameter is equivalent to the a negated with in a filter expression.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;color&quot; limit: 5 type: &quot;/type/type&quot; without: &quot;commons&quot; query: &quot;color&quot; limit: 5 type: &quot;/type/type&quot; filter: &quot;(not with:commons)&quot;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Freebase/" rel="tag"><i class="fa fa-tag"></i> Freebase</a>
+          
+            <a href="/tags/知识图谱/" rel="tag"><i class="fa fa-tag"></i> 知识图谱</a>
+          
+            <a href="/tags/SPARQL/" rel="tag"><i class="fa fa-tag"></i> SPARQL</a>
+          
+            <a href="/tags/Knowledge-Graph/" rel="tag"><i class="fa fa-tag"></i> Knowledge Graph</a>
+          
+            <a href="/tags/search/" rel="tag"><i class="fa fa-tag"></i> search</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/09/15/Freebase介绍/" rel="next" title="Freebase介绍">
+                <i class="fa fa-chevron-left"></i> Freebase介绍
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/09/19/局部敏感哈希-LSH/" rel="prev" title="局部敏感哈希(LSH)">
+                局部敏感哈希(LSH) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/漫画脸1vs1.jpg" alt="dinosaur">
+            
+              <p class="site-author-name" itemprop="name">dinosaur</p>
+              <div class="site-description motion-element" itemprop="description">闪耀的群星，颠覆着黑夜</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">371</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hao-Kailong" title="GitHub &rarr; https://github.com/Hao-Kailong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/klhao.nju@gmail.com" title="Email &rarr; klhao.nju@gmail.com"><i class="fa fa-fw fa-envelope"></i>Email</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Search-Cookbook"><span class="nav-text">Search Cookbook</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Textual-constraints"><span class="nav-text">Textual constraints</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Language-constraints"><span class="nav-text">Language constraints</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Searching-with-multiple-languages-at-the-same-time"><span class="nav-text">Searching with multiple languages at the same time</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Schema-constraints"><span class="nav-text">Schema constraints</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Metaschema-constraints"><span class="nav-text">Metaschema constraints</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Supported-Metaschema-filter-operands"><span class="nav-text">Supported Metaschema filter operands</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scoring-and-ranking"><span class="nav-text">Scoring and ranking</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Other-constraints"><span class="nav-text">Other constraints</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dinosaur</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+      <div>
+        <div class="addthis_inline_share_toolbox">
+  <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cb429b1d763f1d4" async="async"></script>
+</div>
+
+      </div>
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script id="dsq-count-scr" src="https://dinosaur7.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://haokailong.top/2020/09/15/Freebase-Search-Cookbook/";
+    this.page.identifier = "2020/09/15/Freebase-Search-Cookbook/";
+    this.page.title = 'Freebase Search Cookbook';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dinosaur7.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

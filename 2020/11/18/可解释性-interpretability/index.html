@@ -1,0 +1,2297 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="DsoDHJ1Km7LX7l7UnoG8dB2QrygUWW345_JkdBOj1Vw">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="ahe2m7RGVx">
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italicRoboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/solar-system-16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/solar-system-32.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文是对TACL2019《Analysis Methods in Neural Language Processing: A Survey》的翻译和整理。  随着模型精度的提高，可解释性却不断下降，下图形象的表明了这一点：   导读NLP领域发展迅猛，其模型分析方法也正逐渐火热。为什么要研究NLP的可解释性？某种程度上，这一问题又落入更大的范畴——为什么要研究机器学习模型的可解释性？其支持者认为">
+<meta name="keywords" content="NLP,Neural Networks,Deep Learning,Interpretability">
+<meta property="og:type" content="article">
+<meta property="og:title" content="可解释性 (interpretability)">
+<meta property="og:url" content="http://haokailong.top/2020/11/18/可解释性-interpretability/index.html">
+<meta property="og:site_name" content="Hold the Torch">
+<meta property="og:description" content="本文是对TACL2019《Analysis Methods in Neural Language Processing: A Survey》的翻译和整理。  随着模型精度的提高，可解释性却不断下降，下图形象的表明了这一点：   导读NLP领域发展迅猛，其模型分析方法也正逐渐火热。为什么要研究NLP的可解释性？某种程度上，这一问题又落入更大的范畴——为什么要研究机器学习模型的可解释性？其支持者认为">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/interpretability.webp">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/GNpj5fw72EqiccKOqVfMxVaHMdiaIOIFpc1PT4Synn2yedUnW8gWGnDdABcdzrL0H4KoUkxH9sYfypuibHNhhDkAQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/GNpj5fw72EqiccKOqVfMxVaHMdiaIOIFpcaOIgRsk1OJnoVqVttqeDKrFXgoEwAN6dUxOMoOmw71B8UthS0m36Wg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/GNpj5fw72EqiccKOqVfMxVaHMdiaIOIFpcbV4nlTytz3tmMiaWYT8NnOnnibcohj9qMHPviafCNE9ngoursyhCvSnXw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/GNpj5fw72EqiccKOqVfMxVaHMdiaIOIFpcjyyJPH0NA0gO0cBCz8XoicKGg7wLUK8v98sxfcd1wl5yUJN94gyFOeA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/GNpj5fw72EqiccKOqVfMxVaHMdiaIOIFpcgicuwGbxaMapMxPFYIcmjmicFKZSQRwt7iat2n0ibeG9SjNno16j3ArNJQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/GNpj5fw72EqiccKOqVfMxVaHMdiaIOIFpcRqks0M0Chm5E8KYiaolADIYzT0ZibA1rxQgiaGdiaiaJNMLQneeSC0D1HMA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_svg/Ib5852jAyb82RBBvOrn3mh8z9ibBibZ1Mh3DPibCAh2zgdXYVCXvaySlvHLgibGujNBVJQv3t5M2icicicrLgFTN6ZOGSx1WicUlwYXF/640?wx_fmt=svg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_svg/Ib5852jAyb82RBBvOrn3mh8z9ibBibZ1MhSJUgbQeBnJafzqv7D54GETp9EIsuGSm1oQ61aicaO3mx0J8fe7cdibbia5a4URBF6DD/640?wx_fmt=svg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:updated_time" content="2020-11-18T03:01:13.866Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="可解释性 (interpretability)">
+<meta name="twitter:description" content="本文是对TACL2019《Analysis Methods in Neural Language Processing: A Survey》的翻译和整理。  随着模型精度的提高，可解释性却不断下降，下图形象的表明了这一点：   导读NLP领域发展迅猛，其模型分析方法也正逐渐火热。为什么要研究NLP的可解释性？某种程度上，这一问题又落入更大的范畴——为什么要研究机器学习模型的可解释性？其支持者认为">
+<meta name="twitter:image" content="http://haokailong.top/images/blog/2020/interpretability.webp">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://haokailong.top/2020/11/18/可解释性-interpretability/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>可解释性 (interpretability) | Hold the Torch</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-138297445-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-138297445-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hold the Torch</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-wordcloud">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/wordcloud/" rel="section"><i class="menu-item-icon fa fa-fw fa-cloud"></i> <br>词云</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/18/可解释性-interpretability/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">可解释性 (interpretability)
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-18 11:01:13" itemprop="dateModified" datetime="2020-11-18T11:01:13+08:00">2020-11-18</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/18/可解释性-interpretability/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/18/可解释性-interpretability/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本文是对TACL2019《Analysis Methods in Neural Language Processing: A Survey》的翻译和整理。</p>
+</blockquote>
+<p>随着模型精度的提高，可解释性却不断下降，下图形象的表明了这一点：</p>
+<p><div align="center"> <img src="/images/blog/2020/interpretability.webp" alt></div></p>
+<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>NLP领域发展迅猛，其模型分析方法也正逐渐火热。为什么要研究NLP的可解释性？某种程度上，这一问题又落入更大的范畴——为什么要研究机器学习模型的可解释性？其支持者认为，在于增加ML系统的可靠性、可信度、公平性和安全性等。此外，知其所以然也有助于改进机器学习模型的效果。</p>
+<p>而在NLP领域，这一问题需要联系其发展历程来解答：</p>
+<p>早期的NLP工作通常涉及特征工程，这些手工特征的含义是易于理解的——形态特性，词法类别，句法类别，语义关系等等。理论上，人们可以通过观察模型对这些特征赋予的权重来更好地理解模型在做什么。而对于现在普遍的端到端的（比如，从词向量输入到文本分类的输出）神经网络模型，理解和分析它们的工作不是那么直观。但是，既然这些模型结构能够捕捉文本的特征，那么早期的关于语言学概念的分析工作也应当适用于现在的NLP研究。</p>
+<p>本文尝试分析近年来NLP可解释领域的工作，概括当下的主流方向，并针对当前工作的不足提出一些可能的未来方向。本文将围绕以下几方面展开：</p>
+<ul>
+<li>语义特征学习</li>
+<li>可视化方法</li>
+<li>挑战集</li>
+<li>对抗样本</li>
+<li>解释模型预测</li>
+<li>其他研究</li>
+</ul>
+<a id="more"></a>
+<h2 id="1-语义特征学习"><a href="#1-语义特征学习" class="headerlink" title="1. 语义特征学习"></a>1. 语义特征学习</h2><p>现代NLP模型通常是端到端的，没有显式编码语义特征，所以人们很想知道模型到底都学到了什么。</p>
+<h3 id="研究方法"><a href="#研究方法" class="headerlink" title="研究方法"></a>研究方法</h3><p>最常见的方法就是将模型的激活输出和语义特征分类进行关联。</p>
+<p>即，固定一个训练好的模型（例如在机器翻译任务）的权重，将其用于编码语料并训练一个分类器做一些语义特征分类（例如词性分类等）。分类结果的好坏反映了模型学习表示的好坏。</p>
+<p>以上这一方法具有多个名字，如“辅助分类任务”（auxiliary prediction tasks），“诊断分类器”（diagnostic classifiers），以及“探针实验”（probing tasks）等。目前已有的工作总结如下：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/GNpj5fw72EqiccKOqVfMxVaHMdiaIOIFpc1PT4Synn2yedUnW8gWGnDdABcdzrL0H4KoUkxH9sYfypuibHNhhDkAQ/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/GNpj5fw72EqiccKOqVfMxVaHMdiaIOIFpcaOIgRsk1OJnoVqVttqeDKrFXgoEwAN6dUxOMoOmw71B8UthS0m36Wg/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
+<p>举一个神经机器翻译（NMT）任务的例子：</p>
+<blockquote>
+<p>Xing Shi, Inkit Padhi, and Kevin Knight. 2016b. Does String-Based Neural MT Learn Source Syntax? In Proceedings of the 2016 Conference on Empirical Methods in Natural Language Processing, pages 1526–1534, Austin, Texas. Association for Computational Linguistics.</p>
+</blockquote>
+<p>首先训练两个模型：英译法和法译英模型，然后将模型中的编码器部分单独在语料上运行获得中间状态，并介入逻辑回归分类器用于不同语法特征分类。作者实验得出结论：NMT的编码器能够学习词语层面和句子层面重要的语法信息，并且进一步通过比较不同编码层的表示发现：在局部特征更多地体现在底层编码结果中，而高层的结构则学到句子的全局或者摘要的信息。</p>
+<p>其他的寻找模型结构和语义特征关联的实验包括分析注意力权重和指代词分辨的关联，以及直接和间接计算模型激活层输出和语义特征的相关系数。</p>
+<h3 id="语义特征"><a href="#语义特征" class="headerlink" title="语义特征"></a>语义特征</h3><p>上述实验涵盖了许多有用的语义特征，从基本特征如句子长度，词语位置，词语存在性，以及简单词序，形态学结构到语法和语义结构的特征，此外还有音节、口音和风格等语音特征等等。</p>
+<p>尽管难以将这些分布广泛的工作加以整合一统，可以看出<strong>神经网络可以学到数量可观的语言学信息</strong>。对于频繁出现的特征，模型学习得很好；而对于少见的特征，对模型而言则较难学习。有工作发现LSTM可以捕捉到大部分情况的主语-动词的共现关系，而在更难的例子下需要一些直接的监督信息。</p>
+<p>另一个逐渐浮现出来的主题是研究模型学习的文本表示的<strong>层次化性质</strong>。上文中提到的NMT模型的发现就能说明这一点，同时在RNN模型中也能看到语法信息出现在层次化的表示中。</p>
+<p>此外，一些研究者（Williams等，2018；Maillard和Clark，2018）发现使用隐式树状结构训练的模型在自然语言推理（Natural Language Inference，NLI）任务中比使用语法标注树的模型表现要好。更进一步说，这些模型中的树并没有按照现有的语法理论构建语法树，这也对神经网络学习语法信息的重要性带来疑问。</p>
+<h3 id="模型的相关结构"><a href="#模型的相关结构" class="headerlink" title="模型的相关结构"></a>模型的相关结构</h3><p>在这一领域，模型的部分结构被用于探究是否具有对语义信息的学习能力，包括：</p>
+<ul>
+<li>词向量</li>
+<li>句向量</li>
+<li>RNN的隐藏状态和门控激活输出</li>
+<li>句子到句子模型的注意力权重</li>
+</ul>
+<p>对CNN模型的研究工作较少。在语音领域和多模态相关的工作等，请参考上面的表。</p>
+<h3 id="局限"><a href="#局限" class="headerlink" title="局限"></a>局限</h3><p><strong>上述的分类方法可以证明模型可以捕捉一定的语义信息，然而这不一定能证明模型利用了这些信息进行推理</strong>。例如，Vanmassenhove等（2017）研究了NMT（以及基于短语的统计机器翻译）中的方面信息。他们训练了NMT句子编码向量的分类器，发现他们可以在90％的时间内准确预测时态。但是，在评估输出翻译时，他们发现只有79％的结果具有正确的时态。他们将此结果解释为“在解码过程中丢失了部分方面信息”。与此相关的是，Cífka和Bojar（2018）在翻译质量（BLEU）和表示质量（分类任务）方面比较了各种NMT模型的性能。他们发现两者之间存在负相关关系，这表明高质量的系统可能未在学习某些句子的含义。相反，Artetxe等（2018）指出，词嵌入包含不同的语言信息，可以通过对学习的嵌入进行线性变换来发现它。他们的结果提出了另一种解释，表明“嵌入模型能够对不同的语言信息进行编码，但对这些信息的表达方式有限制。”</p>
+<p>从方法论的角度来看，大多数相关的分析工作都与互相关（correlation）有关：<strong>具有语言属性的神经网络组件之间的关联程度如何</strong>？可能缺乏一种<strong>因果关系</strong>的度量：语言属性的编码如何影响系统输出。Giulianelli等（2018）在这个问题上取得了一些进展。他们根据RNN隐藏状态和门控在不同时间步长预测了数字一致性。然后，他们根据预测和正确标签之间的差异，通过更改隐藏的激活来干预模型如何处理句子。这种提高的一致性预测准确性，并且效果在句子过程中持续存在，表明此信息对模型有影响。但是，他们没有报告对整体模型质量的影响，例如通过测量困惑度。因果推理（causal inference）的方法可能会为其中一些问题提供新的思路。</p>
+<h2 id="2-可视化方法"><a href="#2-可视化方法" class="headerlink" title="2. 可视化方法"></a>2. 可视化方法</h2><p>可视化工具，不仅在语言领域，在其他领域都是是一类分析神经网络的重要工具。</p>
+<ul>
+<li>早期的工作可视化了语言建模任务训练的<strong>RNN中的隐藏单元激活输出</strong>，并观察到它们如何与某些语法关系（例如相关性）相对应（Elman，1991）。</li>
+<li><strong>注意力机制</strong>一出来，人们很自然就想到将其可视化用做解释工具。注意力的可视化工作包括：NMT（Bahdanau等人，2014），NLI（Rocktäschel等人，2016; Yin等人，2016），摘要（Rush等人，2015），机器翻译的后编辑（Jauregi Unanue等人， 2018）等。</li>
+<li>计算各种<strong>显著性度量</strong>（saliency mearures）以将预测归因于输入要素，然后可以在选定的示例中可视化重要或显著特征（Li等人，2016a; Aubakirova和Bansal，2016; Sundararajan等人，2017; Arras等人，2017a，b; Ding等人，2017; Murdoch等人，2018; Mudrakarta等人，2018; Montavon等人，2018; Godin等人，2018）。显著性也可以针对中间值而不是输入特征进行计算（Ghaeini等人，2018）。</li>
+</ul>
+<blockquote>
+<p>下图是NMT的attention可视化工作的一个实例。说到注意力可视化，我读到有工作（《Attention Interpretability Across NLP Tasks》）对比了不同任务的attention weights，得出一个有趣的结论：在single sentence任务（如句子分类）的attention可解释性不好，而在sentence-pair任务（如翻译和推理）上attention是有效的机制，其可解释性也和模型效果正相关。</p>
+</blockquote>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/GNpj5fw72EqiccKOqVfMxVaHMdiaIOIFpcbV4nlTytz3tmMiaWYT8NnOnnibcohj9qMHPviafCNE9ngoursyhCvSnXw/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
+<p>一种有启发性的可视化技术是对神经网络激活进行聚类，并将它们与某种语言特性进行比较。早期的工作将RNN激活聚集在一起，表明它们按词汇类别进行组织（Elman，1989，1990）。其他人也遵循了类似的技术。</p>
+<p>同时本领域也出现了一些用于可视化神经网络的在线工具：</p>
+<ul>
+<li><strong>LSTMVis</strong>（Strobelt等人，2018b）可视化RNN激活，重点是跟踪隐藏状态动态。</li>
+<li><strong>Seq2Seq-Vis</strong>（Strobelt等，2018a）可视化基于注意力的seq2seq模型中的不同模块，目的是检查模型决策和测试替代决策。</li>
+<li><strong>Rikters</strong>（2018）提出了另一个专注于比较注意力比对的工具。它还根据注意权重的分布提供翻译置信度评分。</li>
+<li><strong>NeuroX</strong>（Dalvi等，2019b）是一种用于发现和分析单个神经元的工具，专注于机器翻译。</li>
+</ul>
+<h3 id="评估方式"><a href="#评估方式" class="headerlink" title="评估方式"></a>评估方式</h3><p>如同在可解释性方面的许多工作中一样，<strong>评估可视化质量非常困难，并且通常仅限于定性示例</strong>。</p>
+<p>Singh等（2018）展示了人类通过两种解释方法生成的输入词的层次聚类，并要求他们评估哪种方法更准确，或者他们更信任哪种方法。其他人报告了在对话建模（Freeman等人，2018）和医疗代码预测任务（Mullenbach等人，2018）中对注意力可视化进行的人类评估。</p>
+<p>上述开放源代码工具的可用性有望鼓励用户在其常规研发周期中利用可视化。然而其可视化效果如何仍有待观察。</p>
+<h2 id="3-挑战集"><a href="#3-挑战集" class="headerlink" title="3. 挑战集"></a>3. 挑战集</h2><p>NLP中的大多数基准数据集均来自文本语料库，反映了语言现象的自然频率分布。尽管在实践中对于平均情况下评估系统性能很有用，但此类数据集可能无法捕获更广泛的现象。</p>
+<p>另一种评估框架由挑战集构成，也称为测试套件（test suites），已经在NLP中使用了很长时间（Lehmann等，1996），尤其是评估机器翻译系统（King和Falkedal，1990；Isahara，1995；Koh等，2001）。</p>
+<p>Lehmann等（1996年）指出了测试套件的几个关键特性：<strong>系统性，对数据的控制，否定数据的包含以及穷举性</strong>。</p>
+<blockquote>
+<p>这一领域因为统计NLP系统的大规模量化评估方法的流行而沉寂了一段时间。</p>
+</blockquote>
+<p>挑战数据集可以按照任务，语言现象，语言，规模，构造方法，以及评估方法等标准进行分类，如下表：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/GNpj5fw72EqiccKOqVfMxVaHMdiaIOIFpcjyyJPH0NA0gO0cBCz8XoicKGg7wLUK8v98sxfcd1wl5yUJN94gyFOeA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
+<h3 id="按任务分类"><a href="#按任务分类" class="headerlink" title="按任务分类"></a>按任务分类</h3><p>挑战集中针对最多的任务是自然语言推断（NLI）和机器翻译（MT）：一方面这些任务的模型多，另一方面这些任务涉及各种语言水平；而其他一些高级任务（如阅读理解或问题解答）并未得到足够的重视，它们也可能从精心设计的挑战集中获益。</p>
+<p><strong>挑战集主要的工作旨在通过将嵌入模型在单词或句子对上计算的相似性，与人类相似性判断相关联，来评估嵌入模型的质量</strong>。</p>
+<p>包含此类相似性评分的数据集通常用于评估单词嵌入（Finkelstein等，2002；Bruni等，2012；Hill等，2015）或句子嵌入，这些数据集中有许多在粗糙的级别上评估相似性。还有一些数据集提供了更细粒度的评估：例如，一些数据集专用于特定词类，如动词（Gerz等，2016）或稀有词（Luong等，2013），或评估句子嵌入中的成分知识（Marelli等，2014）等；还有数据集收集了多语言和跨语言版本（Leviant和Reichart，2015年; Cer等人，2017年）。</p>
+<p>尽管这些数据集被广泛使用，但这种评估由于其主观性以及与下游绩效的可疑相关性而受到批评（Faruqui et al，2016）。</p>
+<h3 id="按语言现象分类"><a href="#按语言现象分类" class="headerlink" title="按语言现象分类"></a>按语言现象分类</h3><p>挑战集的主要目标之一是<strong>评估模型处理特定语言现象的能力</strong>。</p>
+<p>早期的研究强调穷举性（Cooper等，1996；Lehmann等，1996），而最近的研究则倾向于关注一些感兴趣的特性：例如，Sennrich（2017）为MT评估引入了一个挑战集，该挑战集着重于5个属性：主语一致，名词短语一致，动词结构，极性和音译。对形态学的MT挑战集略为详细阐述，包括14种形态学特征（Burlot和Yvon，2017年）。其他挑战集涵盖了更多种语言属性：例如，在Cooper等人中扩展类别（1996年），针对NLI的GLUE分析集涵盖了四个粗略类别（词汇语义，谓语-自变量结构，逻辑和知识）中的30多种现象。在MT评估中，Burchardt等人（2017）使用覆盖120种现象的大型测试套件报告了结果，部分基于Lehmann等（1996），Isabelle等（2017）和Isabelle and Kuhn（2018）为MT评估准备了挑战集，涵盖了词素句法，句法和词法层面的细粒度现象。</p>
+<p>通常，以编程方式构建的数据集倾向于涵盖较少的细粒度语言属性，而手动构建的数据集则表示更多种现象。</p>
+<h3 id="按语言分类"><a href="#按语言分类" class="headerlink" title="按语言分类"></a>按语言分类</h3><p>不幸的是，在许多NLP工作中，大多数挑战集都是英语。这种情况在MT评估中要好一些，因为自然而然所有数据集都具有其他语言。显然，非英语语言在MT任务还有更多的发展空间。但是，也许在其他任务上更迫切的需要大型非英语数据集来开发流行的NLP任务的神经模型。</p>
+<h3 id="按规模分类"><a href="#按规模分类" class="headerlink" title="按规模分类"></a>按规模分类</h3><p>现有的挑战集的大小差异很大：手工构建的数据集较小，典型大小为数百个，少见上万；自动构建的数据集要大得多，范围从数千到近十万（Sennrich，2017），甚至超过一百万个样本（Linzen等人，2016）。在后一种情况下，作者认为需要如此大的测试集才能获得足够的罕见情况表示。</p>
+<h3 id="按构造方法分类"><a href="#按构造方法分类" class="headerlink" title="按构造方法分类"></a>按构造方法分类</h3><p>挑战集一般要么由编程方式创建，要么通过手工制作特定示例以手动创建。</p>
+<p>通常，半自动方法用于编译示例的初始列表，这些示例由注释者手动验证。具体方法还影响语言使用的种类以及示例的自然性或人工/综合性。目前主流方案如下：</p>
+<ul>
+<li><strong>通过修改或从现有数据集中提取示例来构造数据集</strong>。例如，Sanchez等（2018）和Glockner等人（2018年）从SNLI中提取了示例（Bowman等人，2015年），并替换了特定词（如上位词，同义词和反义词），然后进行了手动验证。Linzen等（2016）使用启发式方法从原始文本中提取了主语-动词一致的示例，从而形成了一个大型数据集。Gulordava等（2018）将其扩展到其他协议现象，但他们依赖于树库中可用的句法信息，从而导致数据集更小。</li>
+<li>一些挑战集<strong>利用现有的测试套件作为示例的直接来源</strong>（Burchardt等，2017）或<strong>搜索相似的自然存在的示例</strong>（Wang等，2018a）。</li>
+<li>Sennrich（2017）引入了一种<strong>通过对比翻译对评估NMT系统</strong>的方法，模型估计反映特定语言特性的两种候选翻译的概率。Sennrich通过应用简单的试探法（例如更改性别和数字以引起前后不一致）以编程方式生成了此类对，从而得到了接近10万个示例的大规模挑战集。作者扩展了该框架以评估其他属性，但通常需要更复杂的生成方法，例如使用形态分析仪/生成器（Burlot和Yvon，2017）或更多人工参与生成（Bawden等，2018）或验证（Rios Gonzales等，2017）。</li>
+<li>最后，一些研究<strong>定义了模板用于捕获了某些语言属性并使用单词列表将其实例化</strong>（Dasgupta等，2018；Rudinger等，2018；Zhao等，2018a）。基于模板的生成具有提供更多控制（例如用于获得特定词汇分布）的优势，但这是以牺牲示例的自然程度为代价的。</li>
+</ul>
+<h3 id="按评估方式分类"><a href="#按评估方式分类" class="headerlink" title="按评估方式分类"></a>按评估方式分类</h3><p>通常，评估模型用其在挑战集示例上的性能来评估，要么使用与第一阶段用于评估系统相同的度量标准，要么通过代理进行评估，如Sennrich（2017）的对比对评估中那样。</p>
+<p>自动评估指标的代价较低，可以大规模计算。但是，可能会缺少某些方面的效果。因此，一些研究报告了人类对其挑战集的评估，例如在MT中（Isabelle等，2017; Burchardt等，2017）。</p>
+<p>此外，根据模型在挑战集上的表现来判断模型的质量可能很棘手。一些作者强调，他们希望在“超出正常运行能力”的极端或困难情况下测试系统（Naik等人，2018）。但是，是否应该期望系统在特殊选择的情况下（相对于一般情况）表现良好，可能取决于目标：为了更好地看待结果，可以将同一任务的模型绩效与人类绩效进行比较（Gulordava等人，2018）。</p>
+<h2 id="4-对抗样本"><a href="#4-对抗样本" class="headerlink" title="4. 对抗样本"></a>4. 对抗样本</h2><p>要了解模型，还需要了解其失败。尽管机器学习系统在许多任务上都取得了成功，但它们也对恶意攻击或对抗性示例非常敏感（Szegedy等，2014；Goodfellow等，2015）。在视觉领域，即使人类无法分辨输入图像的微小变化，也可能导致分类错误。</p>
+<p>对抗样本的目标在于，对给定的模型 <em>f</em> 和输入样本 x，找到样本 x’，它被模型预测为不同的类别，同时保持和原始样本具有最小的距离：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/GNpj5fw72EqiccKOqVfMxVaHMdiaIOIFpcgicuwGbxaMapMxPFYIcmjmicFKZSQRwt7iat2n0ibeG9SjNno16j3ArNJQ/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
+<p>在CV领域，样本改变通常是图像像素，计算两个图片向量的差值很简单，因为数值连续所以可以通过计算相对输入的梯度来计算得到改变后的样本。</p>
+<p>在NLP领域，输入是离散的（例如单词序列），这带来了两个问题：</p>
+<ul>
+<li>如何测量原始示例和对抗示例 x 和 x’ 之间的距离？</li>
+<li>如何将最小化这个距离表述为优化问题？（因为这需要计算改变相对于离散输入的梯度）</li>
+</ul>
+<p>本文按照对抗是否可以已知模型、攻击的目的性、修改单位、攻击的任务对对抗方法进行分类，如下表：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/GNpj5fw72EqiccKOqVfMxVaHMdiaIOIFpcRqks0M0Chm5E8KYiaolADIYzT0ZibA1rxQgiaGdiaiaJNMLQneeSC0D1HMA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
+<h3 id="按对抗是否已知模型分类"><a href="#按对抗是否已知模型分类" class="headerlink" title="按对抗是否已知模型分类"></a>按对抗是否已知模型分类</h3><p>对抗模型可以通过访问模型参数（也称为白盒攻击）来生成对抗性示例，也可以通过使用黑盒攻击来获得对抗性示例（Papernot等，2016a，2017；Narodytska and Kasiviswanathan，2017；Liu等，2017） 。</p>
+<p><strong>白盒攻击</strong>很难适应文本世界，因为它们通常需要对输入计算梯度，在文本情况下可能是离散的。包括如下方法：</p>
+<ul>
+<li><strong>对输入词的嵌入计算梯度，并扰动嵌入</strong>。由于这可能会导致一个不对应任何单词的向量，因此人们可以搜索嵌入给定词典中的最近邻单词（Papernot等人，2016b）；Cheng等（2018）将这个想法扩展到seq2seq模型。</li>
+<li><strong>对输入词的嵌入计算梯度，以识别和排序要修改的词</strong>（Samanta和Mehta，2017；Liang等，2018）。Ebrahimi等（2018b）开发了一种替代方法，该方法通过在向量空间中表示文本编辑操作（例如，一个二进制向量来指定单词中的哪些字符将被更改），并沿着该向量用导数来近似损失的变化。</li>
+</ul>
+<p>考虑到为文本生成白盒对抗性示例的困难性，许多研究都致力于黑盒示例。主要工作如下：</p>
+<ul>
+<li><strong>受文本编辑启发</strong>（自然的或由人类普遍产生的，例如错别字，拼写错误等）（Sakaguchi等人，2017；Heigold等人，2018；Belinkov和Bisk，2018）。Gao等（2018）定义了评分函数以识别要修改的词语。函数不需要访问模型内部，但是需要模型预测分数。在识别了重要标记之后，它们使用常见的编辑操作来修改字符。</li>
+<li>Zhao等（2018c）使用<strong>生成对抗网络</strong>（GAN）（Goodfellow et al，2014）来最小化输入的潜在表示和对抗性示例之间的距离，<strong>并在潜在空间中进行扰动</strong>。由于潜在表示不需要来自受攻击的模型，因此这是黑盒攻击。</li>
+<li>Alzantot等（2018年）开发了一种有趣的<strong>基于人口的遗传算法</strong>，可通过保留原始句子的修饰语群体并评估每一代的修饰语适合度来制作文本分类的对抗性示例。他们不需要访问模型参数，但是会使用预测分数。Kuleshov等人提出了类似的想法（2018）。</li>
+</ul>
+<h3 id="按攻击的目的性分类"><a href="#按攻击的目的性分类" class="headerlink" title="按攻击的目的性分类"></a>按攻击的目的性分类</h3><p>对抗性攻击可以分为定向攻击和非定向攻击（Yuan等人，2017）。</p>
+<p>其中，定向攻击指定了特定的错误类别 <img src="https://mmbiz.qpic.cn/mmbiz_svg/Ib5852jAyb82RBBvOrn3mh8z9ibBibZ1Mh3DPibCAh2zgdXYVCXvaySlvHLgibGujNBVJQv3t5M2icicicrLgFTN6ZOGSx1WicUlwYXF/640?wx_fmt=svg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"> ，而非目标攻击仅关心预测的类别是错误的， <img src="https://mmbiz.qpic.cn/mmbiz_svg/Ib5852jAyb82RBBvOrn3mh8z9ibBibZ1MhSJUgbQeBnJafzqv7D54GETp9EIsuGSm1oQ61aicaO3mx0J8fe7cdibbia5a4URBF6DD/640?wx_fmt=svg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"> 。定向攻击很难生成，因为它们通常需要了解模型参数，即，它们是白盒攻击。大多数对抗示例都是非针对性的，而一些针对性的攻击包括Liang等 （2018a）和Chen等（2018a），后者指定了在图像字幕模型中生成的单词或字幕。其他定向攻击模型则在攻击seq2seq模型时将特定单词指定为省略，替换或包含（Cheng等人，2018; Ebrahimi等人，2018a）。</p>
+<p>在NLP中产生定向攻击的方法可能会从其他领域的对抗性攻击中获得更多启发。例如，在攻击恶意软件检测系统中，多项研究在黑盒情况下开发了针对性攻击（Yuan等人，2017）。Zhao等人提出了针对MT的黑匣子针对性攻击（2018c），他使用对抗性正则化自动编码器将句子映射到连续空间后，使用GAN来搜索对Google MT系统的攻击（Zhao等人，2018b）。</p>
+<h3 id="按修改的单位分类"><a href="#按修改的单位分类" class="headerlink" title="按修改的单位分类"></a>按修改的单位分类</h3><p>对抗文本示例的大部分工作都涉及字符和/或单词级别的修改，其他转换包括添加句子或文本块（Jia and Liang，2017）或生成具有所需句法结构的复述（Iyyer等人，2018）。在图像字幕中，Chen等人（2018a）在输入图像中修改像素以对字幕文本产生针对性的攻击。</p>
+<h3 id="按对抗任务分类"><a href="#按对抗任务分类" class="headerlink" title="按对抗任务分类"></a>按对抗任务分类</h3><p>通常，大多数在NLP中对抗示例的工作都集中在相对高级的语言理解任务上，例如文本分类（包括情感分析）和阅读理解，而文本生成的工作主要集中在MT。</p>
+<p>除了形态标记（Heigold等人，2018）和拼写校正（Sakaguchi等人，2017）等少数工作，对抗样本却很少针对更底层的语言处理任务。</p>
+<h3 id="对抗样本的连贯性和改变量的评估方式"><a href="#对抗样本的连贯性和改变量的评估方式" class="headerlink" title="对抗样本的连贯性和改变量的评估方式"></a>对抗样本的连贯性和改变量的评估方式</h3><p>在对抗图像样本中，通过测量像素空间中的距离来测量扰动是相当简单的，可以使用某些正则化方法，或采用与人类感知更好相关的替代措施（Rozsa等，2016）。呈现对抗图像与源图像之间没有明显差异的视觉效果也令人信服。</p>
+<p>而在文本域中，距离的测量不是那么简单，人类甚至可以感觉到文本的很小变化。因此，对攻击的评估相当棘手。一些研究对对抗样本施加了限制，使其具有少量的编辑操作（Gao等人，2018）。其他人则以不同的方式确保句法或语义上的连贯性，例如通过单词相似性或句子相似性过滤替换（Alzantot等人，2018；Kuleshov等人，2018），或使用同义词和其他单词表（Samanta和Mehta，2017；Yang等，2018）。</p>
+<p>一些人报告了人类是否可以正确地将对抗性示例分类（Yang等人，2018），但这并未表明变化的可感知性。更多信息丰富的人研究评估了对抗性示例与原始示例的语法相似性或相似性（Zhao等人，2018c；Alzantot等人，2018）。考虑到在文本中产生难以察觉的变化的固有困难，需要更多这样的评估。</p>
+<h2 id="5-解释模型预测"><a href="#5-解释模型预测" class="headerlink" title="5. 解释模型预测"></a>5. 解释模型预测</h2><blockquote>
+<p>这一部分是关于Explainability，和Interpretability有些微妙的区别。</p>
+</blockquote>
+<p>解释特定的预测被认为是可解释工作的一个迫切的痛点（Lipton，2016年），它被认为增加了机器学习系统的可靠性（Doshi-Velez等人，2017年）。但是，解释为什么深度非常深，高度非线性的神经网络做出一定的预测并非易事。</p>
+<ul>
+<li>一种解决方案是<strong>要求模型生成与主要预测一起的解释</strong>（Zaidan等，2007；Zhang等，2016），但是这种方法需要人工注释解释，这可能很难收集。</li>
+<li>一种替代方法是<strong>使用部分输入作为解释</strong>。例如，Lei等（2016）定义了一个生成器，该生成器学习文本片段上的分布作为证明预测的合理依据，并根据情感分析进行评估。Alvarez-Melis和Jaakkola（2017）通过扰动输入并找到最相关的关联，在序列到序列的学习场景中发现了输入-输出关联。Gupta和Schütze（2018）研究了如何在RNN中积累信息以进行预测，以及预测分数与重要输入段的关联峰值。</li>
+<li>由于这些方法使用输入段来解释预测，因此它们对网络中发生的内部计算没有太大的启发。</li>
+</ul>
+<p>目前，尽管这一块工作对可解释领域整体具有公认的重要性，我们在NLP中解释神经网络的预测的能力仍然有限。</p>
+<h2 id="6-其他研究"><a href="#6-其他研究" class="headerlink" title="6. 其他研究"></a>6. 其他研究</h2><p>这里包含一些杂项。</p>
+<ul>
+<li><strong>擦除或者隐藏部分神经网络组件</strong>（例如词嵌入的部分维度，隐层单元，甚至整个词）的效果对比实验（Li等人，2016b; Feng等人，2018; Khandelwal等人，2018 ; Bau等人，2018）。Li等（2016b）消除了单词嵌入或隐藏状态下的特定维度，并计算了分配给不同标签的概率的变化。他们的实验揭示了词嵌入模型之间的有趣差异，在某些模型中，信息更多地集中在部分维度上。他们还发现，信息在隐藏层中的分布比在输入层中的分布多，并且在情感分析任务中删除了整个单词以找到那些重要的单词。</li>
+<li><strong>通过定义插入任务来解释词嵌入</strong>，其中人类需要根据词嵌入维度的差异来选择插入词（Murphy等人，2012; Fyshe等人，2015; Faruqui等人，2015）。在这种工作中，如果人类能够更好地识别出插入词，那么词嵌入模型可能被认为更具解释性。由于高维表示的评估成本高昂，因此考虑了其他自动评估方式（Park等人，2017；Senel等人，2018）。</li>
+<li>关于神经网络的一项悠久传统是<strong>评估和分析其学习不同形式语言的能力</strong>（Das等，1992; Casey，1996; Gers和Schmidhuber，2001;Bodén和Wiles，2002; Chalup和Blair，2003）。。这种趋势一直持续到今天，包括对现代结构及其可学习的形式语言的研究（Weiss等人，2018; Bernardy，2018; Suzgun等人，2019），或它们拥有的形式属性（Chen等人，2018b）。</li>
+</ul>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>分析神经网络已成为NLP研究的热门话题。我们已经强调了特定于语言的分析方面：</p>
+<ul>
+<li>在神经网络中捕获了哪些语言信息，它们成功捕获了哪些现象以及在哪里失败了。</li>
+<li>许多分析方法是大型机器学习社区的通用技术，例如通过显着性度量进行可视化或通过对抗性示例进行评估；但是即使是那些有时也需要非凡的改编才能与文本输入一起使用。</li>
+<li>一些方法更特定于该领域，但在其他领域可能被证明是有用的。挑战集或测试套件就是这种情况。</li>
+</ul>
+<p>在整个调查过程中，我们确定了当前分析工作中的一些局限性或不足之处：</p>
+<ul>
+<li>使用辅助分类任务来识别神经网络捕获的语言属性已成为标准做法，但是缺乏其与原始任务之间联系的理论基础，和更好的经验性考虑。</li>
+<li>分析工作的评估通常是有限的或定性的，尤其是在可视化技术方面。为了确定不同方法的成功，需要更新的评估形式。</li>
+<li>除了提供可视化之外，在解释神经网络模型的预测方面所做的工作相对较少。随着公众对解释机器学习系统中算法选择的需求不断增加（Doshi-Velez和Kim，2017年; Doshi-Velez等人，2017年），迫切需要在这一方向上取得进展。</li>
+<li>大多数分析工作都集中在英语上，特别是在为各种任务构建挑战集时，但MT由于其固有的多语言特性而除外。随着领域的发展和成熟，开发其他语言的资源和评估方法很重要。</li>
+<li>除NLI和MT外，还需要更多挑战集来评估其他任务。</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NLP/" rel="tag"><i class="fa fa-tag"></i> NLP</a>
+          
+            <a href="/tags/Neural-Networks/" rel="tag"><i class="fa fa-tag"></i> Neural Networks</a>
+          
+            <a href="/tags/Deep-Learning/" rel="tag"><i class="fa fa-tag"></i> Deep Learning</a>
+          
+            <a href="/tags/Interpretability/" rel="tag"><i class="fa fa-tag"></i> Interpretability</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/11/17/对偶图/" rel="next" title="对偶图">
+                <i class="fa fa-chevron-left"></i> 对偶图
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/11/18/谈谈未来：NLP路在何方？/" rel="prev" title="谈谈未来：NLP路在何方？">
+                谈谈未来：NLP路在何方？ <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/漫画脸1vs1.jpg" alt="dinosaur">
+            
+              <p class="site-author-name" itemprop="name">dinosaur</p>
+              <div class="site-description motion-element" itemprop="description">闪耀的群星，颠覆着黑夜</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">371</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hao-Kailong" title="GitHub &rarr; https://github.com/Hao-Kailong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/klhao.nju@gmail.com" title="Email &rarr; klhao.nju@gmail.com"><i class="fa fa-fw fa-envelope"></i>Email</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#导读"><span class="nav-text">导读</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#1-语义特征学习"><span class="nav-text">1. 语义特征学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#研究方法"><span class="nav-text">研究方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语义特征"><span class="nav-text">语义特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型的相关结构"><span class="nav-text">模型的相关结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#局限"><span class="nav-text">局限</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-可视化方法"><span class="nav-text">2. 可视化方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#评估方式"><span class="nav-text">评估方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-挑战集"><span class="nav-text">3. 挑战集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#按任务分类"><span class="nav-text">按任务分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按语言现象分类"><span class="nav-text">按语言现象分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按语言分类"><span class="nav-text">按语言分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按规模分类"><span class="nav-text">按规模分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按构造方法分类"><span class="nav-text">按构造方法分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按评估方式分类"><span class="nav-text">按评估方式分类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-对抗样本"><span class="nav-text">4. 对抗样本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#按对抗是否已知模型分类"><span class="nav-text">按对抗是否已知模型分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按攻击的目的性分类"><span class="nav-text">按攻击的目的性分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按修改的单位分类"><span class="nav-text">按修改的单位分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按对抗任务分类"><span class="nav-text">按对抗任务分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对抗样本的连贯性和改变量的评估方式"><span class="nav-text">对抗样本的连贯性和改变量的评估方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-解释模型预测"><span class="nav-text">5. 解释模型预测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-其他研究"><span class="nav-text">6. 其他研究</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-text">结论</span></a></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dinosaur</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+      <div>
+        <div class="addthis_inline_share_toolbox">
+  <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cb429b1d763f1d4" async="async"></script>
+</div>
+
+      </div>
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script id="dsq-count-scr" src="https://dinosaur7.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://haokailong.top/2020/11/18/可解释性-interpretability/";
+    this.page.identifier = "2020/11/18/可解释性-interpretability/";
+    this.page.title = '可解释性 (interpretability)';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dinosaur7.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

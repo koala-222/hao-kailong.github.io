@@ -1,0 +1,2171 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="DsoDHJ1Km7LX7l7UnoG8dB2QrygUWW345_JkdBOj1Vw">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="ahe2m7RGVx">
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italicRoboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/solar-system-16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/solar-system-32.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文转载自：“夕小瑶的卖萌屋” 这是一个很萌很干货的公众号，强烈安利一下~ https://mp.weixin.qq.com/s?__biz=MzIwNzc2NTk0NQ==&amp;amp;mid=2247500560&amp;amp;idx=1&amp;amp;sn=f80675e02c36ff1c99eb2adb5a3c9205&amp;amp;chksm=970febc6a07862d06a375a70ba21a63">
+<meta name="keywords" content="NLP,未来,畅想">
+<meta property="og:type" content="article">
+<meta property="og:title" content="谈谈未来：NLP路在何方？">
+<meta property="og:url" content="http://haokailong.top/2020/11/18/谈谈未来：NLP路在何方？/index.html">
+<meta property="og:site_name" content="Hold the Torch">
+<meta property="og:description" content="本文转载自：“夕小瑶的卖萌屋” 这是一个很萌很干货的公众号，强烈安利一下~ https://mp.weixin.qq.com/s?__biz=MzIwNzc2NTk0NQ==&amp;amp;mid=2247500560&amp;amp;idx=1&amp;amp;sn=f80675e02c36ff1c99eb2adb5a3c9205&amp;amp;chksm=970febc6a07862d06a375a70ba21a63">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/IVz4ZzrQibgTFQmNH95NicHuicZqKFlMK2jkapjAo00uZS6tuIGrjUvKUuPsicKDW7ozpVia6pm4gw4njoCkbfPJN9g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/IVz4ZzrQibgTFQmNH95NicHuicZqKFlMK2jFSGWkRbJIr0m3D1J4EYTFHM0YQYEiaibITElsRssicqNXiayZ6uaicq2b2Q/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/IVz4ZzrQibgTFQmNH95NicHuicZqKFlMK2jRNV7jo1G5vbq3cQujPsicTRTdCk8XjrpRAG2ocpl76yvwV8jX2k0f3A/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/IVz4ZzrQibgTFQmNH95NicHuicZqKFlMK2j9iae4QNCuxVcvz1OE9sR91XYic7Tq8EuInic5ySRza63Lbm08nszEnsxA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/IVz4ZzrQibgTFQmNH95NicHuicZqKFlMK2jpMxFrhRRtrVuYibr5ibQj0ZFm0gcGvtZGDwmdkvRWlYIKibhiaPg7wLFGQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/IVz4ZzrQibgTFQmNH95NicHuicZqKFlMK2jlBfNm38POUY9VpWXialILeV1XxZtvWz92Yhb2qC88O0EfUpafOkC4iaA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:updated_time" content="2020-11-18T02:39:57.350Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="谈谈未来：NLP路在何方？">
+<meta name="twitter:description" content="本文转载自：“夕小瑶的卖萌屋” 这是一个很萌很干货的公众号，强烈安利一下~ https://mp.weixin.qq.com/s?__biz=MzIwNzc2NTk0NQ==&amp;amp;mid=2247500560&amp;amp;idx=1&amp;amp;sn=f80675e02c36ff1c99eb2adb5a3c9205&amp;amp;chksm=970febc6a07862d06a375a70ba21a63">
+<meta name="twitter:image" content="https://mmbiz.qpic.cn/mmbiz_png/IVz4ZzrQibgTFQmNH95NicHuicZqKFlMK2jkapjAo00uZS6tuIGrjUvKUuPsicKDW7ozpVia6pm4gw4njoCkbfPJN9g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://haokailong.top/2020/11/18/谈谈未来：NLP路在何方？/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>谈谈未来：NLP路在何方？ | Hold the Torch</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-138297445-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-138297445-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hold the Torch</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-wordcloud">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/wordcloud/" rel="section"><i class="menu-item-icon fa fa-fw fa-cloud"></i> <br>词云</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/18/谈谈未来：NLP路在何方？/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">谈谈未来：NLP路在何方？
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-18 10:39:57" itemprop="dateModified" datetime="2020-11-18T10:39:57+08:00">2020-11-18</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/18/谈谈未来：NLP路在何方？/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/18/谈谈未来：NLP路在何方？/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p> 本文转载自：“夕小瑶的卖萌屋”</p>
+<p>这是一个很萌很干货的公众号，强烈安利一下~</p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzIwNzc2NTk0NQ==&amp;mid=2247500560&amp;idx=1&amp;sn=f80675e02c36ff1c99eb2adb5a3c9205&amp;chksm=970febc6a07862d06a375a70ba21a63200dc0b8521d9655b48b4c37cfe00e8972bcb37644afc&amp;scene=126&amp;sessionid=1605625565&amp;key=1e61c84483e13f9471ee0797d016c58ad2c5650c2da9838f5a72d9628e9968cb2de25800764d4886b46fc6369be40d19db24e806b3df2775b2735adb3b07026fd4f9a606ea6808c12cf5c315c448e9320c0d6c3398f8042d2a272a48f2b1b74a3c08daf500b18c90b33a9389de250c682340459bc12840bc2a10de67ec55aa35&amp;ascene=1&amp;uin=MjExODc0NDkwMg%3D%3D&amp;devicetype=Windows+10+x64&amp;version=6300002f&amp;lang=zh_CN&amp;exportkey=AUEDy2LXhDbW1ZdKANZsG%2Fo%3D&amp;pass_ticket=JMu0tZ8lnp%2FRuz1okqXGKHCSZV44b5P1Q0yYYVTQAtVTaM8NrMmb5T6PBnHGy2oL&amp;wx_header=0" target="_blank" rel="noopener">https://mp.weixin.qq.com/s?__biz=MzIwNzc2NTk0NQ==&amp;mid=2247500560&amp;idx=1&amp;sn=f80675e02c36ff1c99eb2adb5a3c9205&amp;chksm=970febc6a07862d06a375a70ba21a63200dc0b8521d9655b48b4c37cfe00e8972bcb37644afc&amp;scene=126&amp;sessionid=1605625565&amp;key=1e61c84483e13f9471ee0797d016c58ad2c5650c2da9838f5a72d9628e9968cb2de25800764d4886b46fc6369be40d19db24e806b3df2775b2735adb3b07026fd4f9a606ea6808c12cf5c315c448e9320c0d6c3398f8042d2a272a48f2b1b74a3c08daf500b18c90b33a9389de250c682340459bc12840bc2a10de67ec55aa35&amp;ascene=1&amp;uin=MjExODc0NDkwMg%3D%3D&amp;devicetype=Windows+10+x64&amp;version=6300002f&amp;lang=zh_CN&amp;exportkey=AUEDy2LXhDbW1ZdKANZsG%2Fo%3D&amp;pass_ticket=JMu0tZ8lnp%2FRuz1okqXGKHCSZV44b5P1Q0yYYVTQAtVTaM8NrMmb5T6PBnHGy2oL&amp;wx_header=0</a></p>
+</blockquote>
+<p><strong>CMU、华盛顿大学、南加州大学、MIT、MILA、密歇根大学、爱丁堡大学、DeepMind、伯克利、Apple</strong>…如果我说来自这些地方的dalao共同发表了一篇文章，你相信么？但别惊讶，在即将召开的EMNLP’20的长文列表里，我们就真找到了这样一篇“奇文”。一篇论文引得众星云集，那解决的必然不是小问题。这不，作者也很贴心地把他们所希望解决的问题斜体独行地放在了论文的首栏里——</p>
+<p><strong>Where is NLP going？</strong></p>
+<p>……</p>
+<p>在未来的这几分钟里，让我们暂时放下自己正在改的模型、正在写的论文和正在追的SOTA，重拾自然语言处理的初心，跟随大佬们的脚步，去畅想一下未来的NLP究竟是什么样的吧。</p>
+<p><strong>论文题目</strong>：</p>
+<p>《Experience Grounds Language》</p>
+<p><strong>论文链接</strong>：</p>
+<p><em><a href="https://arxiv.org/abs/2004.10151" target="_blank" rel="noopener">https://arxiv.org/abs/2004.10151</a></em></p>
+<p>Arxiv访问慢的小伙伴也可以在【<strong>夕小瑶的卖萌屋</strong>】订阅号后台回复关键词【<strong><em>1117</em></strong>】下载论文PDF~</p>
+<h2 id="NLP，到底该怎么搞？"><a href="#NLP，到底该怎么搞？" class="headerlink" title="NLP，到底该怎么搞？"></a>NLP，到底该怎么搞？</h2><p>这是每一个NLP人都希望探索的终极问题。在经历了21世纪初的神经语言模型、2013年word2vec算法、2018年的预训练模型等等的里程碑过后，当今的NLP已经在许多任务上取得了令人欣喜的效果。但是，在欣喜于一个个子任务的突破之后，我们也该停下来思考我们每个人在初识NLP时的那个问题：如何才能让机器<strong>真正地</strong>理解人类语言呢？</p>
+<p>本文提出了未来NLP的发展方向：只靠文本，是学不会语言的；学会语言，需要的是“<strong>语言之外的事件</strong>”和“<strong>社会环境</strong>”。这样虚无缥缈的两个词，隐含的却是未来NLP所需要添加的潜在的新组件。</p>
+<p>为了更加具象，作者引入了“<strong>世界范围</strong>”的概念，英文名称World Scope，简称<strong>WS</strong>（不觉得和作者王苏有点关系么（逃））</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/IVz4ZzrQibgTFQmNH95NicHuicZqKFlMK2jkapjAo00uZS6tuIGrjUvKUuPsicKDW7ozpVia6pm4gw4njoCkbfPJN9g/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
+<p>那么这五个世界分别表示什么，又象征着NLP的发展到了哪个阶段呢？现在，让我们把NLP系统想象成自家孩子，看看咱家宝贝儿是怎么一步步从过去只会总结文本模式到未来能够能动地改变世界的吧~（为了方便，我们就叫她<strong>N宝</strong>）<a id="more"></a></p>
+<h2 id="WS1：少量语料的世界——当系统学会表示"><a href="#WS1：少量语料的世界——当系统学会表示" class="headerlink" title="WS1：少量语料的世界——当系统学会表示"></a>WS1：少量语料的世界——当系统学会表示</h2><p><img src="https://mmbiz.qpic.cn/mmbiz_png/IVz4ZzrQibgTFQmNH95NicHuicZqKFlMK2jFSGWkRbJIr0m3D1J4EYTFHM0YQYEiaibITElsRssicqNXiayZ6uaicq2b2Q/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
+<p>N宝终于拿到了她能接触到的第一个语料！此时的她，看的多半是类似于Penn Treebank的经典数据集，而她既没有容量很大的大脑（指模型），又接触不到其他东西（指感知和大量语料），于是研究者费尽心机地思考如何让她用少量文本也能学到些什么。这时的发展，正是集中在<strong>文本表示</strong>上。</p>
+<p>所谓的“<strong>含义</strong>”（meaning）到底在哪里呢？一个很直观的想法是认为含义隐藏在文本的<strong>语法结构</strong>中，于是早期的NLP方法大都采用了诸如语法的分析结构。</p>
+<p>但慢慢地，人们发现，文本的含义还有另外的表示方法。20世纪末-21世纪初，Elman和Bengio等人证明了<strong>向量表示</strong>可以捕获语法和语义信息；21世纪初，利用基于互信息的层次聚类表示方法和隐马尔科夫链生成词类别的方法证明了一个词的<strong>上下文</strong>隐含了这个词的含义；同样是21世纪初，以隐狄利克雷分布模型LDA为代表的主题生成模型证明了获取含义需要<strong>大量的</strong>上下文信息。正是基于以上的观察，才有了近年来诸如word2vec和GloVe的词向量表示，以及ELMo、GPT和BERT等等的上下文预训练表示。</p>
+<p>然而，关于文本表示，有一个一直以来的矛盾，伴随着<strong>符号主义</strong>和<strong>连接主义</strong>的争论走到了今天——把词表示为符号，我们就可以利用一个词的字典释义，从而用其他词表示它，这种“以词释词”的方法服从直觉，解释性一流；然而，把词表示为向量，我们就能够利用诸如神经网络的“连接主义”系统进行处理，这种“以数释词”的方法难以解释，但架不住它好用。</p>
+<p>这样的符号主义/连接主义争论经常会在当今的各大人工智能论坛见到，而在连接主义大行其道的当下，能在顶会论文见到这样的争论实在难得啊(=・ω・=)</p>
+<h2 id="WS2：文本的世界——当系统学会阅读"><a href="#WS2：文本的世界——当系统学会阅读" class="headerlink" title="WS2：文本的世界——当系统学会阅读"></a>WS2：文本的世界——当系统学会阅读</h2><p><img src="https://mmbiz.qpic.cn/mmbiz_png/IVz4ZzrQibgTFQmNH95NicHuicZqKFlMK2jRNV7jo1G5vbq3cQujPsicTRTdCk8XjrpRAG2ocpl76yvwV8jX2k0f3A/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
+<p>不是N宝不愿意上网，是多年前她的小脑瓜实在是处理不了网络上这么多纷繁复杂的信息。然而，多亏了专做N宝大脑的黄老板（黄仁勋：？）和革新了N宝大脑的Transformer结构（谷歌：？），有了<strong>增强算力</strong>和<strong>模型加持</strong>的N宝终于开眼看到了更广阔的的世界——非结构的，多语言的，跨领域的，无标签的，单拿出哪个都很让人兴奋吧，但<strong>BERT全都要！</strong></p>
+<p>以BERT为代表的基于Transformer的预训练语言模型在众多下游任务上的优异表现，在寥寥两三年时间里把NLP领域的排行榜屠了个遍。在我们为新诞生的预训练模型欢呼雀跃时，内心也难免会为它们越来越庞大的体积和“饭量”感到触目惊心。</p>
+<p>从训练语料来说，2013年的word2vec使用了16亿个token，一年后的GloVe使用了8400亿个token，而BERT直接吃下了整个维基百科+一万多本书。从模型参数上来说，从2018年ELMo的到GPT-3的也不过只用了两年时间。</p>
+<p>更重要的是，这类预训练模型的效果存在明显的<strong>边际效益递减</strong>：对于16年提出的词预测任务LAMBADA[1]，从15亿参数的GPT-2，到170亿参数的TuringNLG，提升甚微；到了1750亿参数的GPT-3终于有了8个点的提升，但背后的多出来的算力开销，<strong>它值吗？</strong></p>
+<p>更重要的是，这类预训练模型很难解决许多更难的NLP任务、例如<strong>较难的共指解析</strong>（“我把车停在了那个小停车场，因为它足够[小/大]了。”）。之所以称之为“较难的”，是因为它们是经过精心选择的处于数据分布尾端的共指关系。如果N宝没停过车，她怎么会知道这个问题的答案不是从前半句里简单地提取出那个“小”字呢？解决这个问题的关键，在于<strong>经验</strong>。论文标题中的“Experience”，为未来可能的发展指明了方向。</p>
+<p>这时，我们终于意识到，再怎么非结构多语言跨领域无标签的文本，也终究是文本；再往预训练语言模型砸嘛尼，也不一定能换来真正智能的N宝。N宝不缺文本了，她只是需要<strong>更系统地</strong>感知这个世界而已。</p>
+<h2 id="WS3：视觉与声觉的世界——当系统学会感知"><a href="#WS3：视觉与声觉的世界——当系统学会感知" class="headerlink" title="WS3：视觉与声觉的世界——当系统学会感知"></a>WS3：视觉与声觉的世界——当系统学会感知</h2><p><img src="https://mmbiz.qpic.cn/mmbiz_png/IVz4ZzrQibgTFQmNH95NicHuicZqKFlMK2j9iae4QNCuxVcvz1OE9sR91XYic7Tq8EuInic5ySRza63Lbm08nszEnsxA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
+<p>N宝不再只是一头扎进书海里的书呆子了，她终于拥有了能看到世界的<strong>眼睛</strong>、听到世界的<strong>耳朵</strong>和触摸世界的<strong>双手</strong>，尽管眼睛耳朵和手也都是机器学习模型。但是，如果不看不听不碰的话，她怎么能理解“动如脱兔”、“噤若寒蝉”的真意，怎么体会到打工人钢铁般的意志（不）</p>
+<p>这多出来的感知究竟是什么？是人类在进行决策时的<strong>多重依据</strong>，也是人们在认识世界时达成的<strong>共识</strong>，同时也是语言学证明的人类在学习语言时<strong>必需的外部输入</strong>。海伦·凯勒学习语言的故事脍炙人口，缺失视觉的辅助尚且如此，剥夺所有感官后，学到的语言还会是一样的吗？</p>
+<p>文章引用了一种表示人类知识的方法：<strong>Frames and Scripts</strong>[2]。这种方法在上个世纪80年代被用来表示人类知识。通俗来讲，这一方法将人类世界的静态组成和动态动作流程利用类似于面向对象编程的方式进行建模：Frames利用类图构建事物之间的关联关系，而Scripts利用流程图构建一系列动作的发生过程。但即使成功表示了类别之间的关联关系，类别中的各个属性、流程图中的各个行为和条件依然没有和现实产生对应。大框架有了，细节却面临了同样的问题，因此，这种建模依然很片面。这恰恰说明了多模态对于理解知识的重要性。</p>
+<p>既然是多模态，那自然要提及其中涉及的每个领域向多模态发展的努力。这其中，计算机视觉（CV）和自然语言处理（NLP）的结合自然是发展最多的一个。</p>
+<p>计算机视觉领域已经提前意识到了与自然语言处理交互的重要性，并提出了一系列可以复用的模型，而计算机视觉领域也在近几年来开始解决<strong>视觉问答VQA</strong>、<strong>视觉推理</strong>和<strong>视频翻译</strong>等等CV+NLP的交互任务。这些多模态任务的标准数据集可以支持大规模<strong>视觉+文本</strong>、甚至<strong>视觉+文本+语音Transformer</strong>模型的训练。</p>
+<p>NLP领域的发展同样支撑了多模态的应用，由于CV领域广泛采用的ImageNet[3]分类采用了WordNet[4]描述上下位词关系的层次分类，在加入了WordNet中每个概念的图像信息后，我们甚至可以在概念的<strong>向量表示</strong>中学习到仅利用文本<strong>无法获得的特征</strong>。比如，WordNet中“人”是一系列不同职业的上位词，其中包括“消防员”，“医生”等等；单纯凭借文本难以捕捉这些类别的区别；但在加入了“人”、“消防员”、“医生”的图片进行多模态学习后，我们可以利用像素级的掩码精确地获得不同类别的具体差异，甚至可以将自然语言描述拓展到从未见过的类别中，学习到新类别的特征…</p>
+<p>这正是<strong>零次学习</strong>（Zero-shot learning）的想法，利用一段对未知类别的描述，让模型理解在训练过程中没有见过的类别的特征。对于文本的单一模态学习，用文本描述文本是WS1的想法；而多模态学习通过添加<strong>额外的感知方法</strong>，让零次学习的效果得到了大幅提升。那么问题来了，多模态之后，N宝又要做些什么呢？</p>
+<h2 id="WS4：行为的世界——当系统学会试错"><a href="#WS4：行为的世界——当系统学会试错" class="headerlink" title="WS4：行为的世界——当系统学会试错"></a>WS4：行为的世界——当系统学会试错</h2><p><img src="https://mmbiz.qpic.cn/mmbiz_png/IVz4ZzrQibgTFQmNH95NicHuicZqKFlMK2jpMxFrhRRtrVuYibr5ibQj0ZFm0gcGvtZGDwmdkvRWlYIKibhiaPg7wLFGQ/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
+<p>N宝对世界观察了许久，她能读能看能听，我们感觉她好像理解了这个世界。但实际上，她对这个世界似懂非懂。</p>
+<p>在她眼中，词语不过是一串数字或是像素组成的特征而已，每个名词概念到底隐含着什么<strong>内在属性</strong>，每个动作到底会带来什么<strong>影响</strong>，每个形容词到底描述了些什么<strong>特点</strong>，N宝都不懂。被动的学习已经满足不了她了，她想用她的感知去<strong>主动地</strong>理解语言背后的含义。当N宝有了行动的能力，她就有了具身，有了和外界<strong>互动</strong>的条件。</p>
+<p>试想一下，对于“橘子更像是棒球还是香蕉？”这样的问题，你会作何回答？</p>
+<p>WS1系统会认为橘子和香蕉经常出现在<strong>类似的上下文</strong>里，所以橘子和香蕉更像；WS2系统会认为橘子和棒球<strong>都是圆形的</strong>，但说不上来棒球和橘子的质地和大小；WS3系统会了解到橘子、棒球和香蕉的<strong>外表</strong>，所以同样会认为橘子和棒球更像，却说不清楚棒球、橘子和香蕉的软硬程度的重量。只有当系统能够接触到这些物体并产生<strong>互动</strong>时，它才会更加系统地回答，橘子和棒球具有相似的材质和重量，但橘子和香蕉具有相同的软硬程度和用途。</p>
+<p>实际上，人类在学习知识时在不断地与外界产生互动并获得反馈，而这些<strong>持续的反馈</strong>构成了我们学习这个世界时的监督信号。这些信号甚至产生于我们学习语言之前，那么问题来了，这些婴儿时期产生的反馈究竟形成了什么呢？</p>
+<p>对于人来说，这些反馈形成了我们的<strong>直觉和常识</strong>，而这些内容正是我们在日常交流时不会使用语言直接表述的<strong>隐含内容</strong>。对于机器来说，这些试错过程中得到的反馈形成的可能是“<strong>先于语言</strong>”<strong>的表示</strong>（pre-linguistic representations），它们可以被用来作为NLP系统泛化的基础。在语言学上已经证明，孩子从书本上学的东西很难被她们直接搬到现实生活中加以利用。我们利用大量的参数，希望用统计学的方法另辟蹊径地实现生物进化的成果，但缺少了与真实世界的交互，或许我们离这个目标确实遥远。</p>
+<p>在WS4的世界，我们就需要借助<strong>机器人学</strong>领域的研究成果了。尽管从现在看，利用机器人学的成果远比利用CV的成果困难，但为了实现真正理解语言的目标，NLP的研究者应该同样关注机器人学的发展。随着动作空间的加大，NLP系统就能够学会更多的指令，让智能家居和智能机器人不再是现在这样仅靠指令集操作的机器，而是成为真正能应用在任何场景下真正的智能系统。</p>
+<h2 id="WS5：社会的世界——当系统学会能动"><a href="#WS5：社会的世界——当系统学会能动" class="headerlink" title="WS5：社会的世界——当系统学会能动"></a>WS5：社会的世界——当系统学会能动</h2><p><img src="https://mmbiz.qpic.cn/mmbiz_png/IVz4ZzrQibgTFQmNH95NicHuicZqKFlMK2jlBfNm38POUY9VpWXialILeV1XxZtvWz92Yhb2qC88O0EfUpafOkC4iaA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
+<p>能动和能动并不是一个意思——WS4的能动是“会动”，而WS5的能动是“<strong>主观能动性</strong>”的能动。N宝的成长目标是要造福社会的，而人类社会的可是很复杂的。她要在与人打交道的过程中体现出她行为的<strong>目的性</strong>，让她真正能够实现人工智能系统的使命。到这个阶段，N宝就已经成为一个<strong>持久存在的，具有特定社会属性和经验的智能代理</strong>了。</p>
+<p>NLP系统一直以来都是人工智能领域里最受关注的领域之一，毕竟图灵测试就是以对话系统为基础的测试。但是，在进行图灵测试时，人经常会受到<strong>框架效应</strong>（Frame effect）的影响：当聊天机器人表明自己以英语作为第二语言或是表现出弱势时，人自然会大幅降低对对方的期望，让原本真实性不高的回应也看起来像是真人一样。</p>
+<p>那么，为什么说WS5对于语言学习至关重要呢？</p>
+<p>首先，从说话者的角度，语言要<strong>产生作用</strong>。</p>
+<p>从哲学上讲，语言的功能（Function）是含义的来源；从语言学上讲，基于使用的语言学习理论表明，<strong>有用的语言构建</strong>是一切的基础。这些理论在近年来开始关注语言在人类的起源和发展过程中起到的作用，表明了语言对于社会生活的重要性。</p>
+<p>WS1-4逐步地扩展了语言含义的组成，逐渐地，语言可以由结果转变为起因，从单纯的数据转变为有用的信息。当下，NLP系统生成的语句只能以一种与社会隔离开的方式被被动的评价，而要做到衡量NLP系统对社会的影响，必须<strong>主动地</strong>让NLP系统参与到诸如<strong>谈判，合作，情感支持</strong>等等语言活动中来，让NLP系统能够推断人的情感状态和行为的社会效益。</p>
+<p>当下的语言模型利用上下文构建每个词的释义。但实际上，一个词的含义需要被放在<strong>特定的语言和社会环境下</strong>进行综合考量。正比如，“大失所望”的词典意思是不令人满意，可是，只有在孩子学习语言时说出过或是听见过那句“你让我大失所望”时，她才能真正懂得这个词对人来说多么有分量。一个词的含义远不止词本身的意思：它最丰富的表达蕴含在了它<strong>对外界产生的影响</strong>之中。</p>
+<p>其次，从聆听者的角度而言，语言要成为<strong>了解对方想法的工具</strong>。</p>
+<p>“想法”并不局限于一句话本身的意思，而更多地指对方的需求，意图，感情，知识和身份。对“想法”的研究被称为“<strong>心智理论</strong>”（Theory of Mind）。这一理论被建模为<strong>讲者-听者模型</strong>（Speaker-listener model），从计算角度而言，又被进一步发展为“<strong>理性言语行为模型</strong>”[5]（Rational speech act model, RSA，一种基于贝叶斯推断的有效沟通建模）。</p>
+<p>对交流的理解只用静态的数据集是远远不够的。对于同一个样本的标注，不同的标注者可能提供不同的标注方法，这就会引入伪关系和偏差。<strong>动态且灵活的评价</strong>可能会解决这个问题，但如何保持一个NLP系统的身份，如何面对外界可能带来的变化依旧需要进一步研究。</p>
+<p>那么，怎样让NLP系统拥有能够<strong>在社会环境下</strong>理解语言的能力呢？</p>
+<p>首先，如果单纯利用一个诸如神经网络的通用的函数拟合器来给文本做分类，它可能单纯利用了文本中的语法语义信息，却永远不会认为文本中出现的人、事物和因果关系是<strong>真实存在</strong>的。这需要我们向模型中引入足够的<strong>归纳偏置</strong>（Inductive bias）来解决这一问题。其次，基于交叉熵的损失函数使得NLP系统不够关注数据分布的尾端，导致<strong>出现较少的事件被忽视了</strong>。最后，由于现有的系统依然无法达成像人类一样的<strong>归纳能力</strong>，NLP系统的零次学习能力依然有待提高。因此，WS1-4的数据无论再大，以目前的系统设计也难以让NLP系统学到足够丰富的知识来降低模型的困惑度。</p>
+<p>最后，从社会环境的角度而言，语言是用在<strong>人际交流</strong>中的，所以语言本身就携带着<strong>地位、身份、意图</strong>和其他一系列的变量，但我们当下所使用的基于众包的数据标签并没有考虑这一系列对社会生活至关重要的信息。所以，对于生成模型而言，为了考量模型与社会之间的交互性，需要给予模型一个<strong>社会地位及身份</strong>，将其置身于特定场景中来进行评价。</p>
+<p>但是，社会交流中存在那么多变量，该怎么进行标注呢？我们需要跳出这个圈子：训练-验证-测试集的划分以及基于对比的评价方式限制了我们的想象力。我们的终极目标，是让NLP系统通过<strong>参与到社会当中</strong>进行学习，让用户与系统自由交流，使得系统在<strong>探索与试错</strong>中逐渐达成对其身份的<strong>社会语言学构建</strong>。当模型能够在测试过程中能够与人进行交互，我们便可以窥视到模型的决策边界，加深对模型的了解了。</p>
+<h2 id="那么，要怎么进入下一个WS中呢？"><a href="#那么，要怎么进入下一个WS中呢？" class="headerlink" title="那么，要怎么进入下一个WS中呢？"></a>那么，要怎么进入下一个WS中呢？</h2><p>好问题~实际上，现在已经有很多研究在探索WS3-5的需求了。作者在文章中给出了4个这样的研究方向：</p>
+<ul>
+<li><strong>第二语言习得</strong>（Second language acquisition）：不同的国家虽然语言不同，却有着类似的社会模型，其中包括类似的物体指代（例如动物，水果…）和人的内在状态（例如快乐，饥饿…）。现有的研究已经开始向神经机器翻译模型引入这种相似性了：ACL’20的一篇论文[6]利用了WS3的图像信息作为增强双语对应关系的枢纽，未来会发展为利用WS4的模拟世界信息，以及最终走向WS5的真实世界信息。</li>
+<li><strong>指代消解</strong>（Coreference resolution）和<strong>词义消歧</strong>（Word sense disambiguation）：无论是确定文本中代词对应的名词还是探究一个词在文本中的确切意思，都最终需要对心智理论的探索，通过对听者需求和经验的建模综合地完成任务，而非简单地通过文本寻找到与代词最接近的名词，或是用局部的文本信息确定词义。类似TextWorld[7]的WS4虚拟环境为进一步探索这两个问题提供了新的可能。</li>
+<li><strong>新词学习</strong>（Novel word learning）：人对于物体的描述可能不仅局限于语言，有时还会加入肢体语言配合形容物体的形状或大小，这需要WS3系统进行多模态的感知；此外，在描述新的物体时，我们不仅会描述它的外观，还会描述它的功能，这需要WS4系统对动作和功能的认识。例如，在描述手风琴时，我们会说它“背着像吉他，但弹着像钢琴”。手风琴与吉他和钢琴的相似性仅体现在使用动作上，这种动作上的描述只有更高级的系统才能够认识。</li>
+<li><strong>冒犯性语言</strong>（Personally charged language）：每个人都有自己不愿意听到的话。比如，“笨蛋”这个词对于不同的人有着不同的理解：有些人可能认为这样的说法是开玩笑，无伤大雅；但有些人会认为这是对自己努力的否定，从而受到伤害。只有当系统走向WS5，获得了社会交往的知识，才能明白在不同环境和条件下人的情感究竟如何。</li>
+</ul>
+<h2 id="看了这么多，这篇文章究竟想说什么？"><a href="#看了这么多，这篇文章究竟想说什么？" class="headerlink" title="看了这么多，这篇文章究竟想说什么？"></a>看了这么多，这篇文章究竟想说什么？</h2><p>作者王苏在阅读这篇几乎不包含任何数据和公式的文章时，体会到的吃力感完全不亚于任何一篇充斥着公式的文章。许多哲学和语言学概念在近年来很少被提及，甚至一部分概念根本查不到相关的中文翻译，只好结合维基百科和一些查得到的讲义来努力理解。这也难怪，毕竟这篇文章是众多领域大佬从NLP、CV、语言学、哲学和机器人学等等不同的角度为NLP的未来规划的前行路线。</p>
+<p>然而，文中所说的许多东西虽然目前已经有工作开始了相关的探索。虽然诸如“具身”、“社会属性”等等名词看起来和现在的NLP社区不怎么沾边儿，而且这些名词实在是过于虚无缥缈，这也恰好给予了研究者充分的想象空间，让每一个目标得以用不同的方法实现。例如，WS4的“试错”概念和强化学习有着千丝万缕的联系，而WS5的社会属性又不由得让我们想起了微软亚研院致力于提升智商+情商的微软小冰[8]（小冰的论文对于研究对话系统的同学非常值得一读，大推荐）。</p>
+<p>所以，在为越来越大的模型和计算开销发愁之余，换个角度来看看我们所在的领域，以大局观看看我们的发展阶段，思考思考踏入未来需要学习和发展什么样的技术，也许就能实现弯道超车呢~</p>
+<p>要跟紧潮流鸭！加油吧，NLP人(= · ω ·=)</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NLP/" rel="tag"><i class="fa fa-tag"></i> NLP</a>
+          
+            <a href="/tags/未来/" rel="tag"><i class="fa fa-tag"></i> 未来</a>
+          
+            <a href="/tags/畅想/" rel="tag"><i class="fa fa-tag"></i> 畅想</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/11/18/可解释性-interpretability/" rel="next" title="可解释性 (interpretability)">
+                <i class="fa fa-chevron-left"></i> 可解释性 (interpretability)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/11/18/清华大佬的秋招算法岗总结/" rel="prev" title="清华大佬的秋招算法岗总结">
+                清华大佬的秋招算法岗总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/漫画脸1vs1.jpg" alt="dinosaur">
+            
+              <p class="site-author-name" itemprop="name">dinosaur</p>
+              <div class="site-description motion-element" itemprop="description">闪耀的群星，颠覆着黑夜</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">371</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hao-Kailong" title="GitHub &rarr; https://github.com/Hao-Kailong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/klhao.nju@gmail.com" title="Email &rarr; klhao.nju@gmail.com"><i class="fa fa-fw fa-envelope"></i>Email</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#NLP，到底该怎么搞？"><span class="nav-text">NLP，到底该怎么搞？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WS1：少量语料的世界——当系统学会表示"><span class="nav-text">WS1：少量语料的世界——当系统学会表示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WS2：文本的世界——当系统学会阅读"><span class="nav-text">WS2：文本的世界——当系统学会阅读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WS3：视觉与声觉的世界——当系统学会感知"><span class="nav-text">WS3：视觉与声觉的世界——当系统学会感知</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WS4：行为的世界——当系统学会试错"><span class="nav-text">WS4：行为的世界——当系统学会试错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WS5：社会的世界——当系统学会能动"><span class="nav-text">WS5：社会的世界——当系统学会能动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#那么，要怎么进入下一个WS中呢？"><span class="nav-text">那么，要怎么进入下一个WS中呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#看了这么多，这篇文章究竟想说什么？"><span class="nav-text">看了这么多，这篇文章究竟想说什么？</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dinosaur</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+      <div>
+        <div class="addthis_inline_share_toolbox">
+  <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cb429b1d763f1d4" async="async"></script>
+</div>
+
+      </div>
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script id="dsq-count-scr" src="https://dinosaur7.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://haokailong.top/2020/11/18/谈谈未来：NLP路在何方？/";
+    this.page.identifier = "2020/11/18/谈谈未来：NLP路在何方？/";
+    this.page.title = '谈谈未来：NLP路在何方？';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dinosaur7.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

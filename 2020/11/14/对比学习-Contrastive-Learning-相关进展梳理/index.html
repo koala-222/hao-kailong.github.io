@@ -1,0 +1,2248 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="DsoDHJ1Km7LX7l7UnoG8dB2QrygUWW345_JkdBOj1Vw">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="ahe2m7RGVx">
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italicRoboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/solar-system-16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/solar-system-32.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文转载自： https://zhuanlan.zhihu.com/p/141141365   最近深度学习两巨头 Bengio 和 LeCun 在 ICLR 2020 上点名 Self-Supervised Learning（SSL，自监督学习） 是 AI 的未来，而其的代表的 Framework 便是 Contrastive Learning（CL，对比学习）。 另一巨头 Hinton 和">
+<meta name="keywords" content="NLP,Machine Learning,Contrastive Learning,CV">
+<meta property="og:type" content="article">
+<meta property="og:title" content="对比学习 (Contrastive Learning) 相关进展梳理">
+<meta property="og:url" content="http://haokailong.top/2020/11/14/对比学习-Contrastive-Learning-相关进展梳理/index.html">
+<meta property="og:site_name" content="Hold the Torch">
+<meta property="og:description" content="本文转载自： https://zhuanlan.zhihu.com/p/141141365   最近深度学习两巨头 Bengio 和 LeCun 在 ICLR 2020 上点名 Self-Supervised Learning（SSL，自监督学习） 是 AI 的未来，而其的代表的 Framework 便是 Contrastive Learning（CL，对比学习）。 另一巨头 Hinton 和">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=l+%3D+max%280%2C+%CE%B7+%2B+s+%28x%2C+x%5E%2B%29+%E2%88%92+s+%28x%2C+x%5E%E2%88%92%29%29">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=%5Ceta">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=s">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=s%28x%2C+x%5E%2B%29+%3D+%5C%7C+%5Cmax+%280%2C+f%28x%29-f%28x%5E%2B%29%5C%7C">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=s%28x%2C+x%5E%2B%29+%3D+%5C%7C+%5Cmax+%28%5Ceta%2C+f%28x%29-f%28x%5E-%29%5C%7C">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x%5E%2B">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x%5E-">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=N">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-2c7e1ebab1ef558f5e1cb04817f96d51_720w.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-bfb035f24f9d0f8f2f7dd38bdab2a703_720w.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=f%28%5Ccdot%29">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=%5Ctheta_q">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=%5Ctheta_k">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=%5Ctheta_k+%3D+m+%5Ctheta_k+%2B+%281-m%29+%5Ctheta_q+%5C%5C">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-b86b329fbbde88a83d9af0eb686950b3_720w.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-79f91dcbda0e03df0c386bf9a93d1ba8_720w.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=g%28%5Ccdot%29">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-155b87baf119fcb3e4f7fcf45c1d1de0_720w.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_t">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_%7Bt%2Bk%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_%7Bt%2A%7D">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-795d7581c01c2d35ae154b34a80b2e3d_720w.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=z_t">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=c_t">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=z_t">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=c_t">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-307760d8dd68b99f6e40a2f7d36c62f2_720w.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=+%5Cbegin%7Barray%7D%7Bl%7D+L%5E%7Bb+l+o+c+k%7D%28f%29%3A%3D+%5C%5C+%5Cmathbb%7BE%7D%5Cleft%5B%5Cell%5Cleft%28f%28x%29%5E%7BT%7D%5Cleft%28%5Cfrac%7B%5Csum_%7Bi%7D+f%5Cleft%28x_%7Bi%7D%5E%7B%2B%7D%5Cright%29%7D%7Bb%7D-%5Cfrac%7B%5Csum_%7Bi%7D+f%5Cleft%28x_%7Bi%7D%5E%7B-%7D%5Cright%29%7D%7Bb%7D%5Cright%29%5Cright%29%5Cright%5D+%5Cend%7Barray%7D%5C%5C">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-3e09dd4db86352a77c0589dd21fea066_720w.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=%28c%2C+I%5E%2B%29">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=%28c%2C+I%5E-%29">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=p%28c%7CI%5E%2B%29+-+p%28c%7CI%5E-%29">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-e0a52b992f6424411deba5bd5341f2fb_720w.jpg">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-a349c7e19a4f2690073a6fefde343de6_720w.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=%28e_t%2C+r_t%2C+o_t%29">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=H+%3D+d%28+f%28e_t%29+%2B+g%28r_t%29%2C+f%28o_t%29%29">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=e_t">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=r_t">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=o_t">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=%5CDelta+z_%7Bt%7D%3DT%5Cleft%28z_%7Bt%7D%2C+a_%7Bt%7D%5Cright%29%3D%5Coperatorname%7BGNN%7D%5Cleft%28%5Cleft%5C%7B%5Cleft%28z_%7Bt%7D%5E%7Bk%7D%2C+a_%7Bt%7D%5E%7Bk%7D%5Cright%29%5Cright%5C%7D_%7Bk%3D1%7D%5E%7BK%7D%5Cright%29+%5C%5C">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=d%5Cleft%28z_%7Bt%7D%2BT%5Cleft%28z_%7Bt%7D%2C+a_%7Bt%7D%5Cright%29%2C+z_%7Bt%2B1%7D%5Cright%29%2B%5Cmax+%5Cleft%280%2C+%5Cgamma-d%5Cleft%28%5Ctilde%7Bz%7D_%7Bt%7D%2C+z_%7Bt%2B1%7D%5Cright%29%5Cright%29+%5C%5C">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=%5Ctilde+z_t">
+<meta property="og:updated_time" content="2020-11-14T09:16:11.664Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="对比学习 (Contrastive Learning) 相关进展梳理">
+<meta name="twitter:description" content="本文转载自： https://zhuanlan.zhihu.com/p/141141365   最近深度学习两巨头 Bengio 和 LeCun 在 ICLR 2020 上点名 Self-Supervised Learning（SSL，自监督学习） 是 AI 的未来，而其的代表的 Framework 便是 Contrastive Learning（CL，对比学习）。 另一巨头 Hinton 和">
+<meta name="twitter:image" content="https://www.zhihu.com/equation?tex=l+%3D+max%280%2C+%CE%B7+%2B+s+%28x%2C+x%5E%2B%29+%E2%88%92+s+%28x%2C+x%5E%E2%88%92%29%29">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://haokailong.top/2020/11/14/对比学习-Contrastive-Learning-相关进展梳理/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>对比学习 (Contrastive Learning) 相关进展梳理 | Hold the Torch</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-138297445-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-138297445-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hold the Torch</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-wordcloud">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/wordcloud/" rel="section"><i class="menu-item-icon fa fa-fw fa-cloud"></i> <br>词云</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/14/对比学习-Contrastive-Learning-相关进展梳理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">对比学习 (Contrastive Learning) 相关进展梳理
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-14 17:16:11" itemprop="dateModified" datetime="2020-11-14T17:16:11+08:00">2020-11-14</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/14/对比学习-Contrastive-Learning-相关进展梳理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/14/对比学习-Contrastive-Learning-相关进展梳理/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本文转载自：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/141141365" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/141141365</a></p>
+</blockquote>
+<p><br></p>
+<p>最近深度学习两巨头 Bengio 和 LeCun 在 ICLR 2020 上点名 Self-Supervised Learning（SSL，自监督学习） 是 AI 的未来，而其的代表的 Framework 便是 Contrastive Learning（CL，对比学习）。 另一巨头 Hinton 和 Kaiming 两尊大神也在这问题上隔空过招，MoCo、SimCLR、MoCo V2 打得火热，这和 BERT 之后，各大公司出 XL-Net、RoBerta 刷榜的场景何其相似。本篇文章，将会从对比学习的背后的直觉原理出发，介绍其框架，并且对目前的一些相关的工作进行简要介绍，希望能够为感兴趣的同学提供一些帮助。</p>
+<h2 id="Motivation-amp-Framework"><a href="#Motivation-amp-Framework" class="headerlink" title="Motivation &amp; Framework"></a><strong>Motivation &amp; Framework</strong></h2><p>很多研究者认为，深度学习的本质就是做两件事情：<strong>Representation Learning（表示学习）和 Inductive Bias Learning（归纳偏好学习）</strong>。目前的一个趋势就是，学好了样本的表示，在一些不涉及逻辑、推理等的问题上，例如判断句子的情感极性、识别图像中有哪些东西，AI 系统都可以完成非常不错；而涉及到更高层的语义、组合逻辑，则需要设计一些过程来辅助 AI 系统去分解复杂的任务，<a href="https://link.zhihu.com/?target=http%3A//arxiv.org/abs/1904.12584" target="_blank" rel="noopener">ICLR 19</a> 的一篇 oral 就是做的类似的事情。因为归纳偏好的设计更多的是 任务相关的，复杂的过程需要非常精心的设计，所以很多工作都开始关注到表示学习上，NLP 最近大火的预训练模型，例如 BERT，就是利用大规模的语料预训练得到文本的好的表示。那么，CV 领域的 BERT 是什么呢？答案已经呼之欲出，就是对比学习。</p>
+<p>基于此，也就意味着<strong>表示学习算法并不一定要关注到样本的每一个细节，只要学到的特征能够使其和其他样本区别开来就行</strong>，这就是对比学习和对抗生成网络（GAN）的一个主要不同所在。</p>
+<ul>
+<li>如何定义目标函数？最简单的一种就是上面提到的内积函数，另外一中 triplet 的形式就是 <img src="https://www.zhihu.com/equation?tex=l+%3D+max%280%2C+%CE%B7+%2B+s+%28x%2C+x%5E%2B%29+%E2%88%92+s+%28x%2C+x%5E%E2%88%92%29%29" alt="[公式]"> ，直观上理解，就是希望正例 pair 和负例 pair 隔开至少 <img src="https://www.zhihu.com/equation?tex=%5Ceta" alt="[公式]"> 的距离，这一函数同样可以写成另外一种形式，让正例 pair 和负例 pair 采用不同的 <img src="https://www.zhihu.com/equation?tex=s" alt="[公式]"> 函数，例如，<img src="https://www.zhihu.com/equation?tex=s%28x%2C+x%5E%2B%29+%3D+%5C%7C+%5Cmax+%280%2C+f%28x%29-f%28x%5E%2B%29%5C%7C" alt="[公式]"> ，<img src="https://www.zhihu.com/equation?tex=s%28x%2C+x%5E%2B%29+%3D+%5C%7C+%5Cmax+%28%5Ceta%2C+f%28x%29-f%28x%5E-%29%5C%7C" alt="[公式]">。</li>
+<li>如何构建正例和负例？针对不同类型数据，例如图像、文本和音频，如何合理的定义哪些样本应该被视作是 <img src="https://www.zhihu.com/equation?tex=x%5E%2B" alt="[公式]">，哪些该被视作是 <img src="https://www.zhihu.com/equation?tex=x%5E-" alt="[公式]">，；如何增加负例样本的数量，也就是上面式子里的 <img src="https://www.zhihu.com/equation?tex=N" alt="[公式]">？这个问题是目前很多 paper 关注的一个方向，因为虽然自监督的数据有很多，但是<strong>设计出合理的正例和负例 pair，并且尽可能提升 pair 能够 cover 的 semantic relation，才能让得到的表示在 downstream task 表现的更好</strong>。</li>
+</ul>
+<p><br></p>
+<p>接下来，就会介绍一下 MoCo、SimCLR 以及 Contrasitve Predictive Coding（CPC） 这三篇文章，在构建对比样例中的一些核心观点。<a id="more"></a></p>
+<h2 id="Contrastive-Pair"><a href="#Contrastive-Pair" class="headerlink" title="Contrastive Pair"></a><strong>Contrastive Pair</strong></h2><h3 id="MoCo"><a href="#MoCo" class="headerlink" title="MoCo"></a><strong>MoCo</strong></h3><p><img src="https://pic2.zhimg.com/80/v2-2c7e1ebab1ef558f5e1cb04817f96d51_720w.jpg" alt="img"></p>
+<p>论文标题：Momentum Contrast for Unsupervised Visual Representation Learning</p>
+<p>论文来源：CVPR 2020</p>
+<p>论文链接：<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1911.05722" target="_blank" rel="noopener">https://arxiv.org/abs/1911.05722</a></p>
+<p>代码链接：<a href="https://link.zhihu.com/?target=https%3A//github.com/facebookresearch/moco" target="_blank" rel="noopener">https://github.com/facebookresearch/moco</a></p>
+<p><img src="https://pic4.zhimg.com/80/v2-bfb035f24f9d0f8f2f7dd38bdab2a703_720w.jpg" alt="img"></p>
+<p>前面提到了，样本数量对于学习到的样本质量有很大的影响。MoCo 做的事情很简单，就是把负例样本的 encoder <img src="https://www.zhihu.com/equation?tex=f%28%5Ccdot%29" alt="[公式]">和 mini-batch 大小解耦。也就是说，原先在算目标函数的时候，负例样本对也会为 loss 产生贡献，因为也就会有梯度回传给对应的 encoder，那么这样在实现的时候，样本数量必然会受到 batch size 的限制，从而影响学习到表示的质量。</p>
+<p>为此，Memory Bank 提出我把所有样本的表示都存起来，然后每次随机采样，这样就可以认为我的负例样本理论上可以达到所有样本的数量，具体的做法就是每一轮来 encode 一次所有的变量，显然，这样很吃内存，并且得到的表示也和参数更新存在一定的滞后。</p>
+<p>MoCo 则改善了上述的两个缺点，一方面，用一个 queue 来维护当前的 negative candidates pool，queue 有着进出的动态更新机制，一方面能够和 Mini-batch 解耦，queue size 可以设置的比较大，另外一方面也就不用对所有样本做类似预处理的进行编码；对于负例样本的参数，采用 Momentum update 的方式，来把正例 encoder 的参数<img src="https://www.zhihu.com/equation?tex=%5Ctheta_q" alt="[公式]"> copy 给负例 encoder <img src="https://www.zhihu.com/equation?tex=%5Ctheta_k" alt="[公式]">：</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Ctheta_k+%3D+m+%5Ctheta_k+%2B+%281-m%29+%5Ctheta_q+%5C%5C" alt="[公式]"></p>
+<p>三种方式的示意图也在这一小节的开头给出了，可以清楚的看到三种方式的区别。<strong>这种对比画图的方式对于说明问题很有帮助，可以在论文中进行尝试</strong>。</p>
+<h3 id="SimCLR"><a href="#SimCLR" class="headerlink" title="SimCLR"></a><strong>SimCLR</strong></h3><p><img src="https://pic4.zhimg.com/80/v2-b86b329fbbde88a83d9af0eb686950b3_720w.jpg" alt="img"></p>
+<p>论文标题：A Simple Framework for Contrastive Learning of Visual Representations</p>
+<p>论文链接：<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2002.05709" target="_blank" rel="noopener">https://arxiv.org/abs/2002.05709</a></p>
+<p>代码链接：<a href="https://link.zhihu.com/?target=https%3A//github.com/google-research/simclr" target="_blank" rel="noopener">https://github.com/google-research/simclr</a></p>
+<p>MoCo 刚说完样本数量对于对比学习很重要，这边 SimCLR 就从另外一个角度，说构建负例的方式（图像上，就是对于图像的 transformation）也很重要，探究了 transformation 、batch-size 大小等对于学习到的表示的影响，并且把这个框架用下面这张图来说明：</p>
+<p><img src="https://pic1.zhimg.com/80/v2-79f91dcbda0e03df0c386bf9a93d1ba8_720w.jpg" alt="img"></p>
+<p>文章主要得出了下面几个结论：</p>
+<ul>
+<li>对于样本进行变化，即构建正例和负例的 transformation 对于结果至关重要；</li>
+<li>用 entropy loss 的 Contrastive Learning，可以通过 normalize representation embedding 以及 temperature adjustment 提点；</li>
+<li>在计算 loss 之前，让表示再过一个 non-linear hard 能大幅提升效果，即上面框架图中的 <img src="https://www.zhihu.com/equation?tex=g%28%5Ccdot%29" alt="[公式]">；</li>
+<li>大 batch-size 对于 CL 的增益比 Supervised Learning 更大。</li>
+</ul>
+<p>其中最后一个结论，和 MoCo 的初衷是符合的，并且作者虽说不用 Memory-bank，但是 SimCLR 尝试的 bsz 也达到了令人发指的 8192，用了 128 块 TPU，又是算力党的一大胜利。MoCo v2 也是利用了上面的第一点和第三点，在 MoCo 基础上得到了进一步的提升，然后作者还也明确的点名了 SimCLR，称不需要使用那么大的 batch size 也能超过它，可能这就是神仙打架吧。</p>
+<h3 id="CPC"><a href="#CPC" class="headerlink" title="CPC"></a><strong>CPC</strong></h3><p><img src="https://pic1.zhimg.com/80/v2-155b87baf119fcb3e4f7fcf45c1d1de0_720w.jpg" alt="img"></p>
+<p>论文标题：Representation Learning with Contrastive Predictive Coding</p>
+<p>论文链接：<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1807.03748" target="_blank" rel="noopener">https://arxiv.org/abs/1807.03748</a></p>
+<p>代码链接：<a href="https://link.zhihu.com/?target=https%3A//github.com/davidtellez/contrastive-predictive-coding" target="_blank" rel="noopener">https://github.com/davidtellez/contrastive-predictive-coding</a></p>
+<p>前面讨论的两篇文章主要集中在图像数据上，那么对于文本、音频这样的数据，常见的裁剪、旋转等变换操作就无法适用了，并且，因为其数据本身的时序性，设计合理的方法来把这一点考虑进去是至关重要的。Contrastive Predictive Coding（CPC） 这篇文章就提出，可以利用一定窗口内的 <img src="https://www.zhihu.com/equation?tex=x_t" alt="[公式]"> 和 <img src="https://www.zhihu.com/equation?tex=x_%7Bt%2Bk%7D" alt="[公式]"> 作为 Positive pair，并从输入序列之中随机采样一个输入 <img src="https://www.zhihu.com/equation?tex=x_%7Bt%2A%7D" alt="[公式]"> 作为负例，下图说明了 CPC 的工作过程：</p>
+<p><img src="https://pic2.zhimg.com/80/v2-795d7581c01c2d35ae154b34a80b2e3d_720w.jpg" alt="img"></p>
+<p>为了把历史的信息也加入进去，作者提出可以在 <img src="https://www.zhihu.com/equation?tex=z_t" alt="[公式]"> 上额外增加一个自递归模型，例如 GRU，来在表示之中融入时序关系，得到相应的 <img src="https://www.zhihu.com/equation?tex=c_t" alt="[公式]"> 来进行对比学习。在下游任务中，既可以使用 <img src="https://www.zhihu.com/equation?tex=z_t" alt="[公式]"> 也可以使用 <img src="https://www.zhihu.com/equation?tex=c_t" alt="[公式]"> ，又或者是二者的融合，可以根据任务需要来进行灵活的选择。</p>
+<h2 id="Theory-amp-Application"><a href="#Theory-amp-Application" class="headerlink" title="Theory &amp; Application"></a><strong>Theory &amp; Application</strong></h2><p>接下来，会简要的讨论几篇关于对比学习的理论和应用类的文章：</p>
+<h3 id="ICML-2019"><a href="#ICML-2019" class="headerlink" title="ICML 2019"></a><strong>ICML 2019</strong></h3><p><img src="https://pic3.zhimg.com/80/v2-307760d8dd68b99f6e40a2f7d36c62f2_720w.jpg" alt="img"></p>
+<p>论文标题：A Theoretical Analysis of Contrastive Unsupervised Representation Learning</p>
+<p>论文来源：ICML 2019</p>
+<p>论文链接：<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1902.09229" target="_blank" rel="noopener">https://arxiv.org/abs/1902.09229</a></p>
+<p>这篇文章发表在 ICML 2019 上，对比学习这一框架虽然在直觉上非常 make sense，但是理论上为什么得到的表示就能够在 downstream 例如 classification 上表现良好？</p>
+<p>这篇文章通过定义 latent class 以及样本和 latent class 的距离入手，推导出了二分类情况下的 loss bound，保证了其的泛化性能。文章提出了一个改进算法就是进行 block 处理，不再直接优化各个 pair 的 inner product，而是转而优化 positive block以及 negative block 的内积：</p>
+<p><img src="https://www.zhihu.com/equation?tex=+%5Cbegin%7Barray%7D%7Bl%7D+L%5E%7Bb+l+o+c+k%7D%28f%29%3A%3D+%5C%5C+%5Cmathbb%7BE%7D%5Cleft%5B%5Cell%5Cleft%28f%28x%29%5E%7BT%7D%5Cleft%28%5Cfrac%7B%5Csum_%7Bi%7D+f%5Cleft%28x_%7Bi%7D%5E%7B%2B%7D%5Cright%29%7D%7Bb%7D-%5Cfrac%7B%5Csum_%7Bi%7D+f%5Cleft%28x_%7Bi%7D%5E%7B-%7D%5Cright%29%7D%7Bb%7D%5Cright%29%5Cright%29%5Cright%5D+%5Cend%7Barray%7D%5C%5C" alt="[公式]"></p>
+<p>文章在后续的实验上也验证了这一方法会优于内积方法。</p>
+<h3 id="NIPS-2017"><a href="#NIPS-2017" class="headerlink" title="NIPS 2017"></a><strong>NIPS 2017</strong></h3><p><img src="https://pic3.zhimg.com/80/v2-3e09dd4db86352a77c0589dd21fea066_720w.jpg" alt="img"></p>
+<p>论文标题：Contrastive Learning for Image Captioning</p>
+<p>论文来源：NIPS 2017</p>
+<p>论文链接：<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1710.02534" target="_blank" rel="noopener">https://arxiv.org/abs/1710.02534</a></p>
+<p>代码链接：<a href="https://link.zhihu.com/?target=https%3A//github.com/doubledaibo/clcaption_nips2017" target="_blank" rel="noopener">https://github.com/doubledaibo/clcaption_nips2017</a></p>
+<p>这篇文章希望通过使用对比学习来解决 image captioning 中标题文本<strong>可区别性</strong>的问题，即尽可能让标题描述和唯一的一张图片对应，而不是笼统而又模糊的可能和多张图片对应。作者引入对比学习，把对应的图像和标题作为正例 pair <img src="https://www.zhihu.com/equation?tex=%28c%2C+I%5E%2B%29" alt="[公式]">，并把其中的图像随机采样得到负例 pair <img src="https://www.zhihu.com/equation?tex=%28c%2C+I%5E-%29" alt="[公式]">，并且在已有的 sota 模型上优化 <img src="https://www.zhihu.com/equation?tex=p%28c%7CI%5E%2B%29+-+p%28c%7CI%5E-%29" alt="[公式]">，提升生成的 caption 的效果。</p>
+<h3 id="ICLR-2020"><a href="#ICLR-2020" class="headerlink" title="ICLR 2020"></a><strong>ICLR 2020</strong></h3><p><img src="https://pic4.zhimg.com/80/v2-e0a52b992f6424411deba5bd5341f2fb_720w.jpg" alt="img"></p>
+<p>论文标题：Contrastive Learning of Structured World Models</p>
+<p>论文来源：ICLR 2020</p>
+<p>论文链接：<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1911.12247" target="_blank" rel="noopener">https://arxiv.org/abs/1911.12247</a></p>
+<p>代码链接：<a href="https://link.zhihu.com/?target=https%3A//github.com/tkipf/c-swm" target="_blank" rel="noopener">https://github.com/tkipf/c-swm</a></p>
+<p>前面提到，表示学习能够较好的解决一些简单的任务，但是理解物体之间的关系以及建模其间的交互关系不单单需要好的表示，同样需要一个好的归纳偏好。这篇文章就是通过利用 state set 来表示世界中各个物体的状态，并且利用图神经网络来建模其之间的交互，再进一步地利用对比学习来提升性能，下图给出了模型的示意图：</p>
+<p><img src="https://pic3.zhimg.com/80/v2-a349c7e19a4f2690073a6fefde343de6_720w.jpg" alt="img"></p>
+<p>这里的对比学习是从 TransE 架构迁移而来，具体地，在 TransE 中，我们会希望一个三元组 <img src="https://www.zhihu.com/equation?tex=%28e_t%2C+r_t%2C+o_t%29" alt="[公式]"> 的能够让 <img src="https://www.zhihu.com/equation?tex=H+%3D+d%28+f%28e_t%29+%2B+g%28r_t%29%2C+f%28o_t%29%29" alt="[公式]"> 尽可能的小，即 <img src="https://www.zhihu.com/equation?tex=e_t" alt="[公式]"> 的表示加上 relation <img src="https://www.zhihu.com/equation?tex=r_t" alt="[公式]"> 的表示和 <img src="https://www.zhihu.com/equation?tex=o_t" alt="[公式]"> 的表示尽可能地接近，而迁移到世界模型中，就是要将 entity 换成物体的 state，relation 换成 action，即经过图卷积后的得到的新的表示，通过下面的式子进行优化：</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5CDelta+z_%7Bt%7D%3DT%5Cleft%28z_%7Bt%7D%2C+a_%7Bt%7D%5Cright%29%3D%5Coperatorname%7BGNN%7D%5Cleft%28%5Cleft%5C%7B%5Cleft%28z_%7Bt%7D%5E%7Bk%7D%2C+a_%7Bt%7D%5E%7Bk%7D%5Cright%29%5Cright%5C%7D_%7Bk%3D1%7D%5E%7BK%7D%5Cright%29+%5C%5C" alt="[公式]"><img src="https://www.zhihu.com/equation?tex=d%5Cleft%28z_%7Bt%7D%2BT%5Cleft%28z_%7Bt%7D%2C+a_%7Bt%7D%5Cright%29%2C+z_%7Bt%2B1%7D%5Cright%29%2B%5Cmax+%5Cleft%280%2C+%5Cgamma-d%5Cleft%28%5Ctilde%7Bz%7D_%7Bt%7D%2C+z_%7Bt%2B1%7D%5Cright%29%5Cright%29+%5C%5C" alt="[公式]"></p>
+<p>这里的 <img src="https://www.zhihu.com/equation?tex=%5Ctilde+z_t" alt="[公式]"> 是从 experience buffer 中采样得到的负例样本，文章在后续多物体交互环境的模拟实验中验证了其方法的优越性。</p>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a><strong>Summary</strong></h2><p>本文介绍了关于对比学习背后的动机，以及一系列在图像、文本上的一些工作，在计算机视觉领域，其习得的表示能够很好地在下游任务泛化，甚至能够超过监督学习的方法。</p>
+<p>回过头来看，预训练模型从 ImageNet 开始，后来这一思想迁移到 NLP，有了 BERT 等一系列通过自监督的预训练方法来学习表示，后来这一想法又反哺了计算机视觉领域，引出了诸如 MoCo、SimCLR 等工作，在一系列分割、分类任务上都取得了惊人的表现。那么，这一思想会不会又再次和 NLP 结合，碰撞出新的火花呢，让我们拭目以待。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NLP/" rel="tag"><i class="fa fa-tag"></i> NLP</a>
+          
+            <a href="/tags/Machine-Learning/" rel="tag"><i class="fa fa-tag"></i> Machine Learning</a>
+          
+            <a href="/tags/Contrastive-Learning/" rel="tag"><i class="fa fa-tag"></i> Contrastive Learning</a>
+          
+            <a href="/tags/CV/" rel="tag"><i class="fa fa-tag"></i> CV</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/11/14/什么是对比学习-Constrastive-Learning/" rel="next" title="什么是对比学习 (Constrastive Learning) ?">
+                <i class="fa fa-chevron-left"></i> 什么是对比学习 (Constrastive Learning) ?
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/11/17/关于NYT-Riedel-et-al-2010-数据集/" rel="prev" title="关于NYT(Riedel et al. 2010)数据集">
+                关于NYT(Riedel et al. 2010)数据集 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/漫画脸1vs1.jpg" alt="dinosaur">
+            
+              <p class="site-author-name" itemprop="name">dinosaur</p>
+              <div class="site-description motion-element" itemprop="description">闪耀的群星，颠覆着黑夜</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">371</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hao-Kailong" title="GitHub &rarr; https://github.com/Hao-Kailong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/klhao.nju@gmail.com" title="Email &rarr; klhao.nju@gmail.com"><i class="fa fa-fw fa-envelope"></i>Email</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Motivation-amp-Framework"><span class="nav-text">Motivation &amp; Framework</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Contrastive-Pair"><span class="nav-text">Contrastive Pair</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MoCo"><span class="nav-text">MoCo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SimCLR"><span class="nav-text">SimCLR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPC"><span class="nav-text">CPC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Theory-amp-Application"><span class="nav-text">Theory &amp; Application</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ICML-2019"><span class="nav-text">ICML 2019</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NIPS-2017"><span class="nav-text">NIPS 2017</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ICLR-2020"><span class="nav-text">ICLR 2020</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary"><span class="nav-text">Summary</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dinosaur</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+      <div>
+        <div class="addthis_inline_share_toolbox">
+  <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cb429b1d763f1d4" async="async"></script>
+</div>
+
+      </div>
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script id="dsq-count-scr" src="https://dinosaur7.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://haokailong.top/2020/11/14/对比学习-Contrastive-Learning-相关进展梳理/";
+    this.page.identifier = "2020/11/14/对比学习-Contrastive-Learning-相关进展梳理/";
+    this.page.title = '对比学习 (Contrastive Learning) 相关进展梳理';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dinosaur7.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

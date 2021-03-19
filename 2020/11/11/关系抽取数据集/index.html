@@ -1,0 +1,2770 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="DsoDHJ1Km7LX7l7UnoG8dB2QrygUWW345_JkdBOj1Vw">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="ahe2m7RGVx">
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italicRoboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/solar-system-16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/solar-system-32.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇文章部分引用以下博客： https://blog.csdn.net/qq_41372972/article/details/104677655 https://blog.csdn.net/CSDN_wujian/article/details/100136621   最近由于实验需要，收集整理了关系抽取方向的数据集，主要包括SemEval、Wiki80、NYT10。目前来说全监督的关系抽取任">
+<meta name="keywords" content="Relation Extraction,NYT,RE,SemEval,TACRED,FewRel,Wiki80,ACE2005,DocRED">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关系抽取数据集">
+<meta property="og:url" content="http://haokailong.top/2020/11/11/关系抽取数据集/index.html">
+<meta property="og:site_name" content="Hold the Torch">
+<meta property="og:description" content="本篇文章部分引用以下博客： https://blog.csdn.net/qq_41372972/article/details/104677655 https://blog.csdn.net/CSDN_wujian/article/details/100136621   最近由于实验需要，收集整理了关系抽取方向的数据集，主要包括SemEval、Wiki80、NYT10。目前来说全监督的关系抽取任">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/semeval.png">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/NYT.png">
+<meta property="og:updated_time" content="2020-11-11T07:51:32.445Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关系抽取数据集">
+<meta name="twitter:description" content="本篇文章部分引用以下博客： https://blog.csdn.net/qq_41372972/article/details/104677655 https://blog.csdn.net/CSDN_wujian/article/details/100136621   最近由于实验需要，收集整理了关系抽取方向的数据集，主要包括SemEval、Wiki80、NYT10。目前来说全监督的关系抽取任">
+<meta name="twitter:image" content="http://haokailong.top/images/blog/2020/semeval.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://haokailong.top/2020/11/11/关系抽取数据集/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>关系抽取数据集 | Hold the Torch</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-138297445-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-138297445-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hold the Torch</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-wordcloud">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/wordcloud/" rel="section"><i class="menu-item-icon fa fa-fw fa-cloud"></i> <br>词云</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/11/关系抽取数据集/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">关系抽取数据集
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-11 15:51:32" itemprop="dateModified" datetime="2020-11-11T15:51:32+08:00">2020-11-11</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/11/关系抽取数据集/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/11/关系抽取数据集/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本篇文章部分引用以下博客：</p>
+<p><a href="https://blog.csdn.net/qq_41372972/article/details/104677655" target="_blank" rel="noopener">https://blog.csdn.net/qq_41372972/article/details/104677655</a></p>
+<p><a href="https://blog.csdn.net/CSDN_wujian/article/details/100136621" target="_blank" rel="noopener">https://blog.csdn.net/CSDN_wujian/article/details/100136621</a></p>
+</blockquote>
+<p><br></p>
+<p>最近由于实验需要，收集整理了关系抽取方向的数据集，主要包括SemEval、Wiki80、NYT10。目前来说全监督的关系抽取任务一般在SemEval上做，远程监督的关系抽取任务一般在NYT10上做。</p>
+<h1 id="SemEval"><a href="#SemEval" class="headerlink" title="SemEval"></a>SemEval</h1><h2 id="数据集来源"><a href="#数据集来源" class="headerlink" title="数据集来源"></a>数据集来源</h2><p>SemEval数据集来自于2010年的国际语义评测大会中Task 8:” Multi-Way Classification of Semantic Relations Between Pairs of Nominals “</p>
+<h2 id="数据集介绍"><a href="#数据集介绍" class="headerlink" title="数据集介绍"></a>数据集介绍</h2><p>任务：对于给定了的句子和两个做了标注的名词，从给定的关系清单中选出最合适的关系。<br>数据集中一共包含9+1个关系，各类数据的占比如下图所示：</p>
+<p><img src="/images/blog/2020/semeval.png" alt></p>
+<p>数据官网：<a href="http://semeval2.fbk.eu/semeval2.php?location=tasks#T11" target="_blank" rel="noopener">http://semeval2.fbk.eu/semeval2.php?location=tasks#T11</a></p>
+<a id="more"></a>
+<h1 id="Wiki80"><a href="#Wiki80" class="headerlink" title="Wiki80"></a>Wiki80</h1><h2 id="数据集来源-1"><a href="#数据集来源-1" class="headerlink" title="数据集来源"></a>数据集来源</h2><p>根据OpenNRE上的原文（We also provide a new dataset Wiki80, which is derived from FewRel.）来看Wiki80是由清华发布的数据集FewRel上提取的。</p>
+<h2 id="数据集介绍-1"><a href="#数据集介绍-1" class="headerlink" title="数据集介绍"></a>数据集介绍</h2><p>任务：对于给定了的句子和两个做了标注的名词，从给定的关系清单中选出最合适的关系。<br>数据集中一共包含80中关系，经统计各个关系个数均为700，合计56000个样本。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>关系</th>
+<th>个数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>place served by transport hub</td>
+<td>700</td>
+</tr>
+<tr>
+<td>mountain range</td>
+<td>700</td>
+</tr>
+<tr>
+<td>religion</td>
+<td>700</td>
+</tr>
+<tr>
+<td>participating team</td>
+<td>700</td>
+</tr>
+<tr>
+<td>contains administrative territorial entity</td>
+<td>700</td>
+</tr>
+<tr>
+<td>head of government</td>
+<td>700</td>
+</tr>
+<tr>
+<td>country of citizenship</td>
+<td>700</td>
+</tr>
+<tr>
+<td>original network</td>
+<td>700</td>
+</tr>
+<tr>
+<td>heritage designation</td>
+<td>700</td>
+</tr>
+<tr>
+<td>performer</td>
+<td>700</td>
+</tr>
+<tr>
+<td>participant of</td>
+<td>700</td>
+</tr>
+<tr>
+<td>position held</td>
+<td>700</td>
+</tr>
+<tr>
+<td>has part</td>
+<td>700</td>
+</tr>
+<tr>
+<td>location of formation</td>
+<td>700</td>
+</tr>
+<tr>
+<td>located on terrain feature</td>
+<td>700</td>
+</tr>
+<tr>
+<td>architect</td>
+<td>700</td>
+</tr>
+<tr>
+<td>country of origin</td>
+<td>700</td>
+</tr>
+<tr>
+<td>publisher</td>
+<td>700</td>
+</tr>
+<tr>
+<td>director</td>
+<td>700</td>
+</tr>
+<tr>
+<td>father</td>
+<td>700</td>
+</tr>
+<tr>
+<td>developer</td>
+<td>700</td>
+</tr>
+<tr>
+<td>military branch</td>
+<td>700</td>
+</tr>
+<tr>
+<td>mouth of the watercourse</td>
+<td>700</td>
+</tr>
+<tr>
+<td>nominated for</td>
+<td>700</td>
+</tr>
+<tr>
+<td>movement</td>
+<td>700</td>
+</tr>
+<tr>
+<td>successful candidate</td>
+<td>700</td>
+</tr>
+<tr>
+<td>followed by</td>
+<td>700</td>
+</tr>
+<tr>
+<td>manufacturer</td>
+<td>700</td>
+</tr>
+<tr>
+<td>instance of</td>
+<td>700</td>
+</tr>
+<tr>
+<td>after a work by</td>
+<td>700</td>
+</tr>
+<tr>
+<td>member of political party</td>
+<td>700</td>
+</tr>
+<tr>
+<td>licensed to broadcast to</td>
+<td>700</td>
+</tr>
+<tr>
+<td>headquarters location</td>
+<td>700</td>
+</tr>
+<tr>
+<td>sibling</td>
+<td>700</td>
+</tr>
+<tr>
+<td>instrument</td>
+<td>700</td>
+</tr>
+<tr>
+<td>country</td>
+<td>700</td>
+</tr>
+<tr>
+<td>occupation</td>
+<td>700</td>
+</tr>
+<tr>
+<td>residence</td>
+<td>700</td>
+</tr>
+<tr>
+<td>work location</td>
+<td>700</td>
+</tr>
+<tr>
+<td>subsidiary</td>
+<td>700</td>
+</tr>
+<tr>
+<td>participant</td>
+<td>700</td>
+</tr>
+<tr>
+<td>operator</td>
+<td>700</td>
+</tr>
+<tr>
+<td>characters</td>
+<td>700</td>
+</tr>
+<tr>
+<td>occupant</td>
+<td>700</td>
+</tr>
+<tr>
+<td>genre</td>
+<td>700</td>
+</tr>
+<tr>
+<td>operating system</td>
+<td>700</td>
+</tr>
+<tr>
+<td>owned by</td>
+<td>700</td>
+</tr>
+<tr>
+<td>platform</td>
+<td>700</td>
+</tr>
+<tr>
+<td>tributary</td>
+<td>700</td>
+</tr>
+<tr>
+<td>winner</td>
+<td>700</td>
+</tr>
+<tr>
+<td>said to be the same as</td>
+<td>700</td>
+</tr>
+<tr>
+<td>composer</td>
+<td>700</td>
+</tr>
+<tr>
+<td>league</td>
+<td>700</td>
+</tr>
+<tr>
+<td>record label</td>
+<td>700</td>
+</tr>
+<tr>
+<td>distributor</td>
+<td>700</td>
+</tr>
+<tr>
+<td>screenwriter</td>
+<td>700</td>
+</tr>
+<tr>
+<td>sports season of league or competition</td>
+<td>700</td>
+</tr>
+<tr>
+<td>taxon rank</td>
+<td>700</td>
+</tr>
+<tr>
+<td>location</td>
+<td>700</td>
+</tr>
+<tr>
+<td>field of work</td>
+<td>700</td>
+</tr>
+<tr>
+<td>language of work or name</td>
+<td>700</td>
+</tr>
+<tr>
+<td>applies to jurisdiction</td>
+<td>700</td>
+</tr>
+<tr>
+<td>notable work</td>
+<td>700</td>
+</tr>
+<tr>
+<td>located in the administrative territorial entity</td>
+<td>700</td>
+</tr>
+<tr>
+<td>crosses</td>
+<td>700</td>
+</tr>
+<tr>
+<td>original language of film or TV show</td>
+<td>700</td>
+</tr>
+<tr>
+<td>competition class</td>
+<td>700</td>
+</tr>
+<tr>
+<td>part of</td>
+<td>700</td>
+</tr>
+<tr>
+<td>sport</td>
+<td>700</td>
+</tr>
+<tr>
+<td>constellation</td>
+<td>700</td>
+</tr>
+<tr>
+<td>position played on team / speciality</td>
+<td>700</td>
+</tr>
+<tr>
+<td>located in or next to body of water</td>
+<td>700</td>
+</tr>
+<tr>
+<td>voice type</td>
+<td>700</td>
+</tr>
+<tr>
+<td>follows</td>
+<td>700</td>
+</tr>
+<tr>
+<td>spouse</td>
+<td>700</td>
+</tr>
+<tr>
+<td>military rank</td>
+<td>700</td>
+</tr>
+<tr>
+<td>mother</td>
+<td>700</td>
+</tr>
+<tr>
+<td>member of</td>
+<td>700</td>
+</tr>
+<tr>
+<td>child</td>
+<td>700</td>
+</tr>
+<tr>
+<td>main subject</td>
+<td>700</td>
+</tr>
+<tr>
+<td>合计</td>
+<td>56000</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Ps:这里56000个是val与train一起统计的</p>
+<p>Wiki80 文件夹中共包含3个文件:</p>
+<p>Wiki80_rel2id.json : 关系及其索引的对照表，合计80个关系，和Semeval中的不同，这里面的关系不包含实体的前后关系。</p>
+<p>Wiki80_train.txt &amp; wiki80_val.txt : trian(50400个样本)、val(5600个样本)合计56000个样本。</p>
+<p>数据集中不包含测试集</p>
+<p>样本格式：<br>例子：{“token”: [“Vahitahi”, “has”, “a”, “territorial”, “airport”, “.”], “h”: {“name”: “territorial airport”, “id”: “Q16897548”, “pos”: [3, 5]}, “t”: {“name”: “vahitahi”, “id”: “Q1811472”, “pos”: [0, 1]}, “relation”: “place served by transport hub”}</p>
+<p>样本的格式同semeval中的几乎一致，但是在头实体和尾实体中加入了id这一属性。</p>
+<p><strong><em>Wiki80数据集采用人工精标，不包含噪声</em></strong></p>
+<p>数据来源：<a href="https://github.com/thunlp/OpenNRE/tree/master/benchmark" target="_blank" rel="noopener">https://github.com/thunlp/OpenNRE/tree/master/benchmark</a><br>数据参考：<a href="https://opennre-docs.readthedocs.io/en/latest/get_started/benchmark" target="_blank" rel="noopener">https://opennre-docs.readthedocs.io/en/latest/get_started/benchmark</a></p>
+<h1 id="NYT10"><a href="#NYT10" class="headerlink" title="NYT10"></a>NYT10</h1><h2 id="数据集来源："><a href="#数据集来源：" class="headerlink" title="数据集来源："></a>数据集来源：</h2><p>NYT10是在基于远程监督的关系抽取任务上最常用的数据集，NYT10数据集来自于10年的论文Modeling Relations and Their Mentions withoutLabeled Text，是由NYT corpus 同Freebase远程监督得到：</p>
+<p><img src="/images/blog/2020/NYT.png" alt></p>
+<h2 id="数据集介绍-2"><a href="#数据集介绍-2" class="headerlink" title="数据集介绍"></a>数据集介绍</h2><p>任务：对于给定了的句子和两个做了标注的名词，从给定的关系清单中选出最合适的关系。<br>数据集中一共包含52+1（包括NA）个关系，各个关系在样本中的分布如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>relations</th>
+<th>size_of_train</th>
+<th>size_of_test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/location/fr_region/capital</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/location/cn_province/capital</td>
+<td>2</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/location/in_state/administrative_capital</td>
+<td>4</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/base/locations/countries/states_provinces_within</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>/business/company/founders</td>
+<td>901</td>
+<td>95</td>
+</tr>
+<tr>
+<td>/people/person/place_of_birth</td>
+<td>4053</td>
+<td>162</td>
+</tr>
+<tr>
+<td>/people/deceased_person/place_of_death</td>
+<td>2422</td>
+<td>68</td>
+</tr>
+<tr>
+<td>/location/it_region/capital</td>
+<td>22</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/people/family/members</td>
+<td>4</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/people/profession/people_with_this_profession</td>
+<td>2</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/location/neighborhood/neighborhood_of</td>
+<td>9275</td>
+<td>68</td>
+</tr>
+<tr>
+<td>NA</td>
+<td>385664</td>
+<td>166004</td>
+</tr>
+<tr>
+<td>/location/in_state/legislative_capital</td>
+<td>4</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/sports/sports_team/location</td>
+<td>294</td>
+<td>10</td>
+</tr>
+<tr>
+<td>/people/person/religion</td>
+<td>202</td>
+<td>6</td>
+</tr>
+<tr>
+<td>/location/in_state/judicial_capital</td>
+<td>3</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/business/company_advisor/companies_advised</td>
+<td>2</td>
+<td>8</td>
+</tr>
+<tr>
+<td>/people/family/country</td>
+<td>6</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/time/event/locations</td>
+<td>4</td>
+<td>4</td>
+</tr>
+<tr>
+<td>/business/company/place_founded</td>
+<td>648</td>
+<td>20</td>
+</tr>
+<tr>
+<td>/location/administrative_division/country</td>
+<td>7286</td>
+<td>424</td>
+</tr>
+<tr>
+<td>/people/ethnicity/included_in_group</td>
+<td>7</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/location/br_state/capital</td>
+<td>4</td>
+<td>2</td>
+</tr>
+<tr>
+<td>/location/mx_state/capital</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/location/province/capital</td>
+<td>39</td>
+<td>11</td>
+</tr>
+<tr>
+<td>/people/person/nationality</td>
+<td>9733</td>
+<td>723</td>
+</tr>
+<tr>
+<td>/business/person/company</td>
+<td>7336</td>
+<td>302</td>
+</tr>
+<tr>
+<td>/business/shopping_center_owner/shopping_centers_owned</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/business/company/advisors</td>
+<td>9</td>
+<td>8</td>
+</tr>
+<tr>
+<td>/business/shopping_center/owner</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/location/country/languages_spoken</td>
+<td>0</td>
+<td>3</td>
+</tr>
+<tr>
+<td>/people/deceased_person/place_of_burial</td>
+<td>24</td>
+<td>9</td>
+</tr>
+<tr>
+<td>/location/us_county/county_seat</td>
+<td>110</td>
+<td>23</td>
+</tr>
+<tr>
+<td>/people/ethnicity/geographic_distribution</td>
+<td>86</td>
+<td>136</td>
+</tr>
+<tr>
+<td>/people/person/place_lived</td>
+<td>8907</td>
+<td>450</td>
+</tr>
+<tr>
+<td>/business/company/major_shareholders</td>
+<td>328</td>
+<td>46</td>
+</tr>
+<tr>
+<td>/broadcast/producer/location</td>
+<td>71</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/location/us_state/capital</td>
+<td>798</td>
+<td>39</td>
+</tr>
+<tr>
+<td>/broadcast/content/location</td>
+<td>8</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/business/business_location/parent_company</td>
+<td>19</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/location/jp_prefecture/capital</td>
+<td>2</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/film/film/featured_film_locations</td>
+<td>18</td>
+<td>2</td>
+</tr>
+<tr>
+<td>/people/place_of_interment/interred_here</td>
+<td>24</td>
+<td>9</td>
+</tr>
+<tr>
+<td>/location/de_state/capital</td>
+<td>7</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/people/person/profession</td>
+<td>10</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/business/company/locations</td>
+<td>19</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/location/country/capital</td>
+<td>8883</td>
+<td>553</td>
+</tr>
+<tr>
+<td>/location/location/contains</td>
+<td>66721</td>
+<td>2793</td>
+</tr>
+<tr>
+<td>/people/person/ethnicity</td>
+<td>148</td>
+<td>13</td>
+</tr>
+<tr>
+<td>/location/country/administrative_divisions</td>
+<td>7286</td>
+<td>424</td>
+</tr>
+<tr>
+<td>/people/person/children</td>
+<td>622</td>
+<td>30</td>
+</tr>
+<tr>
+<td>/film/film_location/featured_in_films</td>
+<td>18</td>
+<td>2</td>
+</tr>
+<tr>
+<td>/film/film_festival/location</td>
+<td>4</td>
+<td>0</td>
+</tr>
+<tr>
+<td>合计</td>
+<td>522043</td>
+<td>172448</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>NYT10文件夹中包含4个文件：</p>
+<p>Nyt10_rel2id.json : 包含53个关系及其各自对应的索引</p>
+<p>Nyt10_train.txt : 包含466876个样本</p>
+<p>Nyt10_val.txt : 包含55167个样本</p>
+<p>Nyt10_test.txt : 包含172448个样本</p>
+<p><strong><em>Ps:NYT10的数据集是通过远程监督得到的，所以样本的是根据包的形式分布的及含有相同实体的数据集分布在一起。</em></strong></p>
+<p>样本格式：<br>例子：<br>{“text”: “Hundreds of bridges were added to the statewide inventory after an earthquake in 1994 in Northridge , a suburb of Los Angeles .”, “relation”: “/location/neighborhood/neighborhood_of”,“h”:{“id”:”/guid/9202a8c04000641f800000000008fe6d”, “name”: “Northridge”, “pos”: [89, 99]}, “t”: {“id”: “/guid/9202a8c04000641f80000000060b2879”, “name”: “Los Angeles”, “pos”: [114, 125]}}</p>
+<p>与Wiki80的样本格式相似，区别在于NYT10的文本没有进行标记处理。</p>
+<p><strong><em>NYT10数据集采用远程监督得到，包含噪声。</em></strong></p>
+<p>数据来源：<a href="https://github.com/thunlp/OpenNRE/tree/master/benchmark" target="_blank" rel="noopener">https://github.com/thunlp/OpenNRE/tree/master/benchmark</a></p>
+<p><br></p>
+<h1 id="另外比较常用的数据集：TACRED、ACE-2005官网上下载均需要LDC账号。如有大佬愿意提供，不胜感谢！"><a href="#另外比较常用的数据集：TACRED、ACE-2005官网上下载均需要LDC账号。如有大佬愿意提供，不胜感谢！" class="headerlink" title="另外比较常用的数据集：TACRED、ACE 2005官网上下载均需要LDC账号。如有大佬愿意提供，不胜感谢！"></a><font color="orange">另外比较常用的数据集：TACRED、ACE 2005官网上下载均需要LDC账号。如有大佬愿意提供，不胜感谢！</font></h1><p><br></p>
+<h1 id="关系抽取实时SOTA模型榜单"><a href="#关系抽取实时SOTA模型榜单" class="headerlink" title="关系抽取实时SOTA模型榜单"></a>关系抽取实时SOTA模型榜单</h1><p><a href="http://nlpprogress.com/english/relationship_extraction.html" target="_blank" rel="noopener">http://nlpprogress.com/english/relationship_extraction.html</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Relation-Extraction/" rel="tag"><i class="fa fa-tag"></i> Relation Extraction</a>
+          
+            <a href="/tags/NYT/" rel="tag"><i class="fa fa-tag"></i> NYT</a>
+          
+            <a href="/tags/RE/" rel="tag"><i class="fa fa-tag"></i> RE</a>
+          
+            <a href="/tags/SemEval/" rel="tag"><i class="fa fa-tag"></i> SemEval</a>
+          
+            <a href="/tags/TACRED/" rel="tag"><i class="fa fa-tag"></i> TACRED</a>
+          
+            <a href="/tags/FewRel/" rel="tag"><i class="fa fa-tag"></i> FewRel</a>
+          
+            <a href="/tags/Wiki80/" rel="tag"><i class="fa fa-tag"></i> Wiki80</a>
+          
+            <a href="/tags/ACE2005/" rel="tag"><i class="fa fa-tag"></i> ACE2005</a>
+          
+            <a href="/tags/DocRED/" rel="tag"><i class="fa fa-tag"></i> DocRED</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/11/10/LeetCode-2-动态规划与背包问题/" rel="next" title="LeetCode-2-动态规划与背包问题">
+                <i class="fa fa-chevron-left"></i> LeetCode-2-动态规划与背包问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/11/12/fastText原理及实践/" rel="prev" title="fastText原理及实践">
+                fastText原理及实践 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/漫画脸1vs1.jpg" alt="dinosaur">
+            
+              <p class="site-author-name" itemprop="name">dinosaur</p>
+              <div class="site-description motion-element" itemprop="description">闪耀的群星，颠覆着黑夜</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">371</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hao-Kailong" title="GitHub &rarr; https://github.com/Hao-Kailong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/klhao.nju@gmail.com" title="Email &rarr; klhao.nju@gmail.com"><i class="fa fa-fw fa-envelope"></i>Email</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SemEval"><span class="nav-text">SemEval</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据集来源"><span class="nav-text">数据集来源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据集介绍"><span class="nav-text">数据集介绍</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Wiki80"><span class="nav-text">Wiki80</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据集来源-1"><span class="nav-text">数据集来源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据集介绍-1"><span class="nav-text">数据集介绍</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NYT10"><span class="nav-text">NYT10</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据集来源："><span class="nav-text">数据集来源：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据集介绍-2"><span class="nav-text">数据集介绍</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#另外比较常用的数据集：TACRED、ACE-2005官网上下载均需要LDC账号。如有大佬愿意提供，不胜感谢！"><span class="nav-text">另外比较常用的数据集：TACRED、ACE 2005官网上下载均需要LDC账号。如有大佬愿意提供，不胜感谢！</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关系抽取实时SOTA模型榜单"><span class="nav-text">关系抽取实时SOTA模型榜单</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dinosaur</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+      <div>
+        <div class="addthis_inline_share_toolbox">
+  <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cb429b1d763f1d4" async="async"></script>
+</div>
+
+      </div>
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script id="dsq-count-scr" src="https://dinosaur7.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://haokailong.top/2020/11/11/关系抽取数据集/";
+    this.page.identifier = "2020/11/11/关系抽取数据集/";
+    this.page.title = '关系抽取数据集';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dinosaur7.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

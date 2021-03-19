@@ -1,0 +1,2434 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="DsoDHJ1Km7LX7l7UnoG8dB2QrygUWW345_JkdBOj1Vw">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="ahe2m7RGVx">
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italicRoboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/solar-system-16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/solar-system-32.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文主要记录在学习知识图谱课件时的一些笔记，课件来自于是浙江大学教授陈华钧 知识图谱概览知识图谱的技术体系可以总结为下图。">
+<meta name="keywords" content="知识图谱,关系抽取,笔记,KBQA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="知识图谱-陈华钧-笔记">
+<meta property="og:url" content="http://haokailong.top/2019/06/01/知识图谱-陈华钧-笔记/index.html">
+<meta property="og:site_name" content="Hold the Torch">
+<meta property="og:description" content="本文主要记录在学习知识图谱课件时的一些笔记，课件来自于是浙江大学教授陈华钧 知识图谱概览知识图谱的技术体系可以总结为下图。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://haokailong.top/images/blog/201905/知识图谱的技术体系.PNG">
+<meta property="og:image" content="http://haokailong.top/images/blog/201905/SPARQL查询.PNG">
+<meta property="og:image" content="http://haokailong.top/images/blog/201905/SPARQL查询结构图.PNG">
+<meta property="og:image" content="http://haokailong.top/images/blog/201905/Node.PNG">
+<meta property="og:image" content="http://haokailong.top/images/blog/201905/Relationship.PNG">
+<meta property="og:image" content="http://haokailong.top/images/blog/201905/知识图谱工程.PNG">
+<meta property="og:image" content="http://haokailong.top/images/blog/201905/BiLSTM_CRF.PNG">
+<meta property="og:image" content="http://haokailong.top/images/blog/201905/实体关系抽取概览.PNG">
+<meta property="og:image" content="http://haokailong.top/images/blog/201905/监督学习特征举例.PNG">
+<meta property="og:image" content="http://haokailong.top/images/blog/201905/TBSL架构.PNG">
+<meta property="og:image" content="http://haokailong.top/images/blog/201905/端到端KBQA.PNG">
+<meta property="og:updated_time" content="2020-02-29T03:34:55.188Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="知识图谱-陈华钧-笔记">
+<meta name="twitter:description" content="本文主要记录在学习知识图谱课件时的一些笔记，课件来自于是浙江大学教授陈华钧 知识图谱概览知识图谱的技术体系可以总结为下图。">
+<meta name="twitter:image" content="http://haokailong.top/images/blog/201905/知识图谱的技术体系.PNG">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://haokailong.top/2019/06/01/知识图谱-陈华钧-笔记/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>知识图谱-陈华钧-笔记 | Hold the Torch</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-138297445-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-138297445-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hold the Torch</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-wordcloud">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/wordcloud/" rel="section"><i class="menu-item-icon fa fa-fw fa-cloud"></i> <br>词云</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2019/06/01/知识图谱-陈华钧-笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">知识图谱-陈华钧-笔记
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-29 11:34:55" itemprop="dateModified" datetime="2020-02-29T11:34:55+08:00">2020-02-29</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Knowledge-Graph/" itemprop="url" rel="index"><span itemprop="name">Knowledge Graph</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/06/01/知识图谱-陈华钧-笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/01/知识图谱-陈华钧-笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文主要记录在学习知识图谱课件时的一些笔记，课件来自于是浙江大学教授<a href="https://person.zju.edu.cn/huajun" target="_blank" rel="noopener">陈华钧</a></p>
+<h2 id="知识图谱概览"><a href="#知识图谱概览" class="headerlink" title="知识图谱概览"></a>知识图谱概览</h2><p>知识图谱的技术体系可以总结为下图。</p>
+<p><img src="/images/blog/201905/知识图谱的技术体系.PNG" alt></p>
+<a id="more"></a>
+<p>利用SPARQL可以查询知识图谱，举例为：</p>
+<p><img src="/images/blog/201905/SPARQL查询.PNG" alt></p>
+<p>其对应的结构为下面所示：</p>
+<p><img src="/images/blog/201905/SPARQL查询结构图.PNG" alt></p>
+<p>通过这个查询，可以找到出生在成立于1718年的城市，同时不是生于1976年的人的名字。</p>
+<p>在OpenKG上存在类似于WordNet的中文词典，可以在项目中用于解决一些同义词的问题~</p>
+<h2 id="历史中的知识表示方法"><a href="#历史中的知识表示方法" class="headerlink" title="历史中的知识表示方法"></a>历史中的知识表示方法</h2><p>在历史上，出现过多种知识的表示方式。</p>
+<ul>
+<li>一阶谓词逻辑</li>
+<li>产生式系统</li>
+<li>框架系统</li>
+<li>语义网络</li>
+<li>逻辑程序</li>
+<li>缺省逻辑</li>
+<li>模态逻辑</li>
+</ul>
+<p>三元组(Subject, Predicate, Object)，即主谓宾结构。</p>
+<p>OWL是一种用来定义概念、描述客观事物以及这些事物之间关系（即本体）的语言，是一阶谓词逻辑的可判定子集。</p>
+<p>描述逻辑可以为知识图谱的表示与建模提供理论基础。</p>
+<p>schema.org是面向Web的语义数据标准。</p>
+<p><a href="https://protege.stanford.edu" target="_blank" rel="noopener">Protege</a>是一种基于Java语言开发的本体编辑和本体开发工具。</p>
+<p>domain和range类似于数学中的定义域和值域。</p>
+<p>RDF作为⼀种知识图谱表示框架的参考标准，向上对接OWL等更丰富的语义表⽰和推理能力，向下对接简化后的属性图数据库以及图计算引擎。</p>
+<h2 id="知识图谱的存储与关联查询"><a href="#知识图谱的存储与关联查询" class="headerlink" title="知识图谱的存储与关联查询"></a>知识图谱的存储与关联查询</h2><p>使用关系型数据库，在进行联合查询时，表之间的join操作会耗费大量的时间，效率低下。</p>
+<h3 id="图数据库的文件存储结构"><a href="#图数据库的文件存储结构" class="headerlink" title="图数据库的文件存储结构"></a>图数据库的文件存储结构</h3><p><img src="/images/blog/201905/Node.PNG" alt></p>
+<ul>
+<li>节点存储于独立的”节点存储文件“，每个节点的存储空间固定，如14字节，便于直接通过ID编号计算获得访问地址，基于这种格式，节点存储成本为O(1)，而非O(N)</li>
+<li>每个节点首字节标明是否inUse，接下来四个字节存储该节点的第一个关系的ID，而接下来四个字节存储该节点的第一个属性的ID，再接下来四个字节存储该节点的第一个Label ID。</li>
+<li>节点的属性数据（如姓名、年龄等）是分开存储的，节点只存储其第一个属性的ID，这样的设计是为了保证节点遍历的高效性。</li>
+</ul>
+<p><img src="/images/blog/201905/Relationship.PNG" alt></p>
+<ul>
+<li>关系存储于独⽴的“关系存储⽂件”，每个关系的存储空间固定，如34字节，和节点⼀ 样，这种设计便于直接通过ID编号计算获得关系的访问地址。 </li>
+<li>每个节点⾸字节标明是否inUse，接下来四个字节存储该关系的头节点ID，再接下来 四个字节存储该关系的尾节点ID，再接下来四个字节存储关系类型ID，再下⾯存储头节点和尾节点的上⼀个关系ID，以及头尾节点的下⼀个关系ID。</li>
+</ul>
+<h3 id="物流数据模型"><a href="#物流数据模型" class="headerlink" title="物流数据模型"></a>物流数据模型</h3><p>可以将物流数据建模为动态图谱，利用图谱查询操作，计算最短路径。</p>
+<p>原⽣图存储在复杂关联查询和图计算方面有性能优势，⾮原⽣图存储兼容已有⼯具集通常学习和协调成本会低。  </p>
+<p>图数据库有它弱处，假如你的应⽤场景不包含⼤量的关联查询，对于简单查询，传统关系模型目前在性能方面更加有优势。    </p>
+<h2 id="知识图谱的获取与语义关系抽取"><a href="#知识图谱的获取与语义关系抽取" class="headerlink" title="知识图谱的获取与语义关系抽取"></a>知识图谱的获取与语义关系抽取</h2><p>知识图谱工程从不同来源、不同结构的数据中进行知识提取，形成知识存入到知识图谱。文本一般不作为知识图谱构建的初始来源，而多用来做知识图谱补全。</p>
+<p><img src="/images/blog/201905/知识图谱工程.PNG" alt></p>
+<p>Automatic Content Extraction (ACE)，自动内容抽取，主要包含五种任务：</p>
+<ul>
+<li>实体检测与识别</li>
+<li>数值检测与识别</li>
+<li>时间表达检测与识别</li>
+<li>关系检测与识别</li>
+<li>事件检测与识别</li>
+</ul>
+<h3 id="实体识别的常用方法"><a href="#实体识别的常用方法" class="headerlink" title="实体识别的常用方法"></a>实体识别的常用方法</h3><h4 id="基于模板和规则的方法"><a href="#基于模板和规则的方法" class="headerlink" title="基于模板和规则的方法"></a>基于模板和规则的方法</h4><h4 id="基于序列标注的机器学习方法"><a href="#基于序列标注的机器学习方法" class="headerlink" title="基于序列标注的机器学习方法"></a>基于序列标注的机器学习方法</h4><p>利用词本身的特征，如词性、依存关系；利用前后缀特征，如xx省；利用字本身的特征，如数字。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>句子</th>
+<th>由</th>
+<th>浙</th>
+<th>江</th>
+<th>大</th>
+<th>学</th>
+<th>的</th>
+<th>张</th>
+<th>三</th>
+<th>迎</th>
+<th>战</th>
+<th>清</th>
+<th>华</th>
+<th>大</th>
+<th>学</th>
+<th>的</th>
+<th>李</th>
+<th>四</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IOB标注</td>
+<td>O</td>
+<td>B-ORG</td>
+<td>I-ORG</td>
+<td>I-ORG</td>
+<td>I-ORG</td>
+<td>O</td>
+<td>B-PER</td>
+<td>I-PER</td>
+<td>O</td>
+<td>O</td>
+<td>B-ORG</td>
+<td>I-ORG</td>
+<td>I-ORG</td>
+<td>I-ORG</td>
+<td>O</td>
+<td>B-PER</td>
+<td>I-PER</td>
+</tr>
+<tr>
+<td>IO标注</td>
+<td>O</td>
+<td>I-ORG</td>
+<td>I-ORG</td>
+<td>I-ORG</td>
+<td>I-ORG</td>
+<td>O</td>
+<td>I-PER</td>
+<td>I-PER</td>
+<td>O</td>
+<td>O</td>
+<td>I-ORG</td>
+<td>I-ORG</td>
+<td>I-ORG</td>
+<td>I-ORG</td>
+<td>O</td>
+<td>I-PER</td>
+<td>I-PER</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>HMM (隐马尔科夫模型)</strong></p>
+<p>齐次马尔科夫链假设：任意时刻的隐藏状态只依赖于它前一个隐藏态</p>
+<p>观测独立性假设：任意时刻的观察状态仅仅依赖于当前时刻的隐藏状态</p>
+<p><em>鲍姆-韦尔奇算法-EM算法</em></p>
+<p><em>维特比算法</em></p>
+<p><strong>CRF (条件随机场)</strong></p>
+<p>条件随机场是马尔科夫随机场的特例。</p>
+<p>例如：实体识别任务要求对一句话中的十个词做实体类型标记，这十个词可以从可能实体类型标签中选择，这就形成了一个随机场。如果假设某个词的标签只与其相邻的词的标签有关，则形成马尔科夫随机场，同时由于这个随机场只有两种变量，令X为词，Y为实体类型标签，则形成一个条件随机场。</p>
+<h4 id="基于深度学习"><a href="#基于深度学习" class="headerlink" title="基于深度学习"></a>基于深度学习</h4><p><strong>BiLSTM + CRF</strong></p>
+<p><img src="/images/blog/201905/BiLSTM_CRF.PNG" alt></p>
+<h3 id="在WordNet中的关系可以总结如下："><a href="#在WordNet中的关系可以总结如下：" class="headerlink" title="在WordNet中的关系可以总结如下："></a>在WordNet中的关系可以总结如下：</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Relation</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Synonym 同义词</td>
+<td>day (sense 2) / time</td>
+</tr>
+<tr>
+<td>Antonym 反义词</td>
+<td>day (sense 4) / night</td>
+</tr>
+<tr>
+<td>Hypernym 上位词</td>
+<td>berry (sense 2) / fruit</td>
+</tr>
+<tr>
+<td>Hyponym 下位词</td>
+<td>fruit (sense 1) / berry</td>
+</tr>
+<tr>
+<td>Member-of Holonym</td>
+<td>Germany / NATO</td>
+</tr>
+<tr>
+<td>Has-member meronym</td>
+<td>Germany / Sorbian</td>
+</tr>
+<tr>
+<td>Part-of holonym</td>
+<td>Germany / Europe</td>
+</tr>
+<tr>
+<td>Has-part meronym</td>
+<td>Germany / Mannheim</td>
+</tr>
+<tr>
+<td>Substance-of holonym</td>
+<td>wood(sense 1) / lumber</td>
+</tr>
+<tr>
+<td>Has-substance meronym</td>
+<td>lumber(sense 1) / wood</td>
+</tr>
+<tr>
+<td>Domain - TOPIC</td>
+<td>line (sense 7) / military</td>
+</tr>
+<tr>
+<td>Domain - USAGE</td>
+<td>line (sense 21) / channel</td>
+</tr>
+<tr>
+<td>Domain member - TOPIC</td>
+<td>ship / porthole</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Attribute</td>
+<td>speed (sense 2) / fast</td>
+</tr>
+<tr>
+<td>Derived form</td>
+<td>speed (sense 2) / quick</td>
+</tr>
+<tr>
+<td>Derived form</td>
+<td>speed (sense 2) / accelerate</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="实体关系抽取"><a href="#实体关系抽取" class="headerlink" title="实体关系抽取"></a>实体关系抽取</h3><p>实体关系抽取概览如下图：</p>
+<p><img src="/images/blog/201905/实体关系抽取概览.PNG" alt></p>
+<p>监督学习的特征可以分为轻量级特征，中等量级特征，重量级特征。轻量级特征有实体前后的词，实体的类型，实体之间的距离。中等量级特征如Chunk序列。重量级特征如实体间的依存关系路径，实体间树结构的距离，特定的结构信息。</p>
+<p>在Bryan Rink et. al ACL 2016中，使用的监督学习的特征：</p>
+<p><img src="/images/blog/201905/监督学习特征举例.PNG" alt></p>
+<h4 id="最大熵模型"><a href="#最大熵模型" class="headerlink" title="最大熵模型"></a>最大熵模型</h4><p>最大熵原理认为，学习概率模型时，在所有可能的概率模型中，熵最大的模型是最好的模型。</p>
+<h4 id="核函数"><a href="#核函数" class="headerlink" title="核函数"></a>核函数</h4><p>定义：给定一个对象空间X，核函数K: X * X  -&gt;  [0,$\infty$)表示一个二元函数，该函数可以将X中任意的两个对象x, y作为输入，并返回二者之间的相似度得分K(x, y)。</p>
+<p>核函数的方法无需人工指定特征。</p>
+<p>对应到关系分类任务，给定输入文本T中的两个实体e1和e2，核函数方法采用下述方法计算这两个实体间满足关系r的置信度：</p>
+<ul>
+<li>首先从标注数据中找到文本T’，且T’中包含满足关系r的e1’和e2’，然后基于核函数计算T和T’之间的相似度，作为e1和e2满足关系r的置信度。</li>
+<li>该做法背后的思想是：如果两个实体对同时满足某个关系r，这两个实体对分别所在的上下文也应该相似，该相似通过核函数计算得到。</li>
+</ul>
+<ol>
+<li>字符串核</li>
+<li>基于Shallow Parsing核函数</li>
+<li>句法树核函数</li>
+<li>最短依赖路径树核函数</li>
+<li>上下文相关最短路径依赖树核函数</li>
+</ol>
+<h4 id="深度学习"><a href="#深度学习" class="headerlink" title="深度学习"></a>深度学习</h4><h5 id="基于递归神经网络RNN"><a href="#基于递归神经网络RNN" class="headerlink" title="基于递归神经网络RNN"></a>基于递归神经网络RNN</h5><p>可以参考论文</p>
+<p><a href="https://ai.stanford.edu/~ang/papers/emnlp12-SemanticCompositionalityRecursiveMatrixVectorSpaces.pdf" target="_blank" rel="noopener">Semantic Compositionality through Recursive Matrix-Vector Spaces</a></p>
+<h5 id="基于CNN"><a href="#基于CNN" class="headerlink" title="基于CNN"></a>基于CNN</h5><p>可以参考论文</p>
+<p><a href="https://www.aclweb.org/anthology/C14-1220" target="_blank" rel="noopener">Relation Classification via Convolutional Deep Neural Network</a></p>
+<p>采用Piecewise CNN:</p>
+<p><a href="http://www.emnlp2015.org/proceedings/EMNLP/pdf/EMNLP203.pdf" target="_blank" rel="noopener">Distant Supervision for Relation Extraction via Piecewise Convolutional Neural Networks</a></p>
+<p>采用Ranking CNN:</p>
+<p><a href="https://www.aclweb.org/anthology/P15-1061" target="_blank" rel="noopener">Classifying Relations by Ranking with Convolutional Neural Networks</a></p>
+<h5 id="Attention-BiLSTM"><a href="#Attention-BiLSTM" class="headerlink" title="Attention + BiLSTM"></a>Attention + BiLSTM</h5><p>参考论文</p>
+<p><a href="https://www.aclweb.org/anthology/P16-2034" target="_blank" rel="noopener">Attention-Based Bidirectional Long Short Term Memory Networks for Relation Classification</a></p>
+<h5 id="跨句推理"><a href="#跨句推理" class="headerlink" title="跨句推理"></a>跨句推理</h5><p>可以参考论文</p>
+<p><a href="https://www.aclweb.org/anthology/D17-1186" target="_blank" rel="noopener">Incorporating Relation Paths in Neural Relation Extraction</a></p>
+<h5 id="多元关系"><a href="#多元关系" class="headerlink" title="多元关系"></a>多元关系</h5><p>可以参考论文</p>
+<p><a href="https://arxiv.org/pdf/1708.03743.pdf" target="_blank" rel="noopener">Cross-Sentence N-ary Relation Extraction with Graph LSTMs</a></p>
+<h5 id="联合抽取"><a href="#联合抽取" class="headerlink" title="联合抽取"></a>联合抽取</h5><p>基于序列标注的端到端模型</p>
+<p><a href="https://arxiv.org/pdf/1706.05075.pdf" target="_blank" rel="noopener">Joint Extraction of Entities and Relations Based on a Novel Tagging Scheme</a></p>
+<p>基于序列和树结构的LSTM模型</p>
+<p><a href="https://www.aclweb.org/anthology/P16-1105" target="_blank" rel="noopener">End-to-End Relation Extraction using LSTMs on Sequences and Tree Structures</a></p>
+<h5 id="远程监督降噪"><a href="#远程监督降噪" class="headerlink" title="远程监督降噪"></a>远程监督降噪</h5><p>给bag中的句子不同的attention</p>
+<p><a href="https://www.aaai.org/ocs/index.php/AAAI/AAAI17/paper/view/14491/14078" target="_blank" rel="noopener">Distant Supervision for Relation Extraction with Sentence-Level Attention and Entity Descriptions</a></p>
+<p>强化学习训练句子选择器</p>
+<p><a href="https://www.aaai.org/ocs/index.php/AAAI/AAAI18/paper/download/17151/16140" target="_blank" rel="noopener">Reinforcement Learning for Relation Classification from Noisy Data</a></p>
+<h3 id="开放域关系抽取-Open-IE"><a href="#开放域关系抽取-Open-IE" class="headerlink" title="开放域关系抽取 Open IE"></a>开放域关系抽取 Open IE</h3><h4 id="基于模板（正则表达式）"><a href="#基于模板（正则表达式）" class="headerlink" title="基于模板（正则表达式）"></a>基于模板（正则表达式）</h4><h4 id="Bootstrapping"><a href="#Bootstrapping" class="headerlink" title="Bootstrapping"></a>Bootstrapping</h4><p>给定种子集合，如&lt;姚明，叶莉&gt;</p>
+<p>从文档中抽取出包含种子实体的新闻，如：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>句子</th>
+<th>模板</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>姚明老婆叶莉简历曝光</td>
+<td>X老婆Y简历曝光</td>
+</tr>
+<tr>
+<td>姚明与妻子叶莉外出赴约</td>
+<td>X与妻子Y外出赴约</td>
+</tr>
+<tr>
+<td>姚明携爱妻叶莉外出赴约</td>
+<td>X携爱妻Y外出赴约</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>将抽取出的Pattern与文档集匹配</p>
+<ul>
+<li>小猪与妻子伊万外出赴约</li>
+</ul>
+<p>根据Pattern抽取出的新文档加入种子库，迭代多轮直至不符合条件</p>
+<h2 id="知识图谱与关系推理"><a href="#知识图谱与关系推理" class="headerlink" title="知识图谱与关系推理"></a>知识图谱与关系推理</h2><h3 id="Deductive-Reasoning-over-Konwledge-Graph"><a href="#Deductive-Reasoning-over-Konwledge-Graph" class="headerlink" title="Deductive Reasoning over Konwledge Graph"></a>Deductive Reasoning over Konwledge Graph</h3><p>RDFS: Simple Vocabulary and Schema</p>
+<h4 id="OWL本体推理"><a href="#OWL本体推理" class="headerlink" title="OWL本体推理"></a>OWL本体推理</h4><p>基于Tableaux运算的方法</p>
+<h4 id="基于逻辑编程改写的方法"><a href="#基于逻辑编程改写的方法" class="headerlink" title="基于逻辑编程改写的方法"></a>基于逻辑编程改写的方法</h4><p>Datalog语言，面向知识库和数据库设计的逻辑语言</p>
+<h4 id="基于产生式规则的方法"><a href="#基于产生式规则的方法" class="headerlink" title="基于产生式规则的方法"></a>基于产生式规则的方法</h4><p>产生式系统由事实集，产生式集合，推理引擎构成。</p>
+<h3 id="Inductive-Reasoning-over-Knowledge-Graph"><a href="#Inductive-Reasoning-over-Knowledge-Graph" class="headerlink" title="Inductive Reasoning over Knowledge Graph"></a>Inductive Reasoning over Knowledge Graph</h3><h4 id="词向量学习模型"><a href="#词向量学习模型" class="headerlink" title="词向量学习模型"></a>词向量学习模型</h4><p>词向量学习模型有CBoW，Skip-gram等</p>
+<h4 id="知识图谱嵌入"><a href="#知识图谱嵌入" class="headerlink" title="知识图谱嵌入"></a>知识图谱嵌入</h4><p>为知识图谱中的每个实体和关系都学习一个向量表示，将离散的符号表示转化为连续的向量表示。</p>
+<h5 id="嵌入模型：TransE"><a href="#嵌入模型：TransE" class="headerlink" title="嵌入模型：TransE"></a>嵌入模型：TransE</h5><p>h + r = t</p>
+<p>参考论文</p>
+<p><a href="https://www.utc.fr/~bordesan/dokuwiki/_media/en/transe_nips13.pdf" target="_blank" rel="noopener">Translating Embeddings for Modeling Multi-relational Data</a></p>
+<h5 id="嵌入模型：DistMult"><a href="#嵌入模型：DistMult" class="headerlink" title="嵌入模型：DistMult"></a>嵌入模型：DistMult</h5><p>参考论文</p>
+<p><a href="https://arxiv.org/pdf/1412.6575.pdf" target="_blank" rel="noopener">Embedding Entities and Relations for Learning and Inference in Knowledge Bases</a></p>
+<p>h * Mr = t</p>
+<h5 id="嵌入模型：TransH"><a href="#嵌入模型：TransH" class="headerlink" title="嵌入模型：TransH"></a>嵌入模型：TransH</h5><p>参考论文</p>
+<p><a href="https://pdfs.semanticscholar.org/2a3f/862199883ceff5e3c74126f0c80770653e05.pdf" target="_blank" rel="noopener">Knowledge Graph Embedding by Translating on Hyperplanes</a></p>
+<h5 id="嵌入模型：TransR"><a href="#嵌入模型：TransR" class="headerlink" title="嵌入模型：TransR"></a>嵌入模型：TransR</h5><p>参考论文</p>
+<p><a href="https://www.aaai.org/ocs/index.php/AAAI/AAAI15/paper/download/9571/9523" target="_blank" rel="noopener">Learning Entity and Relation Embeddings for Knowledge Graph Completion</a></p>
+<h5 id="嵌入模型：TransD"><a href="#嵌入模型：TransD" class="headerlink" title="嵌入模型：TransD"></a>嵌入模型：TransD</h5><p>参考论文</p>
+<p><a href="https://www.aclweb.org/anthology/P15-1067" target="_blank" rel="noopener">Knowledge Graph Embedding via Dynamic Mapping Matrix</a></p>
+<p>还有嵌入模型如PTransE，规则增强，多模态知识图谱，基于强化学习的DeepPath等等很多</p>
+<h2 id="知识图谱与智能问答"><a href="#知识图谱与智能问答" class="headerlink" title="知识图谱与智能问答"></a>知识图谱与智能问答</h2><p>基本概念：问题类型</p>
+<ul>
+<li>事实性问题<ul>
+<li>谓词型问题：Where is Taj Mahal?</li>
+<li>列表型问题：Give me all cities in Germany.</li>
+<li>最高级型问题：What is the highest mountain?</li>
+<li>对错型问题：Was Margaret Thatcher a Chemist?</li>
+</ul>
+</li>
+<li>观点型问题：What do most Americans think of gun control?</li>
+<li>因果型问题：What is the most frequent cause for lung cancer?</li>
+<li>方法型问题：How do I make a cheese cake?</li>
+<li>解释型问题：Why did the revenue of IBM drop?</li>
+<li>关联型问题：What is the connection between Barack Obama and Indonesia?</li>
+<li>比较型问题：What is the difference between impressionism and expressionism?</li>
+</ul>
+<h3 id="知识图谱问答的主要方法"><a href="#知识图谱问答的主要方法" class="headerlink" title="知识图谱问答的主要方法"></a>知识图谱问答的主要方法</h3><h4 id="基于模板的方法"><a href="#基于模板的方法" class="headerlink" title="基于模板的方法"></a>基于模板的方法</h4><p>模板定义，模板生成，模板匹配</p>
+<p>方法的两个重要步骤，一是模板生成，即根据问题选择相应的模板；二是模板实例化。</p>
+<p>模板系统TBSL架构：</p>
+<p><img src="/images/blog/201905/TBSL架构.PNG" alt></p>
+<h4 id="基于语义解析的方法"><a href="#基于语义解析的方法" class="headerlink" title="基于语义解析的方法"></a>基于语义解析的方法</h4><p>两个关键问题：一是获得短语到资源的映射，即资源映射；二是如何解决文本的歧义，即逻辑表达式。</p>
+<p>资源映射：将自然语言短语或单词节点映射到知识库的实体或实体关系。可以通过构造一个词汇表来完成这样的映射。简单映射可以通过字符串相似度匹配；复杂映射可以采用统计方法。</p>
+<h4 id="基于深度学习的方法"><a href="#基于深度学习的方法" class="headerlink" title="基于深度学习的方法"></a>基于深度学习的方法</h4><p>KBQA与深度学习结合，利用深度学习对于传统问答方法进行改进，基于深度学习的End2End模型。</p>
+<p>例如，Bordes et al. 2014</p>
+<p><img src="/images/blog/201905/端到端KBQA.PNG" alt></p>
+<p>深度学习目前只能处理简单问题和单边关系问题。</p>
+<p>基于elasticsearch的KBQA实践还不错~</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/知识图谱/" rel="tag"><i class="fa fa-tag"></i> 知识图谱</a>
+          
+            <a href="/tags/关系抽取/" rel="tag"><i class="fa fa-tag"></i> 关系抽取</a>
+          
+            <a href="/tags/笔记/" rel="tag"><i class="fa fa-tag"></i> 笔记</a>
+          
+            <a href="/tags/KBQA/" rel="tag"><i class="fa fa-tag"></i> KBQA</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/24/利用Keras搭建多输入CNN/" rel="next" title="利用Keras搭建多输入CNN">
+                <i class="fa fa-chevron-left"></i> 利用Keras搭建多输入CNN
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/06/童年-吉他谱/" rel="prev" title="童年-吉他谱">
+                童年-吉他谱 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/漫画脸1vs1.jpg" alt="dinosaur">
+            
+              <p class="site-author-name" itemprop="name">dinosaur</p>
+              <div class="site-description motion-element" itemprop="description">闪耀的群星，颠覆着黑夜</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">371</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hao-Kailong" title="GitHub &rarr; https://github.com/Hao-Kailong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/klhao.nju@gmail.com" title="Email &rarr; klhao.nju@gmail.com"><i class="fa fa-fw fa-envelope"></i>Email</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#知识图谱概览"><span class="nav-text">知识图谱概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#历史中的知识表示方法"><span class="nav-text">历史中的知识表示方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#知识图谱的存储与关联查询"><span class="nav-text">知识图谱的存储与关联查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#图数据库的文件存储结构"><span class="nav-text">图数据库的文件存储结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#物流数据模型"><span class="nav-text">物流数据模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#知识图谱的获取与语义关系抽取"><span class="nav-text">知识图谱的获取与语义关系抽取</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实体识别的常用方法"><span class="nav-text">实体识别的常用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基于模板和规则的方法"><span class="nav-text">基于模板和规则的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于序列标注的机器学习方法"><span class="nav-text">基于序列标注的机器学习方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于深度学习"><span class="nav-text">基于深度学习</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在WordNet中的关系可以总结如下："><span class="nav-text">在WordNet中的关系可以总结如下：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实体关系抽取"><span class="nav-text">实体关系抽取</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#最大熵模型"><span class="nav-text">最大熵模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#核函数"><span class="nav-text">核函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#深度学习"><span class="nav-text">深度学习</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#基于递归神经网络RNN"><span class="nav-text">基于递归神经网络RNN</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#基于CNN"><span class="nav-text">基于CNN</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Attention-BiLSTM"><span class="nav-text">Attention + BiLSTM</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#跨句推理"><span class="nav-text">跨句推理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#多元关系"><span class="nav-text">多元关系</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#联合抽取"><span class="nav-text">联合抽取</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#远程监督降噪"><span class="nav-text">远程监督降噪</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开放域关系抽取-Open-IE"><span class="nav-text">开放域关系抽取 Open IE</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基于模板（正则表达式）"><span class="nav-text">基于模板（正则表达式）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Bootstrapping"><span class="nav-text">Bootstrapping</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#知识图谱与关系推理"><span class="nav-text">知识图谱与关系推理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Deductive-Reasoning-over-Konwledge-Graph"><span class="nav-text">Deductive Reasoning over Konwledge Graph</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#OWL本体推理"><span class="nav-text">OWL本体推理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于逻辑编程改写的方法"><span class="nav-text">基于逻辑编程改写的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于产生式规则的方法"><span class="nav-text">基于产生式规则的方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inductive-Reasoning-over-Knowledge-Graph"><span class="nav-text">Inductive Reasoning over Knowledge Graph</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#词向量学习模型"><span class="nav-text">词向量学习模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#知识图谱嵌入"><span class="nav-text">知识图谱嵌入</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#嵌入模型：TransE"><span class="nav-text">嵌入模型：TransE</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#嵌入模型：DistMult"><span class="nav-text">嵌入模型：DistMult</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#嵌入模型：TransH"><span class="nav-text">嵌入模型：TransH</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#嵌入模型：TransR"><span class="nav-text">嵌入模型：TransR</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#嵌入模型：TransD"><span class="nav-text">嵌入模型：TransD</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#知识图谱与智能问答"><span class="nav-text">知识图谱与智能问答</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#知识图谱问答的主要方法"><span class="nav-text">知识图谱问答的主要方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基于模板的方法"><span class="nav-text">基于模板的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于语义解析的方法"><span class="nav-text">基于语义解析的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于深度学习的方法"><span class="nav-text">基于深度学习的方法</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dinosaur</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+      <div>
+        <div class="addthis_inline_share_toolbox">
+  <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cb429b1d763f1d4" async="async"></script>
+</div>
+
+      </div>
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script id="dsq-count-scr" src="https://dinosaur7.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://haokailong.top/2019/06/01/知识图谱-陈华钧-笔记/";
+    this.page.identifier = "2019/06/01/知识图谱-陈华钧-笔记/";
+    this.page.title = '知识图谱-陈华钧-笔记';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dinosaur7.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

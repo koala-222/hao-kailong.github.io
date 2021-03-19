@@ -1,0 +1,2230 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="DsoDHJ1Km7LX7l7UnoG8dB2QrygUWW345_JkdBOj1Vw">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="ahe2m7RGVx">
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italicRoboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/solar-system-16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/solar-system-32.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="内容来自于Freebase官方文档：https://developers.google.com/freebase/guide/basic_concepts  Basic ConceptsIf you are new to Freebase, this section covers the basic terminology and concepts required to understand">
+<meta name="keywords" content="Freebase,Knowledeg Graph,知识图谱,SPARQL,ontology">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Freebase介绍">
+<meta property="og:url" content="http://haokailong.top/2020/09/15/Freebase介绍/index.html">
+<meta property="og:site_name" content="Hold the Torch">
+<meta property="og:description" content="内容来自于Freebase官方文档：https://developers.google.com/freebase/guide/basic_concepts  Basic ConceptsIf you are new to Freebase, this section covers the basic terminology and concepts required to understand">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://developers.google.com/freebase/images/Search-Service.png">
+<meta property="og:updated_time" content="2020-09-15T07:39:40.155Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Freebase介绍">
+<meta name="twitter:description" content="内容来自于Freebase官方文档：https://developers.google.com/freebase/guide/basic_concepts  Basic ConceptsIf you are new to Freebase, this section covers the basic terminology and concepts required to understand">
+<meta name="twitter:image" content="https://developers.google.com/freebase/images/Search-Service.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://haokailong.top/2020/09/15/Freebase介绍/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Freebase介绍 | Hold the Torch</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-138297445-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-138297445-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hold the Torch</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-wordcloud">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/wordcloud/" rel="section"><i class="menu-item-icon fa fa-fw fa-cloud"></i> <br>词云</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/15/Freebase介绍/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Freebase介绍
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-15 15:39:40" itemprop="dateModified" datetime="2020-09-15T15:39:40+08:00">2020-09-15</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Knowledge-Graph/" itemprop="url" rel="index"><span itemprop="name">Knowledge Graph</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/09/15/Freebase介绍/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/15/Freebase介绍/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>内容来自于Freebase官方文档：<a href="https://developers.google.com/freebase/guide/basic_concepts" target="_blank" rel="noopener">https://developers.google.com/freebase/guide/basic_concepts</a></p>
+</blockquote>
+<h1 id="Basic-Concepts"><a href="#Basic-Concepts" class="headerlink" title="Basic Concepts"></a>Basic Concepts</h1><p>If you are new to Freebase, this section covers the basic terminology and concepts required to understand how Freebase works.</p>
+<h2 id="Graphs"><a href="#Graphs" class="headerlink" title="Graphs"></a>Graphs</h2><p>Freebase data is stored in a data structure called a <a href="http://en.wikipedia.org/wiki/Graph_(abstract_data_type" target="_blank" rel="noopener">graph</a>). A graph is composed on nodes connected by edges. In Freebase, the nodes are defined using <a href="http://www.freebase.com/type/object" target="_blank" rel="noopener">/type/object</a> and edges are defined using <a href="http://www.freebase.com/type/link" target="_blank" rel="noopener">/type/link</a>. By storing the data as a graph, Freebase can quickly traverse arbitrary connections between topics and easily add new schema without having to change structure of the data.</p>
+<h2 id="Topics"><a href="#Topics" class="headerlink" title="Topics"></a>Topics</h2><p>Freebase has over 39 million topics about real-world entities like people, places and things. Since Freebase data is represented a graph, these topics correspond to the nodes in the graph. However, not every node is a topic. See the section on <a href="https://developers.google.com/freebase/guide/basic_concepts#cvts" target="_blank" rel="noopener">CVTs</a> to as an example of nodes that are not topics.</p>
+<p>Examples of the types of topics found in Freebase:</p>
+<ul>
+<li>Physical entities, e.g., <a href="http://www.freebase.com/en/bob_dylan" target="_blank" rel="noopener">Bob Dylan</a>, <a href="http://www.freebase.com/en/louvre" target="_blank" rel="noopener">the Louvre Museum</a>, the <a href="http://www.freebase.com/en/saturn" target="_blank" rel="noopener">Saturn planet</a>, to</li>
+<li>Artistic/media creations, e.g., <a href="http://www.freebase.com/en/the_dark_knight" target="_blank" rel="noopener">The Dark Knight (film)</a>, <a href="http://http//www.freebase.com/guid/9202a8c04000641f80000000002e46af" target="_blank" rel="noopener">Hotel California (song)</a>, to</li>
+<li>Classifications, e.g., <a href="http://www.freebase.com/en/noble_gas" target="_blank" rel="noopener">noble gas</a>, <a href="http://www.freebase.com/en/chordate" target="_blank" rel="noopener">Chordate</a>, to</li>
+<li>Abstract concepts, e.g., <a href="http://www.freebase.com/en/love" target="_blank" rel="noopener">love</a>, to</li>
+<li>Schools of thoughts or artistic movements, e.g., <a href="http://www.freebase.com/en/impressionism" target="_blank" rel="noopener">Impressionism</a>.</li>
+</ul>
+<p>Some topics are notable because they hold a lot of data (e.g., <a href="http://www.freebase.com/en/wal-mart" target="_blank" rel="noopener">Wal-Mart</a>), and some are notable because they link to many other topics, potentially in different domains of information. For example, abstract topics like love, poverty, chivalry, etc. don’t have many properties associated with them but they appear often as book subjects, poetry subjects, film subjects, etc. making them more notable.</p>
+<h2 id="Types-and-Properties"><a href="#Types-and-Properties" class="headerlink" title="Types and Properties"></a>Types and Properties</h2><p>Any given topic can be seen for many different perspectives for example:</p>
+<ul>
+<li>Bob Dylan was a song writer, singer, performer, book author, and film actor;</li>
+<li>Leonardo da Vinci was a painter, a sculptor, an anatomist, an architect, an engineer, …;</li>
+<li>Love is a book subject, film subject, play subject, poetry subject, …;</li>
+<li>Any city is a location, potentially a tourist destination, and an employer of civil servants.<a id="more"></a></li>
+</ul>
+<p>In order to capture this multi-faceted nature of many topics, we introduce the concept of <em>types</em> in Freebase. Topics in Freebase can have any number of types assigned to them. The topic about Bob Dylan is assigned several types: the song writer type, the music composer type, the music artist (singer) type, the book author type, etc. Each type carries a different set of <em>properties</em> germane to that type. For example,</p>
+<ul>
+<li>The music artist type contains a property that lists all the albums that Bob Dylan has produced as well as all the music instruments he was known to play;</li>
+<li>The book author type contains a property that lists all the books Bob Dylan has written or edited, as well as his writing school of thoughts or movement;</li>
+<li>The company type contains many property for listing a company’s founders, board members, parent company, divisions, employees, products, year-by-year revenue and profit records, etc.</li>
+</ul>
+<p>Thus, a type can be thought of as a conceptual container of properties that are most commonly needed for describing a particular aspect of information. (You can think of a type as analogous to a relational table, and each “type” table has a foreign key into the one “identity” table that uniquely defines each topic.)</p>
+<h2 id="Domains-and-IDs"><a href="#Domains-and-IDs" class="headerlink" title="Domains and IDs"></a>Domains and IDs</h2><p>Just as properties are grouped into types, types themselves are grouped into <em>domains</em>. Think of domains as the sections in your favorite newspaper: Business, Life Style, Arts and Entertainment, Politics, Economics, etc. Each domain is given an ID (identifier), e.g.,</p>
+<ul>
+<li><code>/business</code> is the ID of the Business domain</li>
+<li><code>/music</code> - the Music domain</li>
+<li><code>/film</code> - the Film domain</li>
+<li><code>/medicine</code> - the Medicine domain</li>
+</ul>
+<p>The ID of a domain looks like a file path, or a path in a web address.</p>
+<p>Each type is also given an ID, and its ID is based on the domain in which it belongs. For example, the Company type belongs in the Business domain, and it’s given the ID <code>/business/company</code>. Here are some other examples:</p>
+<ul>
+<li><code>/music/album</code> is the ID of the (Music) Album type, belonging in the Music domain</li>
+<li><code>/film/actor</code> - the Actor type in the Film domain</li>
+<li><code>/medicine/disease</code> - the Disease type in the Medicine domain</li>
+</ul>
+<p>Just as a type inherits the beginning of its ID from its domain, a property also inherits the beginning of its ID from the type it belongs to. For example, the Industry property of the Company type (used for specifying which industry a company is in) is given the ID <code>/business/company/industry</code>. Here are some other examples:</p>
+<ul>
+<li><code>/automotive/engine/horsepower</code> is the ID of the Horsepower property of the (Automotive) Engine type</li>
+<li><code>/astronomy/star/planet_s</code> is the ID of the Planets property of the Star type (used for listing planets around a star)</li>
+<li><code>/language/human_language/writing_system</code> is the ID of the Writing System property of the Human Language type</li>
+</ul>
+<p>Thus, even though <strong>types are not arranged into hierarchies in Freebase</strong>; domains, types, and properties are given IDs conceptually arranged in a file directory-like hierarchy.</p>
+<h2 id="Compound-Value-Types"><a href="#Compound-Value-Types" class="headerlink" title="Compound Value Types"></a>Compound Value Types</h2><p>A Compound Value Type is a Type within Freebase which is used to represent data where each entry consists of multiple fields. Compound value types, or CVT’s are used in Freebase to represent complex data. It may be a little confusing at first, but CVT’s are a very important part of the Freebase schema and allow it to more accurately model complex relationships between topics.</p>
+<p><strong>Think about the following example: Population for a city is something that changes over time.</strong> That means, whenever you query Freebase for population, you are at least implicitly asking for a population at a certain date. Two Values are involved, a number of people, and the date. Here’s a situation where a CVT becomes extremely useful. Without one, to model population data, you would need to make a topic, and name it something like “Vancouver’s population in 1997”, and submit the information over there.</p>
+<p><strong>A CVT can be thought of as a topic that does not require you to make a display name.</strong> CVT’s, like normal topics, have a GUID that can be referenced independently. However, the Freebase client treats them much differently than topics. In most cases, every property of the CVT should be a disambiguation property.</p>
+<h2 id="Topic-MIDs"><a href="#Topic-MIDs" class="headerlink" title="Topic MIDs"></a>Topic MIDs</h2><p>While a topic might or might not be identifiable by namespace/key IDs, it can always be identified with a MID — a Machine Identifier, which consist <code>/m/</code> followed by a base-32 unique identifier. MIDs are assigned to topics at creation time, and are managed throughout the topic’s lifetime. They play a critical role when topics are merged or split, allowing external applications to track the logical topic even though the physical Freebase identity (the topic’s GUID) may change. Machine-generated ids differ from other human-readable Freebase ids (returned by the “id” property) in that they are:</p>
+<ul>
+<li>Guaranteed to exist</li>
+<li>Machine-generated</li>
+<li>Designed to support offline comparison</li>
+<li>Not designed to convey meaning to humans</li>
+<li>Short (possibly fixed length)</li>
+<li>Ideal for quick exchange of keys between external systems and components (external, exchange)</li>
+</ul>
+<p>MIDs are the recommended identifier to use to address topics in Freebase</p>
+<h2 id="Namespaces-Keys-and-Topic-IDs"><a href="#Namespaces-Keys-and-Topic-IDs" class="headerlink" title="Namespaces, Keys, and Topic IDs"></a>Namespaces, Keys, and Topic IDs</h2><p>The <strong>file directory-like hierarchy of domain, type, and property IDs</strong> is just one application of a more general concept: <em>namespaces</em> and <em>keys</em>. A namespace is like a file directory, and a key is like a file name. Just as all file names within a particular file directory must be unique among themselves, all keys within a particular namespace must also be unique among themselves.</p>
+<p>As a more specific example, <code>/business</code> is the namespace corresponding to the Business domain. Within it, Business-related types are given keys (e.g., <code>company</code>) that are unique among themselves. Each type’s ID is formed by appending its key to the namespace’s ID (e.g., <code>/business/company</code>).</p>
+<p>There are several kinds of namespaces beside namespaces that correspond to domains and types. Most <strong>important and frequently encountered is the <code>/en</code> namespace</strong>. This is the English namespace in which most well-known topics can be given unique keys to form human-readable English IDs. For example, the prolific Bob Dylan is so well-known that his topic in Freebase is given the key <code>bob_dylan</code> in the <code>/en</code> namespace, and so the topic’s ID is <code>/en/bob_dylan</code>. This ID allows you to access his topic in the web client with the simple URL</p>
+<h2 id="More-on-Properties"><a href="#More-on-Properties" class="headerlink" title="More on Properties"></a>More on Properties</h2><p>The last basic concept to discuss involves a major difference between Freebase properties and their analogy in relational database technologies, namely relational table columns. For each row, a relational table column can only hold one value. For example, consider a typical “book” relational table with a column named “author”. For each row in the “book” table, the “author” column can only hold one foreign key to an “author” table. If a book happens to have several authors, then this simple relational schema design does not work, and we would have to make a new table to model the authorships. That is, we would need one “book” table, one “author” table, and one “authorship” table to store <strong>the n-to-n relationships between books and authors</strong>. And the way you retrieve data changes quite radically as you switch from one schema design to the other.</p>
+<p>In contrast with conventional database technologies, <strong>Freebase considers multi-value properties to be so desirable in modeling real-life data that it supports multi-value properties by default</strong>. That is, when the <code>/book/written_work/author</code> property was created, it was assumed to allow for multiple authors per book, and you can query for a multi-value property and for a single-value property in exactly the same way. There is no need to think if you need to join with a third table that models the n-to-n relationship.</p>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><ul>
+<li>A type is a conceptual container of related properties commonly needed to describe a certain aspect of a topic.</li>
+<li>A topic can be assigned one or more types (the default type being <code>/common/topic</code>)</li>
+<li>As properties are grouped into types, types are grouped into domains.</li>
+<li>Domains, types, and properties are given IDs in a namespace/key hierarchy.</li>
+<li>Common well-known topics are given IDs in the <code>/en</code> namespace, which are human-readable English strings.</li>
+<li>Topics are uniquely identified within Freebase by GUIDs.</li>
+<li>Properties are multi-value by default, and multi-value properties and single-value properties can be queried in the same way.</li>
+</ul>
+<h1 id="Search-Overview"><a href="#Search-Overview" class="headerlink" title="Search Overview"></a>Search Overview</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p><img src="https://developers.google.com/freebase/images/Search-Service.png" alt="img"></p>
+<p>The Freebase Search API provides access to Freebase data given a free text query. The results of the query are ordered and have a numerical relevancy score.</p>
+<p>Developers can apply filters to constrain the search results to certain types of data. See the <a href="https://developers.google.com/freebase/v1/search-cookbook" target="_blank" rel="noopener">Search Cookbook</a> for more information on how to construct detailed search queries.</p>
+<p>Some examples of how developers may want to use the Search API include:</p>
+<ul>
+<li>Autosuggesting entities (e.g. <a href="https://developers.google.com/freebase/v1/suggest" target="_blank" rel="noopener">Freebase Suggest Widget</a>)</li>
+<li>Getting a ranked list of the most notable entities with a given name.</li>
+<li>Finding entities using <a href="https://developers.google.com/freebase/v1/search-metaschema" target="_blank" rel="noopener">Search Metaschema</a>.</li>
+</ul>
+<p>The following code in Python show how to perform a search for a musical artist that matches the text “Cee Lo Green”. An additional constraint is that they created something called “The Lady Killer”.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line">api_key = open(<span class="string">".api_key"</span>).read()</span><br><span class="line">query = <span class="string">'blue bottle'</span></span><br><span class="line">service_url = <span class="string">'https://www.googleapis.com/freebase/v1/search'</span></span><br><span class="line">params = &#123; </span><br><span class="line">    <span class="string">'query'</span>: query, </span><br><span class="line">    <span class="string">'key'</span>: api_key</span><br><span class="line">&#125;</span><br><span class="line">url = service_url + <span class="string">'?'</span> + urllib.urlencode(params)</span><br><span class="line">response = json.loads(urllib.urlopen(url).read())</span><br><span class="line"><span class="keyword">for</span> result <span class="keyword">in</span> response[<span class="string">'result'</span>]:  </span><br><span class="line">    print(result[<span class="string">'name'</span>] + <span class="string">' ('</span> + str(result[<span class="string">'score'</span>]) + <span class="string">')'</span>)</span><br></pre></td></tr></table></figure>
+<p>Also see the <a href="https://developers.google.com/freebase/v1/libraries" target="_blank" rel="noopener">Client Libraries</a> page to see if your favorite language is supported.</p>
+<h3 id="Search-API-documentation"><a href="#Search-API-documentation" class="headerlink" title="Search API documentation"></a>Search API documentation</h3><p>Also see the following documentation:</p>
+<ul>
+<li>See the <a href="https://developers.google.com/freebase/v1/search" target="_blank" rel="noopener">Search reference documents</a> for details on how to use the API.</li>
+<li>See the <a href="https://developers.google.com/freebase/v1/search-cookbook" target="_blank" rel="noopener">Search Cookbook</a> for more information on how to construct detailed search queries.</li>
+<li>See the <a href="https://developers.google.com/freebase/v1/search-metaschema" target="_blank" rel="noopener">Search Metaschema document</a> for information on how the relationships between entities and properties are described.</li>
+</ul>
+<h2 id="Security-considerations"><a href="#Security-considerations" class="headerlink" title="Security considerations"></a>Security considerations</h2><p>The Search API indexes and searches user generated content stored in the Freebase graph. This means that you cannot directly use the content on a web page without safely escaping it first.</p>
+<p>See <a href="https://developers.google.com/freebase/v1/getting-started#security" target="_blank" rel="noopener">Getting Started: Security</a> for more information.</p>
+<h2 id="Advanced-filtering"><a href="#Advanced-filtering" class="headerlink" title="Advanced filtering"></a>Advanced filtering</h2><p>The Search API supports a large number of filter constraints to better aim the search at the correct entities.</p>
+<p>For example, using a “type” filter constraint, we can show a list of the most notable people in Freebase.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">filter=(any type:/people/person)</span><br></pre></td></tr></table></figure>
+<p>Filter constraints accept a variety of inputs:</p>
+<ul>
+<li>Human readable IDs for schema entities or users, for example:<ul>
+<li><code>/people/person</code> for a type constraint</li>
+<li><code>/film</code> for a domain constraint</li>
+</ul>
+</li>
+<li>Freebase MIDs, for example:<ul>
+<li><code>/m/04kr</code> for the same <code>/people/person</code> type constraint</li>
+<li><code>/m/010s</code> for the above <code>/film</code> domain constraint</li>
+</ul>
+</li>
+<li>Entity names, for example:<ul>
+<li><code>&quot;person&quot;</code> for a less precise <code>/people/person</code> type constraint</li>
+<li><code>&quot;film&quot;</code> for a less precise <code>/film</code> domain constraint</li>
+</ul>
+</li>
+</ul>
+<p>Filter constraints can be classified into a few categories. See the <a href="https://developers.google.com/freebase/v1/search-cookbook" target="_blank" rel="noopener">Search Cookbook</a> for more details.</p>
+<p>Filter constraints can be freely combined and repeated in the <code>SearchRequest</code> directly. Repeated filter constraint parameters are combined into an OR query. Different filter constraint parameters or groups are combined into an AND query.</p>
+<p><strong>For example:</strong></p>
+<p>To search for “people or cities named <em>Gore</em>“, try:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">query=gore</span><br><span class="line">&amp;filter=(any type:/people/person type:/location/citytown)</span><br></pre></td></tr></table></figure>
+<p>This combining behavior can be overriden and better controlled with the filter parameter which offers a richer interface to combining constraints. It is an s-expression, possibly arbitrarily nested, where the operator is one of:</p>
+<ul>
+<li><code>any</code>, logically an OR</li>
+<li><code>all</code>, logically an AND</li>
+<li><code>not</code></li>
+<li><code>should</code>, which can only be used at the top level and which denotes that the constraint is optional. During scoring, matches that don’t match optional constraints have their score divided in half for each optional constraint they don’t match.</li>
+</ul>
+<p><strong>For example:</strong></p>
+<p>To match on the <code>/people/person</code> type or the <code>/film</code> domain, try:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">query=gore &amp;filter=(any type:/people/person domain:/film)</span><br></pre></td></tr></table></figure>
+<p>下一篇文章继续介绍Search Cookbook~</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Freebase/" rel="tag"><i class="fa fa-tag"></i> Freebase</a>
+          
+            <a href="/tags/Knowledeg-Graph/" rel="tag"><i class="fa fa-tag"></i> Knowledeg Graph</a>
+          
+            <a href="/tags/知识图谱/" rel="tag"><i class="fa fa-tag"></i> 知识图谱</a>
+          
+            <a href="/tags/SPARQL/" rel="tag"><i class="fa fa-tag"></i> SPARQL</a>
+          
+            <a href="/tags/ontology/" rel="tag"><i class="fa fa-tag"></i> ontology</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/09/07/Focal-Loss/" rel="next" title="Focal Loss">
+                <i class="fa fa-chevron-left"></i> Focal Loss
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/09/15/Freebase-Search-Cookbook/" rel="prev" title="Freebase Search Cookbook">
+                Freebase Search Cookbook <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/漫画脸1vs1.jpg" alt="dinosaur">
+            
+              <p class="site-author-name" itemprop="name">dinosaur</p>
+              <div class="site-description motion-element" itemprop="description">闪耀的群星，颠覆着黑夜</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">371</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hao-Kailong" title="GitHub &rarr; https://github.com/Hao-Kailong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/klhao.nju@gmail.com" title="Email &rarr; klhao.nju@gmail.com"><i class="fa fa-fw fa-envelope"></i>Email</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Basic-Concepts"><span class="nav-text">Basic Concepts</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Graphs"><span class="nav-text">Graphs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Topics"><span class="nav-text">Topics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Types-and-Properties"><span class="nav-text">Types and Properties</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Domains-and-IDs"><span class="nav-text">Domains and IDs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Compound-Value-Types"><span class="nav-text">Compound Value Types</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Topic-MIDs"><span class="nav-text">Topic MIDs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Namespaces-Keys-and-Topic-IDs"><span class="nav-text">Namespaces, Keys, and Topic IDs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#More-on-Properties"><span class="nav-text">More on Properties</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary"><span class="nav-text">Summary</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Search-Overview"><span class="nav-text">Search Overview</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Overview"><span class="nav-text">Overview</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Search-API-documentation"><span class="nav-text">Search API documentation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Security-considerations"><span class="nav-text">Security considerations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Advanced-filtering"><span class="nav-text">Advanced filtering</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dinosaur</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+      <div>
+        <div class="addthis_inline_share_toolbox">
+  <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cb429b1d763f1d4" async="async"></script>
+</div>
+
+      </div>
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script id="dsq-count-scr" src="https://dinosaur7.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://haokailong.top/2020/09/15/Freebase介绍/";
+    this.page.identifier = "2020/09/15/Freebase介绍/";
+    this.page.title = 'Freebase介绍';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dinosaur7.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

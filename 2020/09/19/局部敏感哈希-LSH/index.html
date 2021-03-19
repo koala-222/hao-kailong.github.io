@@ -1,0 +1,2239 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="DsoDHJ1Km7LX7l7UnoG8dB2QrygUWW345_JkdBOj1Vw">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="ahe2m7RGVx">
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italicRoboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/solar-system-16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/solar-system-32.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="1. 引入​        在做微博文本挖掘的时候，会发现很多微博是高度相似的，因为大量的微博都是转发其他人的微博，并且没有添加评论，导致很多数据是重复或者高度相似的。这给我们进行数据处理带来很大的困扰，我们得想办法把找出这些相似的微博，再对其进行去重处理。 　　如果只是要找到重复的微博，我们可以用两两比较所有的微博，对相同的微博值保留一条即可；但这只能在数据量很小的情况下才有可能，当我们有100">
+<meta name="keywords" content="局部敏感哈希,Local Sensitive Hashing,LSH,Data Mining,Algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="局部敏感哈希(LSH)">
+<meta property="og:url" content="http://haokailong.top/2020/09/19/局部敏感哈希-LSH/index.html">
+<meta property="og:site_name" content="Hold the Torch">
+<meta property="og:description" content="1. 引入​        在做微博文本挖掘的时候，会发现很多微博是高度相似的，因为大量的微博都是转发其他人的微博，并且没有添加评论，导致很多数据是重复或者高度相似的。这给我们进行数据处理带来很大的困扰，我们得想办法把找出这些相似的微博，再对其进行去重处理。 　　如果只是要找到重复的微博，我们可以用两两比较所有的微博，对相同的微博值保留一条即可；但这只能在数据量很小的情况下才有可能，当我们有100">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/hash1.PNG">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/hash2.PNG">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/hash3.PNG">
+<meta property="og:updated_time" content="2020-09-19T05:34:26.361Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="局部敏感哈希(LSH)">
+<meta name="twitter:description" content="1. 引入​        在做微博文本挖掘的时候，会发现很多微博是高度相似的，因为大量的微博都是转发其他人的微博，并且没有添加评论，导致很多数据是重复或者高度相似的。这给我们进行数据处理带来很大的困扰，我们得想办法把找出这些相似的微博，再对其进行去重处理。 　　如果只是要找到重复的微博，我们可以用两两比较所有的微博，对相同的微博值保留一条即可；但这只能在数据量很小的情况下才有可能，当我们有100">
+<meta name="twitter:image" content="http://haokailong.top/images/blog/2020/hash1.PNG">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://haokailong.top/2020/09/19/局部敏感哈希-LSH/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>局部敏感哈希(LSH) | Hold the Torch</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-138297445-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-138297445-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hold the Torch</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-wordcloud">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/wordcloud/" rel="section"><i class="menu-item-icon fa fa-fw fa-cloud"></i> <br>词云</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/19/局部敏感哈希-LSH/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">局部敏感哈希(LSH)
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-19 13:34:26" itemprop="dateModified" datetime="2020-09-19T13:34:26+08:00">2020-09-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Data-Mining/" itemprop="url" rel="index"><span itemprop="name">Data Mining</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/09/19/局部敏感哈希-LSH/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/19/局部敏感哈希-LSH/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-引入"><a href="#1-引入" class="headerlink" title="1. 引入"></a>1. 引入</h2><p>​        在做微博文本挖掘的时候，会发现很多微博是高度相似的，因为大量的微博都是转发其他人的微博，并且没有添加评论，导致很多数据是重复或者高度相似的。这给我们进行数据处理带来很大的困扰，我们得想办法把找出这些相似的微博，再对其进行去重处理。</p>
+<p>　　如果只是要找到重复的微博，我们可以用两两比较所有的微博，对相同的微博值保留一条即可；但这只能在数据量很小的情况下才有可能，当我们有1000万条微博时，需要两两比较的微博有10^6亿（n*(n-1)/2）对，这个计算量是惊人的，即便你用map-reduce，拥有强大的集群，那也顶不住数据再增加一两个数量级。一种稍微好一点的办法是对所以微博进行一次hash，再对桶内的微博进行比较，利用hash可以过滤了绝大多数不相同的微博，避免了无谓的比较，时间复杂度O(n)，显著提高效率。Hash的一个基本特性就是随机性，它将一个字符串随机的hash到一个桶中，对于相同的两个字符串，hash值总是相同的，但两个hash值只要相差一点，hash值就就可能大相径庭，可谓差之毫厘谬以千里：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; s1 = <span class="string">"我是一个字符串"</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; s2 = <span class="string">"我是一个字符串"</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="built_in">hash</span>(s1)</span></span><br><span class="line">2006838971</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="built_in">hash</span>(s2)</span></span><br><span class="line">2006838971</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; s3 = <span class="string">"我就是一个字符串"</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="built_in">hash</span>(s3)</span></span><br><span class="line">-1823451294</span><br></pre></td></tr></table></figure>
+<p>　    如果能有一种hash算法，能将相似的字符串hash得到相似的hash值，那就能在接近线性的时间解决海量微博中的去重问题。幸好，这样的hash已经有大牛发明了，它叫局部敏感哈希（Locality Sensitive Hashing，简称LSH）。接下来我们通过海量微博文本相似项发现的例子来探讨这个神奇的hash。<a id="more"></a></p>
+<h2 id="2-文本相似度计算"><a href="#2-文本相似度计算" class="headerlink" title="2. 文本相似度计算"></a>2. 文本相似度计算</h2><p>​        按照文本处理的术语，我们认为一条微博是一篇文档，度量两篇文档相似度有多种方法，有欧式距离、编辑距离、余弦距离、Jaccard距离，我们这里使用Jaccard距离。这里注意一下，距离和相似度是不同的概念，距离越近相似度应该越高，距离越远相似度应该越低，因此similar = 1-distace。</p>
+<p>　　集合S和T的Jaccard相识度：</p>
+<script type="math/tex; mode=display">
+SIM(S, T) = \frac{|S \cap T|}{ |S \cup T|}</script><p>​        不考虑微博中重复出现的词时，一条微博就可以看成一个集合，集合的元素是一个个的词：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s1 = '''从 决心 减肥 的 这 一刻 起 请 做 如下 小 改变 你 做 得 到 么'''</span><br><span class="line">s2 = '''从 决心 减肥 的 这 一刻 起 请 做 如下 小 改变'''</span><br></pre></td></tr></table></figure>
+<p>​        sim(s1,s2)=11/16=0.69.</p>
+<h2 id="3-文档的Shingling"><a href="#3-文档的Shingling" class="headerlink" title="3. 文档的Shingling"></a>3. 文档的Shingling</h2><p>​        为了字面上相似的文档，将文档表示成集合最有效的方法是构建文档中的短字符串集合，一个常用的方法时Shingling（不知道翻译成什么，囧），看定义很简单的：文档的k-shingle定义为其中长度为k的子串。对于上面的字符串s2，选择k=2，这s2中的所有2-single组成的集合为:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;"从 决心","决心 减肥","减肥 的","的 这","这 一刻","一刻 起","起 请","请 做","做 如下","如下 小","小 改变"&#125;</span><br></pre></td></tr></table></figure>
+<p>　    k值的选取具有一定的技巧，k越大越能找到真正相似的文档，而k越小就能召回更多的文档，但他们可能相似度不高，比如k=1，就变成了基本词的比较了。我这里词作为shingle的基本单位，在英文处理中，是以字母为基本单位，原因在于汉字有上万个，而英文字母只有27个，以汉字为单位将造成shingle集合巨大。</p>
+<p>　　遍历所用文档，就得到了shingle全集。</p>
+<h2 id="4-保持相似度矩阵表示"><a href="#4-保持相似度矩阵表示" class="headerlink" title="4. 保持相似度矩阵表示"></a>4. 保持相似度矩阵表示</h2><p>1、集合的矩阵表示</p>
+<p>　　假设我们有这样4篇文档（分词后）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">s1 = "我 减肥"</span><br><span class="line">s2 = "要"</span><br><span class="line">s3 = "他 减肥 成功"</span><br><span class="line">s4 = "我 要 减肥"</span><br></pre></td></tr></table></figure>
+<p>​        为方便叙述，我们取k=1，这时shingle全集为{我，他，要，减肥，成功}，将文档表示成特征矩阵，行代表shingle元素，列代表文档，只有文档j出现元素i时，矩阵M[i][j]=1，否则M[i][j] = 0.</p>
+<p><img src="/images/blog/2020/hash1.PNG" alt></p>
+<p>​        实际上，真正计算的过程中矩阵不是这样表示的，因为数据很稀疏。得到矩阵表示后，我们来看最小hash的定义。</p>
+<h2 id="5-最小哈希（min-hashing"><a href="#5-最小哈希（min-hashing" class="headerlink" title="5. 最小哈希（min-hashing)"></a>5. 最小哈希（min-hashing)</h2><p>​        最小hash定义为：特征矩阵按行进行一个随机的排列后，第一个列值为1的行的行号。举例说明如下，假设之前的特征矩阵按行进行的一个随机排列如下：</p>
+<p><img src="/images/blog/2020/hash2.PNG" alt></p>
+<p>最小哈希值：h(S1)=3，h(S2)=5，h(S3)=1，h(S4)=2.</p>
+<p>　　为什么定义最小hash？事实上，两列的最小hash值就是这两列的Jaccard相似度的一个估计，换句话说，两列最小hash值同等的概率与其相似度相等，即P(h(Si)=h(Sj)) = sim(Si,Sj)。为什么会相等？我们考虑Si和Sj这两列，它们所在的行的所有可能结果可以分成如下三类：</p>
+<p>　　（1）A类：两列的值都为1；</p>
+<p>　　（2）B类：其中一列的值为0，另一列的值为1；</p>
+<p>　　（3）C类：两列的值都为0.</p>
+<p>　　特征矩阵相当稀疏，导致大部分的行都属于C类，但只有A、B类行的决定sim(Si,Sj)，假定A类行有a个，B类行有b个，那么sim(si,sj)=a/(a+b)。现在我们只需要证明对矩阵行进行随机排列，两个的最小hash值相等的概率P(h(Si)=h(Sj))=a/(a+b)，如果我们把C类行都删掉，那么第一行不是A类行就是B类行，如果第一行是A类行那么h(Si)=h(Sj)，因此P(h(Si)=h(Sj))=P(删掉C类行后，第一行为A类)=A类行的数目/所有行的数目=a/(a+b)，这就是最小hash的神奇之处。</p>
+<h2 id="6-最小hash签名"><a href="#6-最小hash签名" class="headerlink" title="6. 最小hash签名"></a>6. 最小hash签名</h2><p>​        有了最小hash还不够，一次最小hash只是一次独立的随即事件，中心极限定理告诉我们，只有多次重复随机事件才能造就必然。选择n个随机排列作用于特征矩阵，得到n个最小hash值，h1,h2,…,hn，这n个最小hash值组成一个n维向量，即为最小签名，两列的最小签名的相似度即为两列的Jaccard相似度的估计。</p>
+<p>　　现在就看如何计算最小签名了。对一个很大的矩阵按行进行随机排列，首先需要得到一个随机排列，然后按这个随机排列去排序，这将耗费很长的时间。我们需要一种方法来模拟随机排列的过程。又有一个神奇的办法是：找一个哈希函数h，将第r行放在排列转换后的第h(r)的位置上。我们不再是选择n个随机排列，而是选择n个hash，h1,h2,…,hn作用于行，这样我们就可以得到签名矩阵。令SIG(i,c)为第i个哈希函数在第c列上的元素。一开始对所有的SIG(i,c)初始化为无穷大，然后从上往下对列c进行处理：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">　　<span class="keyword">if</span> 特征矩阵中的c列r行值为<span class="number">1</span>:</span><br><span class="line">　　　　<span class="keyword">for</span> i <span class="keyword">in</span> xrange(n):<span class="comment">#对每个hash函数</span></span><br><span class="line">　　　　SIG(i,c)=min(SIG(i,C),hi(r))</span><br><span class="line">　　<span class="keyword">else</span>:</span><br><span class="line">　　　　<span class="keyword">continue</span></span><br></pre></td></tr></table></figure>
+<p>　　按上面的方法处理每一列，即得到最小签名矩阵。</p>
+<h2 id="7-基于最小hash的局部敏感哈希"><a href="#7-基于最小hash的局部敏感哈希" class="headerlink" title="7. 基于最小hash的局部敏感哈希"></a>7. 基于最小hash的局部敏感哈希</h2><p>​        前面我们辛辛苦苦的工作貌似只是将一个文档的集合转换为一个最小签名，虽然这个签名大大压缩了集合的空间，但要计算两列的相似度还是需要两两比较签名矩阵两列的相似度，如果有n篇文档，两个比较的次数是n*(n-1)/2。接下来就看局部敏感hash怎么个敏感法。</p>
+<p>　　我们对签名矩阵按行进行分组，将矩阵分成b组，每组由r行组成，下面的实列将一个签名矩阵分成6组，每组由3行组成。 </p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>组1</th>
+<th>…</th>
+<th>1 0 0 0 2<br>3 2 1 2 2<br>0 1 3 1 1</th>
+<th>…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>组2</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>组3</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>组4</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>组5</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>组6</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>​    分组之后，我们对最小签名向量的每一组进行hash，各个组设置不同的桶空间。只要两列有一组的最小签名部分相同，那么这两列就会hash到同一个桶而成为候选相似项。签名的分析我们知道，对于某个具体的行，两个签名相同的概率p =两列的相似度= sim(S1,S2)，然后：</p>
+<p>　　（1）在某个组中所有行的两个签名值都相等概率是$p^r$;</p>
+<p>　　（2）在某个组中至少有一对签名不相等的概率是$1-p^r$;</p>
+<p>　　（3）在每一组中至少有一对签名不相等的概率是$(1-p^r)^b$;</p>
+<p>　　（4）至少有一个组的所有对的签名相等的概率是$1 - (1-p^r)^b$;</p>
+<p>　　于是两列成为候选相似对的概率是$1 - (1-p^r)^b$，它曲线如下：</p>
+<p><img src="/images/blog/2020/hash3.PNG" alt></p>
+<p>​        当两篇文档的相似度为0.8时，它们hash到同一个桶而成为候选对的概率是0.9996，而当它们的相似度只有0.3时，它们成为候选对的概率只有0.0475，因此局部敏感hash解决了让相似的对以较高的概率hash到同一个桶，而不相似的项hash到不同的桶的问题。</p>
+<p>　　对于每个桶内的文档，会有一部分是不相似的，因为hash有冲突，需要进行桶内检验。基于最小签名的LSH很容易转化为Map-reduce来计算。</p>
+<p>　　下面是我对微博进行局部敏感hash的一个结果（分词并删掉标点）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">1. "外表 活泼 内心 孤僻 的 人 会 做 的 事 1 手机 不 离 身 2 对待 不同 的 人 有 不同 的 性格 3 从 小 懂得 很多 道理 4 有 时候 很 神经 有时候 很 镇静 5 会 因为 别人 一 句 话 伤心 但 不 会 被 发现 6 安慰 很多 人 但 自己 却 没 人 安慰 7 会 怀念 从前 讨厌 现在 8 有时候 会 笑 的 没 心 没 肺 有 时 却 很 沉默"</span><br><span class="line">2. "外表 活泼 内心 孤僻 的 人 会 做 的 事 1. 手机 不 离 身 2. 对待 不同 的 人 有 不同 的 性格 3. 从小 懂得 很多 道理 4. 有时候 很 神经 有时候 很 镇静 5. 会 因为 别人 一 句 话 伤心 但 不 会 被 发现 6. 安慰 很多 人 但 自己 却 没 人 安慰 7. 会 怀念 从前 讨厌 现在 8. 有时候 会 笑 的 没 心 没 肺 有时 却 很 沉默"</span><br><span class="line">3. "射手 座 的 特征 1 手机 不 离 身 2 对待 不同 的 人 有 不同 的 性格 3 从 小 懂得 很多 道理 4 有 时候 很 神经 有时候 很 镇静 5 会 因为 别人 一 句 话 伤心 但 不 会 被 发现 6 安慰 很多 人 但 自己 却 没 人 安慰"</span><br><span class="line">4. "外表 活泼 内心 孤僻 的 人 会 做 的 事 1 手机 不 离 身 2 对待 不同 的 人 有 不同 的 性格 3 从 小 懂得 很多 道理 4 有 时候 很 神经 有时候 很 镇静 5 会 因为 别人 一 句 话 伤心 但 不 会 被 发现 6 安慰 很多 人 但 自己 却 没 人 安慰 7 会 怀念 从前 讨厌 现在 8 有时候 会 笑 的 没 心 没 肺 有 时 却 很 沉默 你 是 这样 吗"</span><br><span class="line">5. "金牛座 特征 1 手机 不 离 身 2 对待 不同 的 人 有 不同 的 性格 3 从 小 懂得 很多 道理 4 有 时候 很 神经 有时候 很 镇静 5 会 因为 别人 一 句 话 伤心 但 不 会 被 发现 6 安慰 很多 人 但 自己 却 没 人 安慰 会 怀念 从前 讨厌 现在 8 有时候 会 笑 的 没 心 没 肺 有时 却 很 沉默"</span><br><span class="line">6. "外表 活泼 内心 孤僻 的 人 会 做 的 事 1 手机 不 离 身 2 对待 不同 的 人 有 不同 的 性格 3 从 小 懂得 很多 道理 4 有 时候 很 神经 有时候 很 镇静 5 会 因为 别人 一 句 话 伤心 但 不 会 被 发现 6 安慰 很多 人 但 自己 却 没 人 安慰 7 会 怀念 从前 讨厌 现在 8 有时候 会 笑 的 没 心 没 肺 有 时 却 很 沉默 你 是 这样 吗"</span><br><span class="line">7. "天蝎座 特征 1 手机 不 离 身 2 对待 不同 的 人 有 不同 的 性格 3 从 小 懂得 很多 道理 4 有 时候 很 神经 有时候 很 镇静 5 会 因为 别人 一 句 话 伤心 但 不 会 被 发现 6 安慰 很多 人 但 自己 却 没 人 安慰 7 会 怀念 从前 讨厌 现在 8 有时候 会 笑 的 没 心 没 肺 有时 却 很 沉默"</span><br><span class="line">8. "双子座 的 你 是 这样 的 吗 1 手机 不 离 身 睡觉 不 关机 2 对待 不同 的 人 有 不同 的 性格 3 从 小 懂得 很多 道理 但 知 行 往往 难以 合 一 4 有 时候 很 神经 有时候 很 镇静 5 会 因为 别人 一 句 话 伤心 但 不 会 被 发现 6 很 会 安慰 别人 却 不 会 安慰 自己 7 会 经常 怀念 从 前"</span><br><span class="line">9. "外表 活泼 内心 孤僻 的 人 会 做 的 事 1 手机 不 离 身 2 对待 不同 的 人 有 不同 的 性格 3 从 小 懂得 很多 道理 4 有 时候 很 神经 有时候 很 镇静 5 会 因为 别人 一 句 话 伤心 但 不 会 被 发现 6 安慰 很多 人 但 自己 却 没 人 安慰 7 会 怀念 从前 讨厌 现在 8 有时候 会 笑 的 没 心 没 肺 有时 却 很 沉默 你 是 这样 吗"</span><br><span class="line">10. "外表 活泼 内心 孤僻 的 人 会 做 的 事 1 手机 不 离 身 2 对待 不同 的 人 有 不同 的 性格 3 从 小 懂得 很多 道理 4 有 时候 很 神经 有时候 很 镇静 5 会 因为 别人 一 句 话 伤心 但 不 会 被 发现 6 安慰 很多 人 但 自己 却 没 人 安慰 7 会 怀念 从前 讨厌 现在 8 有时候 会 笑 的 没 心 没 肺 有 时 却 很 沉默 你 是 这样 吗 转"</span><br><span class="line">11. "外表 活泼 内心 孤僻 的 人 会 做 的 事 1. 手机 不 离 身 2. 对待 不同 的 人 有 不同 的 性格 3. 从小 懂得 很多 道理 4. 有时候 很 神经 有时候 很 镇静 5. 会 因为 别人 一 句 话 伤心 但 不 会 被 发现 6. 安慰 很多 人 但 自己 却 没 人 安慰 7. 会 怀念 从前 讨厌 现在 8. 有时候 会 笑 的 没 心 没 肺 有时 却 很 沉默"</span><br></pre></td></tr></table></figure>
+<p>​        看了这个，你还相信星座吗？</p>
+<h2 id="8-局部敏感哈希的一般定义"><a href="#8-局部敏感哈希的一般定义" class="headerlink" title="8. 局部敏感哈希的一般定义"></a>8. 局部敏感哈希的一般定义</h2><p>　　局部敏感hash实质上是满足一定条件的函数簇，上面介绍只是一个基于Jaccard的例子，实际上还有面向其他距离的LSH。</p>
+<p>　　令d1&lt;d2是定义在距离测定d下得两个距离值，如果一个函数族的每一个函数f满足：</p>
+<p>　　（1）如果d(x,y)&lt;=d1,则f(x)=f(y)的概率至少为p1，即P(f(x)=f(y)) &gt;= p1;</p>
+<p>　　（2）如果d(x,y)&gt;=d2,则f(x)=f(y)的概率至多为p2，即p(f(x)=f(y)) &lt;= p2.</p>
+<p>　　那么称F为(d1,d2,p1,p2)-敏感的函数族。实际上我们之前的最小hash函数族是(d1,d2,1-d1,1-d2)-敏感的。</p>
+<p>　　局部敏感hash族还可以进行放大处理，已获得更高的准确率和召回率，当然也有面向其他距离的LSH。本文的东西全部源自参考文献的课本，有兴趣可以好好读一下这本书。</p>
+<h2 id="9-参考文献"><a href="#9-参考文献" class="headerlink" title="9. 参考文献"></a>9. 参考文献</h2><blockquote>
+<p>本文来自<a href="http://www.cnblogs.com/fengfenggirl" target="_blank" rel="noopener">http://www.cnblogs.com/fengfenggirl</a></p>
+</blockquote>
+<p>参考资料：</p>
+<p><a href="http://www.stanford.edu/class/cs246/" target="_blank" rel="noopener">《Mining of Massive Dataset》</a></p>
+<p>《互联网大规模数据挖掘与分布式处理》</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/局部敏感哈希/" rel="tag"><i class="fa fa-tag"></i> 局部敏感哈希</a>
+          
+            <a href="/tags/Local-Sensitive-Hashing/" rel="tag"><i class="fa fa-tag"></i> Local Sensitive Hashing</a>
+          
+            <a href="/tags/LSH/" rel="tag"><i class="fa fa-tag"></i> LSH</a>
+          
+            <a href="/tags/Data-Mining/" rel="tag"><i class="fa fa-tag"></i> Data Mining</a>
+          
+            <a href="/tags/Algorithm/" rel="tag"><i class="fa fa-tag"></i> Algorithm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/09/15/Freebase-Search-Cookbook/" rel="next" title="Freebase Search Cookbook">
+                <i class="fa fa-chevron-left"></i> Freebase Search Cookbook
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/09/20/SemEval-2020自由文本关系抽取冠军方案解读/" rel="prev" title="SemEval-2020自由文本关系抽取冠军方案解读">
+                SemEval-2020自由文本关系抽取冠军方案解读 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/漫画脸1vs1.jpg" alt="dinosaur">
+            
+              <p class="site-author-name" itemprop="name">dinosaur</p>
+              <div class="site-description motion-element" itemprop="description">闪耀的群星，颠覆着黑夜</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">371</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hao-Kailong" title="GitHub &rarr; https://github.com/Hao-Kailong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/klhao.nju@gmail.com" title="Email &rarr; klhao.nju@gmail.com"><i class="fa fa-fw fa-envelope"></i>Email</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-引入"><span class="nav-text">1. 引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-文本相似度计算"><span class="nav-text">2. 文本相似度计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-文档的Shingling"><span class="nav-text">3. 文档的Shingling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-保持相似度矩阵表示"><span class="nav-text">4. 保持相似度矩阵表示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-最小哈希（min-hashing"><span class="nav-text">5. 最小哈希（min-hashing)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-最小hash签名"><span class="nav-text">6. 最小hash签名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-基于最小hash的局部敏感哈希"><span class="nav-text">7. 基于最小hash的局部敏感哈希</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-局部敏感哈希的一般定义"><span class="nav-text">8. 局部敏感哈希的一般定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-参考文献"><span class="nav-text">9. 参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dinosaur</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+      <div>
+        <div class="addthis_inline_share_toolbox">
+  <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cb429b1d763f1d4" async="async"></script>
+</div>
+
+      </div>
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script id="dsq-count-scr" src="https://dinosaur7.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://haokailong.top/2020/09/19/局部敏感哈希-LSH/";
+    this.page.identifier = "2020/09/19/局部敏感哈希-LSH/";
+    this.page.title = '局部敏感哈希(LSH)';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dinosaur7.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

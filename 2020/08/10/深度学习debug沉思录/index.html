@@ -1,0 +1,2272 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="DsoDHJ1Km7LX7l7UnoG8dB2QrygUWW345_JkdBOj1Vw">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="ahe2m7RGVx">
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italicRoboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/solar-system-16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/solar-system-32.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言接触深度学习也有一两年了，一直没有将一些实战经验整理一下形成文字。本文打算用来记录一些在深度学习实践中的调试过程，记录一些经验之谈。因为目前深度学习业界的理论基础尚且薄弱，很多工程实践中的问题没法用理论解释得很好，这里的只是实践中的一些经验之谈，以供参考以及排错。本文将持续更新。 需要强调的是，本文的很多单纯只是经验，在尽可能列出参考文献的同时却并无严格理论验证，希望大家见谅。欢迎大家集思广益">
+<meta name="keywords" content="调参,神经网络,Neural Networks,Deep Learning,深度学习,炼丹,经验,技巧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习debug沉思录">
+<meta property="og:url" content="http://haokailong.top/2020/08/10/深度学习debug沉思录/index.html">
+<meta property="og:site_name" content="Hold the Torch">
+<meta property="og:description" content="前言接触深度学习也有一两年了，一直没有将一些实战经验整理一下形成文字。本文打算用来记录一些在深度学习实践中的调试过程，记录一些经验之谈。因为目前深度学习业界的理论基础尚且薄弱，很多工程实践中的问题没法用理论解释得很好，这里的只是实践中的一些经验之谈，以供参考以及排错。本文将持续更新。 需要强调的是，本文的很多单纯只是经验，在尽可能列出参考文献的同时却并无严格理论验证，希望大家见谅。欢迎大家集思广益">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/深度学习debug沉思录/3.1.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/深度学习debug沉思录/3.2.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/深度学习debug沉思录/8.1.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/深度学习debug沉思录/8.2.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/深度学习debug沉思录/9.1.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/深度学习debug沉思录/11.1.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/深度学习debug沉思录/12.1.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/深度学习debug沉思录/14.1.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/深度学习debug沉思录/14.2.PNG">
+<meta property="og:updated_time" content="2020-08-10T13:21:43.441Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度学习debug沉思录">
+<meta name="twitter:description" content="前言接触深度学习也有一两年了，一直没有将一些实战经验整理一下形成文字。本文打算用来记录一些在深度学习实践中的调试过程，记录一些经验之谈。因为目前深度学习业界的理论基础尚且薄弱，很多工程实践中的问题没法用理论解释得很好，这里的只是实践中的一些经验之谈，以供参考以及排错。本文将持续更新。 需要强调的是，本文的很多单纯只是经验，在尽可能列出参考文献的同时却并无严格理论验证，希望大家见谅。欢迎大家集思广益">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/深度学习debug沉思录/3.1.PNG">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://haokailong.top/2020/08/10/深度学习debug沉思录/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>深度学习debug沉思录 | Hold the Torch</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-138297445-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-138297445-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hold the Torch</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-wordcloud">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/wordcloud/" rel="section"><i class="menu-item-icon fa fa-fw fa-cloud"></i> <br>词云</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/08/10/深度学习debug沉思录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">深度学习debug沉思录
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-08-10 21:21:43" itemprop="dateModified" datetime="2020-08-10T21:21:43+08:00">2020-08-10</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/08/10/深度学习debug沉思录/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/08/10/深度学习debug沉思录/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>接触深度学习也有一两年了，一直没有将一些实战经验整理一下形成文字。本文打算用来记录一些<strong>在深度学习实践中的调试过程</strong>，记录一些经验之谈。因为目前深度学习业界的理论基础尚且薄弱，很多工程实践中的问题没法用理论解释得很好，这里的只是实践中的一些经验之谈，以供参考以及排错。本文将持续更新。</p>
+<p>需要强调的是，本文的很多单纯只是经验，在尽可能列出参考文献的同时却并无严格理论验证，希望大家见谅。欢迎大家集思广益，共同维护这个经验集，为整个社区贡献微弱力量。<a id="more"></a></p>
+<h2 id="1、在分类问题中，损失函数及其快速得下降为0-0000"><a href="#1、在分类问题中，损失函数及其快速得下降为0-0000" class="headerlink" title="1、在分类问题中，损失函数及其快速得下降为0.0000"></a><strong>1、在分类问题中，损失函数及其快速得下降为0.0000</strong></h2><p>在分类问题中，我们一般采用的是交叉熵[1]作为损失函数，如式(1.1)所示</p>
+<script type="math/tex; mode=display">
+L_{cls} = - \sum _{i=1} ^ n y_i\log \hat{y_i} = -\boldsymbol{y}^T\log \hat{\boldsymbol{y}}</script><p>其中和是预测结果，以概率分布的形式表达，如[0.2, 0.3, 0.3]等，一般是通过softmax层实现，和是样本真实标签，在单分类问题中，采用的是独热编码[2]，只有一个分量是为1的，如[0, 1, 0]。（公式第二行是向量化表达）</p>
+<p><strong>我们发现，交叉熵损失的下确界是0，但是永远都不可能达到0</strong>，因为要达到0，那么所有的预测向量分布就必须完全和真实标签一致，退化为独热编码。但是实际上在神经网络中，经过了softmax层之后，是不可能使得除了目标分量的其他所有分量为0的（这个这里只是抛出了结论，讨论需要比较长的篇幅。），因此永远不可能达到0的，正是因为如此，交叉熵损失可以一直优化，这也是其比MSE损失优的一个点之一。</p>
+<p>既然注意到了不可能为0，我们就可以分析，这肯定是自己程序问题，我们将经过softmax之前的logit打印出，如：</p>
+<script type="math/tex; mode=display">
+[1023, -201, 1021, 124]</script><p>发现了没有，这些值都很大，而softmax函数为:</p>
+<script type="math/tex; mode=display">
+P(x_i) = \frac{\exp (x_i)}{\sum _{i=1}^{n} \exp(x_i)}</script><p>我们会发现，过大或者过小的指数项，比如1023，会涉及到计算，这个数值在TensorFlow或者大部分框架中是溢出的，显示为inf，因此就会把该分量拉成1，而其他变成了0。这种操作是会导致严重的过拟合的。因此，一般来说，logit值不能太大，否则将会出现数值计算问题。</p>
+<p><strong>那么如何解决？</strong> 出现这种问题的情况很多时候是因为<strong>参数初始化</strong>导致的数值计算问题，比如都采用了方差过小的高斯分布进行初始化，那么就会把网络的输出的范围拉的特别大，导致以上的问题。因此在参数初始化中，确保每一层的初始化都是在一定范围内的，可以考虑采用Xavier初始化，Kaiming初始化等。（这个初始化的影响我们将会以后讨论，这是一个新的话题。）</p>
+<h2 id="2、在正则化的过程中对神经网络的偏置也进行了正则"><a href="#2、在正则化的过程中对神经网络的偏置也进行了正则" class="headerlink" title="2、在正则化的过程中对神经网络的偏置也进行了正则"></a><strong>2、在正则化的过程中对神经网络的偏置也进行了正则</strong></h2><p>一般来说，我们常用的是二范数正则，也即是岭回归，如式子(2.1)</p>
+<script type="math/tex; mode=display">
+L = \gamma _w(y, \hat{y})  + \frac{1}{2} \boldsymbol{w}^T\boldsymbol{w}</script><p>一般来说，我们只会对神经网络的<strong>权值</strong>进行正则操作，使得权值具有一定的稀疏性[21]或者控制其尺寸，使得其不至于幅度太大[3]，减少模型的容量以减少过拟合的风险。同时，我们注意到神经网络中每一层的权值的作用是<strong>调节每一层超平面的方向</strong>（因为就是其法向量），因此只要比例一致，不会影响超平面的形状的。但是，我们必须注意到，每一层中的偏置是<strong>调节每一层超平面的平移长度的</strong>，如果你对偏置进行了正则，那么我们的可能就会变得很小，或者很稀疏，这样就导致你的每一层的超平面只能局限于很小的一个范围内，使得模型的容量大大减少，一般会导致欠拟合[7]的现象。</p>
+<p><strong>因此，一般我们不会对偏置进行正则的，注意了。</strong></p>
+<p>在Pytorch框架中，常用的方法为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">param_optimizer = list(self.model.named_parameters())</span><br><span class="line">no_decay = [<span class="string">'bias'</span>, <span class="string">'LayerNorm.bias'</span>, <span class="string">'LayerNorm.weight'</span>]</span><br><span class="line">optimizer_grouped_parameters = [</span><br><span class="line">	&#123;<span class="string">'params'</span>: [p <span class="keyword">for</span> n, p <span class="keyword">in</span> param_optimizer <span class="keyword">if</span> <span class="keyword">not</span> any(nd <span class="keyword">in</span> n <span class="keyword">for</span> nd <span class="keyword">in</span> no_decay)], <span class="string">'weight_decay'</span>: config.weight_decay&#125;,</span><br><span class="line">   	&#123;<span class="string">'params'</span>: [p <span class="keyword">for</span> n, p <span class="keyword">in</span> param_optimizer <span class="keyword">if</span> any(nd <span class="keyword">in</span> n <span class="keyword">for</span> nd <span class="keyword">in</span> no_decay)], <span class="string">'weight_decay'</span>: <span class="number">0.0</span>&#125;</span><br><span class="line">]</span><br><span class="line">self.optimizer = AdamW(optimizer_grouped_parameters, config.lr)</span><br></pre></td></tr></table></figure>
+<h2 id="3、学习率太大导致不收敛"><a href="#3、学习率太大导致不收敛" class="headerlink" title="3、学习率太大导致不收敛"></a><strong>3、学习率太大导致不收敛</strong></h2><p>不收敛是个范围很大的问题，有很多可能性，其中有一种是和网络结构无关的原因，就是学习率设置的太大了，如下图所示，太大的学习率将会导致严重的抖动，使得无法收敛，<strong>甚至在某些情况下可能使得损失变得越来越大直到无穷</strong>。这个时候请调整你的学习率，尝试是否可以收敛。当然，这里的“太大”目前没有理论可以衡量，不过我喜欢从的Adam优化器[4]开始进行尝试优化。</p>
+<p><img src="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/深度学习debug沉思录/3.1.PNG" alt="img"></p>
+<p>下图展示了过大过小的学习率对模型性能的影响曲线图：</p>
+<p><img src="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/深度学习debug沉思录/3.2.PNG" alt="img"></p>
+<h2 id="4、别在softmax层前面的输入施加了激活函数"><a href="#4、别在softmax层前面的输入施加了激活函数" class="headerlink" title="4、别在softmax层前面的输入施加了激活函数"></a><strong>4、别在softmax层前面的输入施加了激活函数</strong></h2><p>假设我们的网络提取出来的最后的特征向量是，如果我们最后的分类的类别有类，那么我们会用一个全连接层将其映射到对应维度的空间里面，如式(4.2)。</p>
+<script type="math/tex; mode=display">
+\boldsymbol{y} = g_w(\widetilde{\boldsymbol{y}})</script><p>那么，这个全连接层虽然说可以看成是分类器，但是我们最好把它看成是上一层的“近线性可分特征”的一个维度转换（有点绕，意思是我们这里只是一个维度的转换，而不涉及到kernel），不管怎么说，这个时候，我们的输出是不能有激活函数的，如下式是<strong>不可以的</strong>：</p>
+<script type="math/tex; mode=display">
+\boldsymbol{y} = \sigma( g_w(\widetilde{\boldsymbol{y}}))</script><p>这时候的输出，具有和分类类别相同的维度，在很多框架中被称之为<strong>logits</strong>值，这个值一般是在实数范围内的，一般不会太大，参考笔记第一点的情况。</p>
+<h2 id="5、检查原数据输入的值范围"><a href="#5、检查原数据输入的值范围" class="headerlink" title="5、检查原数据输入的值范围"></a><strong>5、检查原数据输入的值范围</strong></h2><p>原始数据输入可能千奇百怪，每个特征维的值范围可能有着数量级上的差别，这个时候如果我们不对数据进行预处理，将会大大增大设计网络的负担。一般来说我们希望输入的数据是中心对齐的，也即是<strong>0均值</strong>的[5]，可以加速网络收敛的速度。同时，我们希望不同维度上的数值范围是一致的，可以采用一些归一化[6]的手段进行处理（这个时候假设每个维度重要性是一样的，比如我们图片的三个通道等）。</p>
+<h2 id="6、别忘了对你的训练数据进行打乱"><a href="#6、别忘了对你的训练数据进行打乱" class="headerlink" title="6、别忘了对你的训练数据进行打乱"></a><strong>6、别忘了对你的训练数据进行打乱</strong></h2><p>经常，你的训练过程非常完美，能够很好地拟合训练数据，但是在测试过程中确实一塌糊涂，是的，你的模型这个时候过拟合[7]了。这个时候你会检查模型的有效性，不过在进行这一步之前，不妨先检查下你的<strong>数据加载器</strong>(Data Loader)是否是正常设计的。</p>
+<p>一般来说，我们的训练数据在训练过程中，每一个epoch[8]中，都是需要进行<strong>打乱</strong>(shuffle)的，很多框架的数据加载器参数列表中都会有这项选项，比如pytorch的DataLoader类[9]。为什么需要打乱呢？那是因为如果不打乱我们的训练数据，我们的模型就有可能学习到训练数据的个体与个体之间特定的排列顺序，而这种排列顺序，在很多情况下是无用的，会导致过拟合的糟糕现象。因此，我们在训练过程中，在每一个epoch训练中都对训练集进行打乱，以确保模型不能“记忆”样本之间的特定排序。这其实也是<strong>正则</strong>的一种手段。</p>
+<p>在训练中，大概如：</p>
+<script type="math/tex; mode=display">
+epoch1 -> shuffle -> eposh2 -> shuffle ...</script><h2 id="7、一个batch中，label不要全部相同"><a href="#7、一个batch中，label不要全部相同" class="headerlink" title="7、一个batch中，label不要全部相同"></a><strong>7、一个batch中，label不要全部相同</strong></h2><p>这个情况有点类似与笔记的第六点，我们需要尽量给训练过程中人为引入不确定性，这是很多正则手段，包括dropout，stochastic depth等的思路，这样能够有效地减少过拟合的风险。因此，一个batch中，尽量确保你的样本是来自于各个类的（针对分类问题而言），这样你的模型会减少执着与某个类别的概率，减少过拟合风险，同时也会加快收敛速度。</p>
+<h2 id="8、少用vanilla-SGD优化器"><a href="#8、少用vanilla-SGD优化器" class="headerlink" title="8、少用vanilla SGD优化器"></a><strong>8、少用vanilla SGD优化器</strong></h2><p>在高维度情况下的优化，其优化平面会出现很多鞍点（既是梯度为0，但却不是极点），通常，鞍点会比局部极值更容易出现（直观感受就是，因为高维度情况下，一个点周围有很多维度，如果是极值点，那么就需要其他所有维度都是朝向同一个方向“弯曲”的，而这个要比鞍点的各个方向“弯曲”的情况可能要小），因此这个时候我们更担心陷于鞍点，而不是局部极小值点（当然局部极小值点也是一个大麻烦，不过鞍点更麻烦）。如果采用普通的SGD优化器，那么就会陷于任何一个梯度为0的点，也就是说，极有可能会陷于鞍点。如果要使用SGD方法，建议使用带有momentum的SGD方法，可以有效避免陷入鞍点的风险。</p>
+<p><img src="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/深度学习debug沉思录/8.1.PNG" alt="img"></p>
+<p>下图是某个函数的三维曲线图和等高线图，我们可以看到有若干个局部最优点和鞍点，这些点对于vanilla SGD来说是不容易处理的。</p>
+<p><img src="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/深度学习debug沉思录/8.2.PNG" alt="img"></p>
+<h2 id="9、检查各层梯度，对梯度爆炸进行截断"><a href="#9、检查各层梯度，对梯度爆炸进行截断" class="headerlink" title="9、检查各层梯度，对梯度爆炸进行截断"></a><strong>9、检查各层梯度，对梯度爆炸进行截断</strong></h2><p>有些时候，你会发现在训练过程中，你的损失突然变得特别大，或者特别小，这个时候不妨检查下每一层的梯度（用tensorboard的distribution可以很好地检查），很可能是发生了<strong>梯度爆炸</strong>(gradient explosion)的情况，特别是在存在LSTM等时序的网络中，很容易出现这种情况。因此，这个时候我们会用梯度截断进行处理，操作很简单粗暴，就是设置一个阈值，把超过这个阈值的梯度全部拉到这个阈值，如下图所示：</p>
+<p><img src="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/深度学习debug沉思录/9.1.PNG" alt="img"></p>
+<p>在tensorflow中也提供了相应的API供梯度截断使用[10]，如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tf.clip_by_value(    </span><br><span class="line">    t,    </span><br><span class="line">	clip_value_min, <span class="comment"># 指定截断最小值    </span></span><br><span class="line">	clip_value_max, <span class="comment"># 指定截断最大值    </span></span><br><span class="line">	name=<span class="literal">None</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>具体使用见[11]，在应用梯度之前，对梯度截断进行处理。</p>
+<h2 id="10、检查你的样本label"><a href="#10、检查你的样本label" class="headerlink" title="10、检查你的样本label"></a><strong>10、检查你的样本label</strong></h2><p>有些时候，你的训练过程可以很好地收敛，当使用MSE损失[12]的时候甚至可能达到0.0000的情况。但是，当你把模型拿到测试集中评估的时候，却发现性能极差，仿佛没有训练一样。这是过拟合吗？显然是的，但是这可能并不是你的模型的问题，请检查你的数据加载中训练集的样本标签是否正确对应。</p>
+<p>这个问题很白痴，但是却真的很容易在数据加载过程中因为种种原因把label信息和对应样本给混掉。根据文献[13]中的实验，用MSE损失的情况下，就算是你的label完全随机的，和样本一点关系都没有，也可以通过基于SGD的优化算法达到0.0000损失的。<strong>因此，请务必确保你的样本label是正确的。</strong></p>
+<h2 id="11、分类问题中的分类置信度问题"><a href="#11、分类问题中的分类置信度问题" class="headerlink" title="11、分类问题中的分类置信度问题"></a><strong>11、分类问题中的分类置信度问题</strong></h2><p>在分类问题中我们一般都是采用的是交叉熵损失，如式子(1.1)所示，在一些实验中，如果我们绘制出训练损失和分类准确度的曲线图，我们可能会有下图这种情况[14]：</p>
+<p><img src="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/深度学习debug沉思录/11.1.PNG" alt="img"></p>
+<p>其中上图为分类损失，紫色为训练损失，蓝色为测试损失，下图为分类准确度，绿色为训练准确度，蓝色为测试准确度。<strong>我们不难发现一个比较有意思的现象，就是当测试损失开始到最低点，开始向上反弹的时候，其测试准确度却还是上升的，而不是下降。</strong> 这是为什么呢？为什么分类准确度不会顺着分类损失的增大而减少呢？</p>
+<p>这个涉及到了分类过程中对某个类的“置信程度”的多少，比如：</p>
+<script type="math/tex; mode=display">
+[0.9, 0.01, 0.01, 0.07]</script><p>模型是对第一类相当确信的，但是在第二种情况：</p>
+<script type="math/tex; mode=display">
+[0.5, 0.4, 0.05, 0.05]</script><p>这对第一类的置信程度就很低了，虽然按照贝叶斯决策，还是会选择第一类作为决策结果。因此这就是导致以上现象的原因，<strong>在那个拐点后面，这个模型对于分类的置信程度其实已经变得很差了，虽然对于准确度而言，其还能分类正确。</strong> 但是这其实正是过拟合的一种表现，模型已经对自己的分类结果不确信了。</p>
+<h2 id="12、少在太小的批次中使用BatchNorm层"><a href="#12、少在太小的批次中使用BatchNorm层" class="headerlink" title="12、少在太小的批次中使用BatchNorm层"></a><strong>12、少在太小的批次中使用BatchNorm层</strong></h2><p>Batch Normalization[15]，中文译作<strong>批规范化</strong>，在深度学习中是一种加快收敛速度，提高性能的一个利器，其本质和我们对输入的原数据进行0均值单位方差规范化差不多，是以batch为单位，对中间层的输出进行规范化，可以缓和<strong>内部协方差偏移</strong>(Internal Covariate Shift)的现象。其基本公式很简单，如下：</p>
+<script type="math/tex; mode=display">
+\widetilde{x} = \frac{x_i - \mu}{\sigma_i}</script><script type="math/tex; mode=display">
+x_i^{norm} = \gamma_i \cdot \widetilde{x} + \beta_i</script><p>不过这里并不打算对BN进行详细讲解，只是想告诉大家，因为BN操作在训练过程中是对每个batch进行处理的，从每个batch中求得均值和方差才能进行操作。如果你的batch特别小（比如是受限于硬件条件或者网络要求小batch），那么BN层的batch均值和方差可能就会不能很好符合整个训练集的统计特征，导致差的性能。实际上，实验[16]说明了这个关系，当batch小于16时，性能大幅度下降。</p>
+<p><img src="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/深度学习debug沉思录/12.1.PNG" alt="img"></p>
+<p><strong>因此，少在太小的batch中使用BN层，如果实在要使用，在发生性能问题时优先检查BN层。</strong></p>
+<h2 id="13、数值计算问题，出现Nan"><a href="#13、数值计算问题，出现Nan" class="headerlink" title="13、数值计算问题，出现Nan"></a><strong>13、数值计算问题，出现Nan</strong></h2><p>Nan(Not An Number)是一个在数值计算中容易出现的问题，在深度学习中因为涉及到很多损失函数，有些损失函数的定义域并不是整个实数，比如常用的对数，因此一不小心就会出现Nan。在深度学习中，如果某一层出现了Nan，那么是具有传递性的，后面的层也会出现Nan，因此可以通过<strong>二分法</strong>对此进行排错。</p>
+<p>一般来说，在深度学习中出现Nan是由于除0异常或者是因为损失函数中的（比如交叉熵，KL散度）对数操作中，输入小于或者等于0了，一般等于0的情况比较多，因此通常会：</p>
+<script type="math/tex; mode=display">
+\log (x + \epsilon) \thickapprox \log(x)</script><p>这里的是个很小的值，一般取即可，可以防止因为对数操作中输入0导致的Nan异常。</p>
+<p><strong>需要注意的是，有些时候因为参数初始化或者学习率太大也会导致数值计算溢出，这也是会出现Nan的，一般这样会出现在较前面的层里面。</strong></p>
+<h2 id="14、BN层放置的位置问题"><a href="#14、BN层放置的位置问题" class="headerlink" title="14、BN层放置的位置问题"></a><strong>14、BN层放置的位置问题</strong></h2><p>BN层有两种常见的放置位置，如下图所示：<strong>第一个是放在激活函数之前：</strong></p>
+<p><img src="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/深度学习debug沉思录/14.1.PNG" alt="img"></p>
+<p><strong>第二个是放在激活函数之后：</strong></p>
+<p><img src="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/深度学习debug沉思录/14.2.PNG" alt="img"></p>
+<p>在原始BN的论文[15]中，Batch Norm(BN)层是位于激活层之前的，因为是对原始的，未经过激活的logit数据进行数据分布的重整。然而，不少实验证实似乎BN层放在<strong>激活层之后效果会更好</strong>，这个原因目前不明。<strong>Update 2020/5/18</strong>: 在新的文献[28]中，作者尝试解释了以下BN用法的原因，有兴趣的读者可以移步去细读下。</p>
+<p><strong>传统用法:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">graph LR   </span><br><span class="line">	weights --&gt; BatchNorm   </span><br><span class="line">	BatchNorm --&gt; ReLU</span><br></pre></td></tr></table></figure>
+<p><strong>[28]的作者提出的用法：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">graph LR   </span><br><span class="line">	ReLU --&gt; BatchNorm+dropout 	</span><br><span class="line">	BatchNorm+dropout --&gt; weights</span><br></pre></td></tr></table></figure>
+<h2 id="15、dropout层应用在卷积层中可能导致更差的性能"><a href="#15、dropout层应用在卷积层中可能导致更差的性能" class="headerlink" title="15、dropout层应用在卷积层中可能导致更差的性能"></a><strong>15、dropout层应用在卷积层中可能导致更差的性能</strong></h2><p>dropout[19]是hinton大神与2012年提出的一种神经网络正则手段，其可以简单解释为<strong>在训练过程中，按一定概率让神经网络中的某些神经元输出为0</strong>，其原因可以有几个解释，一个是作为一种集成模型进行解释，另一个可以看成是在特征提取学习过程中给数据加入噪声，可以看成是一种数据增强的正则手段。</p>
+<p>在原始论文中，dropout被应用于全连接层中，而没有应用在卷积层中，Hinton的解释是因为卷积层参数并不多，过拟合风险较小不适合采用dropout这种大杀器的正则手段。有人也认为因为卷积网络是局部感知的，用dropout正则对于其在后层中对于全局信息的获取可能具有负作用[20]。</p>
+<p>不过在一些工作中，也有人将dropout层应用在卷积层中的[17-18]，其层次安排为:$CONV -&gt; RELU -&gt; DROP$，不过其丢弃率都是选择的较小数如0.1, 0.2等，个人觉得这里的作用大概是对<strong>中间数据进行加入噪声，以便于数据增强的正则手段。</strong></p>
+<p><strong>个人建议是可以尝试在卷积层中使用少量的dropout，用较小的丢弃率，但是最后别忘了扔掉这些dropout再进行一些探索，也许可以具有更好的效果。</strong></p>
+<h2 id="16、较小的batch-size可以提供较好的泛化"><a href="#16、较小的batch-size可以提供较好的泛化" class="headerlink" title="16、较小的batch size可以提供较好的泛化"></a><strong>16、较小的batch size可以提供较好的泛化</strong></h2><p>现代的深度学习优化器基本上都是基于SGD算法进行修改而成的，在每一次训练中都是以一个batch size为单位进行训练的，在这个过程中相当于在统计这个batch中样本的一些统计特性，因此batch size是会影响模型的超曲线形状的。</p>
+<p>一般来说较大的batch size比如128，256会和整个训练集的统计性质更相近，从而使得具有较少的多样性，而较小的batch size 比如16，32，因为batch size较小，不同batch之间的差异性较大，这种差异性可以看成是正则手段，有机会提高模型的泛化性能。（不过有些文章似乎不同意这个观点，认为较大batch size有较好性能，<strong>个人建议是大batch size和小batch size都可以跑跑，有可能能提升性能。</strong>）</p>
+<h2 id="17、初始化权值不能初始化为全0"><a href="#17、初始化权值不能初始化为全0" class="headerlink" title="17、初始化权值不能初始化为全0"></a><strong>17、初始化权值不能初始化为全0</strong></h2><p>这个应该是老生常谈了，但是初学者经常会出现这种错误，在初始化权值的时候将权值全部初始化为了0，在反向传播的过程中，对于某个权值的更新公式为[22]：</p>
+<script type="math/tex; mode=display">
+\frac{\partial C}{\partial w_{i,j}^l} = a_k^{l-1} * \delta_j^l = a_k^{l-1} * \sum (\delta_k^{l+1} * w_{k,j}^{l+1} * \sigma^{'}(z_j^l))</script><p>这个公式推导具体参见[22]，这里不累述了，我们可以发现，当初始化权值参数全部为0的时候，我们的将全部为0，这个时候对于某个权值的梯度也就变为了0，<strong>因此整个网络的任何参数都得不到更新，将会导致训练无法进行。</strong></p>
+<p>而<strong>对于偏置的初始化不同</strong>，对于偏置的更新公式如[22]：</p>
+<script type="math/tex; mode=display">
+\frac{\partial C}{\partial b_j^l} = \delta _j^l * 1 = \delta _j ^l</script><p>我们可以发现，对于偏置的更新而言，不依赖与初始值，因此<strong>偏置的初始化可以初始化为全0</strong>。</p>
+<h2 id="18、别忘了你的偏置"><a href="#18、别忘了你的偏置" class="headerlink" title="18、别忘了你的偏置"></a><strong>18、别忘了你的偏置</strong></h2><p>这个也是初学者很容易犯的错误，就是忘记给每一层添加偏置。我们在笔记第二点中提到了神经网络中偏置的作用，总的来说就是对超平面进行平移的，因此一般来说，我们的神经网络都是需要添加偏置的，不然你的超平面就只能是通过原点的了，这样大大减少了模型的容量，经常会使得模型欠拟合。</p>
+<h2 id="19、验证准确率远大于测试准确率"><a href="#19、验证准确率远大于测试准确率" class="headerlink" title="19、验证准确率远大于测试准确率"></a><strong>19、验证准确率远大于测试准确率</strong></h2><p>有些时候，你发现你的验证集准确率远大于测试集的准确率，在排除了代码问题和操作问题之后，其实也可能是因为训练集和测试集划分的问题。一般来说，你的验证集是从训练集中划分出来的[23]，因此你的验证集和训练集可以视为是同分布的，但是并不能确保你的训练集和测试集是同分布的，如果训练集和测试集的分布差的比较大，就可能出现这种情况。这个时候，可以考虑迁移学习中的一些方法。</p>
+<h2 id="20、KL散度出现负数"><a href="#20、KL散度出现负数" class="headerlink" title="20、KL散度出现负数"></a><strong>20、KL散度出现负数</strong></h2><p>Kullback–Leibler散度，简称KL散度[24]，也称为相对熵，是一种用于<strong>度量两个分布之间相似性</strong>的常用手段，公式如(20.1)，其中第二行形式的变形描述了相对熵的特性。</p>
+<script type="math/tex; mode=display">
+D_{KL} (P||Q) = \sum _i P(i)\log(\frac{P(i)}{Q(i)}) = \sum_i\{P(i)\log P(i) - P(i)\log Q(i)\}</script><p>我们注意到KL散度是不可能为负数的，其中P, Q是定义在同一个概率空间[25]里面的同型的分布，维度相同。从相对熵的定义来看，这个公式描述了用分布去近似所造成的不一致性的程度。在深度学习和机器学习中，一般是用来描述两个维度相同的<strong>概率分布</strong>之间的相似度。注意到，这里的P, Q都是概率分布，因此是需要经过<code>softmax</code>层的，才能保证概率和为1，不然可能会出现KL散度为负数的笑话。</p>
+<p>而且，在一些框架如Pytorch中，其输入值需要是<code>log_softmax</code>而目标值需要是<code>softmax</code>值，也就说输入值需要进行对数操作后再转变为概率分布[27]。</p>
+<p><strong>参考资料</strong></p>
+<p>[1] Janocha K, Czarnecki W M. On loss functions for deep neural networks in classification[J]. arXiv preprint arXiv:1702.05659, 2017.(Overview about loss function used in DNN)</p>
+<p>[2] tf.one_hot()进行独热编码</p>
+<p>[3] 曲线拟合问题与L2正则</p>
+<p>[4] Kinga D, Adam J B. A method for stochastic optimization[C]//International Conference on Learning Representations (ICLR). 2015, 5.</p>
+<p>[5] 深度学习系列：深度学习中激活函数的选择</p>
+<p>[6] 机器学习之特征归一化（normalization）</p>
+<p>[7] 机器学习模型的容量，过拟合与欠拟合</p>
+<p>[8] 在机器学习中epoch, iteration, batch_size的区别</p>
+<p>[9] Pytorch Dataloader doc</p>
+<p>[10] tf.clip_by_value</p>
+<p>[11] 梯度截断的tensorflow实现</p>
+<p>[12] 均方误差(MSE)和均方根误差(RMSE)和平均绝对误差(MAE)</p>
+<p>[13]. Du S S, Zhai X, Poczos B, et al. Gradient Descent Provably Optimizes Over-parameterized Neural Networks[J]. arXiv preprint arXiv:1810.02054, 2018.</p>
+<p>[14] The inconsistency between the loss curve and metric curve?</p>
+<p>[15] Ioffe S, Szegedy C. Batch normalization: accelerating deep network training by reducing internal covariate shift[C]// International Conference on International Conference on Machine Learning. JMLR.org, 2015:448-456.</p>
+<p>[16] Wu Y, He K. Group normalization[J]. arXiv preprint arXiv:1803.08494, 2018.</p>
+<p>[17] Park S, Kwak N. Analysis on the dropout effect in convolutional neural networks[C]//Asian Conference on Computer Vision. Springer, Cham, 2016: 189-204.</p>
+<p>[18] Where should I place dropout layers in a neural network?</p>
+<p>[19] Hinton G E, Srivastava N, Krizhevsky A, et al. Improving neural networks by preventing co-adaptation of feature detectors[J]. arXiv preprint arXiv:1207.0580, 2012.</p>
+<p>[20] Why do I never see dropout applied in convolutional layers?</p>
+<p>[21] L1正则</p>
+<p>[22] 深度学习系列：反向传播算法的公式推导</p>
+<p>[23] 训练集、测试集、检验集的区别与交叉检验</p>
+<p>[24] Kullback–Leibler divergence</p>
+<p>[25] Probability space</p>
+<p>[26] 如何理解K-L散度（相对熵）</p>
+<p>[27] KL Divergence produces negative values</p>
+<p>[28] Chen G, Chen P, Shi Y, et al. Rethinking the Usage of Batch Normalization and Dropout in the Training of Deep Neural Networks[J]. arXiv preprint arXiv:1905.05928, 2019.</p>
+<p>[29] <a href="https://forums.fast.ai/t/rethinking-batchnorm-dropout-combine-together-for-independent-component-layer/46232" target="_blank" rel="noopener">https://forums.fast.ai/t/rethinking-batchnorm-dropout-combine-together-for-independent-component-layer/46232</a></p>
+<p>作者丨土豆@知乎</p>
+<p>来源丨<a href="https://zhuanlan.zhihu.com/p/158739701" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/158739701</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/调参/" rel="tag"><i class="fa fa-tag"></i> 调参</a>
+          
+            <a href="/tags/神经网络/" rel="tag"><i class="fa fa-tag"></i> 神经网络</a>
+          
+            <a href="/tags/Neural-Networks/" rel="tag"><i class="fa fa-tag"></i> Neural Networks</a>
+          
+            <a href="/tags/Deep-Learning/" rel="tag"><i class="fa fa-tag"></i> Deep Learning</a>
+          
+            <a href="/tags/深度学习/" rel="tag"><i class="fa fa-tag"></i> 深度学习</a>
+          
+            <a href="/tags/炼丹/" rel="tag"><i class="fa fa-tag"></i> 炼丹</a>
+          
+            <a href="/tags/经验/" rel="tag"><i class="fa fa-tag"></i> 经验</a>
+          
+            <a href="/tags/技巧/" rel="tag"><i class="fa fa-tag"></i> 技巧</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/05/NLP数据增强技术/" rel="next" title="NLP数据增强技术">
+                <i class="fa fa-chevron-left"></i> NLP数据增强技术
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/14/优化方法总结：SGD-Momentum-AdaGrad-RMSProp-Adam/" rel="prev" title="优化方法总结：SGD, Momentum, AdaGrad, RMSProp, Adam">
+                优化方法总结：SGD, Momentum, AdaGrad, RMSProp, Adam <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/漫画脸1vs1.jpg" alt="dinosaur">
+            
+              <p class="site-author-name" itemprop="name">dinosaur</p>
+              <div class="site-description motion-element" itemprop="description">闪耀的群星，颠覆着黑夜</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">371</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hao-Kailong" title="GitHub &rarr; https://github.com/Hao-Kailong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/klhao.nju@gmail.com" title="Email &rarr; klhao.nju@gmail.com"><i class="fa fa-fw fa-envelope"></i>Email</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1、在分类问题中，损失函数及其快速得下降为0-0000"><span class="nav-text">1、在分类问题中，损失函数及其快速得下降为0.0000</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、在正则化的过程中对神经网络的偏置也进行了正则"><span class="nav-text">2、在正则化的过程中对神经网络的偏置也进行了正则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3、学习率太大导致不收敛"><span class="nav-text">3、学习率太大导致不收敛</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4、别在softmax层前面的输入施加了激活函数"><span class="nav-text">4、别在softmax层前面的输入施加了激活函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5、检查原数据输入的值范围"><span class="nav-text">5、检查原数据输入的值范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6、别忘了对你的训练数据进行打乱"><span class="nav-text">6、别忘了对你的训练数据进行打乱</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7、一个batch中，label不要全部相同"><span class="nav-text">7、一个batch中，label不要全部相同</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8、少用vanilla-SGD优化器"><span class="nav-text">8、少用vanilla SGD优化器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9、检查各层梯度，对梯度爆炸进行截断"><span class="nav-text">9、检查各层梯度，对梯度爆炸进行截断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10、检查你的样本label"><span class="nav-text">10、检查你的样本label</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11、分类问题中的分类置信度问题"><span class="nav-text">11、分类问题中的分类置信度问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12、少在太小的批次中使用BatchNorm层"><span class="nav-text">12、少在太小的批次中使用BatchNorm层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13、数值计算问题，出现Nan"><span class="nav-text">13、数值计算问题，出现Nan</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14、BN层放置的位置问题"><span class="nav-text">14、BN层放置的位置问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15、dropout层应用在卷积层中可能导致更差的性能"><span class="nav-text">15、dropout层应用在卷积层中可能导致更差的性能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#16、较小的batch-size可以提供较好的泛化"><span class="nav-text">16、较小的batch size可以提供较好的泛化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#17、初始化权值不能初始化为全0"><span class="nav-text">17、初始化权值不能初始化为全0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#18、别忘了你的偏置"><span class="nav-text">18、别忘了你的偏置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#19、验证准确率远大于测试准确率"><span class="nav-text">19、验证准确率远大于测试准确率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#20、KL散度出现负数"><span class="nav-text">20、KL散度出现负数</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dinosaur</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+      <div>
+        <div class="addthis_inline_share_toolbox">
+  <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cb429b1d763f1d4" async="async"></script>
+</div>
+
+      </div>
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script id="dsq-count-scr" src="https://dinosaur7.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://haokailong.top/2020/08/10/深度学习debug沉思录/";
+    this.page.identifier = "2020/08/10/深度学习debug沉思录/";
+    this.page.title = '深度学习debug沉思录';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dinosaur7.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

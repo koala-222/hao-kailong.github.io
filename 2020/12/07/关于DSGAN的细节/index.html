@@ -1,0 +1,2181 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="DsoDHJ1Km7LX7l7UnoG8dB2QrygUWW345_JkdBOj1Vw">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="ahe2m7RGVx">
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italicRoboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/solar-system-16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/solar-system-32.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="clean数据https://github.com/Panda0406/Adversarial-Learning-Distant-Supervision-RE/issues/2 DSGAN得到的干净数据分布是不平衡的，作者手动调整了生成数据的比例，去掉了一些过高的比例的类别的数据，以避免不必要的偏置。    Their repo do not perform as you present. I h">
+<meta name="keywords" content="GAN,Distant Supervision,RE,DSGAN,noise">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于DSGAN的细节">
+<meta property="og:url" content="http://haokailong.top/2020/12/07/关于DSGAN的细节/index.html">
+<meta property="og:site_name" content="Hold the Torch">
+<meta property="og:description" content="clean数据https://github.com/Panda0406/Adversarial-Learning-Distant-Supervision-RE/issues/2 DSGAN得到的干净数据分布是不平衡的，作者手动调整了生成数据的比例，去掉了一些过高的比例的类别的数据，以避免不必要的偏置。    Their repo do not perform as you present. I h">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-12-18T13:00:46.028Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于DSGAN的细节">
+<meta name="twitter:description" content="clean数据https://github.com/Panda0406/Adversarial-Learning-Distant-Supervision-RE/issues/2 DSGAN得到的干净数据分布是不平衡的，作者手动调整了生成数据的比例，去掉了一些过高的比例的类别的数据，以避免不必要的偏置。    Their repo do not perform as you present. I h">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://haokailong.top/2020/12/07/关于DSGAN的细节/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>关于DSGAN的细节 | Hold the Torch</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-138297445-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-138297445-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hold the Torch</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-wordcloud">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/wordcloud/" rel="section"><i class="menu-item-icon fa fa-fw fa-cloud"></i> <br>词云</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/07/关于DSGAN的细节/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">关于DSGAN的细节
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-18 21:00:46" itemprop="dateModified" datetime="2020-12-18T21:00:46+08:00">2020-12-18</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/Distant-Supervision/" itemprop="url" rel="index"><span itemprop="name">Distant Supervision</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/12/07/关于DSGAN的细节/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/07/关于DSGAN的细节/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="clean数据"><a href="#clean数据" class="headerlink" title="clean数据"></a>clean数据</h1><p><a href="https://github.com/Panda0406/Adversarial-Learning-Distant-Supervision-RE/issues/2" target="_blank" rel="noopener">https://github.com/Panda0406/Adversarial-Learning-Distant-Supervision-RE/issues/2</a></p>
+<p>DSGAN得到的干净数据分布是不平衡的，作者手动调整了生成数据的比例，去掉了一些过高的比例的类别的数据，以避免不必要的偏置。</p>
+<blockquote>
+<p> <a href="https://github.com/thunlp/NRE/blob/master/PCNN%2BATT/out/pr.txt" target="_blank" rel="noopener"> Their repo</a> do not perform as you present. I have tested it.</p>
+<p> Because we remove many sentence bags of positive entity pairs, it causes the proportion change of positive set and negative set. So we correspondingly add some positive sentence sets based on the learned filter network. These positive sentence sets are the subset of cleaned positive sentence sets. This part is explained in the code.</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="如何划分N和P"><a href="#如何划分N和P" class="headerlink" title="如何划分N和P?"></a>如何划分N和P?</h1><p>这个问题来自issue 4:</p>
+<p><a href="https://github.com/Panda0406/Adversarial-Learning-Distant-Supervision-RE/issues/4" target="_blank" rel="noopener">https://github.com/Panda0406/Adversarial-Learning-Distant-Supervision-RE/issues/4</a></p>
+<blockquote>
+<p>论文中写道关于数据集DS已经划分了N和P，这部分是数据集本身就已经提供的还是人为又自己划分的？另外N^D和N^G具体怎么划分？</p>
+</blockquote>
+<p>第一个问题：通过阅读作者的源代码，N是指NA数据，P是指除去NA外的其他数据。作者训练了一个CNN的二分类器，用于区分P和N，然后取N中排在前300000的样本作为负样本 (good_negative) 。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">filter_negative</span><span class="params">(embeddings, inputs, rela2sents, args)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    利用 RANK_CNN 筛选 NA 样本，用于 GAN 训练</span></span><br><span class="line"><span class="string">    Select high-quality negative samples for robust result.</span></span><br><span class="line"><span class="string">    rela2sents: 关系 r 对应的句子列表 (去除 same)</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">'\n\n############## Training Rank_CNN ##############'</span></span><br><span class="line"></span><br><span class="line">    pos_data, neg_data = list(), list()</span><br><span class="line">    <span class="keyword">for</span> k, v <span class="keyword">in</span> rela2sents.items():</span><br><span class="line">        <span class="keyword">if</span> k != <span class="number">0</span>:</span><br><span class="line">            pos_data += v</span><br><span class="line">    neg_data = rela2sents[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">print</span> <span class="string">'positive size:'</span>, len(pos_data), <span class="string">'negative size:'</span>, len(neg_data)  <span class="comment"># nonna 和 na</span></span><br><span class="line"></span><br><span class="line">    rank_model = Rank_CNN(embeddings, args, emb_change=<span class="literal">True</span>)</span><br><span class="line">    rank_model = rank_model.cuda() <span class="keyword">if</span> use_cuda <span class="keyword">else</span> rank_model</span><br><span class="line"></span><br><span class="line">    x = pos_data+neg_data</span><br><span class="line">    y = [<span class="number">1</span>]*len(pos_data)+[<span class="number">0</span>]*len(neg_data)</span><br><span class="line">    trainloader = generate_trainloader(inputs, x, y, args.batch_size, shuf=<span class="literal">True</span>)</span><br><span class="line">    parameters = filter(<span class="keyword">lambda</span> p: p.requires_grad, rank_model.parameters())</span><br><span class="line">    optimizer = optim.Adam(parameters, lr=<span class="number">0.0005</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">        <span class="comment">#rank_model.train()</span></span><br><span class="line">        corrects, total, accuracy = <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i, (x, y) <span class="keyword">in</span> enumerate(trainloader, <span class="number">0</span>):</span><br><span class="line">            logits = calculate_logits(rank_model, x, args.max_sent)</span><br><span class="line">            y = y.type(LongTensor)</span><br><span class="line">            loss = calculate_loss(logits, y)</span><br><span class="line">            optimizer.zero_grad()</span><br><span class="line">            loss.backward()</span><br><span class="line">            optimizer.step()</span><br><span class="line"></span><br><span class="line">            corrects += (torch.max(logits, <span class="number">1</span>)[<span class="number">1</span>].view(y.size()).data == y).sum()</span><br><span class="line">            total += int(y.size()[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> i % args.log_interval == <span class="number">0</span>:</span><br><span class="line">                accuracy = <span class="number">100.0</span> * corrects / total</span><br><span class="line">                time_str = datetime.datetime.now().isoformat()</span><br><span class="line">                sys.stdout.write(<span class="string">"[rank_data] epoch %d step %d | loss : %f, accuracy: %f"</span> % (epoch, i, loss.data[<span class="number">0</span>], accuracy) + <span class="string">'\r'</span>)</span><br><span class="line">                sys.stdout.flush()</span><br><span class="line">        <span class="keyword">print</span> <span class="string">''</span></span><br><span class="line"></span><br><span class="line">        accuracy, accuracy_non_NA = calculate_accuracy(trainloader, rank_model, args, epoch)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> accuracy_non_NA &gt; <span class="number">90.0</span>:  <span class="comment"># 这一步是否就是作者说的让模型过拟合? #</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    torch.save(rank_model.state_dict(), <span class="string">'./models/Rank.pkl'</span>)</span><br><span class="line">    GAN_train_data = deepcopy(rela2sents)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"\n##############  Selecting high-quality negative samples  ##############"</span></span><br><span class="line">    <span class="comment"># 选取排在前 300000 的负样本 #</span></span><br><span class="line">    good_negative = select_negative(rank_model, rela2sents[<span class="number">0</span>], inputs, args.max_sent)</span><br><span class="line">    GAN_train_data[<span class="number">0</span>] = good_negative</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"We select %d high-quality negative sentences"</span> % (len(good_negative))</span><br><span class="line">    pickle.dump(GAN_train_data, open(<span class="string">'./data/GAN_train_data.pkl'</span>, <span class="string">'wb'</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> GAN_train_data</span><br></pre></td></tr></table></figure>
+<p>第二个问题：$N^D$ 和 $N^G$ 的划分是随机划分的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sample_negative_set</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="string">"""随机采样划分负样本"""</span></span><br><span class="line">    <span class="keyword">if</span> len(self.pos_data) &lt; <span class="number">10000</span>:</span><br><span class="line">        nl = <span class="number">50000</span></span><br><span class="line">        neg_sample = self.neg_data[:<span class="number">100000</span>]</span><br><span class="line">        G_neg_data = [neg_sample[<span class="number">2</span>*i] <span class="keyword">for</span> i <span class="keyword">in</span> range(nl)]</span><br><span class="line">        G_neg_data = random.sample(G_neg_data, max(<span class="number">5</span>*len(self.pos_data), <span class="number">20000</span>))</span><br><span class="line">        D_neg_data = [neg_sample[<span class="number">2</span>*i+<span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> range(nl)]</span><br><span class="line">        D_neg_data = random.sample(D_neg_data, max(<span class="number">5</span>*len(self.pos_data), <span class="number">20000</span>))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        nl = min(<span class="number">5</span>*len(self.pos_data), <span class="number">150000</span>)</span><br><span class="line">        neg_sample = self.neg_data[:<span class="number">2</span>*nl]</span><br><span class="line">        G_neg_data = [neg_sample[<span class="number">2</span>*i] <span class="keyword">for</span> i <span class="keyword">in</span> range(nl)]</span><br><span class="line">        D_neg_data = [neg_sample[<span class="number">2</span>*i+<span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> range(nl)]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Positive_total: %d, G_negative: %d, D_negative: %d"</span> %(len(self.pos_data), len(G_neg_data), len(D_neg_data))</span><br><span class="line"></span><br><span class="line">    self.G_neg_data = G_neg_data</span><br><span class="line">    self.D_neg_data = D_neg_data</span><br></pre></td></tr></table></figure>
+<h1 id="Variable"><a href="#Variable" class="headerlink" title="Variable"></a>Variable</h1><p>由于代码是采用早期pytorch版本实现，所以依然存在Variable这样的写法。</p>
+<blockquote>
+<p>variable是tensor的外包装，data属性存储着tensor数据，grad属性存储关于该变量的导数，creator是代表该变量的创造者</p>
+</blockquote>
+<p>但是在目前采用的pytorch 1.x 版本，Variable已经和Tensor合并，所以无需过于在意~</p>
+<h1 id="batch-size-大小"><a href="#batch-size-大小" class="headerlink" title="batch_size 大小"></a>batch_size 大小</h1><p>在对生成器、判别器进行预训练时，batch_size 设的特别大，源代码中如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x = pos_data + neg_data</span><br><span class="line">y = [<span class="number">1</span>] * len(pos_data) + [<span class="number">0</span>] * len(neg_data)</span><br><span class="line">batch_size = int(len(y) / <span class="number">50</span>) + <span class="number">1</span>  </span><br><span class="line"><span class="comment"># batch_size 很大, 对于 pos=5000, neg=30000, 则 batch_size = 700 !!</span></span><br></pre></td></tr></table></figure>
+<h2 id="不知道设置这么大的-batch-size-依据是什么？"><a href="#不知道设置这么大的-batch-size-依据是什么？" class="headerlink" title="不知道设置这么大的 batch_size 依据是什么？"></a>不知道设置这么大的 batch_size 依据是什么？</h2><p>有时间的话，对 batch_size 的实际设置的影响，进行实验探究。</p>
+<h1 id="强化学习优化过程"><a href="#强化学习优化过程" class="headerlink" title="强化学习优化过程"></a>强化学习优化过程</h1><p>首先，为每个样本计算 logits，然后以 logits 为概率，为每个样本赋予0, 1标签，这一步是一个按概率随机采样的过程，即<code>action</code>步。</p>
+<p>具体代码为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">select_action</span><span class="params">(self, model, x, random=True)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    为每一个样本按照概率赋予标签</span></span><br><span class="line"><span class="string">    :param model:</span></span><br><span class="line"><span class="string">    :param x:</span></span><br><span class="line"><span class="string">    :param random: 是否引入随机性</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    probs = calculate_prob(model, x, self.max_sent, self.inputs, detach=<span class="literal">True</span>)</span><br><span class="line">    actions_probs = probs[:, <span class="number">1</span>]</span><br><span class="line">    <span class="keyword">if</span> random:</span><br><span class="line">        actions = list()</span><br><span class="line">        <span class="keyword">for</span> prob <span class="keyword">in</span> probs:</span><br><span class="line">            <span class="keyword">if</span> abs(prob[<span class="number">0</span>]-prob[<span class="number">1</span>])&lt;<span class="number">0.3</span>:  <span class="comment"># 如果概率相差不大, 就按概率选择</span></span><br><span class="line">                actions.append(int(np.random.choice(np.arange(<span class="number">2</span>), p=prob)))</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                actions.append(int(np.argmax(prob)))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        actions = list(np.argmax(probs, axis=<span class="number">1</span>))</span><br><span class="line">    <span class="keyword">return</span> actions</span><br></pre></td></tr></table></figure>
+<p>根据actions中的0, 1标签，可以将样本划分为high_conf_sents 和 low_conf_sents，即可以根据Generator划分高置信度样本和低置信度样本。然后用它们去训练Discriminator。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train_Discriminator</span><span class="params">(self, high_conf_sents, low_conf_sents)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    :param high_conf_sents: 由 Generator 预测的正样本集</span></span><br><span class="line"><span class="string">    :param low_conf_sents: 由 Generator 预测的负样本集</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    bag_size = len(high_conf_sents + low_conf_sents)</span><br><span class="line">    pp = float(len(low_conf_sents) / bag_size)</span><br><span class="line">    <span class="comment"># 动态调整学习率, high_conf_sents 占比越大, 学习率越高 #</span></span><br><span class="line">    self.D_optimizer.param_groups[<span class="number">0</span>][<span class="string">'lr'</span>] = self.D_lr * (<span class="number">1</span> - pp)</span><br><span class="line">    <span class="string">"""在这里把标签进行了置换"""</span></span><br><span class="line">    trainloader = generate_trainloader(self.inputs, low_conf_sents, [<span class="number">1</span>] * len(low_conf_sents),</span><br><span class="line">                                       batch_size=len(low_conf_sents), shuf=<span class="literal">False</span>)</span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> range(self.D_epoch):</span><br><span class="line">        self.Discriminator.train()</span><br><span class="line">        <span class="keyword">for</span> i, (x, y) <span class="keyword">in</span> enumerate(trainloader):</span><br><span class="line">            logits = calculate_logits(self.Discriminator, x, self.max_sent)</span><br><span class="line">            loss = calculate_loss(logits, y)</span><br><span class="line">            self.D_optimizer.zero_grad()</span><br><span class="line">            loss.backward()</span><br><span class="line">            self.D_optimizer.step()</span><br><span class="line"></span><br><span class="line">    self.D_optimizer.param_groups[<span class="number">0</span>][<span class="string">'lr'</span>] = self.D_lr * pp</span><br><span class="line">    trainloader = generate_trainloader(self.inputs, high_conf_sents, [<span class="number">0</span>] * len(high_conf_sents),</span><br><span class="line">                                       batch_size=len(high_conf_sents), shuf=<span class="literal">False</span>)</span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> range(self.D_epoch):</span><br><span class="line">        self.Discriminator.train()</span><br><span class="line">        <span class="keyword">for</span> i, (x, y) <span class="keyword">in</span> enumerate(trainloader):</span><br><span class="line">            logits = calculate_logits(self.Discriminator, x, self.max_sent)</span><br><span class="line">            loss = calculate_loss(logits, y)</span><br><span class="line">            self.D_optimizer.zero_grad()</span><br><span class="line">            loss.backward()</span><br><span class="line">            self.D_optimizer.step()</span><br></pre></td></tr></table></figure>
+<p>上面将正负样本的标签置换，用”错误“的标签去训练Discriminator，按照自然的想法，Discriminator效果会下降，而下面的<code>reward</code>的计算就要用到这个下降幅度作为指标。</p>
+<p>在具体的reward计算过程中，步骤如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">""" ================================= 强化学习 =============================== """</span></span><br><span class="line"><span class="keyword">if</span> is_Training:</span><br><span class="line">    D_pos_prob_list = [self.D_pos_prob_dict[i][bag_id] <span class="keyword">for</span> i <span class="keyword">in</span> range(epoch)]</span><br><span class="line">    D_neg_prob_list = [self.D_neg_prob_dict[i][bag_id] <span class="keyword">for</span> i <span class="keyword">in</span> range(epoch)]</span><br><span class="line">    self.D_pos_prob_dict[epoch].append(D_pos_prob)</span><br><span class="line">    self.D_neg_prob_dict[epoch].append(D_neg_prob)</span><br><span class="line">    <span class="keyword">if</span> epoch &gt; <span class="number">0</span>:</span><br><span class="line">        reward_PD = max(D_pos_prob_list) - self.D_pos_prob_dict[epoch][bag_id]</span><br><span class="line">        reward_ND = max(D_neg_prob_list) - self.D_neg_prob_dict[epoch][bag_id]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        reward_PD = <span class="number">0.01</span></span><br><span class="line">        reward_ND = <span class="number">0.01</span></span><br><span class="line">    reward = <span class="number">100</span> * (reward_PD + reward_ND + <span class="number">0.05</span>)</span><br><span class="line">    <span class="string">""" ===================================================================== """</span></span><br></pre></td></tr></table></figure>
+<font color="red">这里我有一个困惑，按照道理，应该希望D_pos_prob越小越好，D_neg_prob越大越好，但是作者却对两者进行了同样的处理？！</font>
+
+<p>根据我的理解，reward_ND应该正好和reward_PD目标相反，即：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reward_ND = self.D_neg_prob_dict[epoch][bag_id] - max(D_neg_prob_list)</span><br></pre></td></tr></table></figure>
+<h2 id="不知道是不是一个bug"><a href="#不知道是不是一个bug" class="headerlink" title="不知道是不是一个bug?"></a>不知道是不是一个bug?</h2><h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><ol>
+<li>在代码实现中，用到了deepcopy()，用于深复制一个对象：</li>
+</ol>
+<blockquote>
+<p> copy.deepcopy(x[, memo])</p>
+<pre><code> Return a deep copy of x.
+</code></pre></blockquote>
+<ol>
+<li>在将args参数赋给模型的时候，手动写可能要好多行，可以使用<code>setattr()</code>函数，按照以下写法：</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> k, v <span class="keyword">in</span> vars(args).items(): </span><br><span class="line">    setattr(self, k, v)</span><br></pre></td></tr></table></figure>
+<ol>
+<li>对词向量的初始化采用均匀分布：</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">word2id[<span class="string">'UNK'</span>] = W_size+<span class="number">1</span></span><br><span class="line">W[W_size+<span class="number">1</span>] = np.random.uniform(<span class="number">-0.25</span>, <span class="number">0.25</span>, w_dim)  <span class="comment"># UNK</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>保存数组或列表：</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">numpy.savez(file, *args, **kwds)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Save several arrays into a single file in uncompressed .npz format.</p>
+</blockquote>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>总而言之，DSGAN是希望利用NA数据提供监督信息，使得模型能够区分开TP和FP，整体流程可以概括如下：</p>
+<ol>
+<li>选取样本数大于1500的关系作为POS，训练RANK-CNN，选取难以辨别的前300,000个NA样本作为负样本</li>
+<li>针对每个关系R：<ol>
+<li>利用全部POS, NA预训练G和D，以二分类为目标</li>
+<li>固定住除全连接层以外的所有参数</li>
+<li>如果正样本过多，随机选取7800个；对负样本，选取最难区分的前5000个</li>
+<li>用Generator生成概率，按照概率执行select_action()，并根据action将POS minibatch划分为high_conf_sents, low_conf_sents</li>
+<li>赋予high_conf_sents标签1，low_conf_sents标签0，训练Discriminator；显然，Discriminator表现会变差，因为接受了错误的训练导向。</li>
+<li>根据Discriminator在high_conf_sents, NA上的概率值，计算reward</li>
+<li>训练优化器</li>
+</ol>
+</li>
+<li>选取使D效果下降最多的G，并对POS二分类，实现FP的去除。</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/GAN/" rel="tag"><i class="fa fa-tag"></i> GAN</a>
+          
+            <a href="/tags/Distant-Supervision/" rel="tag"><i class="fa fa-tag"></i> Distant Supervision</a>
+          
+            <a href="/tags/RE/" rel="tag"><i class="fa fa-tag"></i> RE</a>
+          
+            <a href="/tags/DSGAN/" rel="tag"><i class="fa fa-tag"></i> DSGAN</a>
+          
+            <a href="/tags/noise/" rel="tag"><i class="fa fa-tag"></i> noise</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/12/07/Windows10蓝牙设备删除失败/" rel="next" title="Windows10蓝牙设备删除失败">
+                <i class="fa fa-chevron-left"></i> Windows10蓝牙设备删除失败
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/12/08/Byte-Pair-Embedding-vs-Word-Embedding/" rel="prev" title="Byte Pair Embedding vs Word Embedding">
+                Byte Pair Embedding vs Word Embedding <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/漫画脸1vs1.jpg" alt="dinosaur">
+            
+              <p class="site-author-name" itemprop="name">dinosaur</p>
+              <div class="site-description motion-element" itemprop="description">闪耀的群星，颠覆着黑夜</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">371</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hao-Kailong" title="GitHub &rarr; https://github.com/Hao-Kailong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/klhao.nju@gmail.com" title="Email &rarr; klhao.nju@gmail.com"><i class="fa fa-fw fa-envelope"></i>Email</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#clean数据"><span class="nav-text">clean数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何划分N和P"><span class="nav-text">如何划分N和P?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Variable"><span class="nav-text">Variable</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#batch-size-大小"><span class="nav-text">batch_size 大小</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#不知道设置这么大的-batch-size-依据是什么？"><span class="nav-text">不知道设置这么大的 batch_size 依据是什么？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#强化学习优化过程"><span class="nav-text">强化学习优化过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#不知道是不是一个bug"><span class="nav-text">不知道是不是一个bug?</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他"><span class="nav-text">其他</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dinosaur</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+      <div>
+        <div class="addthis_inline_share_toolbox">
+  <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cb429b1d763f1d4" async="async"></script>
+</div>
+
+      </div>
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script id="dsq-count-scr" src="https://dinosaur7.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://haokailong.top/2020/12/07/关于DSGAN的细节/";
+    this.page.identifier = "2020/12/07/关于DSGAN的细节/";
+    this.page.title = '关于DSGAN的细节';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dinosaur7.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

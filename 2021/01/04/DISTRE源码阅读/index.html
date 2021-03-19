@@ -1,0 +1,2164 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="DsoDHJ1Km7LX7l7UnoG8dB2QrygUWW345_JkdBOj1Vw">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="ahe2m7RGVx">
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italicRoboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/solar-system-16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/solar-system-32.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Instance模型部分1234567891011121314151617def forward(self,            sentence: Dict[str, torch.Tensor],            label: torch.Tensor = None) -&amp;gt; torch.Tensor:        sentence_encoded = self.embedder(">
+<meta name="keywords" content="DISTRE,source code,relation extraction">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DISTRE源码阅读">
+<meta property="og:url" content="http://haokailong.top/2021/01/04/DISTRE源码阅读/index.html">
+<meta property="og:site_name" content="Hold the Torch">
+<meta property="og:description" content="Instance模型部分1234567891011121314151617def forward(self,            sentence: Dict[str, torch.Tensor],            label: torch.Tensor = None) -&amp;gt; torch.Tensor:        sentence_encoded = self.embedder(">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-01-07T08:16:24.839Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DISTRE源码阅读">
+<meta name="twitter:description" content="Instance模型部分1234567891011121314151617def forward(self,            sentence: Dict[str, torch.Tensor],            label: torch.Tensor = None) -&amp;gt; torch.Tensor:        sentence_encoded = self.embedder(">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://haokailong.top/2021/01/04/DISTRE源码阅读/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>DISTRE源码阅读 | Hold the Torch</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-138297445-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-138297445-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hold the Torch</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-wordcloud">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/wordcloud/" rel="section"><i class="menu-item-icon fa fa-fw fa-cloud"></i> <br>词云</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/04/DISTRE源码阅读/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">DISTRE源码阅读
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-01-07 16:16:24" itemprop="dateModified" datetime="2021-01-07T16:16:24+08:00">2021-01-07</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/Distant-Supervision/" itemprop="url" rel="index"><span itemprop="name">Distant Supervision</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/01/04/DISTRE源码阅读/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/04/DISTRE源码阅读/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Instance模型部分"><a href="#Instance模型部分" class="headerlink" title="Instance模型部分"></a>Instance模型部分</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self,</span></span></span><br><span class="line"><span class="function"><span class="params">            sentence: Dict[str, torch.Tensor],</span></span></span><br><span class="line"><span class="function"><span class="params">            label: torch.Tensor = None)</span> -&gt; torch.Tensor:</span></span><br><span class="line">    </span><br><span class="line">    sentence_encoded = self.embedder(sentence[<span class="string">'byte_pairs'</span>])</span><br><span class="line"></span><br><span class="line">    output = &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> label <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        output[<span class="string">"loss"</span>] = self._loss(sentence, sentence_encoded, label)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> self.clf_head <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        byte_pairs = sentence[<span class="string">'byte_pairs'</span>][:, :sentence_encoded.size(<span class="number">1</span>)]</span><br><span class="line">        clf_logits = self.clf_head(sentence_encoded, byte_pairs)</span><br><span class="line">        output[<span class="string">'logits'</span>] = clf_logits</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> output</span><br></pre></td></tr></table></figure>
+<p>模型很简单，主要分为两个部分，一个编码器，一个分类器。下面去看<code>_loss()</code>和<code>clf_head()</code>函数。</p>
+<a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_loss</span><span class="params">(self, sentence: Dict[str, torch.Tensor], sentence_encoded: torch.Tensor, label: torch.Tensor)</span>:</span></span><br><span class="line">    lm_losses = <span class="number">0.</span></span><br><span class="line">    clf_losses = <span class="number">0.</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># [n_batch, seq_len]</span></span><br><span class="line">    byte_pairs = sentence[<span class="string">'byte_pairs'</span>][:, :sentence_encoded.size(<span class="number">1</span>)]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> self.lm_head <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="comment"># [n_batch, seq_len]</span></span><br><span class="line">        mask = (byte_pairs != <span class="number">0</span>).float()</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># (n_batch, seq_len - 1)</span></span><br><span class="line">        lm_logits = self.lm_head(sentence_encoded)</span><br><span class="line">        <span class="comment">#print('lm_logits:', lm_logits.shape)</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># [n_batch * (seq_len - 1)]</span></span><br><span class="line">        byte_pairs_shifted = byte_pairs[:, <span class="number">1</span>:].contiguous().view(<span class="number">-1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># [n_batch * (seq_len - 1)]</span></span><br><span class="line">        lm_losses = nn.CrossEntropyLoss(reduce=<span class="literal">False</span>)(lm_logits, byte_pairs_shifted)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># [n_batch, seq_len - 1]</span></span><br><span class="line">        lm_losses = lm_losses.view(byte_pairs.size(<span class="number">0</span>), byte_pairs.size(<span class="number">1</span>) - <span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># [n_batch, seq_len - 1]</span></span><br><span class="line">        lm_losses = lm_losses * mask[:, <span class="number">1</span>:]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># [n_batch * (seq_len - 1)]</span></span><br><span class="line">        lm_losses = lm_losses.sum(dim=<span class="number">1</span>) / torch.sum(mask[:, <span class="number">1</span>:], dim=<span class="number">1</span>)</span><br><span class="line">        lm_losses = lm_losses.mean()</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">if</span> self.clf_head <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        clf_logits = self.clf_head(sentence_encoded, byte_pairs)</span><br><span class="line">        <span class="keyword">if</span> clf_logits.size(<span class="number">0</span>) != label.size(<span class="number">0</span>):</span><br><span class="line">            torch.save(sentence, <span class="string">'./sentence.pt'</span>)</span><br><span class="line">        clf_losses = nn.CrossEntropyLoss(reduce=<span class="literal">False</span>)(clf_logits, label)</span><br><span class="line">        clf_losses = clf_losses.mean()</span><br><span class="line">        </span><br><span class="line">    loss = clf_losses + self.language_model_weight * lm_losses</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> loss</span><br></pre></td></tr></table></figure>
+<p>值得注意的是，在进行模型的训练时，除了关系分类的损失，还添加了预训练模型的损失，对于GPT是预测下一个单词，对于BERT是MLM。<strong>并且给language_model_weight赋予0.5的权重</strong>。</p>
+<p>对于编码器和分类器，分别按照以下代码实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LanguageModelHead</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line">    <span class="string">""" Language Model Head for the transformer """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, model)</span>:</span></span><br><span class="line">        super(LanguageModelHead, self).__init__()</span><br><span class="line">        self.n_embd = model.embed.embedding_dim</span><br><span class="line">        self.decoder = model.decoder</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, h)</span>:</span></span><br><span class="line">        <span class="comment"># Truncated Language modeling logits (we remove the last token)</span></span><br><span class="line">        h_trunc = h[:, :<span class="number">-1</span>].contiguous().view(<span class="number">-1</span>, self.n_embd)</span><br><span class="line">        lm_logits = self.decoder(h_trunc)</span><br><span class="line">        <span class="keyword">return</span> lm_logits</span><br></pre></td></tr></table></figure>
+<p>这里的decoder()可能是GPT独有的，在transformer提供的代码里对应到BERT模型没有相应的模块。</p>
+<h2 id="BERT模型"><a href="#BERT模型" class="headerlink" title="BERT模型"></a>BERT模型</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">  (11): BertLayer(</span><br><span class="line">    (attention): BertAttention(</span><br><span class="line">      (self): BertSelfAttention(</span><br><span class="line">        (query): Linear(in_features=768, out_features=768, bias=True)</span><br><span class="line">        (key): Linear(in_features=768, out_features=768, bias=True)</span><br><span class="line">        (value): Linear(in_features=768, out_features=768, bias=True)</span><br><span class="line">        (dropout): Dropout(p=0.1, inplace=False)</span><br><span class="line">      )</span><br><span class="line">      (output): BertSelfOutput(</span><br><span class="line">        (dense): Linear(in_features=768, out_features=768, bias=True)</span><br><span class="line">        (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)</span><br><span class="line">        (dropout): Dropout(p=0.1, inplace=False)</span><br><span class="line">      )</span><br><span class="line">    )</span><br><span class="line">    (intermediate): BertIntermediate(</span><br><span class="line">      (dense): Linear(in_features=768, out_features=3072, bias=True)</span><br><span class="line">    )</span><br><span class="line">    (output): BertOutput(</span><br><span class="line">      (dense): Linear(in_features=3072, out_features=768, bias=True)</span><br><span class="line">      (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)</span><br><span class="line">      (dropout): Dropout(p=0.1, inplace=False)</span><br><span class="line">    )</span><br><span class="line">  )</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>BERT中的一层主要由<code>BertAttention</code> <code>BertIntermediate</code> <code>BertOutput</code>构成，<font color="orange">BertIntermediate将768维的向量转化为3072维，是一种升维的操作！</font></p>
+<p>而BERTPooler是最终<code>[CLS]</code>的表示，通过以下方式：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(pooler): BertPooler(</span><br><span class="line">      (dense): Linear(in_features=768, out_features=768, bias=True)</span><br><span class="line">      (activation): Tanh()</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+<p>由上面的讲解可知，pooler层的输入是transformer最后一层的输出，[batch_size, seq_length, hidden_size]</p>
+<p><strong>取出每一句的第一个单词，做全连接和激活。</strong>得到的输出可以用来分类等下游任务（即将每个句子的第一个单词的表示作为整个句子的表示）  </p>
+<font color="red">并没有进行MaxPooling等操作，这个叫法确实有点迷惑。。。</font>
+
+<p>再去看分类模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ClassificationHead</span><span class="params">(TaskHead)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, model, n_class, clf_token, dropout=<span class="number">0.</span>)</span>:</span></span><br><span class="line">        super(ClassificationHead, self).__init__()</span><br><span class="line">        self.n_embd = model.embed.embedding_dim</span><br><span class="line">        self.clf_token = clf_token</span><br><span class="line">        self.dropout = nn.Dropout(dropout)</span><br><span class="line">        self.linear = nn.Linear(self.n_embd, n_class)</span><br><span class="line"></span><br><span class="line">        nn.init.normal_(self.linear.weight, std = <span class="number">0.02</span>)</span><br><span class="line">        nn.init.normal_(self.linear.bias, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, h, x)</span>:</span></span><br><span class="line">        clf_h = h.contiguous().view(<span class="number">-1</span>, self.n_embd)</span><br><span class="line">        flat = x.contiguous().view(<span class="number">-1</span>)</span><br><span class="line">        clf_h = clf_h[flat == self.clf_token, :]</span><br><span class="line">        clf_h = self.dropout(clf_h)</span><br><span class="line">        clf_logits = self.linear(clf_h)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> clf_logits</span><br></pre></td></tr></table></figure>
+<p>就是在句子表示<code>__clf__</code>后面加了一层全连接层，<strong>没有激活，没有多层</strong>。</p>
+<h2 id="语法糖"><a href="#语法糖" class="headerlink" title="语法糖"></a>语法糖</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> itemgetter</span><br><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> groupby</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_scopes</span><span class="params">(x)</span>:</span></span><br><span class="line">    scopes = []</span><br><span class="line">    <span class="keyword">for</span> k, g <span class="keyword">in</span> groupby(enumerate(x), <span class="keyword">lambda</span> i_x: i_x[<span class="number">1</span>]):</span><br><span class="line">        group = list(map(itemgetter(<span class="number">0</span>), g))</span><br><span class="line">        scopes.append((group[<span class="number">0</span>], group[<span class="number">-1</span>]+<span class="number">1</span>))</span><br><span class="line">    <span class="keyword">return</span> scopes</span><br></pre></td></tr></table></figure>
+<h1 id="Bag模型部分"><a href="#Bag模型部分" class="headerlink" title="Bag模型部分"></a>Bag模型部分</h1><p>依然是从<code>forward()</code>函数入手：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self,</span></span></span><br><span class="line"><span class="function"><span class="params">            sentence: Dict[str, torch.Tensor],</span></span></span><br><span class="line"><span class="function"><span class="params">            metadata: List[Dict[str, Any]],</span></span></span><br><span class="line"><span class="function"><span class="params">            label: torch.Tensor = None)</span> -&gt; torch.Tensor:</span></span><br><span class="line">    </span><br><span class="line">    byte_pairs = sentence[<span class="string">'byte_pairs'</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> self.training <span class="keyword">and</span> self.entity_dropout &gt; <span class="number">0.</span>:</span><br><span class="line">        dropout_mask = get_entity_dropout_mask(byte_pairs, self.encoder_vocab[self.del1_token], self.encoder_vocab[self.del2_token], self.entity_dropout)</span><br><span class="line">        byte_pairs = byte_pairs.masked_fill(dropout_mask, self.encoder_vocab[self.mask_token])</span><br><span class="line"></span><br><span class="line">    sentence_encoded = self.embedder(byte_pairs)</span><br><span class="line">    </span><br><span class="line">    output = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    instance_ids = [md[<span class="string">'instance_id'</span>] <span class="keyword">for</span> md <span class="keyword">in</span> metadata]</span><br><span class="line">    scopes = get_scopes(instance_ids)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> label <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        output[<span class="string">"loss"</span>] = self._loss(sentence, sentence_encoded, scopes, label)</span><br><span class="line">    </span><br><span class="line">    clf_logits, clf_h = self.clf_head(sentence, sentence_encoded, scopes, label)</span><br><span class="line">    output[<span class="string">'instances'</span>] = [metadata[idx] <span class="keyword">for</span> idx, _ <span class="keyword">in</span> scopes]</span><br><span class="line">    output[<span class="string">'logits'</span>] = clf_logits</span><br><span class="line">    output[<span class="string">'clf_h'</span>] = clf_h</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> output</span><br></pre></td></tr></table></figure>
+<p>首先注意到<code>get_entity_dropout_mask()</code>函数，函数体为下文所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_entity_mask</span><span class="params">(x, del1, del2)</span>:</span></span><br><span class="line">    a = torch.arange(x.size(<span class="number">1</span>)).expand_as(x).type_as(x)</span><br><span class="line">    pos_del1 = a[x == del1].unsqueeze(<span class="number">1</span>)</span><br><span class="line">    pos_del2 = a[x == del2].unsqueeze(<span class="number">1</span>)</span><br><span class="line">    mask_ent1 = (<span class="number">0</span> &lt; a) &amp; (a &lt; pos_del1)</span><br><span class="line">    mask_ent2 = (pos_del1 &lt; a) &amp; (a &lt; pos_del2)</span><br><span class="line">    <span class="keyword">return</span> mask_ent1, mask_ent2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_entity_dropout_mask</span><span class="params">(x, del1, del2, dropout_probability=<span class="number">.1</span>)</span>:</span></span><br><span class="line">    mask_ent1, mask_ent2 = get_entity_mask(x, del1, del2)</span><br><span class="line">    binary_mask_ent1 = x.new(x.size(<span class="number">0</span>), <span class="number">1</span>).bernoulli_(<span class="number">1</span> - dropout_probability)</span><br><span class="line">    binary_mask_ent2 = x.new(x.size(<span class="number">0</span>), <span class="number">1</span>).bernoulli_(<span class="number">1</span> - dropout_probability)</span><br><span class="line">    <span class="keyword">return</span> (binary_mask_ent1 * mask_ent1.long() + binary_mask_ent2 * mask_ent2.long()).byte()</span><br></pre></td></tr></table></figure>
+<p>不同于直接进行mask操作，<strong>值得注意的是，在DISTRE中引入了DROPOUT操作</strong>，这是我之前没有尝试过的。</p>
+<p>回到<code>forward()</code>函数，里面用<code>get_scopes()</code>函数获取一个包的句子范围，也就是上面提到的语法糖部分。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_loss</span><span class="params">(self, sentence: Dict[str, torch.Tensor], sentence_encoded: torch.Tensor, scopes: List[Tuple[int, int]], label: torch.Tensor)</span>:</span></span><br><span class="line">    lm_losses = <span class="number">0.</span></span><br><span class="line">    clf_losses = <span class="number">0.</span></span><br><span class="line"></span><br><span class="line">    bag_label_indices = [start <span class="keyword">for</span> start, _ <span class="keyword">in</span> scopes]</span><br><span class="line">    bag_label = label[bag_label_indices]  <span class="comment"># 对维度进行了一个缩减</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># [n_batch, seq_len]</span></span><br><span class="line">    byte_pairs = sentence[<span class="string">'byte_pairs'</span>][:, :sentence_encoded.size(<span class="number">1</span>)]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> self.lm_head <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="comment"># [n_batch, seq_len]</span></span><br><span class="line">        mask = (byte_pairs != <span class="number">0</span>).float()</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># (n_batch, seq_len - 1)</span></span><br><span class="line">        lm_logits = self.lm_head(sentence_encoded)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># [n_batch * (seq_len - 1)]</span></span><br><span class="line">        byte_pairs_shifted = byte_pairs[:, <span class="number">1</span>:].contiguous().view(<span class="number">-1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># [n_batch * (seq_len - 1)]</span></span><br><span class="line">        lm_losses = nn.CrossEntropyLoss(reduce=<span class="literal">False</span>)(lm_logits, byte_pairs_shifted)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># [n_batch, seq_len - 1]</span></span><br><span class="line">        lm_losses = lm_losses.view(byte_pairs.size(<span class="number">0</span>), byte_pairs.size(<span class="number">1</span>) - <span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># [n_batch, seq_len - 1]</span></span><br><span class="line">        lm_losses = lm_losses * mask[:, <span class="number">1</span>:]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># [n_batch * (seq_len - 1)]</span></span><br><span class="line">        lm_losses = lm_losses.sum(dim=<span class="number">1</span>) / torch.sum(mask[:, <span class="number">1</span>:], dim=<span class="number">1</span>)</span><br><span class="line">        lm_losses = lm_losses.mean()</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">if</span> self.clf_head <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        clf_logits, _ = self.clf_head(sentence, sentence_encoded, scopes, label=label)</span><br><span class="line">        clf_losses = nn.CrossEntropyLoss(reduce=<span class="literal">False</span>)(clf_logits, bag_label)</span><br><span class="line">        clf_losses = clf_losses.mean()</span><br><span class="line">        </span><br><span class="line">    loss = clf_losses + self.language_model_weight * lm_losses</span><br><span class="line"></span><br><span class="line">    self.metrics[<span class="string">'accuracy'</span>](clf_logits, bag_label)</span><br><span class="line">    self.metrics[<span class="string">'not_na_accuracy'</span>](clf_logits, bag_label, mask=torch.ne(bag_label, self.na_idx))</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> loss</span><br></pre></td></tr></table></figure>
+<p>对于语言模型损失，Bag相对于Instance级别没有什么改变。但是对于分类损失，有添加注意力机制：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BagClassificationHead</span><span class="params">(TaskHead)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, model, n_class, encoder_vocab, clf_token, selector, dropout=<span class="number">0.</span>)</span>:</span></span><br><span class="line">        super(BagClassificationHead, self).__init__()</span><br><span class="line">        self.n_embd = model.embed.embedding_dim</span><br><span class="line">        self.encoder_vocab = encoder_vocab</span><br><span class="line">        self.clf_token = clf_token</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> selector == <span class="string">'average'</span>:</span><br><span class="line">            self.selector = Average(model, n_class, dropout)</span><br><span class="line">        <span class="keyword">elif</span> selector == <span class="string">'attention'</span>:</span><br><span class="line">            self.selector = Attention(model, n_class, dropout)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">f"Selector '<span class="subst">&#123;selector&#125;</span>' not supported."</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, sentence: Dict[str, torch.Tensor], sentence_encoded: torch.Tensor, scopes: List[Tuple[int, int]], label: torch.Tensor)</span>:</span></span><br><span class="line">        x = sentence[<span class="string">'byte_pairs'</span>][:, :sentence_encoded.size(<span class="number">1</span>)]</span><br><span class="line">        h = sentence_encoded</span><br><span class="line"></span><br><span class="line">        clf_token_idx = self.encoder_vocab[self.clf_token]</span><br><span class="line"></span><br><span class="line">        clf_h = h.contiguous().view(<span class="number">-1</span>, self.n_embd)</span><br><span class="line">        flat = x.contiguous().view(<span class="number">-1</span>)</span><br><span class="line">        clf_h = clf_h[flat == clf_token_idx, :]</span><br><span class="line">        clf_logits = self.selector(clf_h, scopes, label)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> clf_logits, clf_h</span><br></pre></td></tr></table></figure>
+<p>按照不同的Bag向量获取方式，这里有两种selector，一种是<code>Average</code>，一种是<code>Attention</code>，去看这两个函数：</p>
+<h2 id="Average-Selector"><a href="#Average-Selector" class="headerlink" title="Average Selector"></a>Average Selector</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Selector</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, model, n_class, dropout)</span>:</span></span><br><span class="line">        super(Selector, self).__init__()</span><br><span class="line">        relation_dim = model.embed.embedding_dim</span><br><span class="line"></span><br><span class="line">        self.relation_matrix = nn.Embedding(n_class, relation_dim)</span><br><span class="line">        self.bias = nn.Parameter(torch.Tensor(n_class))</span><br><span class="line">        <span class="comment">#self.attention_matrix = nn.Embedding(n_class, relation_dim)</span></span><br><span class="line">        self.init_weights()</span><br><span class="line">        self.dropout = nn.Dropout(dropout)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">init_weights</span><span class="params">(self)</span>:</span></span><br><span class="line">        nn.init.xavier_uniform(self.relation_matrix.weight.data)</span><br><span class="line">        nn.init.normal(self.bias)  <span class="comment"># bias初始化没有置为0</span></span><br><span class="line">        <span class="comment">#nn.init.xavier_uniform(self.attention_matrix.weight.data)</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_logits</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        logits = torch.matmul(x, torch.transpose(</span><br><span class="line">            self.relation_matrix.weight, <span class="number">0</span>, <span class="number">1</span>),) + self.bias</span><br><span class="line">        <span class="keyword">return</span> logits</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x, scopes=None, label=None)</span>:</span></span><br><span class="line">        <span class="keyword">raise</span> NotImplementedError</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        <span class="keyword">raise</span> NotImplementedError</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Average</span><span class="params">(Selector)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x, scopes=None, label=None)</span>:</span></span><br><span class="line">        scopes = scopes <span class="keyword">or</span> [(<span class="number">0</span>, x.size(<span class="number">0</span>))]</span><br><span class="line"></span><br><span class="line">        tower_repre = []</span><br><span class="line">        <span class="keyword">for</span> start, end <span class="keyword">in</span> scopes:</span><br><span class="line">            sen_matrix = x[start: end]</span><br><span class="line">            final_repre = torch.mean(sen_matrix, <span class="number">0</span>)  <span class="comment"># 取平均</span></span><br><span class="line">            tower_repre.append(final_repre)</span><br><span class="line">        stack_repre = torch.stack(tower_repre)</span><br><span class="line">        stack_repre = self.dropout(stack_repre)</span><br><span class="line">        logits = self.get_logits(stack_repre)</span><br><span class="line">        <span class="keyword">return</span> logits</span><br></pre></td></tr></table></figure>
+<p>在做Attention的时候，<strong>是拿所有关系与当前表示相乘</strong>。</p>
+<h2 id="Attention-Selector"><a href="#Attention-Selector" class="headerlink" title="Attention Selector"></a>Attention Selector</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Attention</span><span class="params">(Selector)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_attention_train_logit</span><span class="params">(self, x, query)</span>:</span></span><br><span class="line">        relation_query = self.relation_matrix(query)</span><br><span class="line">        attention_logit = torch.sum(x * relation_query, <span class="number">1</span>, <span class="literal">True</span>)</span><br><span class="line">        <span class="keyword">return</span> attention_logit</span><br><span class="line">	</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_attention_test_logit</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        attention_logit = torch.matmul(x, torch.transpose(self.relation_matrix.weight, <span class="number">0</span>, <span class="number">1</span>))</span><br><span class="line">        <span class="keyword">return</span> attention_logit</span><br><span class="line">	</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x, scopes=None, label=None)</span>:</span></span><br><span class="line">        scopes = scopes <span class="keyword">or</span> [(<span class="number">0</span>, x.size(<span class="number">0</span>))]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.training:</span><br><span class="line">            attention_logit = self._attention_train_logit(x, label)</span><br><span class="line"></span><br><span class="line">            tower_repre = []</span><br><span class="line">            <span class="keyword">for</span> start, end <span class="keyword">in</span> scopes:</span><br><span class="line">                sen_matrix = x[start: end]</span><br><span class="line">                attention_score = F.softmax(torch.transpose(attention_logit[start: end], <span class="number">0</span>, <span class="number">1</span>), <span class="number">1</span>)</span><br><span class="line">                final_repre = torch.squeeze(torch.matmul(attention_score, sen_matrix))</span><br><span class="line">                tower_repre.append(final_repre)</span><br><span class="line">            stack_repre = torch.stack(tower_repre)</span><br><span class="line">            stack_repre = self.dropout(stack_repre)</span><br><span class="line">            logits = self.get_logits(stack_repre)</span><br><span class="line">            <span class="keyword">return</span> logits</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            attention_logit = self._attention_test_logit(x)</span><br><span class="line"></span><br><span class="line">            tower_output = []</span><br><span class="line">            <span class="keyword">for</span> start, end <span class="keyword">in</span> scopes:</span><br><span class="line">                sen_matrix = x[start: end]</span><br><span class="line">                attention_score = F.softmax(torch.transpose(attention_logit[start: end], <span class="number">0</span>, <span class="number">1</span>), <span class="number">1</span>)</span><br><span class="line">                final_repre = torch.matmul(attention_score, sen_matrix)</span><br><span class="line">                logits = self.get_logits(final_repre)</span><br><span class="line">                tower_output.append(torch.diag(F.softmax(logits, <span class="number">1</span>)))</span><br><span class="line">            stack_output = torch.stack(tower_output)</span><br><span class="line">            <span class="keyword">return</span> stack_output</span><br></pre></td></tr></table></figure>
+<p>在训练和测试阶段有些不同，训练时使用<code>_attention_train_logit()</code>，只取1个关系；测试时使用<code>_attention_test_logit()</code>，使用所有的关系。</p>
+<h1 id="数据加载部分"><a href="#数据加载部分" class="headerlink" title="数据加载部分"></a>数据加载部分</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@DataIterator.register("bag")</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BagIterator</span><span class="params">(DataIterator)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,</span></span></span><br><span class="line"><span class="function"><span class="params">                 sorting_keys: List[Tuple[str, str]],</span></span></span><br><span class="line"><span class="function"><span class="params">                 padding_noise: float = <span class="number">0.1</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                 biggest_batch_first: bool = False,</span></span></span><br><span class="line"><span class="function"><span class="params">                 batch_size: int = <span class="number">32</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                 instances_per_epoch: int = None,</span></span></span><br><span class="line"><span class="function"><span class="params">                 max_instances_in_memory: int = None,</span></span></span><br><span class="line"><span class="function"><span class="params">                 cache_instances: bool = False,</span></span></span><br><span class="line"><span class="function"><span class="params">                 track_epoch: bool = False,</span></span></span><br><span class="line"><span class="function"><span class="params">                 maximum_samples_per_batch: Tuple[str, int] = None)</span> -&gt; <span class="keyword">None</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> sorting_keys:</span><br><span class="line">            <span class="keyword">raise</span> ConfigurationError(<span class="string">"BucketIterator requires sorting_keys to be specified"</span>)</span><br><span class="line"></span><br><span class="line">        super().__init__(cache_instances=cache_instances,</span><br><span class="line">                         track_epoch=track_epoch,</span><br><span class="line">                         batch_size=batch_size,</span><br><span class="line">                         instances_per_epoch=instances_per_epoch,</span><br><span class="line">                         max_instances_in_memory=max_instances_in_memory,</span><br><span class="line">                         maximum_samples_per_batch=maximum_samples_per_batch)</span><br><span class="line">        self._sorting_keys = sorting_keys</span><br><span class="line">        self._padding_noise = padding_noise</span><br><span class="line">        self._biggest_batch_first = biggest_batch_first</span><br><span class="line"></span><br><span class="line"><span class="meta">    @overrides</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_create_batches</span><span class="params">(self, instances: Iterable[Instance], shuffle: bool)</span> -&gt; Iterable[Batch]:</span></span><br><span class="line">        <span class="keyword">for</span> instance_list <span class="keyword">in</span> self._memory_sized_lists(instances):</span><br><span class="line"></span><br><span class="line">            bags = &#123;&#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> instance_id, mentions <span class="keyword">in</span> groupby(</span><br><span class="line">                sorted(instance_list, key=<span class="keyword">lambda</span> instance: instance[<span class="string">'metadata'</span>][<span class="string">'instance_id'</span>]),</span><br><span class="line">                key=<span class="keyword">lambda</span> instance: instance[<span class="string">'metadata'</span>][<span class="string">'instance_id'</span>]):</span><br><span class="line"></span><br><span class="line">                bags[instance_id] = list(mentions)</span><br><span class="line"></span><br><span class="line">            shuffled_instance_ids = list(bags.keys())</span><br><span class="line">            random.shuffle(shuffled_instance_ids)</span><br><span class="line"></span><br><span class="line">            print(<span class="string">'creating new instances'</span>)</span><br><span class="line"></span><br><span class="line">            new_instances = []</span><br><span class="line">            <span class="keyword">for</span> instance_id <span class="keyword">in</span> shuffled_instance_ids:</span><br><span class="line">                mentions = bags[instance_id]</span><br><span class="line">                <span class="keyword">if</span> shuffle:</span><br><span class="line">                    random.shuffle(mentions)</span><br><span class="line">                new_instances.extend(mentions)</span><br><span class="line"></span><br><span class="line">            print(<span class="string">'creating batches'</span>)</span><br><span class="line"></span><br><span class="line">            batches = []</span><br><span class="line">            <span class="keyword">for</span> batch_instances <span class="keyword">in</span> lazy_groups_of(iter(new_instances), self._batch_size):</span><br><span class="line">                <span class="keyword">for</span> possibly_smaller_batches <span class="keyword">in</span> self._ensure_batch_is_sufficiently_small(batch_instances):</span><br><span class="line">                    batches.append(Batch(possibly_smaller_batches))</span><br><span class="line">            </span><br><span class="line">            print(<span class="string">'num batches:'</span>, len(batches))</span><br><span class="line"></span><br><span class="line">            move_to_front = self._biggest_batch_first <span class="keyword">and</span> len(batches) &gt; <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> move_to_front:</span><br><span class="line">                <span class="comment"># We'll actually pop the last _two_ batches, because the last one might not be full.</span></span><br><span class="line">                last_batch = batches.pop()</span><br><span class="line">                penultimate_batch = batches.pop()</span><br><span class="line">            <span class="keyword">if</span> move_to_front:</span><br><span class="line">                batches.insert(<span class="number">0</span>, penultimate_batch)</span><br><span class="line">                batches.insert(<span class="number">0</span>, last_batch)</span><br><span class="line"></span><br><span class="line">            print(<span class="string">'yielding from batches'</span>)</span><br><span class="line">            <span class="keyword">yield</span> <span class="keyword">from</span> batches</span><br></pre></td></tr></table></figure>
+<h2 id="group-by"><a href="#group-by" class="headerlink" title="group_by"></a>group_by</h2><p>首先根据instance_id进行<code>group_by</code>操作，而instance_id是以下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">instance_id = <span class="string">f'<span class="subst">&#123;head&#125;</span>#<span class="subst">&#123;tail&#125;</span>'</span></span><br><span class="line"><span class="keyword">if</span> label:</span><br><span class="line">    instance_id = <span class="string">f'<span class="subst">&#123;instance_id&#125;</span>#<span class="subst">&#123;label&#125;</span>'</span></span><br></pre></td></tr></table></figure>
+<p>在实验中，作者制定了label，为下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">yield</span> self.text_to_instance(sentence=sentence, head=head, tail=tail, label=relation,</span><br><span class="line">                                            head_type=head_type, tail_type=tail_type)</span><br></pre></td></tr></table></figure>
+<p>因此，<strong>instance_id即为头尾实体加关系构成</strong>，这样，对于知识库中有多个关系的头尾实体，会分别打成多个包。<em>比如，Steve Jobs -&gt; Apple，有关系CEO和founder，则会打成两个包，包中句子完全相同</em>。</p>
+<h2 id="creating-batches"><a href="#creating-batches" class="headerlink" title="creating batches"></a>creating batches</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">'creating new instances'</span>)</span><br><span class="line"></span><br><span class="line">new_instances = []</span><br><span class="line"><span class="keyword">for</span> instance_id <span class="keyword">in</span> shuffled_instance_ids:</span><br><span class="line">    mentions = bags[instance_id]</span><br><span class="line">    <span class="keyword">if</span> shuffle:</span><br><span class="line">        random.shuffle(mentions)</span><br><span class="line">    new_instances.extend(mentions)</span><br></pre></td></tr></table></figure>
+<p><strong><em>通过这一步，将同一个包中的句子挨在了一起</em></strong>。</p>
+<font color="red">问题是`for instance_list in self._memory_sized_lists(instances)`要看一下instance_list的值和大小。</font>
+
+<p>在网上找到了示例代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 需要导入模块: from allennlp.common import util [as 别名]</span></span><br><span class="line"><span class="comment"># 或者: from allennlp.common.util import lazy_groups_of [as 别名]</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_create_batches</span><span class="params">(self, instances                    , shuffle      )</span>:</span></span><br><span class="line">        <span class="comment"># First break the dataset into memory-sized lists:</span></span><br><span class="line">        <span class="keyword">for</span> instance_list <span class="keyword">in</span> self._memory_sized_lists(instances):</span><br><span class="line">            <span class="keyword">if</span> shuffle:</span><br><span class="line">                random.shuffle(instance_list)</span><br><span class="line">            iterator = iter(instance_list)</span><br><span class="line">            <span class="comment"># Then break each memory-sized list into batches.</span></span><br><span class="line">            <span class="keyword">for</span> batch_instances <span class="keyword">in</span> lazy_groups_of(iterator, self._batch_size):</span><br><span class="line">                <span class="keyword">for</span> possibly_smaller_batches <span class="keyword">in</span> self._ensure_batch_is_sufficiently_small(batch_instances):</span><br><span class="line">                    batch = Batch(possibly_smaller_batches)</span><br><span class="line">                    <span class="keyword">yield</span> batch</span><br></pre></td></tr></table></figure>
+<p>添加以下代码查看instance_list的大小：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">'============================================================'</span>)</span><br><span class="line">print(<span class="string">"'instance_list' type "</span>, type(instance_list))</span><br><span class="line">print(<span class="string">"'instance_list' length "</span>, len(instance_list))</span><br><span class="line">print(<span class="string">'============================================================'</span>)</span><br></pre></td></tr></table></figure>
+<p>结果为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">============================================================</span><br><span class="line"><span class="string">'instance_list'</span> <span class="built_in">type</span>  &lt;class <span class="string">'list'</span>&gt;</span><br><span class="line"><span class="string">'instance_list'</span> length  522611</span><br><span class="line">============================================================</span><br></pre></td></tr></table></figure>
+<p>可以看到，是将所有数据加载到了内存中。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><font color="orange">**总结一下，1.对句子按照(head, tail, relation)排序 2.按照batch_size来截取**</font>
+
+<p>在论文中batch_size设置为8，在源代码中默认设置为16。</p>
+<h1 id="预测部分"><a href="#预测部分" class="headerlink" title="预测部分"></a>预测部分</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Predictor.register('tre-classifier')</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TREClassifierPredictor</span><span class="params">(Predictor)</span>:</span></span><br><span class="line">    <span class="string">"""Predictor wrapper for the TREClassifier"""</span></span><br><span class="line"><span class="meta">    @overrides</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_json_to_instance</span><span class="params">(self, json_dict: JsonDict)</span> -&gt; Instance:</span></span><br><span class="line">        sentence = json_dict[<span class="string">'sentence'</span>]</span><br><span class="line">        head = json_dict[<span class="string">'head'</span>]</span><br><span class="line">        tail = json_dict[<span class="string">'tail'</span>]</span><br><span class="line">        instance = self._dataset_reader.text_to_instance(sentence=sentence, head=head, tail=tail)</span><br><span class="line">        <span class="keyword">return</span> instance</span><br><span class="line"></span><br><span class="line"><span class="meta">    @overrides</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">predict_batch_instance</span><span class="params">(self, instances: List[Instance])</span> -&gt; List[JsonDict]:</span></span><br><span class="line">        model = self._model</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            cuda_device = model._get_prediction_device()</span><br><span class="line">            dataset = Batch(instances)</span><br><span class="line">            dataset.index_instances(model.vocab)</span><br><span class="line">            model_input = util.move_to_device(dataset.as_tensor_dict(), cuda_device)</span><br><span class="line">            outputs = model.decode(model(**model_input))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> sanitize(outputs)</span><br></pre></td></tr></table></figure>
+<p>根据训练时的模型选择，分别对应Bag2Bag或Sent2Sent预测模式。</p>
+<h2 id="predict-batch-json"><a href="#predict-batch-json" class="headerlink" title="predict_batch_json()"></a>predict_batch_json()</h2><p>从官网的文档来看，是这样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SemanticRoleLabelerPredictor</span><span class="params">(Predictor)</span>:</span></span><br><span class="line"> | ...</span><br><span class="line"> | @overrides</span><br><span class="line"> | <span class="function"><span class="keyword">def</span> <span class="title">predict_batch_json</span><span class="params">(self, inputs: List[JsonDict])</span> -&gt; List[JsonDict]</span></span><br></pre></td></tr></table></figure>
+<p>Expects JSON that looks like <code>[{&quot;sentence&quot;: &quot;...&quot;}, {&quot;sentence&quot;: &quot;...&quot;}, ...]</code> and returns JSON that looks like</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;<span class="attr">"words"</span>: [...],</span><br><span class="line">     <span class="attr">"verbs"</span>: [</span><br><span class="line">        &#123;<span class="attr">"verb"</span>: <span class="string">"..."</span>, <span class="attr">"description"</span>: <span class="string">"..."</span>, <span class="attr">"tags"</span>: [...]&#125;,</span><br><span class="line">        ...</span><br><span class="line">        &#123;<span class="attr">"verb"</span>: <span class="string">"..."</span>, <span class="attr">"description"</span>: <span class="string">"..."</span>, <span class="attr">"tags"</span>: [...]&#125;,</span><br><span class="line">    ]&#125;,</span><br><span class="line">    &#123;<span class="attr">"words"</span>: [...],</span><br><span class="line">     <span class="attr">"verbs"</span>: [</span><br><span class="line">        &#123;<span class="attr">"verb"</span>: <span class="string">"..."</span>, <span class="attr">"description"</span>: <span class="string">"..."</span>, <span class="attr">"tags"</span>: [...]&#125;,</span><br><span class="line">        ...</span><br><span class="line">        &#123;<span class="attr">"verb"</span>: <span class="string">"..."</span>, <span class="attr">"description"</span>: <span class="string">"..."</span>, <span class="attr">"tags"</span>: [...]&#125;,</span><br><span class="line">    ]&#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/DISTRE/" rel="tag"><i class="fa fa-tag"></i> DISTRE</a>
+          
+            <a href="/tags/source-code/" rel="tag"><i class="fa fa-tag"></i> source code</a>
+          
+            <a href="/tags/relation-extraction/" rel="tag"><i class="fa fa-tag"></i> relation extraction</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/01/03/PR曲线横纵坐标轴的数据来源/" rel="next" title="PR曲线横纵坐标轴的数据来源">
+                <i class="fa fa-chevron-left"></i> PR曲线横纵坐标轴的数据来源
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/04/conda安装环境报错-Solving-environment-failed-with-initial-frozen-solve/" rel="prev" title="conda安装环境报错 Solving environment failed with initial frozen solve">
+                conda安装环境报错 Solving environment failed with initial frozen solve <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/漫画脸1vs1.jpg" alt="dinosaur">
+            
+              <p class="site-author-name" itemprop="name">dinosaur</p>
+              <div class="site-description motion-element" itemprop="description">闪耀的群星，颠覆着黑夜</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">371</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hao-Kailong" title="GitHub &rarr; https://github.com/Hao-Kailong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/klhao.nju@gmail.com" title="Email &rarr; klhao.nju@gmail.com"><i class="fa fa-fw fa-envelope"></i>Email</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Instance模型部分"><span class="nav-text">Instance模型部分</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#BERT模型"><span class="nav-text">BERT模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#语法糖"><span class="nav-text">语法糖</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bag模型部分"><span class="nav-text">Bag模型部分</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Average-Selector"><span class="nav-text">Average Selector</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Attention-Selector"><span class="nav-text">Attention Selector</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据加载部分"><span class="nav-text">数据加载部分</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#group-by"><span class="nav-text">group_by</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#creating-batches"><span class="nav-text">creating batches</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#预测部分"><span class="nav-text">预测部分</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#predict-batch-json"><span class="nav-text">predict_batch_json()</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dinosaur</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+      <div>
+        <div class="addthis_inline_share_toolbox">
+  <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cb429b1d763f1d4" async="async"></script>
+</div>
+
+      </div>
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script id="dsq-count-scr" src="https://dinosaur7.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://haokailong.top/2021/01/04/DISTRE源码阅读/";
+    this.page.identifier = "2021/01/04/DISTRE源码阅读/";
+    this.page.title = 'DISTRE源码阅读';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dinosaur7.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

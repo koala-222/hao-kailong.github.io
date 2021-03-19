@@ -1,0 +1,2215 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="DsoDHJ1Km7LX7l7UnoG8dB2QrygUWW345_JkdBOj1Vw">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="ahe2m7RGVx">
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italicRoboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/solar-system-16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/solar-system-32.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="编译：机器之心， 作者： Daniel Daza 最优传输理论及 Wasserstein 距离是很多读者都希望了解的基础，本文主要通过简单案例展示了它们的基本思想，并通过 PyTorch 介绍如何实战 W 距离。   机器学习中的许多问题都涉及到令两个分布尽可能接近的思想，例如在 GAN 中令生成器分布接近判别器分布就能伪造出逼真的图像。但是 KL 散度等分布的度量方法有很多局限性，本文则介绍了">
+<meta name="keywords" content="GAN,pytorch,Wasserstein,概率分布">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pytorch实战 计算Wasserstein距离">
+<meta property="og:url" content="http://haokailong.top/2020/10/26/Pytorch实战-计算Wasserstein距离/index.html">
+<meta property="og:site_name" content="Hold the Torch">
+<meta property="og:description" content="编译：机器之心， 作者： Daniel Daza 最优传输理论及 Wasserstein 距离是很多读者都希望了解的基础，本文主要通过简单案例展示了它们的基本思想，并通过 PyTorch 介绍如何实战 W 距离。   机器学习中的许多问题都涉及到令两个分布尽可能接近的思想，例如在 GAN 中令生成器分布接近判别器分布就能伪造出逼真的图像。但是 KL 散度等分布的度量方法有很多局限性，本文则介绍了">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/wasserstein/distribution.png">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/wasserstein/move.png">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/wasserstein/pic.png">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/wasserstein/matrix.png">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/wasserstein/coupling.png">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/wasserstein/coupling1.png">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/wasserstein/support.png">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/wasserstein/moon.png">
+<meta property="og:updated_time" content="2020-10-26T10:52:36.394Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Pytorch实战 计算Wasserstein距离">
+<meta name="twitter:description" content="编译：机器之心， 作者： Daniel Daza 最优传输理论及 Wasserstein 距离是很多读者都希望了解的基础，本文主要通过简单案例展示了它们的基本思想，并通过 PyTorch 介绍如何实战 W 距离。   机器学习中的许多问题都涉及到令两个分布尽可能接近的思想，例如在 GAN 中令生成器分布接近判别器分布就能伪造出逼真的图像。但是 KL 散度等分布的度量方法有很多局限性，本文则介绍了">
+<meta name="twitter:image" content="http://haokailong.top/images/blog/2020/wasserstein/distribution.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://haokailong.top/2020/10/26/Pytorch实战-计算Wasserstein距离/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Pytorch实战 计算Wasserstein距离 | Hold the Torch</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-138297445-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-138297445-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hold the Torch</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-wordcloud">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/wordcloud/" rel="section"><i class="menu-item-icon fa fa-fw fa-cloud"></i> <br>词云</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/26/Pytorch实战-计算Wasserstein距离/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Pytorch实战 计算Wasserstein距离
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-26 18:52:36" itemprop="dateModified" datetime="2020-10-26T18:52:36+08:00">2020-10-26</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/10/26/Pytorch实战-计算Wasserstein距离/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/26/Pytorch实战-计算Wasserstein距离/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>编译：机器之心， 作者： Daniel Daza</p>
+<p>最优传输理论及 Wasserstein 距离是很多读者都希望了解的基础，本文主要通过简单案例展示了它们的基本思想，并通过 PyTorch 介绍如何实战 W 距离。</p>
+</blockquote>
+<p><br></p>
+<p>机器学习中的许多问题都涉及到令两个分布尽可能接近的思想，例如在 GAN 中令生成器分布接近判别器分布就能伪造出逼真的图像。但是 KL 散度等分布的度量方法有很多局限性，本文则介绍了 Wasserstein 距离及 Sinkhorn 迭代方法，它们在 GAN 及众多任务上都展示了杰出的性能。</p>
+<p>在简单的情况下，我们假设从未知数据分布 p(x) 中观测到一些随机变量 x（例如，猫的图片），我们想要找到一个模型 q(x|θ)（例如一个神经网络）能作为 p(x) 的一个很好的近似。如果 p 和 q 的分布很相近，那么就表明我们的模型已经学习到如何识别猫。</p>
+<p>因为 KL 散度可以度量两个分布的距离，所以只需要最小化 KL(q‖p) 就可以了。可以证明，最小化 KL(q‖p) 等价于最小化一个负对数似然，这样的做法在我们训练一个分类器时很常见。例如，对于变分自编码器来说，我们希望后验分布能够接近于某种先验分布，这也是我们通过最小化它们之间的 KL 散度来实现的。</p>
+<p>尽管 KL 散度有很广泛的应用，在某些情况下，KL 散度则会失效。不妨考虑一下如下图所示的离散分布：</p>
+<p><img src="/images/blog/2020/wasserstein/distribution.png" alt></p>
+<p><br></p>
+<p>KL 散度假设这两个分布共享相同的支撑集（也就是说，它们被定义在同一个点集上）。因此，我们不能为上面的例子计算 KL 散度。由于这一个限制和其他计算方面的因素促使研究人员寻找一种更适合于计算两个分布之间差异的方法。</p>
+<p>在本文中，作者将：</p>
+<ul>
+<li>简单介绍最优传输问题</li>
+<li>将 Sinkhorn 迭代描述为对解求近似</li>
+<li>使用 PyTorch 计算 Sinkhorn 距离</li>
+<li>描述用于计算 mini-batch 之间的距离的对该实现的扩展<a id="more"></a></li>
+</ul>
+<p><br></p>
+<p><center><font color="red">移动概率质量函数</font></center><br>我们不妨把离散的概率分布想象成空间中分散的点的质量。我们可以观测这些带质量的点从一个分布移动到另一个分布需要做多少功，如下图所示：</p>
+<p><img src="/images/blog/2020/wasserstein/move.png" alt></p>
+<p>接着，我们可以定义另一个度量标准，用以衡量移动所有点所需要做的功。要想将这个直观的概念形式化定义下来，首先，我们可以通过引入一个<font color="orange"><strong>耦合矩阵</strong></font> P（coupling matrix），它表示要从 p(x) 支撑集中的一个点上到 q(x) 支撑集中的一个点需要分配多少概率质量。对于均匀分布，我们规定每个点都具有 1/4 的概率质量。如果我们将本例支撑集中的点从左到右排列，我们可以将上述的耦合矩阵写作：</p>
+<script type="math/tex; mode=display">
+P = 
+\left [
+\begin{matrix} 
+0 & 0 & 0 & \frac{1}{4} \\
+0 & 0 & \frac{1}{4} & 0 \\
+0 & \frac{1}{4} & 0 & 0 \\
+\frac{1}{4} & 0 & 0 & 0 \\
+\end{matrix} 
+\right ]</script><p>也就是说，p(x) 支撑集中点 1 的质量被分配给了 q(x) 支撑集中的点 4，p(x) 支撑集中点 2 的质量被分配给了 q(x) 支撑集中的点 3，以此类推。</p>
+<p>为了算出质量分配的过程需要做多少功，我们将引入第二个矩阵：<font color="orange"><strong>距离矩阵</strong></font>。该矩阵中的每个元素 C_ij 表示将 p(x) 支撑集中的点移动到 q(x) 支撑集中的点上的成本。点与点之间的欧几里得距离是定义这种成本的一种方式，它也被称为「ground distance」。如果我们假设 p(x) 的支撑集和 q(x) 的支撑集分别为 {1,2,3,4} 和 {5,6,7,8}，成本矩阵即为：</p>
+<script type="math/tex; mode=display">
+C = 
+\left [
+\begin{matrix} 
+4 & 5 & 6 & 7 \\
+3 & 4 & 5 & 6 \\
+2 & 3 & 4 & 5 \\
+1 & 2 & 3 & 4 \\
+\end{matrix} 
+\right ]</script><p>根据上述定义，总的成本可以通过 P 和 C 之间的 Frobenius 内积来计算：</p>
+<script type="math/tex; mode=display">
+<C, P> \quad = \quad \sum_{ij}C_{ij}P_{ij}</script><p>你可能已经注意到了，实际上有很多种方法可以把点从一个支撑集移动到另一个支撑集中，每一种方式都会得到不同的成本。上面给出的只是一个示例，但是我们感兴趣的是最终能够让成本较小的分配方式。这就是两个离散分布之间的「最优传输」问题，该问题的解是所有耦合矩阵上的最低成本 L_C。</p>
+<p>由于不是所有矩阵都是有效的耦合矩阵，最后一个条件会引入了一个约束。对于一个耦合矩阵来说，其所有列都必须要加到带有 q(x) 概率质量的向量中。在本例中，该向量包含 4 个值为 1/4 的元素。更一般地，我们可以将两个向量分别记为 a 和 b，因此最优运输问题可以被写作：</p>
+<script type="math/tex; mode=display">
+L_C = \min_P \quad < C, P> \\
+s.t. P_1 = a \\
+\quad P^T_1 = b</script><p>当距离矩阵基于一个有效的距离函数构建时，最小成本即为我们所说的「Wasserstein 距离」。</p>
+<font color="blue">关于该问题的解以及将其扩展到连续概率分布中还有大量问题需要解决。如果想要获取更正式、更容易理解的解释，读者可以参阅 Gabriel Peyré 和 Marco Cuturi 编写的「Computational Optimal Transport」一书，此书也是本文写作的主要参考来源之一。</font>
+
+<p>这里的基本设定是，<strong>我们已经把求两个分布之间距离的问题定义为求最优耦合矩阵的问题</strong>。事实证明，我们可以通过一个小的修改让我们以迭代和可微分的方式解决这个问题，这将让我们可以很好地使用深度学习自动微分机制完成该工作。</p>
+<p><center><font color="red">熵正则化和 Sinkhorn 迭代</font></center><br>首先，我们将一个矩阵的熵定义如下：</p>
+<script type="math/tex; mode=display">
+H(P) = -\sum_{ij} P_{ij} \log P_{ij}</script><p>正如信息论中概率分布的熵一样，一个熵较低的矩阵将会更稀疏，它的大部分非零值集中在几个点周围。相反，一个具有高熵的矩阵将会更平滑，其最大熵是在均匀分布的情况下获得的。我们可以将正则化系数 ε 引入最优传输问题，从而得到更平滑的耦合矩阵：</p>
+<script type="math/tex; mode=display">
+L_C = \min_P \quad < C, P>  - \epsilon H(P)\\
+s.t. P_1 = a \\
+\quad P^T_1 = b</script><p>通过增大 ε，最终得到的耦合矩阵将会变得更加平滑；而当 ε 趋近于零时，耦合矩阵会更加稀疏，同时最终的解会更加趋近于原始最优运输问题。</p>
+<p>通过引入这种熵正则化，该问题变成了一个凸优化问题，并且可 以通过使用「Sinkhorn iteration」求解。解可以被写作 P=diag(u)Kdiag(v)，在迭代过程中交替更新 u 和 v：</p>
+<script type="math/tex; mode=display">
+u^{(k+1)} = \frac{a}{Kv^{(k)}} \\
+v ^{(k+1)} = \frac{b}{K^Tu^{(k+1)}}</script><p>其中 K 是一个用 C 计算的核矩阵（kernel matrix）。由于这些迭代过程是在对原始问题的正则化版本求解，因此对应产生的 Wasserstein 距离有时被称为 Sinkhorn 距离。该迭代过程会形成一个线性操作的序列，因此对于深度学习模型，通过这些迭代进行反向传播是非常简单的。</p>
+<p><br></p>
+<p><center><font color="red">通过pytorch实现Sinkhorn迭代</font></center><br>为了提升 Sinkhorn 迭代的收敛性和稳定性，还可以加入其它的步骤。我们可以在 GitHub 上找到 Gabriel Peyre 完成的详细实现。</p>
+<p>项目链接：<a href="https://github.com/gpeyre/SinkhornAutoDiff。" target="_blank" rel="noopener">https://github.com/gpeyre/SinkhornAutoDiff。</a></p>
+<p>让我们先用一个简单的例子来测试一下，现在我们将研究二维空间（而不是上面的一维空间）中的离散均匀分布。在这种情况下，我们将在平面上移动概率质量。让我们首先定义两个简单的分布：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">%matplotlib inline</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">np.random.seed(<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line">n_points = <span class="number">5</span></span><br><span class="line">a = np.array([[i, <span class="number">0</span>] <span class="keyword">for</span> i <span class="keyword">in</span> range(n_points)])</span><br><span class="line">b = np.array([[i, <span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> range(n_points)])</span><br><span class="line"></span><br><span class="line">plt.figure(figsize=(<span class="number">6</span>, <span class="number">3</span>))</span><br><span class="line">plt.scatter(a[:, <span class="number">0</span>], a[:, <span class="number">1</span>], label=<span class="string">'supp($p(x)$)'</span>)</span><br><span class="line">plt.scatter(b[:, <span class="number">0</span>], b[:, <span class="number">1</span>], label=<span class="string">'supp($q(x)$)'</span>)</span><br><span class="line">plt.legend();</span><br></pre></td></tr></table></figure>
+<p><img src="/images/blog/2020/wasserstein/pic.png" alt></p>
+<p>我们很容易看出，最优传输对应于将 p(x) 支撑集中的每个点分配到 q(x) 支撑集上的点。对于所有的点来说，距离都是 1，同时由于分布是均匀的，每点移动的概率质量是 1/5。因此，Wasserstein 距离是 5×1/5= 1。现在我们用 Sinkhorn 迭代来计算这个距离：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> layers <span class="keyword">import</span> SinkhornDistance</span><br><span class="line"></span><br><span class="line">x = torch.tensor(a, dtype=torch.float)</span><br><span class="line">y = torch.tensor(b, dtype=torch.float)</span><br><span class="line"></span><br><span class="line">sinkhorn = SinkhornDistance(eps=<span class="number">0.1</span>, max_iter=<span class="number">100</span>, reduction=<span class="literal">None</span>)</span><br><span class="line">dist, P, C = sinkhorn(x, y)</span><br><span class="line">print(<span class="string">"Sinkhorn distance: &#123;:.3f&#125;"</span>.format(dist.item()))</span><br><span class="line"></span><br><span class="line">————————————————————————————————————————————————</span><br><span class="line">Sinkhorn distance: <span class="number">1.000</span></span><br></pre></td></tr></table></figure>
+<p>结果正如我们所计算的那样，距离为 1。现在，让我们查看一下「Sinkhorn( )」方法返回的矩阵，其中 P 是计算出的耦合矩阵，C 是距离矩阵。距离矩阵如下图所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">plt.imshow(C)</span><br><span class="line">plt.title(<span class="string">'Distance matrix'</span>)</span><br><span class="line">plt.colorbar();</span><br><span class="line">plt.imshow(C)plt.title(<span class="string">'Distance matrix'</span>)plt.colorbar();</span><br></pre></td></tr></table></figure>
+<p><img src="/images/blog/2020/wasserstein/matrix.png" alt></p>
+<p>元素C[0, 0]说明了将（0,0）点的质量移动到（0,1）所需要的成本 1 是如何产生的。在该行的另一端，元素C[0, 4]包含了将点（0,0）的质量移动到点（4,1）所需要的成本，这个成本是整个矩阵中最大的：</p>
+<p>由于我们为距离矩阵使用的是平方后的 ℓ2 范数，计算结果如上所示。现在，让我们看看计算出的耦合矩阵吧：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">plt.imshow(P)</span><br><span class="line">plt.title(<span class="string">'Coupling matrix'</span>);</span><br><span class="line">plt.imshow(P)plt.title(<span class="string">'Coupling matrix'</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="/images/blog/2020/wasserstein/coupling.png" alt></p>
+<p>该图很好地向我们展示了算法是如何有效地发现最优耦合，它与我们前面确定的耦合矩阵是相同的。到目前为止，我们使用了 0.1 的正则化系数。如果将该值增加到 1 会怎样？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sinkhorn = SinkhornDistance(eps=<span class="number">1</span>, max_iter=<span class="number">100</span>, reduction=<span class="literal">None</span>)</span><br><span class="line">dist, P, C = sinkhorn(x, y)</span><br><span class="line">print(<span class="string">"Sinkhorn distance: &#123;:.3f&#125;"</span>.format(dist.item()))</span><br><span class="line">plt.imshow(P);</span><br><span class="line"></span><br><span class="line">————————————————————————————————————————————————</span><br><span class="line">Sinkhorn distance: <span class="number">1.408</span></span><br></pre></td></tr></table></figure>
+<p><img src="/images/blog/2020/wasserstein/coupling1.png" alt></p>
+<p>正如我们前面讨论过的，加大 ε 有增大耦合矩阵熵的作用。接下来，我们看看 P 是如何变得更加平滑的。但是，这样做也会为计算出的距离带来一个不好的影响，导致对 Wasserstein 距离的近似效果变差。</p>
+<p><br></p>
+<p>可视化支撑集的空间分配也很有意思：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_assignments</span><span class="params">(a, b, P)</span>:</span>    </span><br><span class="line">    norm_P = P/P.max()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(a.shape[<span class="number">0</span>]):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(b.shape[<span class="number">0</span>]):</span><br><span class="line">            plt.arrow(a[i, <span class="number">0</span>], a[i, <span class="number">1</span>], b[j, <span class="number">0</span>]-a[i, <span class="number">0</span>], b[j, <span class="number">1</span>]-a[i, <span class="number">1</span>],</span><br><span class="line">                     alpha=norm_P[i,j].item())</span><br><span class="line">    plt.title(<span class="string">'Assignments'</span>)</span><br><span class="line">    plt.scatter(a[:, <span class="number">0</span>], a[:, <span class="number">1</span>])</span><br><span class="line">    plt.scatter(b[:, <span class="number">0</span>], b[:, <span class="number">1</span>])</span><br><span class="line">    plt.axis(<span class="string">'off'</span>)</span><br><span class="line"></span><br><span class="line">show_assignments(a, b, P)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/blog/2020/wasserstein/support.png" alt></p>
+<p>让我们在一个更有趣的分布（Moons 数据集）上完成这项工作。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> make_moons</span><br><span class="line"></span><br><span class="line">X, Y = make_moons(n_samples = <span class="number">30</span>)</span><br><span class="line">a = X[Y==<span class="number">0</span>]</span><br><span class="line">b = X[Y==<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">x = torch.tensor(a, dtype=torch.float)</span><br><span class="line">y = torch.tensor(b, dtype=torch.float)</span><br><span class="line"></span><br><span class="line">sinkhorn = SinkhornDistance(eps=<span class="number">0.1</span>, max_iter=<span class="number">100</span>, reduction=<span class="literal">None</span>)</span><br><span class="line">dist, P, C = sinkhorn(x, y)</span><br><span class="line">print(<span class="string">"Sinkhorn distance: &#123;:.3f&#125;"</span>.format(dist.item()))</span><br><span class="line">show_assignments(a, b, P)</span><br><span class="line"></span><br><span class="line">——————————————————————————————————————————</span><br><span class="line">Sinkhorn distance: <span class="number">1.714</span></span><br></pre></td></tr></table></figure>
+<p><img src="/images/blog/2020/wasserstein/moon.png" alt></p>
+<p><br></p>
+<p>在深度学习中，我们通常对使用 mini-batch 来加速计算十分感兴趣。我们也可以通过使用额外的批处理维度修改 Sinkhorn 迭代来满足该设定。将此更改添加到具体实现中后，我们可以在一个 mini-batch 中计算多个分布的 Sinkhorn 距离。下面我们将通过另一个容易被验证的例子说明这一点。</p>
+<p>代码：<a href="https://github.com/dfdazac/wassdistance/blob/master/layers.py" target="_blank" rel="noopener">https://github.com/dfdazac/wassdistance/blob/master/layers.py</a></p>
+<p>我们将计算包含 5 个支撑点的 4 对均匀分布的 Sinkhorn 距离，它们垂直地被 1（如上所示）、2、3 和 4 个单元分隔开。这样，它们之间的 Wasserstein 距离将分别为 1、4、9 和 16。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">n = <span class="number">5</span></span><br><span class="line">batch_size = <span class="number">4</span></span><br><span class="line">a = np.array([[[i, <span class="number">0</span>] <span class="keyword">for</span> i <span class="keyword">in</span> range(n)] <span class="keyword">for</span> b <span class="keyword">in</span> range(batch_size)])</span><br><span class="line">b = np.array([[[i, b + <span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> range(n)] <span class="keyword">for</span> b <span class="keyword">in</span> range(batch_size)])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Wrap with torch tensors</span></span><br><span class="line">x = torch.tensor(a, dtype=torch.float)</span><br><span class="line">y = torch.tensor(b, dtype=torch.float)</span><br><span class="line"></span><br><span class="line">sinkhorn = SinkhornDistance(eps=<span class="number">0.1</span>, max_iter=<span class="number">100</span>, reduction=<span class="literal">None</span>)</span><br><span class="line">dist, P, C = sinkhorn(x, y)</span><br><span class="line">print(<span class="string">"Sinkhorn distances: "</span>, dist)</span><br><span class="line"></span><br><span class="line">——————————————————————————————————————————</span><br><span class="line">Sinkhorn distances:  tensor([ <span class="number">1.0001</span>,  <span class="number">4.0001</span>,  <span class="number">9.0000</span>, <span class="number">16.0000</span>])</span><br></pre></td></tr></table></figure>
+<p>这样做确实有效！同时，也请注意，现在 P 和 C 为 3 维张量，它包含 mini-batch 中每对分布的耦合矩阵和距离矩阵：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">'P.shape = &#123;&#125;'</span>.format(P.shape))</span><br><span class="line">print(<span class="string">'C.shape = &#123;&#125;'</span>.format(C.shape))</span><br><span class="line"></span><br><span class="line">——————————————————————————————————————————</span><br><span class="line">P.shape = torch.Size([<span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>])</span><br><span class="line">C.shape = torch.Size([<span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>])</span><br></pre></td></tr></table></figure>
+<p><center><font color="red">结语</font></center><br>分布之间的 Wasserstein 距离及其通过 Sinkhorn 迭代实现的计算方法为我们带来了许多可能性。该框架不仅提供了对 KL 散度等距离的替代方法，而且在建模过程中提供了更大的灵活性，我们不再被迫要选择特定的参数分布。这些迭代过程可以在 GPU 上高效地执行，并且是完全可微分的，这使得它对于深度学习来说是一个很好的选择。这些优点在机器学习领域的最新研究中得到了充分的利用（如自编码器和距离嵌入），使其在该领域的应用前景更加广阔。</p>
+<p><em>原文链接：<a href="https://dfdazac.github.io/sinkhorn.html" target="_blank" rel="noopener">https://dfdazac.github.io/sinkhorn.html</a></em></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/GAN/" rel="tag"><i class="fa fa-tag"></i> GAN</a>
+          
+            <a href="/tags/pytorch/" rel="tag"><i class="fa fa-tag"></i> pytorch</a>
+          
+            <a href="/tags/Wasserstein/" rel="tag"><i class="fa fa-tag"></i> Wasserstein</a>
+          
+            <a href="/tags/概率分布/" rel="tag"><i class="fa fa-tag"></i> 概率分布</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/10/25/ReLU家族/" rel="next" title="ReLU家族">
+                <i class="fa fa-chevron-left"></i> ReLU家族
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/10/27/PyTorch之requires-grad/" rel="prev" title="PyTorch之requires_grad">
+                PyTorch之requires_grad <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/漫画脸1vs1.jpg" alt="dinosaur">
+            
+              <p class="site-author-name" itemprop="name">dinosaur</p>
+              <div class="site-description motion-element" itemprop="description">闪耀的群星，颠覆着黑夜</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">371</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hao-Kailong" title="GitHub &rarr; https://github.com/Hao-Kailong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/klhao.nju@gmail.com" title="Email &rarr; klhao.nju@gmail.com"><i class="fa fa-fw fa-envelope"></i>Email</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dinosaur</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+      <div>
+        <div class="addthis_inline_share_toolbox">
+  <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cb429b1d763f1d4" async="async"></script>
+</div>
+
+      </div>
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script id="dsq-count-scr" src="https://dinosaur7.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://haokailong.top/2020/10/26/Pytorch实战-计算Wasserstein距离/";
+    this.page.identifier = "2020/10/26/Pytorch实战-计算Wasserstein距离/";
+    this.page.title = 'Pytorch实战 计算Wasserstein距离';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dinosaur7.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

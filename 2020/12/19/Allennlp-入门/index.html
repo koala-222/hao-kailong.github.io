@@ -1,0 +1,2247 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="DsoDHJ1Km7LX7l7UnoG8dB2QrygUWW345_JkdBOj1Vw">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="ahe2m7RGVx">
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italicRoboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/solar-system-32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/solar-system-16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/solar-system-32.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="在最近的实验中，对比方法里有一个需要用到AllenNLP，因此，对AllenNLP进行一个入门的了解。 概念Allennlp将NLP任务处理流程中的各个阶段都做了一定程度的抽象，在软件设计上讲就是，实现了高内聚，低耦合，让我们能够专注于特定模块的逻辑，而无需其他流程的改动，极大程度上减少了工作量。 那基础且重要的处理流程有：  DatasetReader：从文件中读取数据，转化为Instance集">
+<meta name="keywords" content="AllenNLP,Pytorch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Allennlp 入门">
+<meta property="og:url" content="http://haokailong.top/2020/12/19/Allennlp-入门/index.html">
+<meta property="og:site_name" content="Hold the Torch">
+<meta property="og:description" content="在最近的实验中，对比方法里有一个需要用到AllenNLP，因此，对AllenNLP进行一个入门的了解。 概念Allennlp将NLP任务处理流程中的各个阶段都做了一定程度的抽象，在软件设计上讲就是，实现了高内聚，低耦合，让我们能够专注于特定模块的逻辑，而无需其他流程的改动，极大程度上减少了工作量。 那基础且重要的处理流程有：  DatasetReader：从文件中读取数据，转化为Instance集">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://haokailong.top/images/blog/2020/allennlp/datasetreader.jpg">
+<meta property="og:updated_time" content="2020-12-20T05:28:40.694Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Allennlp 入门">
+<meta name="twitter:description" content="在最近的实验中，对比方法里有一个需要用到AllenNLP，因此，对AllenNLP进行一个入门的了解。 概念Allennlp将NLP任务处理流程中的各个阶段都做了一定程度的抽象，在软件设计上讲就是，实现了高内聚，低耦合，让我们能够专注于特定模块的逻辑，而无需其他流程的改动，极大程度上减少了工作量。 那基础且重要的处理流程有：  DatasetReader：从文件中读取数据，转化为Instance集">
+<meta name="twitter:image" content="http://haokailong.top/images/blog/2020/allennlp/datasetreader.jpg">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://haokailong.top/2020/12/19/Allennlp-入门/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Allennlp 入门 | Hold the Torch</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-138297445-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-138297445-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hold the Torch</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-wordcloud">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/wordcloud/" rel="section"><i class="menu-item-icon fa fa-fw fa-cloud"></i> <br>词云</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/19/Allennlp-入门/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Allennlp 入门
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-20 13:28:40" itemprop="dateModified" datetime="2020-12-20T13:28:40+08:00">2020-12-20</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/12/19/Allennlp-入门/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/19/Allennlp-入门/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在最近的实验中，对比方法里有一个需要用到AllenNLP，因此，对AllenNLP进行一个入门的了解。</p>
+<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>Allennlp将NLP任务处理流程中的各个阶段都做了一定程度的抽象，在软件设计上讲就是，实现了高内聚，低耦合，让我们能够专注于特定模块的逻辑，而无需其他流程的改动，极大程度上减少了工作量。</p>
+<p>那基础且重要的处理流程有：</p>
+<ul>
+<li>DatasetReader：从文件中读取数据，转化为Instance集合</li>
+<li>Model：模型主体</li>
+<li>Iterator：迭代数据，提取batch数据</li>
+<li>Trainer：模型训练器，并记录metric</li>
+<li>Predictor：使用训练好的模型来预测数据</li>
+</ul>
+<p>以上每个流程是松耦合的，没有强关联，需要全局配置的东西非常少。比如在NLP处理中最常见的一个：num_embedding/vocab_size 需要提前全局给定，或者使用单独的配置来存储，只不过带来的问题就是这个配置在很多地方都可能会使用到，故参数的传递就又会增加代码的冗杂度，使用起来很不方便。在Allennlp中会有一个vocabulary全局存储，无需单独配置，且提供函数接口调用获取，非常简单。<a id="more"></a></p>
+<h1 id="DatasetReader"><a href="#DatasetReader" class="headerlink" title="DatasetReader"></a>DatasetReader</h1><p>数据预处理，繁琐无聊但又少不了，而Allennlp让我们只关注于核心的数据读取，通用的东西早已封装好，核心的逻辑一个都逃不了，比如在DatasetReader我们只需要实现两个函数：_read , text_to_instance，即可完成数据预处理整个流程，其他的比如build_vocabulary, idx2word, word2idx, get_vocab_size等都帮我们做辽，就问你这个工具棒不棒，妙不妙。</p>
+<p>别以为_read和text_to_instance函数逻辑有多复杂，其实再简单不过了：</p>
+<ol>
+<li>从本地读取数据</li>
+<li>从数据中读取相关数据字段</li>
+<li>将提取的数据转化成Instance数组</li>
+</ol>
+<p>示例代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@DatasetReader.register("pos")</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PosDatasetReader</span><span class="params">(DatasetReader)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    DatasetReader for PoS tagging data, one sentence per line, like</span></span><br><span class="line"><span class="string">    The###DET dog###NN ate###V the###DET apple###NN</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, token_indexers: Dict[str, TokenIndexer] = None)</span> -&gt; <span class="keyword">None</span>:</span></span><br><span class="line">        super().__init__(lazy=<span class="literal">False</span>)</span><br><span class="line">        self.token_indexers = token_indexers <span class="keyword">or</span> &#123;<span class="string">"tokens"</span>: SingleIdTokenIndexer()&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">text_to_instance</span><span class="params">(self, tokens: List[Token], tags: List[str] = None)</span> -&gt; Instance:</span></span><br><span class="line">        sentence_field = TextField(tokens, self.token_indexers)</span><br><span class="line">        fields = &#123;<span class="string">"sentence"</span>: sentence_field&#125;</span><br><span class="line">        <span class="keyword">if</span> tags:</span><br><span class="line">            label_field = SequenceLabelField(labels=tags, sequence_field=sentence_field)</span><br><span class="line">            fields[<span class="string">"labels"</span>] = label_field</span><br><span class="line">        <span class="keyword">return</span> Instance(fields)</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_read</span><span class="params">(self, file_path: str)</span> -&gt; Iterator[Instance]:</span></span><br><span class="line">        <span class="keyword">with</span> open(file_path) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">for</span> line <span class="keyword">in</span> f:</span><br><span class="line">                pairs = line.strip().split()</span><br><span class="line">                sentence, tags = zip(*(pair.split(<span class="string">"###"</span>) <span class="keyword">for</span> pair <span class="keyword">in</span> pairs))</span><br><span class="line">                <span class="keyword">yield</span> self.text_to_instance([Token(word) <span class="keyword">for</span> word <span class="keyword">in</span> sentence], tags)</span><br></pre></td></tr></table></figure>
+<p>读取的Instance集合结构如下所示：</p>
+<p><img src="/images/blog/2020/allennlp/datasetreader.jpg" alt></p>
+<p>需要注意这里的text_to_instance函数是<strong>重写</strong>，另外也可以将text_to_instance中的代码搬迁到_read中去，程序不会出错，只不过鉴于设计模式中的<strong>单一职责</strong>规定，建议将不同逻辑的代码使用不同函数进行隔离。</p>
+<p>这个时候，有心人会注意到，DatasetReader 和 Pytorch中的Dataset、DataLoader的异同点是啥？</p>
+<p>答：DatasetReader是对后两者的部分抽象融合。</p>
+<ul>
+<li><p>相同点</p>
+</li>
+<li><ul>
+<li>都完成数据的读取与抽象的功能</li>
+<li>都能够实现数据的懒加载（针对于大数据量的情况）</li>
+<li>都有加速数据读取的性能的机制</li>
+</ul>
+</li>
+<li><p>不同点</p>
+</li>
+<li><ul>
+<li>DatasetReader合二为一，更加简单易懂</li>
+<li>DatasetReader只需要实现一个函数即可完成所有功能（并不是说所有功能在DatasetReader中实现，而是配合其他模块一起实现）</li>
+<li>DatasetReader能够在数据类型上支持多种不同NLP任务</li>
+<li>其他的我都不说了，反正很简单……</li>
+</ul>
+</li>
+</ul>
+<p>说了不同点，可还没有说到其核心强大之处。我将以三点说： - 懒加载数据 - 约定胜于配置 - 不同类型的Field</p>
+<h3 id="懒加载"><a href="#懒加载" class="headerlink" title="懒加载"></a>懒加载</h3><p>在编写_read函数的时候，使用yield关键字返回数据，DatasetReader于是对于数据的读取天然有着一种lazy generator模式，支持懒加载数据，只需要在传递lazy参数就行。</p>
+<p>当然，对内存有所优化，在时间上就会有所消耗，这是所有算法都不能避免的，针对不同的数据集使用不同的数据加载模式。</p>
+<h3 id="约定胜于配置"><a href="#约定胜于配置" class="headerlink" title="约定胜于配置"></a>约定胜于配置</h3><p>细心的朋友会发现，我们重写的是_read函数，这是一个私有函数，也是整个数据读取最核心的函数，Allennlp帮我们完成了read函数，并会自动调用_read函数读取数据。我们只需要实现这个函数，其他数据整理与读取进度条的展示等附带功能就会自动帮我们完成。</p>
+<h3 id="不同类型的Field"><a href="#不同类型的Field" class="headerlink" title="不同类型的Field"></a>不同类型的Field</h3><p>DatasetReader最终返回的是Instance实例的集合，而Instance实际上是一个字典类型的数据：<code>MutableMapping[str, Field]</code>，value是Field类型的数据，常用的Field类型有：</p>
+<ul>
+<li>TextField</li>
+<li>LabelField</li>
+<li>SequenceLabelField</li>
+<li>KnowledgeGraphField</li>
+<li>…</li>
+</ul>
+<p>首先，Field的作用是存储token相关信息，不同的Field实现类能够存储不同任务下的数据结构信息，比如sentence-classification与POS/NER的数据结构就不一样。且不同实现有不同的处理方法，Allennlp给我们提供了很多内置实现，详细可以去看<a href="https://link.zhihu.com/?target=https%3A//github.com/allenai/allennlp/tree/master/allennlp/data/fields" target="_blank" rel="noopener">官方代码</a>，这里我就不一一介绍，简单介绍几个：TextField，LabelField</p>
+<p>先看TextField，用来存储序列（tokens）数据，在初始化的时候是需要传递token_indexers，以对数据进行索引映射。</p>
+<p>而LabelField和SequenceLabelField就不需要token_indexers，因为本身就是label标签，无需使用不同的索引映射，故使用统一默认（SingleId）的索引映射处理即可。</p>
+<p>好了，我们知道了Instance是如何使用Field存储数据，那如何把字段塞进model.forward函数中去呢？</p>
+<p>答：Instance中的key值与forward函数中的参数名对应。</p>
+<p>比如以上代码中，每个Instance有sentence和label两个字段（Field），故在model.forward函数也有与之对应的参数名，如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Model.register("lstm-tagger")</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LstmTagger</span><span class="params">(Model)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 其他函数我就不展示出来了</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self,</span></span></span><br><span class="line"><span class="function"><span class="params">                sentence: Dict[str, torch.Tensor],</span></span></span><br><span class="line"><span class="function"><span class="params">                label: torch.Tensor = None)</span> -&gt; Dict[str, torch.Tensor]:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<p>【思考题】：咳咳～～，细心的朋友可能会观察到，sentence的数据类型是<code>Dict[str, torch.Tensor]</code>，可我在Instance中sentence键上存储的就是TextField。前面也说了，TextField本身就是需要将数据转化成index，然后用pytorch包装成torch.Tensor数据类型，那为什么会是Dict[str,torch.Tensor]数据类型呢？ 【线索】：token_indexers , 思考五秒钟……</p>
+<h2 id="token-indexers-amp-token-embedders"><a href="#token-indexers-amp-token-embedders" class="headerlink" title="token_indexers &amp; token_embedders"></a>token_indexers &amp; token_embedders</h2><p>为了讲清楚上面这个问题，我们再跟随着sentence这个字段从读取到映射成词向量这整个流程来讲解。</p>
+<font color="orange">sentence字段的处理分为以下几个阶段： 1. tokenizer -> 分词 2. Token -> 转化为单个Token对象 3. Instance -> 转化为Instance实例 4. Iterator -> 并组装成batch模式 5. model.forward -> 塞给模型去执行 6. token_embedders -> 将idx转化成词向量 </font>
+
+<ol>
+<li><strong>tokenizer -&gt; 分词</strong></li>
+</ol>
+<p>这个过程是在文本读取的时候执行的。在DatasetReader初始化的时候，会将tokenizer传递到构造函数当中，没有的话就初始化一个默认分词器。这个分词器可以是一个，也可以是多个，取决于在参数列表里面传递的个数。</p>
+<p>对于英文分词，allennlp有内置的WordTokenizer，可是中文分词的话，就需要自己手动构造一个：继承Tokenizer，然后注册。这样就可以在配置文件中通过type找到定制分词器。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">"I love cat" -&gt; ["I", "love", "cat"]</span><br></pre></td></tr></table></figure>
+<ol>
+<li><strong>Token -&gt; 转化成单个Token对象</strong></li>
+</ol>
+<p>如果看过Token源码就会知道，其核心存储着text，text_id,分别代表着分词的<strong>文本</strong>以及<strong>索引</strong>。</p>
+<p>这个过程比较简单，没有什么逻辑。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">["I", "love", "cat"] -&gt; [Token("I"), Token("love"), Token("cat")]</span><br></pre></td></tr></table></figure>
+<ol>
+<li><strong>Instance -&gt; 转化为Instance实例</strong></li>
+</ol>
+<p>这个过程一般是在DatasetReader的text_to_instance函数中完成，并针对不同字段转化成不同的Field。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tokens = [Token("I"), Token("love"), Token("cat")]</span><br><span class="line">token_indexers = &#123;</span><br><span class="line">    "word_token": SingleIdTokenIndexer(),</span><br><span class="line">    "character_token": TokenCharactersIndexer()</span><br><span class="line">&#125;</span><br><span class="line">instance = &#123;</span><br><span class="line">    "sentence": TextField(tokens, token_indexers)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><strong>Iterator -&gt; 组装成batch模式</strong></li>
+</ol>
+<p>这个过程或许看不见，可是逻辑基本上固定，如无特殊需求，无需定制。</p>
+<p>将Instance转化成idx的伪代码如下所示：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">instance = &#123;</span><br><span class="line">    "sentence": &#123;</span><br><span class="line">        "word_token": ["I", "love", "cat"] -&gt; torch.Tensor([23, 55, 67]),</span><br><span class="line">        "character_token": [["I"], ["l", "o", "v", "e"],["c", "a", "t"]] -&gt; torch.Tensor([[23], [34, 78, 35, 36],[13, 74, 26]])</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然而，Iterator看似简单，可还有一些细节我想与大家聊聊：</p>
+<ul>
+<li>在batch数据的时候，同batch中不同长度的数据是需要pad</li>
+<li>为了pad过程的<strong>性能</strong>，可优先将长度相近的文本放置在同一个batch中</li>
+<li>随机打乱数据</li>
+</ul>
+<p>Allennlp已经内置了几个DataIterator，几乎不需要你自己重写，除非你在batch的过程中，完成一些创新性的小trick。</p>
+<p>示例代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> allennlp.data.iterators <span class="keyword">import</span> BucketIterator</span><br><span class="line"></span><br><span class="line">iterator = BucketIterator(batch_size=config.batch_size, </span><br><span class="line">                          biggest_batch_first=<span class="literal">True</span>,</span><br><span class="line">                          sorting_keys=[(<span class="string">"tokens"</span>, <span class="string">"num_tokens"</span>)],</span><br><span class="line">                         )</span><br><span class="line">iterator.index_with(vocab)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>sorting_keys 能够提升padding过程效率。</li>
+<li><p>index_with(vocab)非常重要：给token_indexers配置vocabulary。<strong>这一步千万不要给忘记了</strong>。</p>
+</li>
+<li><p><strong>model.forward -&gt; 模型的参数</strong></p>
+</li>
+</ul>
+<p>Instance经过token_indexers转化成索引之后，由Iterator组装成batch数据，然后塞给模型的forward函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">token_embedders = &#123;</span><br><span class="line">    <span class="string">"word_token"</span>: TokenEmbedder(embedding_dim = <span class="number">23</span>),</span><br><span class="line">    <span class="string">"character_token"</span>: TokenEmbedder(embedding_dim = <span class="number">27</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">text_field_embedders = BaseTextFieldEmbedder(token_embedders)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self,sentence: Dict[str,torch.Tensor])</span>:</span></span><br><span class="line">    sentence_embedding = text_field_embedders(sentence)</span><br></pre></td></tr></table></figure>
+<p>上述伪代码很简单的，不过需要注意几点： 1）text_field_embedders参数token_embedders的关键字和token_indexers的关键字必须要保持一致。 2）多种TokenEmbedders对同一个文本分别做处理并映射到词向量后，将其拼接到一起。比如上述两个token_embedder维度为23和27，sentence_embedding的维度就为50。通过简单的几行代码就可以完成很复杂的词向量拼接的功能。(WTF? 词向量拼接很复杂吗？)</p>
+<ol>
+<li><strong>token_embedders -&gt; 词向量映射</strong></li>
+</ol>
+<p>其实如何将将文本索引映射到词向量，第五点就已经说了。其核心需要注意的就是： - token_indexers和token_embedders都是字典类型，且键值必须保持一致 - token_embedders处理后的词向量是拼接到一起<strong>（这个特性非常棒）</strong></p>
+<p>至此，我们跟随着sentence字段从读取到映射成词向量整个流程都已经聊完了，相信都已经掌握了。</p>
+<p>至此，我已经将模型执行之前所有的注意点都给聊完了。</p>
+<h2 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h2><p>建议看看源码，因为看了源码你才会发现，Allennlp的model和module都是基于Pytorch的torch.nn.Module模块建立，所以我们可以很容易的使用Allennlp中的任何类。</p>
+<p>为了说明Allennlp中的模型，我先与Pytorch中的模型做一个对比说明：</p>
+<p>示例代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, tokens: Dict[str, torch.Tensor],</span></span></span><br><span class="line"><span class="function"><span class="params">                id: Any, label: torch.Tensor)</span> -&gt; torch.Tensor:</span></span><br><span class="line">        mask = get_text_field_mask(tokens)</span><br><span class="line">        embeddings = self.word_embeddings(tokens)</span><br><span class="line">        state = self.encoder(embeddings, mask)</span><br><span class="line">        class_logits = self.projection(state)</span><br><span class="line"></span><br><span class="line">        output = &#123;<span class="string">"class_logits"</span>: class_logits&#125;</span><br><span class="line">        output[<span class="string">"loss"</span>] = self.loss(class_logits, label)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> output</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Allennlp中的forward函数参数有的是一个字典类型（类似于TextField指定了TokenIndexer）的数据，有的是纯torch.Tensor数据。而Pytorch中的数据格式没有限制，自由度由自己控制，但推荐是torch.Tensor数据类型。</li>
+<li>Allennlpforward函数返回的也是一个字典类型的数据，其中最重要的就是损失函数值，必须将其存储在loss键下（这是一个<strong>约定</strong>），同时loss值的一个计算也是在forward函数中执行的。</li>
+</ul>
+<p>至此，我们已经了解为什么forward函数有的参数为什么是字典类型。那我这里想问一个问题：</p>
+<p>为什么forward函数返回的值也是字典类型？ 答：因为在Trainer中有大用处，后面我会进一步讲解。</p>
+<p>Allennlp为什么会这么好用呢？</p>
+<p>答：因为里面将很多类似的组件，并将其抽象成模块来使用，常用的有：</p>
+<ul>
+<li>token_embedder</li>
+<li>encoder</li>
+<li>decoder</li>
+</ul>
+<p>示例代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> allennlp.nn.util <span class="keyword">import</span> get_text_field_mask</span><br><span class="line"><span class="keyword">from</span> allennlp.models <span class="keyword">import</span> Model</span><br><span class="line"><span class="keyword">from</span> allennlp.modules.text_field_embedders <span class="keyword">import</span> TextFieldEmbedder</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BaselineModel</span><span class="params">(Model)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, word_embeddings: TextFieldEmbedder,</span></span></span><br><span class="line"><span class="function"><span class="params">                 encoder: Seq2VecEncoder,</span></span></span><br><span class="line"><span class="function"><span class="params">                 out_sz: int=len<span class="params">(label_cols)</span>)</span>:</span></span><br><span class="line">        super().__init__(vocab)</span><br><span class="line">        self.word_embeddings = word_embeddings</span><br><span class="line">        self.encoder = encoder</span><br><span class="line">        self.projection = nn.Linear(self.encoder.get_output_dim(), out_sz)</span><br><span class="line">        self.loss = nn.BCEWithLogitsLoss()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, tokens: Dict[str, torch.Tensor],</span></span></span><br><span class="line"><span class="function"><span class="params">                id: Any, label: torch.Tensor)</span> -&gt; torch.Tensor:</span></span><br><span class="line">        mask = get_text_field_mask(tokens)</span><br><span class="line">        embeddings = self.word_embeddings(tokens)</span><br><span class="line">        state = self.encoder(embeddings, mask)</span><br><span class="line">        class_logits = self.projection(state)</span><br><span class="line"></span><br><span class="line">        output = &#123;<span class="string">"class_logits"</span>: class_logits&#125;</span><br><span class="line">        output[<span class="string">"loss"</span>] = self.loss(class_logits, label)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> output</span><br></pre></td></tr></table></figure>
+<p>上面代码中，encoder是Seq2VecEncoder（基类）类型，故可更改encoder的实现，并不改变模型内部的代码，实现组件的单独替换，而我们所需要做的，只需要添加Seq2VecEncoder的派生类即可。</p>
+<p>这就是Allennlp的强大之处：所有的流程都抽象化，具体实现只需要自己指定或实现就行。</p>
+<h2 id="Train"><a href="#Train" class="headerlink" title="Train"></a>Train</h2><p>接下来就该讨论模型的<strong>训练流程</strong>了。</p>
+<p>相比Pytorch繁杂且毫无新特性的训练过程，Keras和tensorflow框架就做的很好，只需要简单的几行代码就可以替代Pytorch多行手动编制的训练loop。</p>
+<p>Allennlp抽象了一个Trainer，用来执行训练过程：更新梯度，保存日志文件（用tensorboard查看），保存best_model，良好的训练过程输出等等，这个训练器大大减少了我们的工作量。</p>
+<p>示例代码如下，也是非常简单：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> allennlp.training.trainer <span class="keyword">import</span> Trainer</span><br><span class="line"></span><br><span class="line">trainer = Trainer(</span><br><span class="line">    model=model,</span><br><span class="line">    optimizer=optim.Adam(model.parameters(), lr=config.lr),</span><br><span class="line">    iterator=iterator,</span><br><span class="line">    train_dataset=train_ds,</span><br><span class="line">    cuda_device=<span class="number">0</span> <span class="keyword">if</span> USE_GPU <span class="keyword">else</span> <span class="number">-1</span>,</span><br><span class="line">    num_epochs=config.epochs,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">trainer.train()</span><br></pre></td></tr></table></figure>
+<p>配置完Trainer，只需要指定train函数即可完成训练的整个过程。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Allennlp非常好用，也有足够的定制化能力，也可以和Transformer完美结合在一起，同时也支持<strong>semantic parsing</strong>，<strong>state machine</strong>，未来也会添加更多更强大的模块。</p>
+<p><br></p>
+<blockquote>
+<p>搬运自知乎：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/111563535" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/111563535</a></p>
+</blockquote>
+<p><br></p>
+<h1 id="感受"><a href="#感受" class="headerlink" title="感受"></a>感受</h1><p>虽然作者介绍了很多，但整体看下来感觉繁琐而低效，很多类和模块的封装没有必要，而且学习成本较高。值得赞扬的就是对Train和Test过程的封装了，其他的实在不够有吸引力。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/AllenNLP/" rel="tag"><i class="fa fa-tag"></i> AllenNLP</a>
+          
+            <a href="/tags/Pytorch/" rel="tag"><i class="fa fa-tag"></i> Pytorch</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/12/19/pip-安装路径/" rel="next" title="pip 安装路径">
+                <i class="fa fa-chevron-left"></i> pip 安装路径
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/12/20/AllenNLP-Jsonnet-模式/" rel="prev" title="AllenNLP Jsonnet 模式">
+                AllenNLP Jsonnet 模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/漫画脸1vs1.jpg" alt="dinosaur">
+            
+              <p class="site-author-name" itemprop="name">dinosaur</p>
+              <div class="site-description motion-element" itemprop="description">闪耀的群星，颠覆着黑夜</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">371</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hao-Kailong" title="GitHub &rarr; https://github.com/Hao-Kailong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/klhao.nju@gmail.com" title="Email &rarr; klhao.nju@gmail.com"><i class="fa fa-fw fa-envelope"></i>Email</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概念"><span class="nav-text">概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DatasetReader"><span class="nav-text">DatasetReader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#懒加载"><span class="nav-text">懒加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#约定胜于配置"><span class="nav-text">约定胜于配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不同类型的Field"><span class="nav-text">不同类型的Field</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#token-indexers-amp-token-embedders"><span class="nav-text">token_indexers &amp; token_embedders</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Model"><span class="nav-text">Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Train"><span class="nav-text">Train</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#感受"><span class="nav-text">感受</span></a></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dinosaur</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+      <div>
+        <div class="addthis_inline_share_toolbox">
+  <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cb429b1d763f1d4" async="async"></script>
+</div>
+
+      </div>
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script id="dsq-count-scr" src="https://dinosaur7.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://haokailong.top/2020/12/19/Allennlp-入门/";
+    this.page.identifier = "2020/12/19/Allennlp-入门/";
+    this.page.title = 'Allennlp 入门';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dinosaur7.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

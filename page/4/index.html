@@ -415,6 +415,636 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/05/allennlp-jsonnet-error/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/01/05/allennlp-jsonnet-error/" class="post-title-link" itemprop="url">allennlp jsonnet error</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-01-05 15:49:10" itemprop="dateModified" datetime="2021-01-05T15:49:10+08:00">2021-01-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/01/05/allennlp-jsonnet-error/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/05/allennlp-jsonnet-error/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在安装allennlp时，出现编译错误，仔细阅读报错，发现：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make: g++ <span class="built_in">command</span> not found</span><br></pre></td></tr></table></figure>
+<p>原因是出在g++这里，从网上查阅了参考资料，<strong>适合我的解决方案是</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt-get install aptitude</span><br><span class="line">apt-get update</span><br><span class="line">apt-get build-essential</span><br></pre></td></tr></table></figure>
+<p>原因是allennlp要求的g++版本与现有版本不匹配，想办法升级即可。</p>
+<p>然后安装<code>build-essential</code>，以及其他必要的编译环境，参考<a href="https://github.com/scrapy/scrapy/issues/2115" target="_blank" rel="noopener">issue</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install python3 python-dev python3-dev \</span><br><span class="line">     build-essential libssl-dev libffi-dev \</span><br><span class="line">     libxml2-dev libxslt1-dev zlib1g-dev \</span><br><span class="line">     python-pip</span><br></pre></td></tr></table></figure>
+<p>┭┮﹏┭┮，太不容易了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Successfully built jsonnet</span><br><span class="line">Installing collected packages: jsonnet, h5py, boto3, allennlp</span><br><span class="line">Successfully installed allennlp-1.3.0 boto3-1.16.48 h5py-3.1.0 jsonnet-0.17.0</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/05/使用BibTeX生成参考文献列表/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/01/05/使用BibTeX生成参考文献列表/" class="post-title-link" itemprop="url">使用BibTeX生成参考文献列表</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-01-05 14:33:04" itemprop="dateModified" datetime="2021-01-05T14:33:04+08:00">2021-01-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/01/05/使用BibTeX生成参考文献列表/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/05/使用BibTeX生成参考文献列表/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>本篇文章转载自：</p>
+<p><a href="https://liam.page/2016/01/23/using-bibtex-to-generate-reference/" target="_blank" rel="noopener">https://liam.page/2016/01/23/using-bibtex-to-generate-reference/</a></p>
+</blockquote>
+<p>LaTeX 是一些理工专业论文排版的事实标准。既然是论文排版，就不可避免会涉及到参考文献的处理。Oren Patashnik 和 Leslie Lamport 在 1985 年开发的 BibTeX 是在 LaTeX 社区相当流行的参考文献格式化工具。</p>
+<p>其实网络上流传的 BibTeX 教程很多，本不用我再来插一句嘴。不过这么多年来，始终有很多朋友会对几个问题反复提问。这让我感到，现有的教程恐怕是不够的。这篇文章尝试将 BibTeX 的基本用法讲解清楚，同时适当地提及一些处理流程，争取在有限的篇幅里，讲清楚 BibTeX 的来龙去脉。</p>
+<h1 id="bst-和-bib-格式简介"><a href="#bst-和-bib-格式简介" class="headerlink" title="bst 和 bib 格式简介"></a>bst 和 bib 格式简介</h1><p>BibTeX 涉及到两种特有的辅助的文件格式：<code>bst</code> 和 <code>bib</code>。</p>
+<p><code>bst</code> 是 (B)ibliography (ST)yle 的缩写。顾名思义，和 <code>sty</code> 文件是 style 的缩写一样，<code>bst</code> 文件控制着参考文献列表的格式。在这里说的「格式」，主要指参考文献列表中的编号、排序规则、对人名的处理（是否缩写）、月份的处理（是否缩写）、期刊名称的缩写等。</p>
+<p><code>bib</code> 是 BibTeX 定义的「参考文献数据库」。通常，我们会按照 BibTeX 规定的格式，向 <code>bib</code> 文件写入多条文献信息。在实际使用时，我们就可以根据 <code>bib</code> 文件中定义的文献标记（label），从数据库中调取文献信息，继而排版成参考文献列表。</p>
+<p>值得注意的是，<code>bib</code> 是一个数据库，其中的内容并不一定等于 LaTeX 排版参考文献列表时的内容。也就是说，如果 <code>bib</code> 数据库中有 10 条文献信息，并不一定说 LaTeX 排版出来的 PDF 文件中，参考文献列表里也一定有 10 条。实际排版出来的参考文献列表中有多少条文献，实际是哪几条，具体由文中使用的 <code>\cite</code> 命令（以及 <code>\nocite</code> 命令）指定。如果没有使用 <code>\cite</code> 命令调取文献信息，那么即使在 <code>bib</code> 文件中定义了文献信息，也不会展现在参考文献列表中。很多人对此误解甚深，于是经常有人问道「为什么我在 <code>bib</code> 文件里写的文献，不出现在参考文献中」之类的问题。</p>
+<h1 id="BibTeX-工作流程"><a href="#BibTeX-工作流程" class="headerlink" title="BibTeX 工作流程"></a>BibTeX 工作流程</h1><p>介绍中提到，BibTeX 是一个参考文献格式化工具。这个定义，给 BibTeX 的用处做了良好的界定：BibTeX 不是用来排版参考文献的，更不是个排版工具，<strong>它只是根据需要，按照（bst 文件规定的）某种格式，将（bib 文件中包含的）参考文献信息，格式化 为 LaTeX 能够使用的列表信息</strong>。</p>
+<p>清楚了 BibTeX 需要做的事情（用软件工程的话说，就是清楚了 BibTeX 的 API），我们就可以理清 BibTeX 的工作流程。</p>
+<h3 id="知道需要哪些参考文献信息"><a href="#知道需要哪些参考文献信息" class="headerlink" title="知道需要哪些参考文献信息"></a>知道需要哪些参考文献信息</h3><p>既然 BibTeX 会<em>根据需要</em> 格式化数据，那么首先要解决的问题就是：BibTeX 如何了解此处的「需求」。</p>
+<p>对 BibTeX 稍有了解的读者可能知道，运行 BibTeX 的命令行命令是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bibtex foo.aux # 其中后缀名 .aux 可以省略</span><br></pre></td></tr></table></figure>
+<p>实际上，BibTeX 正是通过读取 <code>aux</code> 文件中的 <code>\citation{}</code> 标记，来确定用户需要哪些参考文献的。</p>
+<p>举个例子，假设用户用 LaTeX 编译了以下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">foo.tex\documentclass&#123;article&#125;\begin&#123;document&#125;bar\cite&#123;baz&#125;\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p>如果该文件名为 <code>foo.tex</code>，那么就会生成 <code>foo.aux</code>。其内容大约是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">foo.aux\relax\citation&#123;baz&#125;</span><br></pre></td></tr></table></figure>
+<p>在这里，<code>\relax</code> 表示休息一会儿，什么也不做；<code>\citation</code> 则是由 <code>tex</code> 文件中的 <code>\cite</code> 命令写入 <code>aux</code> 文件的标记。它说明了：用户需要标记为 <code>baz</code> 的参考文献信息。</p>
+<p>当 BibTeX 读入 <code>aux</code> 文件的时候，它就会记录下所有 <code>\citation</code> 命令中的内容（即文献标记——label），这样就知道了用户需要哪些参考文献信息。</p>
+<h3 id="了解文献列表格式以及读取文献数据库"><a href="#了解文献列表格式以及读取文献数据库" class="headerlink" title="了解文献列表格式以及读取文献数据库"></a>了解文献列表格式以及读取文献数据库</h3><p>当 BibTeX 清楚了用户需要哪些文献信息，接下来自然应该搞清楚用户想要什么样的格式。而知道了格式之后，就可以从数据库中抽取所需的文献信息，按照格式准备数据。</p>
+<p>为了讲清楚这个步骤，我们对上述 LaTeX 代码做些许的修改。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">foo.tex</span><br><span class="line">\documentclass&#123;article&#125;</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line">\bibliographystyle&#123;unsrt&#125;</span><br><span class="line">bar\cite&#123;baz&#125;</span><br><span class="line">\bibliography&#123;foobar&#125;</span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p>同样，我们将它保存为 <code>foo.tex</code>，经由 LaTeX 编译之后得到一个 <code>foo.aux</code> 文件，其内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">foo.aux</span><br><span class="line">\relax</span><br><span class="line">\bibstyle&#123;unsrt&#125;</span><br><span class="line">\citation&#123;baz&#125;</span><br><span class="line">\bibdata&#123;foobar&#125;</span><br></pre></td></tr></table></figure>
+<p>简单的对比，不难发现：</p>
+<ol>
+<li><code>foo.tex</code> 中新增的 <code>\bibliographystyle{unsrt}</code> 与 <code>aux</code> 文件中的 <code>\bibstyle{unsrt}</code> 相对应。</li>
+<li><code>foo.tex</code> 中新增的 <code>\bibliography{foobar}</code> 与 <code>aux</code> 文件中的 <code>\bibdata{foobar}</code> 相对应。</li>
+</ol>
+<p>根据命令的名字，我们很容易猜测各个命令的作用。<code>tex</code> 文件中的 <code>\bibliographystyle</code> 指定了用户期待的参考文献列表格式文件，并将其写入 <code>aux</code> 文件备用，通过 <code>\bibstyle</code> 标记。与此同时，<code>\bibliography</code> 命令则用 <code>\bibdata</code> 在 <code>aux</code> 文件中记录了参考文献数据库的名字（不含扩展名）。</p>
+<p>在这里，<code>unsrt</code> 是 unsort 的缩写，它对应着 <code>unsrt.bst</code> 文件，是大多数 TeX 发行版自带的标准格式文件之一；<code>foobar</code> 则对应着 <code>foobar.bib</code> 文件，该文件是用户自己编写或生成的参考文献数据库。</p>
+<h3 id="实际操作看看"><a href="#实际操作看看" class="headerlink" title="实际操作看看"></a>实际操作看看</h3><p>我们假设上述 <code>foobar.bib</code> 文件有如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@BOOK&#123;baz,    </span><br><span class="line">title = &#123;Dummy Book&#125;,    </span><br><span class="line">publisher = &#123;Egypt&#125;,    </span><br><span class="line">year = &#123;321&#125;,    </span><br><span class="line">author = &#123;The King&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们在命令行执行以下操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">latex foo.tex   # .tex 可以省略</span><br><span class="line">bibtex foo.aux  # .aux 可以省略</span><br></pre></td></tr></table></figure>
+<p>我们会发现，BibTeX 生成了两个文件：<code>foo.bbl</code> 和 <code>foo.blg</code>。其中 <code>foo.bbl</code> 的内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;thebibliography&#125;&#123;1&#125;</span><br><span class="line">\bibitem&#123;baz&#125;The King.</span><br><span class="line">\newblock &#123;\em Dummy Book&#125;.</span><br><span class="line">\newblock Egypt, 321.</span><br><span class="line">\end&#123;thebibliography&#125;</span><br></pre></td></tr></table></figure>
+<p>显然，这就是一个标准的 LaTeX 环境。对 LaTeX 参考文献排版稍有了解的读者可能知道 <code>thebibliography</code> 环境正是 LaTeX 中手工编排参考文献时使用的环境。因此，<strong>foo.bbl 就是 BibTeX 格式化输出的结果</strong>，LaTeX 只需要将该文件的内容读入，就能在相应的位置输出格式化之后的参考文献列表了。</p>
+<p>接下来，我们看看 <code>foo.blg</code> 的内容。<code>blg</code> 实际是 BibTeX Log 的缩写，亦即这是一个日志文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">foo.blgThis is BibTeX, Version 0.99d (TeX Live 2015)</span><br><span class="line">Capacity: max_strings=35307, hash_size=35307, hash_prime=30011</span><br><span class="line">The top-level auxiliary file: foo.aux</span><br><span class="line">The style file: unsrt.bst</span><br><span class="line">Database file #1: foobar.bib</span><br><span class="line">You&apos;ve used 1 entry,</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>我们看到，BibTeX 打出的日志文件中，记录了读入 <code>aux</code>/<code>bst</code>/<code>bib</code> 文件的情况。特别地，记录了所需的参考文献条目（entry）的数量（此处为 1）。</p>
+<p>日志中值得注意的地方是在提到 <code>bib</code> 文件时，使用了 <code>#1</code> 的标记。既然存在 <code>#1</code>，那么合理推测也可以存在 <code>#2</code>。也就是说，BibTeX 可能支持两个或更多的 <code>bib</code> 数据库共同工作。具体如何实现，请读者自己阅读相关资料（手册或 Google 检索）后实验。</p>
+<p>紧接着，我们再执行一次 LaTeX：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">latex foo.tex</span><br></pre></td></tr></table></figure>
+<p>首先，来看看 <code>aux</code> 文件会发生什么变化：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\relax</span><br><span class="line">\bibstyle&#123;unsrt&#125;</span><br><span class="line">\citation&#123;baz&#125;</span><br><span class="line">\bibdata&#123;foobar&#125;</span><br><span class="line">\bibcite&#123;baz&#125;&#123;1&#125;</span><br></pre></td></tr></table></figure>
+<p>相比上一次的 <code>foo.aux</code>，在读入 BibTeX 之后，LaTeX 向 <code>aux</code> 文件写入了更多的信息。这里 <code>\bibcite{baz}{1}</code> 将 <code>baz</code> 这一参考文献标记（label）与参考文献编号（数字 1）绑定起来了。</p>
+<p>接下来，我们看看 <code>dvi</code> 文件的内容：</p>
+<p><img src="/images/blog/2021/latex.png" alt></p>
+<p>不难发现，由于读入了 <code>foo.bbl</code> 文件，参考文献列表已经正确展现出来了。然而，正文中依然有一个问号。</p>
+<p>实际上，LaTeX 需要 <code>aux</code> 文件中的 <code>\bibcite</code> 命令，将参考文献标记与参考文献编号关联起来，从而在 <code>tex</code> 文件中的 <code>\cite</code> 命令位置填上正确的参考文献编号。我们注意到，在我们第二次执行 LaTeX 命令编译之前，<code>foo.aux</code> 文件中是没有这些信息的，直到编译完成，这些信息才被正确写入。因此，第二次执行 LaTeX 命令时，LaTeX 还不能填入正确的文献编号，于是就写入了一个问号作为占位符。</p>
+<p>解决这个问题的办法也很简单——此时 <code>aux</code> 文件中已经有了需要的信息，再编译一遍就好了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">latex foo.tex</span><br></pre></td></tr></table></figure>
+<p>如果没有意外，此时的 <code>foo.dvi</code> 文件应该看起来一切正常了。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><ul>
+<li>BibTeX 是一个参考文献格式化工具，它会根据需要，按照（<code>bst</code> 文件规定的）某种格式，将（<code>bib</code> 文件中包含的）参考文献信息，<em>格式化</em> 为 LaTeX 能够使用的列表信息。</li>
+<li>正确使用 BibTeX 处理参考文献，需要先用 (Xe/PDF)LaTeX 编译 <code>tex</code> 文件，生成 <code>aux</code> 辅助文件。</li>
+<li>执行 BibTeX 将读入 <code>aux</code> 文件，搞清楚用户需要哪些文献。</li>
+<li>紧接着，BibTeX 根据 <code>aux</code> 文件中的内容，找到正确的 <code>bst</code> 和 <code>bib</code> 文件，并将参考文献信息格式化为 LaTeX 的 <code>thebibliography</code> 环境，作为 <code>bbl</code> 文件输出。</li>
+<li>第二次执行 (Xe/PDF)LaTeX 将会读入新生成的 <code>bbl</code> 文件，同时更新 <code>aux</code> 文件。</li>
+<li>此时，参考文献列表将会正常展示，但是正文中的引用标记显示为问号。</li>
+<li>第三次执行 (Xe/PDF)LaTeX 将会读入 <code>bbl</code> 文件和更新过后的 <code>aux</code> 文件。此时，参考文献相关内容都正常显示。</li>
+</ul>
+<p>因此，总的来说，想要正确使用 BibTeX 协同 LaTeX 处理参考文献，需要编译四次：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(xe/pdf)latex foo.tex   <span class="comment"># 表示使用 latex, pdflatex 或 xelatex 编译，下同</span></span><br><span class="line">bibtex foo.aux</span><br><span class="line">(xe/pdf)latex foo.tex</span><br><span class="line">(xe/pdf)latex foo.tex</span><br></pre></td></tr></table></figure>
+<h1 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h1><blockquote>
+<p>我希望将一条文献展示在参考文献列表中，但不想在正文中用 <code>\cite</code> 命令引用，怎么办？</p>
+</blockquote>
+<p>首先，确保这条文献已经写入了 <code>bib</code> 文件。其次，可以在 <code>\bibliography</code> 命令之前，用 <code>\nocite{label}</code> 提示 BibTeX 调取这条文献。</p>
+<blockquote>
+<p>我有很多条文献，都存在这样的情况。每条文献逐一 <code>\nocite</code> 太繁琐了，有没有懒人适用的办法？</p>
+</blockquote>
+<p>有的。<code>\nocite{*}</code>。</p>
+<blockquote>
+<p>每次都要编译四次，我感觉懒癌又要发作了，有没有办法治疗？</p>
+</blockquote>
+<p>有的。可以尝试 LaTeXmk, TeXify 之类的自动化工具。</p>
+<blockquote>
+<p>我对默认提供的 <code>bst</code> 文件的格式效果不满意，哪里能找到更多的 <code>bst</code>？</p>
+</blockquote>
+<p>现代 TeX 发行版都提供了多种 <code>bst</code> 可供选择，每个 <code>bst</code> 文件的格式、适用范围、使用条件都不一样，需要仔细甄别。具体可以去安装目录下搜索试试。</p>
+<blockquote>
+<p>有没有遵循国家标准的 <code>bst</code>？</p>
+</blockquote>
+<p>有的，<a href="https://liam.page/2014/05/09/gbt7714-2005-bibtex-style/" target="_blank" rel="noopener">这里</a>。</p>
+<blockquote>
+<p>我找到的 <code>bst</code>，效果都不满意，怎么办？</p>
+</blockquote>
+<p>你可以在命令行执行 <code>latex makebst</code>，制作一个符合自己要求的 <code>bst</code> 文件。你需要回答大约 100 个关于参考文献列表效果的问题。</p>
+<blockquote>
+<p><code>bib</code> 文件怎么生成？</p>
+</blockquote>
+<p>你可以手写，或者用 JabRef 之类的文献工具生成。具体请自行 Google 检索，篇幅所限就不展开了。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/04/conda安装环境报错-Solving-environment-failed-with-initial-frozen-solve/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/01/04/conda安装环境报错-Solving-environment-failed-with-initial-frozen-solve/" class="post-title-link" itemprop="url">conda安装环境报错 Solving environment failed with initial frozen solve</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-01-04 23:10:10" itemprop="dateModified" datetime="2021-01-04T23:10:10+08:00">2021-01-04</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/01/04/conda安装环境报错-Solving-environment-failed-with-initial-frozen-solve/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/04/conda安装环境报错-Solving-environment-failed-with-initial-frozen-solve/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查询版本</span></span><br><span class="line">$ conda -V</span><br><span class="line"><span class="comment"># 升级</span></span><br><span class="line">$ conda update -n base conda</span><br><span class="line">Collecting package metadata (current_repodata.json): <span class="keyword">done</span></span><br><span class="line">Solving environment: \ </span><br><span class="line">The environment is inconsistent, please check the package plan carefully</span><br><span class="line">The following packages are causing the inconsistency:</span><br><span class="line"></span><br><span class="line">  - https://repo.anaconda.com/pkgs/main/linux-64::anaconda==2019.07=py37_0</span><br><span class="line">  - https://repo.anaconda.com/pkgs/main/linux-64::numba==0.44.1=py37h962f231_0</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## Package Plan ##</span></span><br><span class="line"></span><br><span class="line">  environment location: /home/lab305/anaconda3</span><br><span class="line"></span><br><span class="line">  added / updated specs:</span><br><span class="line">    - conda</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">The following packages will be downloaded:</span><br><span class="line">...</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>升级<code>conda</code>到最新版本后再更新全部应用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ conda update --all</span><br><span class="line">Collecting package metadata (current_repodata.json): <span class="keyword">done</span></span><br><span class="line">Solving environment: <span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## Package Plan ##</span></span><br><span class="line"></span><br><span class="line">  environment location: /home/lab305/anaconda3/envs/pytorch1.3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">The following packages will be downloaded:</span><br></pre></td></tr></table></figure>
+<p>就可以继续使用<code>conda</code>安装应用。</p>
+<p>但是我按照以上步骤后依然报错，后来等待soft-solving后提示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">allennlp requires python&gt;=3.6 &lt;3.7</span><br></pre></td></tr></table></figure>
+<p>而我创建conda环境时使用的python3.7版本…</p>
+<p>fix这个bug之后，就没有问题了！🎉</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/04/DISTRE源码阅读/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1865,565 +2495,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/27/对NYT数据集二分类/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/27/对NYT数据集二分类/" class="post-title-link" itemprop="url">对NYT数据集二分类</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-28 14:50:52" itemprop="dateModified" datetime="2020-12-28T14:50:52+08:00">2020-12-28</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/Distant-Supervision/" itemprop="url" rel="index"><span itemprop="name">Distant Supervision</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/27/对NYT数据集二分类/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/27/对NYT数据集二分类/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在最近的实验中，考虑到远程监督数据集NYT的去噪问题，设想能否利用预训练语言模型的强大能力，对数据集的噪音进行一个预先的划分，进行二分类的尝试。</p>
-<h1 id="实验设置"><a href="#实验设置" class="headerlink" title="实验设置"></a>实验设置</h1><p>以56种关系作为POS，以NA关系作为NEG，进行0-1的二分类学习，编码器采用BERT，由于类别不平衡，对负样本进行采样，不超过正样本的类别数。由于训练数据过多，训练时长太久，于是，对正负样本各取10000个，然后进行实验。</p>
-<h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">TRAINING: <span class="number">625</span>it [<span class="number">02</span>:<span class="number">56</span>,  <span class="number">3.54</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">37</span>, <span class="number">10.72</span>it/s]</span><br><span class="line">epoch <span class="number">0</span>, loss <span class="number">0.3108509671562363</span>, accuracy <span class="number">0.8750775915580384</span></span><br><span class="line">TRAINING: <span class="number">625</span>it [<span class="number">02</span>:<span class="number">58</span>,  <span class="number">3.50</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">37</span>, <span class="number">10.69</span>it/s]</span><br><span class="line">epoch <span class="number">1</span>, loss <span class="number">0.2790242659515024</span>, accuracy <span class="number">0.8945530726256983</span></span><br><span class="line">TRAINING: <span class="number">573</span>it [<span class="number">02</span>:<span class="number">44</span>,  <span class="number">3.53</span>it/s]</span><br><span class="line">TRAINING: <span class="number">625</span>it [<span class="number">02</span>:<span class="number">59</span>,  <span class="number">3.49</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">37</span>, <span class="number">10.69</span>it/s]</span><br><span class="line">epoch <span class="number">2</span>, loss <span class="number">0.27044483414959747</span>, accuracy <span class="number">0.9058038485412787</span></span><br><span class="line">TRAINING: <span class="number">625</span>it [<span class="number">02</span>:<span class="number">58</span>,  <span class="number">3.50</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">37</span>, <span class="number">10.72</span>it/s]</span><br><span class="line">epoch <span class="number">3</span>, loss <span class="number">0.3372199231719427</span>, accuracy <span class="number">0.8947082557417753</span></span><br><span class="line">TRAINING: <span class="number">625</span>it [<span class="number">02</span>:<span class="number">58</span>,  <span class="number">3.50</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">37</span>, <span class="number">10.67</span>it/s]</span><br><span class="line">epoch <span class="number">4</span>, loss <span class="number">0.35960243281818205</span>, accuracy <span class="number">0.8975791433891993</span></span><br><span class="line">TRAINING: <span class="number">625</span>it [<span class="number">02</span>:<span class="number">58</span>,  <span class="number">3.50</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">37</span>, <span class="number">10.68</span>it/s]</span><br><span class="line">epoch <span class="number">5</span>, loss <span class="number">0.3635644751425287</span>, accuracy <span class="number">0.8998292985723153</span></span><br><span class="line">TRAINING: <span class="number">625</span>it [<span class="number">02</span>:<span class="number">58</span>,  <span class="number">3.51</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">37</span>, <span class="number">10.68</span>it/s]</span><br><span class="line">epoch <span class="number">6</span>, loss <span class="number">0.43025128015637093</span>, accuracy <span class="number">0.9021570453134699</span></span><br><span class="line">TRAINING: <span class="number">625</span>it [<span class="number">02</span>:<span class="number">58</span>,  <span class="number">3.50</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">37</span>, <span class="number">10.68</span>it/s]</span><br><span class="line">epoch <span class="number">7</span>, loss <span class="number">0.5122146993227276</span>, accuracy <span class="number">0.8918373680943513</span></span><br></pre></td></tr></table></figure>
-<p>可以看到，分类准确率（accuracy）在90%左右，具体应用到实验中效果会怎么样呢？还有待实验~</p>
-<h2 id="全量数据"><a href="#全量数据" class="headerlink" title="全量数据"></a>全量数据</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">epoch <span class="number">0</span>, loss <span class="number">0.19445358777635965</span>, accuracy <span class="number">0.9276846679081316</span></span><br><span class="line">BIMODEL.pkl saved, best accuracy <span class="number">0.9276846679081316</span></span><br><span class="line">TRAINING: <span class="number">8560</span>it [<span class="number">40</span>:<span class="number">00</span>,  <span class="number">3.57</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">36</span>, <span class="number">11.01</span>it/s]</span><br><span class="line">epoch <span class="number">1</span>, loss <span class="number">0.2355663737937318</span>, accuracy <span class="number">0.9197703289882061</span></span><br><span class="line">TRAINING: <span class="number">8560</span>it [<span class="number">39</span>:<span class="number">57</span>,  <span class="number">3.57</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">36</span>, <span class="number">11.00</span>it/s]</span><br><span class="line">epoch <span class="number">2</span>, loss <span class="number">0.29970387574681023</span>, accuracy <span class="number">0.914804469273743</span></span><br><span class="line">TRAINING: <span class="number">8560</span>it [<span class="number">40</span>:<span class="number">02</span>,  <span class="number">3.56</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">36</span>, <span class="number">11.00</span>it/s]</span><br><span class="line">epoch <span class="number">3</span>, loss <span class="number">0.2967500277536646</span>, accuracy <span class="number">0.9183736809435133</span></span><br></pre></td></tr></table></figure>
-<p>可以看到，准确率可以接近93%，挺不错的~</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/27/二分类损失/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/27/二分类损失/" class="post-title-link" itemprop="url">二分类损失</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-27 17:56:49" itemprop="dateModified" datetime="2020-12-27T17:56:49+08:00">2020-12-27</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/27/二分类损失/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/27/二分类损失/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在用pytorch进行二分类时，最后网络的输出经过sigmoid()函数，得到形如(batch, )的tensor，该使用什么损失函数呢？</p>
-<h1 id="BCELoss"><a href="#BCELoss" class="headerlink" title="BCELoss"></a>BCELoss</h1><p>Creates a criterion that measures the Binary Cross Entropy between the target and the output:</p>
-<blockquote>
-<p>Input: (N, *)</p>
-<p>Output: (N, *)</p>
-</blockquote>
-<p>可以用于指导二分类</p>
-<h1 id="L1Loss"><a href="#L1Loss" class="headerlink" title="L1Loss"></a>L1Loss</h1><p>Creates a criterion that measures the mean absolute error (MAE) between each element in the input x<em>x</em> and target y<em>y</em>.</p>
-<blockquote>
-<p>Input: (N, *)</p>
-<p>Output: (N, *)</p>
-</blockquote>
-<p>看起来也可以</p>
-<h1 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h1><p>个人理解是，一个是建模为分类问题，一个是建模为回归问题。看任务更适合哪一个，就采用哪一个就可以。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/27/pytorch常用代码框架/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/27/pytorch常用代码框架/" class="post-title-link" itemprop="url">pytorch常用代码框架</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-27 18:15:44" itemprop="dateModified" datetime="2020-12-27T18:15:44+08:00">2020-12-27</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/27/pytorch常用代码框架/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/27/pytorch常用代码框架/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在用pytorch做训练的时候，总是会重复写一些代码，比如数据加载、训练过程等，为了避免重复造轮子，把之前一个二分类的项目放在这里，将来想要用的时候直接取，避免重复劳动🎇🎨🎃</p>
-<h1 id="helper-py"><a href="#helper-py" class="headerlink" title="helper.py"></a>helper.py</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> Dataset, DataLoader</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> BertTokenizer</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BISET</span><span class="params">(Dataset)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, file, config)</span>:</span></span><br><span class="line">        super().__init__()</span><br><span class="line">        self.data = self._get_data_(file)</span><br><span class="line">        self.tokenizer = BertTokenizer.from_pretrained(config.pretrain)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__getitem__</span><span class="params">(self, item)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.data[item]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__len__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> len(self.data)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_get_data_</span><span class="params">(file)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> json.load(open(file, encoding=<span class="string">'utf-8'</span>))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_generate_batch_</span><span class="params">(self, data)</span>:</span></span><br><span class="line">        token2ids, masks, labels = [], [], []</span><br><span class="line">        <span class="keyword">for</span> record <span class="keyword">in</span> data:</span><br><span class="line">            id = self.tokenizer.convert_tokens_to_ids(self.tokenizer.tokenize(record[<span class="string">'text'</span>]))</span><br><span class="line">            h_id = self.tokenizer.convert_tokens_to_ids(self.tokenizer.tokenize(record[<span class="string">'h'</span>][<span class="string">'name'</span>]))</span><br><span class="line">            t_id = self.tokenizer.convert_tokens_to_ids(self.tokenizer.tokenize(record[<span class="string">'t'</span>][<span class="string">'name'</span>]))</span><br><span class="line">            <span class="comment"># [CLS] + head + [unused6] + tail + [unused7] + sentence + [SEP]</span></span><br><span class="line">            representation = [<span class="number">101</span>] + h_id + [<span class="number">7</span>] + t_id + [<span class="number">8</span>] + id + [<span class="number">102</span>]</span><br><span class="line">            token2ids.append(representation)</span><br><span class="line">        max_len= min(max([len(id) <span class="keyword">for</span> id <span class="keyword">in</span> token2ids]), <span class="number">150</span>)</span><br><span class="line">        <span class="keyword">for</span> i, id <span class="keyword">in</span> enumerate(token2ids):</span><br><span class="line">            mask = ([<span class="number">1</span>] * len(id) + [<span class="number">0</span>] * max_len)[:max_len]</span><br><span class="line">            masks.append(mask)</span><br><span class="line">            token2ids[i] = (id + [<span class="number">0</span>] * max_len)[:max_len]</span><br><span class="line">            <span class="keyword">if</span> data[i][<span class="string">'relation'</span>] == <span class="string">'NA'</span>:</span><br><span class="line">                labels.append(<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                labels.append(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> torch.tensor(token2ids).cuda(), torch.tensor(masks).cuda(), torch.tensor(labels).cuda()</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/12/27/pytorch常用代码框架/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2472,7 +2543,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-count">148</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3286,7 +3357,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">371</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">376</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -3834,13 +3915,13 @@
       
     
       
+    
+      
+    
+      
+    
+      
         
-      
-    
-      
-    
-      
-    
       
     
       

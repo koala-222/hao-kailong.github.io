@@ -415,6 +415,558 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/03/12/二分类中softmax对比sigmoid/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/03/12/二分类中softmax对比sigmoid/" class="post-title-link" itemprop="url">二分类中softmax对比sigmoid</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-03-12 23:04:21" itemprop="dateModified" datetime="2021-03-12T23:04:21+08:00">2021-03-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/03/12/二分类中softmax对比sigmoid/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/12/二分类中softmax对比sigmoid/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>题外话：在Pycharm中<code>Ctrl+左键</code>就可以跳转到源码！用了这么多年竟然都不知道！😓</p>
+<blockquote>
+<p>本文引用自：<a href="https://www.aiuai.cn/aifarm679.html" target="_blank" rel="noopener">https://www.aiuai.cn/aifarm679.html</a></p>
+</blockquote>
+<h1 id="1-理论分析"><a href="#1-理论分析" class="headerlink" title="1. 理论分析"></a>1. 理论分析</h1><p>[1] Sigmoid</p>
+<script type="math/tex; mode=display">
+\begin{equation} \begin{cases} p(y=1|x) = \frac{1}{1 + e ^{-\theta ^ T x}} \\ p(y=0|x) = 1 - p(y=1|x) = \frac{e ^{-\theta ^ T x}}{1 + e ^{-\theta ^ T x}} \end{cases} \end{equation}</script><p>[2] Softmax</p>
+<script type="math/tex; mode=display">
+\begin{equation} \begin{cases} p(y=0|x) = \frac{e ^{\theta _0^T x} }{e ^{\theta _0^T x} + e ^{\theta _1^T x} } = \frac{e ^{(\theta _0^T - \theta _1^T)x} }{1 + e ^{(\theta _0^T - \theta _1^T) x} } \\ p(y=1|x) = 1 - p(y=0|x) \end{cases} \end{equation}</script><p>令 $\beta = -(\theta_0^T - \theta _1^T)$，则有：</p>
+<script type="math/tex; mode=display">\begin{equation} \begin{cases} p(y=1|x) = \frac{1}{1 + e ^{-\beta ^ T x}} \\ p(y=0|x) = \frac{e ^{-\beta ^ T x}}{1 + e ^{-\beta ^ T x}} \end{cases} \end{equation}</script><p>可见，此时，Softmax 与 Sigmoid 二者理论公式的等价性.</p>
+<h1 id="2-基于Keras的实验对比"><a href="#2-基于Keras的实验对比" class="headerlink" title="2. 基于Keras的实验对比"></a>2. 基于Keras的实验对比</h1>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2021/03/12/二分类中softmax对比sigmoid/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/03/12/The-log-sum-exp-trick/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/03/12/The-log-sum-exp-trick/" class="post-title-link" itemprop="url">The log-sum-exp trick</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-03-12 20:31:19" itemprop="dateModified" datetime="2021-03-12T20:31:19+08:00">2021-03-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/03/12/The-log-sum-exp-trick/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/12/The-log-sum-exp-trick/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在机器学习和神经网络中，$\log()$是一个常用的技巧。</p>
+<p>例如，对于函数求导时，使用$\log()$可以简化计算，避免乘法法则。</p>
+<script type="math/tex; mode=display">
+\frac{\partial}{\partial x} \log[f(x)g(x)] = \frac{\partial}{\partial x}f(x) + \frac{\partial}{\partial x} g(x).</script><h2 id="在softmax-函数中的运用"><a href="#在softmax-函数中的运用" class="headerlink" title="在softmax()函数中的运用"></a>在softmax()函数中的运用</h2><p>在softmax()函数中，按照以下公式，将得分转化为对应的概率：</p>
+<script type="math/tex; mode=display">
+\frac{\exp(x_m)}{\sum_{i=1}^N \exp(x_n)}</script><p>如果分母过大，则很容易溢出，按照以下方式进行转化：</p>
+<script type="math/tex; mode=display">
+y = \log \sum_{i=1}^n \exp(x_n) \\
+e^y = \sum_{i=1}^n\exp(x_n) \\
+e^y = e^c\sum_{i=1}^n\exp(x_n-c) \\
+y = c + \log \sum_{i=1}^n \exp(x_n-c)</script><p>如果设置$c = \max{x_1,…,x_n}$，则最大不超过1</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/03/12/Leetcode-84-递增栈/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/03/12/Leetcode-84-递增栈/" class="post-title-link" itemprop="url">Leetcode 84 递增栈</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-03-12 14:22:53" itemprop="dateModified" datetime="2021-03-12T14:22:53+08:00">2021-03-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/03/12/Leetcode-84-递增栈/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/12/Leetcode-84-递增栈/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h1><ol>
+<li>最终矩形必然截断到某一高度</li>
+<li>针对每一个高度，只需找到左右两侧的更高高度</li>
+<li>递增栈的数据结构</li>
+</ol>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">largestRectangleArea</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; heights)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; slope &#123;<span class="number">-1</span>&#125;;</span><br><span class="line">    <span class="keyword">int</span> ret = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=heights.size(); ++i) &#123;</span><br><span class="line">      <span class="keyword">while</span> (slope.back() &gt;= <span class="number">0</span> &amp;&amp; (i == heights.size() || heights[slope.back()] &gt;= heights[i])) &#123;</span><br><span class="line">        <span class="keyword">int</span> height = heights[slope.back()];</span><br><span class="line">        slope.pop_back();</span><br><span class="line">        ret = <span class="built_in">std</span>::max(ret, (i-slope.back()<span class="number">-1</span>)*height);</span><br><span class="line">      &#125;</span><br><span class="line">      slope.push_back(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>异常巧妙😲</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/03/04/阿里面试要点/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1726,570 +2278,6 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/11/深度异常检测/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2021/01/11/深度异常检测/" class="post-title-link" itemprop="url">异常检测</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2021-01-11 22:35:11" itemprop="dateModified" datetime="2021-01-11T22:35:11+08:00">2021-01-11</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/01/11/深度异常检测/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/11/深度异常检测/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>根据维基百科：</p>
-<blockquote>
-<p>在<a href="https://zh.wikipedia.org/wiki/数据挖掘" target="_blank" rel="noopener">数据挖掘</a>中，<strong>异常检测</strong>（英语：<strong>anomaly detection</strong>）对不符合预期模式或<a href="https://zh.wikipedia.org/w/index.php?title=数据集&amp;action=edit&amp;redlink=1" target="_blank" rel="noopener">数据集</a>中其他项目的项目、事件或观测值的识别。<a href="https://zh.wikipedia.org/wiki/异常检测#cite_note-ChandolaSurvey-1" target="_blank" rel="noopener">[1]</a> 通常异常项目会转变成<a href="https://zh.wikipedia.org/w/index.php?title=银行欺诈&amp;action=edit&amp;redlink=1" target="_blank" rel="noopener">银行欺诈</a>、结构缺陷、医疗问题、文本错误等类型的问题。异常也被称为离群值、新奇、噪声、偏差和例外。</p>
-</blockquote>
-<p>有三大类异常检测方法。<a href="https://zh.wikipedia.org/wiki/异常检测#cite_note-ChandolaSurvey-1" target="_blank" rel="noopener">[1]</a> 在假设数据集中大多数实例都是正常的前提下，<strong>无监督异常检测</strong>方法能通过寻找与其他数据最不匹配的实例来检测出未标记测试数据的异常。<strong>监督式异常检测</strong>方法需要一个已经被标记“正常”与“异常”的数据集，并涉及到训练分类器（与许多其他的<a href="https://zh.wikipedia.org/wiki/分类问题" target="_blank" rel="noopener">统计分类问题</a>的关键区别是异常检测的内在不均衡性）。<strong>半监督式异常检测</strong>方法根据一个给定的<em>正常</em>训练数据集创建一个表示正常行为的模型，然后检测由学习模型生成的测试实例的可能性。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2021/01/11/深度异常检测/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/10/DSRE测试时的batch-size/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2021/01/10/DSRE测试时的batch-size/" class="post-title-link" itemprop="url">DSRE测试时的batch_size</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2021-01-10 12:47:51" itemprop="dateModified" datetime="2021-01-10T12:47:51+08:00">2021-01-10</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/Distant-Supervision/" itemprop="url" rel="index"><span itemprop="name">Distant Supervision</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/01/10/DSRE测试时的batch-size/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/10/DSRE测试时的batch-size/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在进行远程监督关系抽取测试阶段，由于每个包中含有的句子数不同，少的只含有1个句子的包有1149个，但是最多的1个包含有138个句子。担心使用BERT测试时，会出现爆显存的问题。</p>
-<h1 id="显存占用"><a href="#显存占用" class="headerlink" title="显存占用"></a>显存占用</h1><p>在评估时batch_size设为8也完全不会超显存，才占用9875MB左右。<br>将batch_size设为64占用16547MB左右显存，<strong>峰值28539MB</strong>，再多可能就超了。</p>
-<h1 id="是否截断？"><a href="#是否截断？" class="headerlink" title="是否截断？"></a>是否截断？</h1><p>测试集中含有1758个包，每个包53个类别，总类别数为：</p>
-<p>$1758 * 53 = 93174$</p>
-<p>是否需要对其截断呢？</p>
-<p>按照DISTRE的方式，截取前50000个，得到的<code>auc</code>值为：0.0290428</p>
-<p>若不截断，得到的<code>auc</code>值为：0.0290428</p>
-<p>可以看到是否截断对<code>auc</code>值的计算还是有影响的，保留的越多，理所应当对应的面积就越大，所以<code>auc</code>值就越高。<strong><em>但是，由于后面数值过小，所以可以忽略不计，也可能对结果没有影响。</em></strong></p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2021/01/10/DSRE测试时的batch-size/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/09/论文题目怎么起？/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2021/01/09/论文题目怎么起？/" class="post-title-link" itemprop="url">论文题目怎么起？</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2021-01-09 18:37:00" itemprop="dateModified" datetime="2021-01-09T18:37:00+08:00">2021-01-09</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/01/09/论文题目怎么起？/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/09/论文题目怎么起？/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>最近在写论文准备投稿，但是论文题目还没有想好，该怎么给论文起一个好名字呢？去看了一些相关工作的论文题目，总结一些经验。</p>
-<h1 id="论文题目"><a href="#论文题目" class="headerlink" title="论文题目"></a>论文题目</h1><h2 id="问句式"><a href="#问句式" class="headerlink" title="问句式"></a>问句式</h2><p>Are Noisy Sentences Useless for Distant Supervised Relation Extraction?</p>
-<p>这种可以给人留下较深的印象，在众多的论文中脱颖而出。而且很清晰地表达了论文的核心部分。类似的还有大名鼎鼎的：</p>
-<p>Attention is All You Need</p>
-<h2 id="冒号式"><a href="#冒号式" class="headerlink" title="冒号式"></a>冒号式</h2><p>以冒号将题目分为两部分，前面一部分是方法或模型名；后一部分是针对的任务。比如：</p>
-<p>Uncover the Ground Truth Relations in Distant Supervision: A Neural Expectation-Maximization Framework</p>
-<p>From Bag of Sentences to Document: Distantly Supervised Relation Extraction via Machine Reading Comprehension</p>
-<p>Towards Accurate and Consistent Evaluation: A Dataset for Distantly-Supervised Relation Extraction</p>
-<h2 id="动名词"><a href="#动名词" class="headerlink" title="动名词"></a>动名词</h2><p>使用动词的动名词形式表达使用的主要技术：</p>
-<p>Reducing Wrong Labels in Distant Supervision for Relation Extraction</p>
-<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><ol>
-<li>用Method, Approach还是Framework?</li>
-<li>要不要在标题中加上False Negative Problems?</li>
-<li>要不要强调Semi-Supervised?</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2338,7 +2326,7 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-count">148</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3152,7 +3140,17 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
                     
                       
                     
-                    <span class="site-state-item-count">371</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">376</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -3694,9 +3692,9 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
   
     
       
-    
-      
         
+      
+    
       
     
       

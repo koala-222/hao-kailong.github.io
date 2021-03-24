@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://haokailong.top/"/>
-  <updated>2021-03-19T15:30:16.066Z</updated>
+  <updated>2021-03-24T08:46:33.508Z</updated>
   <id>http://haokailong.top/</id>
   
   <author>
@@ -15,6 +15,101 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>CUDA_DEVICE_ORDER</title>
+    <link href="http://haokailong.top/2021/03/24/CUDA-DEVICE-ORDER/"/>
+    <id>http://haokailong.top/2021/03/24/CUDA-DEVICE-ORDER/</id>
+    <published>2021-03-24T08:12:28.000Z</published>
+    <updated>2021-03-24T08:46:33.508Z</updated>
+    
+    <content type="html"><![CDATA[<p>NVML工具nvidia-smi按设备的PCI Bus ID 为设备分配索引序号，由于PCI Bus ID 是硬件相关的，我们把设备的 PCI Bus ID 或者按该ID分配的索引号为物理ID。</p><p>CUDA应用运行时进行设备查询（比如deviceQuery）返回的设备ID可能与物理ID不一致，譬如下面这位网友遇到的情况：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## NVML id 是 物理ID，CUDA index是CUDA应用查询返回的设备ID</span></span><br><span class="line">NVML id 0 maps to Cuda index 4</span><br><span class="line">NVML id 1 maps to Cuda index 5</span><br><span class="line">NVML id 2 maps to Cuda index 6</span><br><span class="line">NVML id 3 maps to Cuda index 7</span><br><span class="line">NVML id 4 maps to Cuda index 0</span><br><span class="line">NVML id 5 maps to Cuda index 1</span><br><span class="line">NVML id 6 maps to Cuda index 2</span><br><span class="line">NVML id 7 maps to Cuda index 3</span><br><span class="line">NVML id 8 maps to Cuda index 8</span><br><span class="line">NVML id 9 maps to Cuda index 9</span><br><span class="line">NVML id 10 maps to Cuda index 10</span><br><span class="line">NVML id 11 maps to Cuda index 11</span><br><span class="line">NVML id 12 maps to Cuda index 12</span><br><span class="line">NVML id 13 maps to Cuda index 13</span><br><span class="line">NVML id 14 maps to Cuda index 14</span><br><span class="line">NVML id 15 maps to Cuda index 15</span><br></pre></td></tr></table></figure><p>我们可以通过设置 CUDA_DEVICE_ORDER = PCI_BUS_ID 来要求运行时设备查询按照 PCI_BUS_ID 的顺序索引，从而使得  设备ID=物理ID  保证CUDA应用按期望使用指定设备。目前最佳的设置方法是同时设置 CUDA_DEVICE_ORDER = PCI_BUS_ID 和 CUDA_VISIBLE_DEVICES 。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">os.environ[<span class="string">"CUDA_DEVICE_ORDER"</span>] = <span class="string">"PCI_BUS_ID"</span></span><br><span class="line">os.environ[<span class="string">"CUDA_VISIBLE_DEVICES"</span>] = <span class="string">"2, 3"</span></span><br></pre></td></tr></table></figure><p>当你添加这两行代码后，那么device_ids[0]默认的就是第2号卡，你的模型也会初始化在第2号卡上了，而不会占用第0号卡了。<strong>这里简单说一下设置上面两行代码后，那么对这个程序而言可见的只有2和3号卡，和其他的卡没有关系，这是物理上的号卡，逻辑上来说其实是对应0和1号卡，即device_ids[0]对应的就是第2号卡，device_ids[1]对应的就是第3号卡</strong>。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;NVML工具nvidia-smi按设备的PCI Bus ID 为设备分配索引序号，由于PCI Bus ID 是硬件相关的，我们把设备的 PCI Bus ID 或者按该ID分配的索引号为物理ID。&lt;/p&gt;
+&lt;p&gt;CUDA应用运行时进行设备查询（比如deviceQuery）返回
+      
+    
+    </summary>
+    
+    
+      <category term="Others" scheme="http://haokailong.top/categories/Others/"/>
+    
+      <category term="Tool" scheme="http://haokailong.top/categories/Others/Tool/"/>
+    
+    
+      <category term="CUDA" scheme="http://haokailong.top/tags/CUDA/"/>
+    
+      <category term="CUDA_DEVICE_ORDER" scheme="http://haokailong.top/tags/CUDA-DEVICE-ORDER/"/>
+    
+      <category term="CUDA_VISIBLE_DEVICES" scheme="http://haokailong.top/tags/CUDA-VISIBLE-DEVICES/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>C++变长数组</title>
+    <link href="http://haokailong.top/2021/03/23/C-%E5%8F%98%E9%95%BF%E6%95%B0%E7%BB%84/"/>
+    <id>http://haokailong.top/2021/03/23/C-变长数组/</id>
+    <published>2021-03-23T05:06:58.000Z</published>
+    <updated>2021-03-23T05:17:22.796Z</updated>
+    
+    <content type="html"><![CDATA[<p>之前在DEV C++中，对于变长数组，习惯采用以下写法：</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> <span class="built_in">array</span>[m][n];</span><br></pre></td></tr></table></figure><p>但是，在按照这种方式书写三维数组时，出现了内存错误。</p><p>查阅网上的博客，有这种说法：</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;  </span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;    </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>  </span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">    <span class="keyword">int</span> len;  </span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; len;  </span><br><span class="line">    <span class="comment">//用指针p指向new动态分配的长度为len*sizeof(int)的内存空间  </span></span><br><span class="line">    <span class="keyword">int</span> *p = <span class="keyword">new</span> <span class="keyword">int</span>[len];  </span><br><span class="line">    <span class="comment">/*注意int *p = new int[len];这一句，你不能这样做：  </span></span><br><span class="line"><span class="comment">    int p[len];  </span></span><br><span class="line"><span class="comment">    C++编译器会报错说len的大小不能确定，因为用这种形式声明数组，数组的大小需要在编译时确定。</span></span><br><span class="line"><span class="comment">    而且这样也不行：</span></span><br><span class="line"><span class="comment">    int p[] = new int[len];  </span></span><br><span class="line"><span class="comment">    编译器会说不能把int*型转化为int[]型，因为用new开辟了一段内存空间后会返回这段内存的首地址，所以要把这个地址赋给一个指针，所以要用： </span></span><br><span class="line"><span class="comment">    int *p = new int[len]*/</span></span><br><span class="line">    <span class="keyword">delete</span>[] p; <span class="comment">//注意要注销指针p，使程序释放用new开辟的内存空间</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><a id="more"></a><p>可能是因为编译器的版本不同。但是，按照<code>new</code>申请内存应该是一种最为规范的做法，在任何版本都不会出错。</p><h2 id="使用vector"><a href="#使用vector" class="headerlink" title="使用vector"></a>使用vector</h2><p>使用C++标准模版库（STL）中的vector（向量）也可以实现变长数组：</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> len;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; len;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="built_in">array</span>(len); <span class="comment">// 声明变长数组</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len;++i) &#123;</span><br><span class="line">        <span class="built_in">array</span>[i] = i;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="built_in">array</span>[i] &lt;&lt; <span class="string">' '</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;之前在DEV C++中，对于变长数组，习惯采用以下写法：&lt;/p&gt;
+&lt;figure class=&quot;highlight c++&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;built_in&quot;&gt;array&lt;/span&gt;[m][n];&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;但是，在按照这种方式书写三维数组时，出现了内存错误。&lt;/p&gt;
+&lt;p&gt;查阅网上的博客，有这种说法：&lt;/p&gt;
+&lt;figure class=&quot;highlight c++&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;meta&quot;&gt;#&lt;span class=&quot;meta-keyword&quot;&gt;include&lt;/span&gt;&lt;span class=&quot;meta-string&quot;&gt;&amp;lt;iostream&amp;gt;  &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;built_in&quot;&gt;std&lt;/span&gt;;    &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;()&lt;/span&gt;  &lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;/span&gt;&amp;#123;  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt; len;  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;built_in&quot;&gt;cin&lt;/span&gt; &amp;gt;&amp;gt; len;  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;comment&quot;&gt;//用指针p指向new动态分配的长度为len*sizeof(int)的内存空间  &lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt; *p = &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt;[len];  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;comment&quot;&gt;/*注意int *p = new int[len];这一句，你不能这样做：  &lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;    int p[len];  &lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;    C++编译器会报错说len的大小不能确定，因为用这种形式声明数组，数组的大小需要在编译时确定。&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;    而且这样也不行：&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;    int p[] = new int[len];  &lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;    编译器会说不能把int*型转化为int[]型，因为用new开辟了一段内存空间后会返回这段内存的首地址，所以要把这个地址赋给一个指针，所以要用： &lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;    int *p = new int[len]*/&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;delete&lt;/span&gt;[] p; &lt;span class=&quot;comment&quot;&gt;//注意要注销指针p，使程序释放用new开辟的内存空间&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+      <category term="C++" scheme="http://haokailong.top/categories/C/"/>
+    
+    
+      <category term="C++" scheme="http://haokailong.top/tags/C/"/>
+    
+      <category term="dynamic" scheme="http://haokailong.top/tags/dynamic/"/>
+    
+      <category term="array" scheme="http://haokailong.top/tags/array/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>hexo error spawn failed解决办法</title>
+    <link href="http://haokailong.top/2021/03/20/hexo-error-spawn-failed%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"/>
+    <id>http://haokailong.top/2021/03/20/hexo-error-spawn-failed解决办法/</id>
+    <published>2021-03-20T04:07:42.000Z</published>
+    <updated>2021-03-20T04:09:46.745Z</updated>
+    
+    <content type="html"><![CDATA[<p>出现错误：</p><p><code>error: spawn failed...</code></p><p>总结：</p><p>问题大多是因为<code>git</code>进行<code>push</code>或者<code>hexo d</code>的时候改变了一些<code>.deploy_git</code>文件下的内容。</p><p>解决办法：</p><ol><li>删除<code>.deploy_git</code>文件夹;</li><li>输入<code>git config --global core.autocrlf false</code></li><li>然后，依次执行：<br><code>hexo clean</code><br><code>hexo g</code><br><code>hexo d</code></li></ol><p>问题解决。暴力直接，有效。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;出现错误：&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;error: spawn failed...&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;总结：&lt;/p&gt;
+&lt;p&gt;问题大多是因为&lt;code&gt;git&lt;/code&gt;进行&lt;code&gt;push&lt;/code&gt;或者&lt;code&gt;hexo d&lt;/code&gt;的时候改变了一
+      
+    
+    </summary>
+    
+    
+      <category term="Others" scheme="http://haokailong.top/categories/Others/"/>
+    
+    
+      <category term="hexo" scheme="http://haokailong.top/tags/hexo/"/>
+    
+      <category term="git" scheme="http://haokailong.top/tags/git/"/>
+    
+  </entry>
   
   <entry>
     <title>ELECTRA预训练模型</title>
@@ -622,108 +717,6 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}&lt
       <category term="箱线图" scheme="http://haokailong.top/tags/%E7%AE%B1%E7%BA%BF%E5%9B%BE/"/>
     
       <category term="box-plot" scheme="http://haokailong.top/tags/box-plot/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>异常检测</title>
-    <link href="http://haokailong.top/2021/01/11/%E6%B7%B1%E5%BA%A6%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B/"/>
-    <id>http://haokailong.top/2021/01/11/深度异常检测/</id>
-    <published>2021-01-11T02:48:56.000Z</published>
-    <updated>2021-01-11T14:35:11.033Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>根据维基百科：</p><blockquote><p>在<a href="https://zh.wikipedia.org/wiki/数据挖掘" target="_blank" rel="noopener">数据挖掘</a>中，<strong>异常检测</strong>（英语：<strong>anomaly detection</strong>）对不符合预期模式或<a href="https://zh.wikipedia.org/w/index.php?title=数据集&amp;action=edit&amp;redlink=1" target="_blank" rel="noopener">数据集</a>中其他项目的项目、事件或观测值的识别。<a href="https://zh.wikipedia.org/wiki/异常检测#cite_note-ChandolaSurvey-1" target="_blank" rel="noopener">[1]</a> 通常异常项目会转变成<a href="https://zh.wikipedia.org/w/index.php?title=银行欺诈&amp;action=edit&amp;redlink=1" target="_blank" rel="noopener">银行欺诈</a>、结构缺陷、医疗问题、文本错误等类型的问题。异常也被称为离群值、新奇、噪声、偏差和例外。</p></blockquote><p>有三大类异常检测方法。<a href="https://zh.wikipedia.org/wiki/异常检测#cite_note-ChandolaSurvey-1" target="_blank" rel="noopener">[1]</a> 在假设数据集中大多数实例都是正常的前提下，<strong>无监督异常检测</strong>方法能通过寻找与其他数据最不匹配的实例来检测出未标记测试数据的异常。<strong>监督式异常检测</strong>方法需要一个已经被标记“正常”与“异常”的数据集，并涉及到训练分类器（与许多其他的<a href="https://zh.wikipedia.org/wiki/分类问题" target="_blank" rel="noopener">统计分类问题</a>的关键区别是异常检测的内在不均衡性）。<strong>半监督式异常检测</strong>方法根据一个给定的<em>正常</em>训练数据集创建一个表示正常行为的模型，然后检测由学习模型生成的测试实例的可能性。</p><a id="more"></a><h1 id="检测方法"><a href="#检测方法" class="headerlink" title="检测方法"></a>检测方法</h1><p>【1】基于统计模型的方法：首先建立一个数据模型，<font color="orange">异常是那些同模型不能完美拟合的对象</font>；如果模型是<strong>簇的集合</strong>，则异常是不显著属于任何簇的对象；在使用<strong>回归模型</strong>时，异常是相对远离预测值的对象。</p><p>【2】基于邻近度的方法：通常可以在对象之间定义邻近性度量，异常对象是那些远离其他对象的对象。</p><p>【3】基于密度的方法：仅当一个点的局部密度显著低于它的大部分近邻时才将其分类为离群点。</p><p>【4】基于聚类的方法：聚类分析用于发现局部强相关的对象组，而异常检测用来发现不与其他对象强相关的对象。因此，聚类分析非常自然的可以用于离群点检测。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;定义&quot;&gt;&lt;a href=&quot;#定义&quot; class=&quot;headerlink&quot; title=&quot;定义&quot;&gt;&lt;/a&gt;定义&lt;/h1&gt;&lt;p&gt;根据维基百科：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;在&lt;a href=&quot;https://zh.wikipedia.org/wiki/数据挖掘&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;数据挖掘&lt;/a&gt;中，&lt;strong&gt;异常检测&lt;/strong&gt;（英语：&lt;strong&gt;anomaly detection&lt;/strong&gt;）对不符合预期模式或&lt;a href=&quot;https://zh.wikipedia.org/w/index.php?title=数据集&amp;amp;action=edit&amp;amp;redlink=1&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;数据集&lt;/a&gt;中其他项目的项目、事件或观测值的识别。&lt;a href=&quot;https://zh.wikipedia.org/wiki/异常检测#cite_note-ChandolaSurvey-1&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;[1]&lt;/a&gt; 通常异常项目会转变成&lt;a href=&quot;https://zh.wikipedia.org/w/index.php?title=银行欺诈&amp;amp;action=edit&amp;amp;redlink=1&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;银行欺诈&lt;/a&gt;、结构缺陷、医疗问题、文本错误等类型的问题。异常也被称为离群值、新奇、噪声、偏差和例外。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;有三大类异常检测方法。&lt;a href=&quot;https://zh.wikipedia.org/wiki/异常检测#cite_note-ChandolaSurvey-1&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;[1]&lt;/a&gt; 在假设数据集中大多数实例都是正常的前提下，&lt;strong&gt;无监督异常检测&lt;/strong&gt;方法能通过寻找与其他数据最不匹配的实例来检测出未标记测试数据的异常。&lt;strong&gt;监督式异常检测&lt;/strong&gt;方法需要一个已经被标记“正常”与“异常”的数据集，并涉及到训练分类器（与许多其他的&lt;a href=&quot;https://zh.wikipedia.org/wiki/分类问题&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;统计分类问题&lt;/a&gt;的关键区别是异常检测的内在不均衡性）。&lt;strong&gt;半监督式异常检测&lt;/strong&gt;方法根据一个给定的&lt;em&gt;正常&lt;/em&gt;训练数据集创建一个表示正常行为的模型，然后检测由学习模型生成的测试实例的可能性。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Algorithms" scheme="http://haokailong.top/categories/Algorithms/"/>
-    
-    
-      <category term="异常检测" scheme="http://haokailong.top/tags/%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B/"/>
-    
-      <category term="anomaly detection" scheme="http://haokailong.top/tags/anomaly-detection/"/>
-    
-      <category term="deep" scheme="http://haokailong.top/tags/deep/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>DSRE测试时的batch_size</title>
-    <link href="http://haokailong.top/2021/01/10/DSRE%E6%B5%8B%E8%AF%95%E6%97%B6%E7%9A%84batch-size/"/>
-    <id>http://haokailong.top/2021/01/10/DSRE测试时的batch-size/</id>
-    <published>2021-01-10T03:49:37.000Z</published>
-    <updated>2021-01-10T04:47:51.981Z</updated>
-    
-    <content type="html"><![CDATA[<p>在进行远程监督关系抽取测试阶段，由于每个包中含有的句子数不同，少的只含有1个句子的包有1149个，但是最多的1个包含有138个句子。担心使用BERT测试时，会出现爆显存的问题。</p><h1 id="显存占用"><a href="#显存占用" class="headerlink" title="显存占用"></a>显存占用</h1><p>在评估时batch_size设为8也完全不会超显存，才占用9875MB左右。<br>将batch_size设为64占用16547MB左右显存，<strong>峰值28539MB</strong>，再多可能就超了。</p><h1 id="是否截断？"><a href="#是否截断？" class="headerlink" title="是否截断？"></a>是否截断？</h1><p>测试集中含有1758个包，每个包53个类别，总类别数为：</p><p>$1758 * 53 = 93174$</p><p>是否需要对其截断呢？</p><p>按照DISTRE的方式，截取前50000个，得到的<code>auc</code>值为：0.0290428</p><p>若不截断，得到的<code>auc</code>值为：0.0290428</p><p>可以看到是否截断对<code>auc</code>值的计算还是有影响的，保留的越多，理所应当对应的面积就越大，所以<code>auc</code>值就越高。<strong><em>但是，由于后面数值过小，所以可以忽略不计，也可能对结果没有影响。</em></strong></p><a id="more"></a><h1 id="不同batch-size对auc影响"><a href="#不同batch-size对auc影响" class="headerlink" title="不同batch_size对auc影响"></a>不同batch_size对auc影响</h1><p>当batch_size设为64，<code>auc</code>值为：0.0290429</p><p>当batch_size设为8，  <code>auc</code>值为：0.0292178</p><p>当batch_size设为1，  <code>auc</code>值为：0.0290395</p><font color="orange">为什么不同的batch_size设置会导致计算的`auc`结果不同呢？从理论上讲这个是不合理的。</font>打印logits和labels查看，发现**确实不同**：当batch_size=1:<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[[<span class="number">0.00892705</span> <span class="number">0.00151212</span> <span class="number">0.00814364</span> <span class="number">0.00080609</span> <span class="number">0.00226246</span> <span class="number">0.00350421</span></span><br><span class="line">  <span class="number">0.0011088</span>  <span class="number">0.01335552</span> <span class="number">0.00449597</span> <span class="number">0.00577065</span>]</span><br><span class="line"> [<span class="number">0.00675167</span> <span class="number">0.00236401</span> <span class="number">0.00788459</span> <span class="number">0.0009495</span>  <span class="number">0.00175571</span> <span class="number">0.00618613</span></span><br><span class="line">  <span class="number">0.00157026</span> <span class="number">0.03045319</span> <span class="number">0.00293169</span> <span class="number">0.01477546</span>]</span><br><span class="line"> [<span class="number">0.00760224</span> <span class="number">0.00332207</span> <span class="number">0.00867613</span> <span class="number">0.00068079</span> <span class="number">0.00131133</span> <span class="number">0.00436077</span></span><br><span class="line">  <span class="number">0.00407064</span> <span class="number">0.03283269</span> <span class="number">0.00417252</span> <span class="number">0.00687293</span>]]</span><br></pre></td></tr></table></figure>当batch_size=8:<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[[<span class="number">0.00892705</span> <span class="number">0.00151212</span> <span class="number">0.00814363</span> <span class="number">0.00080609</span> <span class="number">0.00226246</span> <span class="number">0.00350421</span></span><br><span class="line">  <span class="number">0.0011088</span>  <span class="number">0.01335552</span> <span class="number">0.00449597</span> <span class="number">0.00577066</span>]</span><br><span class="line"> [<span class="number">0.00675167</span> <span class="number">0.00236401</span> <span class="number">0.00788459</span> <span class="number">0.0009495</span>  <span class="number">0.00175571</span> <span class="number">0.00618613</span></span><br><span class="line">  <span class="number">0.00157026</span> <span class="number">0.03045319</span> <span class="number">0.00293169</span> <span class="number">0.01477545</span>]</span><br><span class="line"> [<span class="number">0.00675167</span> <span class="number">0.00236401</span> <span class="number">0.00788459</span> <span class="number">0.0009495</span>  <span class="number">0.00175571</span> <span class="number">0.00618613</span></span><br><span class="line">  <span class="number">0.00157026</span> <span class="number">0.03045319</span> <span class="number">0.00293169</span> <span class="number">0.01477545</span>]]</span><br></pre></td></tr></table></figure>但是输入数据是没有shuffle的，打印查看，确实输入顺序保持一致。<font color="red">***估计是BERT中的normalization层对于不同的batch_size会有不同的小的偏置，导致结果的轻微波动！***</font>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;在进行远程监督关系抽取测试阶段，由于每个包中含有的句子数不同，少的只含有1个句子的包有1149个，但是最多的1个包含有138个句子。担心使用BERT测试时，会出现爆显存的问题。&lt;/p&gt;
-&lt;h1 id=&quot;显存占用&quot;&gt;&lt;a href=&quot;#显存占用&quot; class=&quot;headerlink&quot; title=&quot;显存占用&quot;&gt;&lt;/a&gt;显存占用&lt;/h1&gt;&lt;p&gt;在评估时batch_size设为8也完全不会超显存，才占用9875MB左右。&lt;br&gt;将batch_size设为64占用16547MB左右显存，&lt;strong&gt;峰值28539MB&lt;/strong&gt;，再多可能就超了。&lt;/p&gt;
-&lt;h1 id=&quot;是否截断？&quot;&gt;&lt;a href=&quot;#是否截断？&quot; class=&quot;headerlink&quot; title=&quot;是否截断？&quot;&gt;&lt;/a&gt;是否截断？&lt;/h1&gt;&lt;p&gt;测试集中含有1758个包，每个包53个类别，总类别数为：&lt;/p&gt;
-&lt;p&gt;$1758 * 53 = 93174$&lt;/p&gt;
-&lt;p&gt;是否需要对其截断呢？&lt;/p&gt;
-&lt;p&gt;按照DISTRE的方式，截取前50000个，得到的&lt;code&gt;auc&lt;/code&gt;值为：0.0290428&lt;/p&gt;
-&lt;p&gt;若不截断，得到的&lt;code&gt;auc&lt;/code&gt;值为：0.0290428&lt;/p&gt;
-&lt;p&gt;可以看到是否截断对&lt;code&gt;auc&lt;/code&gt;值的计算还是有影响的，保留的越多，理所应当对应的面积就越大，所以&lt;code&gt;auc&lt;/code&gt;值就越高。&lt;strong&gt;&lt;em&gt;但是，由于后面数值过小，所以可以忽略不计，也可能对结果没有影响。&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Information Extraction" scheme="http://haokailong.top/categories/Information-Extraction/"/>
-    
-      <category term="Relation Extraction" scheme="http://haokailong.top/categories/Information-Extraction/Relation-Extraction/"/>
-    
-      <category term="Distant Supervision" scheme="http://haokailong.top/categories/Information-Extraction/Relation-Extraction/Distant-Supervision/"/>
-    
-    
-      <category term="relation extraction" scheme="http://haokailong.top/tags/relation-extraction/"/>
-    
-      <category term="distant supervision" scheme="http://haokailong.top/tags/distant-supervision/"/>
-    
-      <category term="batch_size" scheme="http://haokailong.top/tags/batch-size/"/>
-    
-      <category term="batch" scheme="http://haokailong.top/tags/batch/"/>
-    
-      <category term="auc" scheme="http://haokailong.top/tags/auc/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>论文题目怎么起？</title>
-    <link href="http://haokailong.top/2021/01/09/%E8%AE%BA%E6%96%87%E9%A2%98%E7%9B%AE%E6%80%8E%E4%B9%88%E8%B5%B7%EF%BC%9F/"/>
-    <id>http://haokailong.top/2021/01/09/论文题目怎么起？/</id>
-    <published>2021-01-09T09:34:32.000Z</published>
-    <updated>2021-01-09T10:37:00.764Z</updated>
-    
-    <content type="html"><![CDATA[<p>最近在写论文准备投稿，但是论文题目还没有想好，该怎么给论文起一个好名字呢？去看了一些相关工作的论文题目，总结一些经验。</p><h1 id="论文题目"><a href="#论文题目" class="headerlink" title="论文题目"></a>论文题目</h1><h2 id="问句式"><a href="#问句式" class="headerlink" title="问句式"></a>问句式</h2><p>Are Noisy Sentences Useless for Distant Supervised Relation Extraction?</p><p>这种可以给人留下较深的印象，在众多的论文中脱颖而出。而且很清晰地表达了论文的核心部分。类似的还有大名鼎鼎的：</p><p>Attention is All You Need</p><h2 id="冒号式"><a href="#冒号式" class="headerlink" title="冒号式"></a>冒号式</h2><p>以冒号将题目分为两部分，前面一部分是方法或模型名；后一部分是针对的任务。比如：</p><p>Uncover the Ground Truth Relations in Distant Supervision: A Neural Expectation-Maximization Framework</p><p>From Bag of Sentences to Document: Distantly Supervised Relation Extraction via Machine Reading Comprehension</p><p>Towards Accurate and Consistent Evaluation: A Dataset for Distantly-Supervised Relation Extraction</p><h2 id="动名词"><a href="#动名词" class="headerlink" title="动名词"></a>动名词</h2><p>使用动词的动名词形式表达使用的主要技术：</p><p>Reducing Wrong Labels in Distant Supervision for Relation Extraction</p><h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><ol><li>用Method, Approach还是Framework?</li><li>要不要在标题中加上False Negative Problems?</li><li>要不要强调Semi-Supervised?</li></ol>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;最近在写论文准备投稿，但是论文题目还没有想好，该怎么给论文起一个好名字呢？去看了一些相关工作的论文题目，总结一些经验。&lt;/p&gt;
-&lt;h1 id=&quot;论文题目&quot;&gt;&lt;a href=&quot;#论文题目&quot; class=&quot;headerlink&quot; title=&quot;论文题目&quot;&gt;&lt;/a&gt;论文题目&lt;/h
-      
-    
-    </summary>
-    
-    
-      <category term="Others" scheme="http://haokailong.top/categories/Others/"/>
-    
-    
-      <category term="paper" scheme="http://haokailong.top/tags/paper/"/>
-    
-      <category term="title" scheme="http://haokailong.top/tags/title/"/>
     
   </entry>
   

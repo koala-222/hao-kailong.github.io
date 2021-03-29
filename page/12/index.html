@@ -415,6 +415,1308 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/26/Pytorch实战-计算Wasserstein距离/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/10/26/Pytorch实战-计算Wasserstein距离/" class="post-title-link" itemprop="url">Pytorch实战 计算Wasserstein距离</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-26 18:52:36" itemprop="dateModified" datetime="2020-10-26T18:52:36+08:00">2020-10-26</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/10/26/Pytorch实战-计算Wasserstein距离/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/26/Pytorch实战-计算Wasserstein距离/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>编译：机器之心， 作者： Daniel Daza</p>
+<p>最优传输理论及 Wasserstein 距离是很多读者都希望了解的基础，本文主要通过简单案例展示了它们的基本思想，并通过 PyTorch 介绍如何实战 W 距离。</p>
+</blockquote>
+<p><br></p>
+<p>机器学习中的许多问题都涉及到令两个分布尽可能接近的思想，例如在 GAN 中令生成器分布接近判别器分布就能伪造出逼真的图像。但是 KL 散度等分布的度量方法有很多局限性，本文则介绍了 Wasserstein 距离及 Sinkhorn 迭代方法，它们在 GAN 及众多任务上都展示了杰出的性能。</p>
+<p>在简单的情况下，我们假设从未知数据分布 p(x) 中观测到一些随机变量 x（例如，猫的图片），我们想要找到一个模型 q(x|θ)（例如一个神经网络）能作为 p(x) 的一个很好的近似。如果 p 和 q 的分布很相近，那么就表明我们的模型已经学习到如何识别猫。</p>
+<p>因为 KL 散度可以度量两个分布的距离，所以只需要最小化 KL(q‖p) 就可以了。可以证明，最小化 KL(q‖p) 等价于最小化一个负对数似然，这样的做法在我们训练一个分类器时很常见。例如，对于变分自编码器来说，我们希望后验分布能够接近于某种先验分布，这也是我们通过最小化它们之间的 KL 散度来实现的。</p>
+<p>尽管 KL 散度有很广泛的应用，在某些情况下，KL 散度则会失效。不妨考虑一下如下图所示的离散分布：</p>
+<p><img src="/images/blog/2020/wasserstein/distribution.png" alt></p>
+<p><br></p>
+<p>KL 散度假设这两个分布共享相同的支撑集（也就是说，它们被定义在同一个点集上）。因此，我们不能为上面的例子计算 KL 散度。由于这一个限制和其他计算方面的因素促使研究人员寻找一种更适合于计算两个分布之间差异的方法。</p>
+<p>在本文中，作者将：</p>
+<ul>
+<li>简单介绍最优传输问题</li>
+<li>将 Sinkhorn 迭代描述为对解求近似</li>
+<li>使用 PyTorch 计算 Sinkhorn 距离</li>
+<li>描述用于计算 mini-batch 之间的距离的对该实现的扩展
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/10/26/Pytorch实战-计算Wasserstein距离/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </li></ul></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/25/ReLU家族/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/10/25/ReLU家族/" class="post-title-link" itemprop="url">ReLU家族</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-26 12:14:13" itemprop="dateModified" datetime="2020-10-26T12:14:13+08:00">2020-10-26</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/10/25/ReLU家族/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/25/ReLU家族/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>ReLU是常用的激活函数，也有很多变种，比如：<a href="https://pytorch.org/docs/stable/generated/torch.nn.ReLU.html#torch.nn.ReLU" target="_blank" rel="noopener">relu</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.LeakyReLU.html#torch.nn.LeakyReLU" target="_blank" rel="noopener">leaky_relu</a>, <a href="https://pytorch.org/docs/stable/nn.functional.html#gelu" target="_blank" rel="noopener">gelu</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.CELU.html#torch.nn.CELU" target="_blank" rel="noopener">celu</a>, 等等，下面选取几种典型的、常用的介绍。</p>
+<h2 id="1-ReLU"><a href="#1-ReLU" class="headerlink" title="1. ReLU"></a>1. ReLU</h2><script type="math/tex; mode=display">
+ReLU(x) = \max (0, x)</script><p><img src="/images/blog/2020/relu/relu.png" alt></p>
+<h2 id="2-LeakyReLU"><a href="#2-LeakyReLU" class="headerlink" title="2. LeakyReLU"></a>2. LeakyReLU</h2><script type="math/tex; mode=display">
+LeakyReLU(x) = \max(0, x) + \gamma * \min (0,x)</script><p>其中$\gamma$为负斜率，下图可以看出，但是负斜率太小了，不太明显。</p>
+<p><img src="/images/blog/2020/relu/leakyrelu.png" alt></p>
+<p>在我个人的PCNN实验中，使用leaky_relu作为激活函数，速度比tanh快了近三倍。
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/10/25/ReLU家族/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/22/Glove-word-embedding添加特殊字符/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/10/22/Glove-word-embedding添加特殊字符/" class="post-title-link" itemprop="url">Glove word embedding添加特殊字符</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-22 19:34:50" itemprop="dateModified" datetime="2020-10-22T19:34:50+08:00">2020-10-22</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/10/22/Glove-word-embedding添加特殊字符/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/22/Glove-word-embedding添加特殊字符/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="1-问题引入"><a href="#1-问题引入" class="headerlink" title="1. 问题引入"></a>1. 问题引入</h2><p>对于一些特殊字符，例如[CLS], [SEP], [PAD], [UNK]等，在GLOVE词向量中没有对应的值。另外，在进行词嵌入时，难免会有OOV (out of vocabulary) 的现象，需要特殊处理。</p>
+<p>在阅读<a href="https://github.com/INK-USC/NERO" target="_blank" rel="noopener">NERO</a>源码时，注意到作者在对未登录词处理时，并没有按照其他词的分布来生成，通过统计，GLOVE词向量均值应该为0附近，<strong>但是作者采用的是$N(-1., 1.)$的正态分布，均值是-1</strong>，不明白这样做是出于什么特殊的原因吗？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">token2id</span><span class="params">(config, counter, embedding_dict)</span>:</span></span><br><span class="line">    <span class="string">"""添加 &lt;PAD&gt;, &lt;UNK&gt;, 实体遮罩 的词嵌入"""</span></span><br><span class="line">    vec_size = len(list(embedding_dict.values())[<span class="number">0</span>])</span><br><span class="line">    masks = entity_masks()</span><br><span class="line">    token2idx_dict = &#123;&#125;</span><br><span class="line">    token2idx_dict[constant.PAD_TOKEN] = constant.PAD_ID</span><br><span class="line">    token2idx_dict[constant.UNK_TOKEN] = constant.UNK_ID</span><br><span class="line">    embedding_dict[constant.PAD_TOKEN] = [<span class="number">0.</span> <span class="keyword">for</span> _ <span class="keyword">in</span> range(vec_size)]  <span class="comment"># 初始化为零向量</span></span><br><span class="line">    embedding_dict[constant.UNK_TOKEN] = [<span class="number">0.</span> <span class="keyword">for</span> _ <span class="keyword">in</span> range(vec_size)]</span><br><span class="line">    <span class="keyword">for</span> token <span class="keyword">in</span> list(embedding_dict.keys()) + masks:</span><br><span class="line">        <span class="keyword">if</span> token <span class="keyword">not</span> <span class="keyword">in</span> token2idx_dict:</span><br><span class="line">            token2idx_dict[token] = len(token2idx_dict)</span><br><span class="line">        <span class="keyword">if</span> token <span class="keyword">not</span> <span class="keyword">in</span> embedding_dict:</span><br><span class="line">            embedding_dict[token] = [np.random.normal(<span class="number">-1.</span>, <span class="number">1.</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> range(vec_size)]  <span class="comment"># <span class="doctag">TODO:</span> why loc = -1.</span></span><br><span class="line">    idx2emb_dict = &#123;idx: embedding_dict[token] <span class="keyword">for</span> token, idx <span class="keyword">in</span> token2idx_dict.items()&#125;</span><br><span class="line">    word_emb = np.array([idx2emb_dict[idx] <span class="keyword">for</span> idx <span class="keyword">in</span> range(len(token2idx_dict))], dtype=np.float32)</span><br><span class="line">    <span class="keyword">return</span> token2idx_dict, word_emb</span><br></pre></td></tr></table></figure>
+<h2 id="2-阅读源码"><a href="#2-阅读源码" class="headerlink" title="2. 阅读源码"></a>2. 阅读源码</h2><p>pytorch中nn.Embedding.weight初始化分布是满足$N(0., 1.)$的，参考<a href="https://blog.csdn.net/weixin_30788619/article/details/99645247" target="_blank" rel="noopener">https://blog.csdn.net/weixin_30788619/article/details/99645247</a> ，pytorch源码：
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/10/22/Glove-word-embedding添加特殊字符/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/21/Piecewise-CNN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/10/21/Piecewise-CNN/" class="post-title-link" itemprop="url">Piecewise CNN</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-21 22:00:29" itemprop="dateModified" datetime="2020-10-21T22:00:29+08:00">2020-10-21</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/10/21/Piecewise-CNN/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/21/Piecewise-CNN/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>PCNN是<a href="https://www.aclweb.org/anthology/D15-1203.pdf" target="_blank" rel="noopener">Zeng et al. 2015</a>提出的算法，理解起来很容易，但是实现却有问题。</p>
+<p>首先给出自己的实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_piecewise_pool</span><span class="params">(self, x, mask)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    :param x: (batch_size, cur_max_len, filters)</span></span><br><span class="line"><span class="string">    :param mask: (batch_size, cur_max_len)</span></span><br><span class="line"><span class="string">    :return: </span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    mask_part1 = (mask == <span class="number">1</span>).float().unsqueeze(<span class="number">2</span>)  <span class="comment"># (batch_size, cur_max_len, 1)</span></span><br><span class="line">    mask_part2 = (mask == <span class="number">2</span>).float().unsqueeze(<span class="number">2</span>)</span><br><span class="line">    mask_part3 = (mask == <span class="number">3</span>).float().unsqueeze(<span class="number">2</span>)</span><br><span class="line">    x1 = (x * mask_part1).transpose(<span class="number">1</span>, <span class="number">2</span>)  <span class="comment"># (batch_size, filters, cur_max_len)</span></span><br><span class="line">    x2 = (x * mask_part2).transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">    x3 = (x * mask_part3).transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">    x1 = self.pool(x1)  <span class="comment"># (batch_size, filters, 1)</span></span><br><span class="line">    x2 = self.pool(x2)</span><br><span class="line">    x3 = self.pool(x3)</span><br><span class="line">    x = torch.cat((x1, x2, x3), dim=<span class="number">1</span>).squeeze()</span><br><span class="line">    <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
+<p>这里的mask按照句子的不同位置分为[1, 1, 1, 2, 2, 3, 3, 3, 0, 0, 0]的向量。
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/10/21/Piecewise-CNN/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/20/Text-Adversarial-Training/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/10/20/Text-Adversarial-Training/" class="post-title-link" itemprop="url">Text Adversarial Training</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-20 19:56:24" itemprop="dateModified" datetime="2020-10-20T19:56:24+08:00">2020-10-20</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/10/20/Text-Adversarial-Training/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/20/Text-Adversarial-Training/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>本文是对一个好人😁 (Ian Goodfellow) ，大名鼎鼎的GAN的提出者，的论文 <a href="https://arxiv.org/abs/1605.07725" target="_blank" rel="noopener">ADVERSARIAL TRAINING METHODS FOR SEMI-SUPERVISED TEXT CLASSIFICATION</a> 核心部分的理解以及实现。</p>
+<h2 id="1-论文核心思想"><a href="#1-论文核心思想" class="headerlink" title="1. 论文核心思想"></a>1. 论文核心思想</h2><p>对抗训练是一种新颖的正则化方法，用以提高分类器对微小扰动的鲁棒性。令$\mathbf{x}$代表输入，$\mathbf{\theta}$代表分类器的参数，对抗训练是在损失函数上添加一项：</p>
+<script type="math/tex; mode=display">
+-\log p(y| \mathbf{x + r_{adv}}; \mathbf{\theta}) \quad where \quad \mathbf{r_{adv}} = \arg  \min _ {\mathbf{r}, \mathbf{||r||} \leq \epsilon } \log p(y | \mathbf{x + r}; \mathbf{\hat{\theta}})</script><p>即添加当前状态下使损失最大的扰动项。但是，在实际操作中，寻找最优项是NP难问题；于是作者提出了一种线性近似方法，即：</p>
+<script type="math/tex; mode=display">
+\mathbf{r_{adv}} = -\epsilon \mathbf{g} / ||\mathbf{g}||_2 \quad where \quad \mathbf{g} = \nabla _ \mathbf{x} \log p(y|\mathbf{x};\hat{\mathbf{\theta}})</script><p>如何理解上式呢？<font color="orange"><strong>对当前损失函数求导后取负数</strong></font>，是使得损失增大的最快方向。通过梯度反向传播很容易计算。$\epsilon$用于控制扰动项的范数，将扰动的大小限制在合理范围内。</p>
+<h2 id="2-实现"><a href="#2-实现" class="headerlink" title="2. 实现"></a>2. 实现</h2><p>使用pytorch进行实现。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_add_perturbation</span><span class="params">(self, embedded, loss)</span>:</span></span><br><span class="line">    <span class="string">"""Adds gradient to embedding and recomputes classification loss."""</span></span><br><span class="line">    grad, = tf.gradients(</span><br><span class="line">        loss,</span><br><span class="line">        embedded,</span><br><span class="line">        aggregation_method=tf.AggregationMethod.EXPERIMENTAL_ACCUMULATE_N)</span><br><span class="line">    grad = tf.stop_gradient(grad)</span><br><span class="line">    <span class="comment"># L2 norm constraint</span></span><br><span class="line">    perturb = scale_l2(grad, self.epsilon)</span><br><span class="line">    <span class="keyword">return</span> embedded + perturb</span><br></pre></td></tr></table></figure>
+<p>scale_l2用于$L_2$ norm constraint。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">scale_l2</span><span class="params">(x, norm_length)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    L2 normalization</span></span><br><span class="line"><span class="string">    :param x:</span></span><br><span class="line"><span class="string">    :param norm_length: 范数长度</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="comment"># shape(x) = (batch, num_timesteps, d)</span></span><br><span class="line">    <span class="comment"># Divide x by max(abs(x)) for a numerically stable L2 norm.</span></span><br><span class="line">    <span class="comment"># 2norm(x) = a * 2norm(x/a)</span></span><br><span class="line">    <span class="comment"># Scale over the full sequence, dims (1, 2)</span></span><br><span class="line">    alpha = tf.reduce_max(tf.abs(x), (<span class="number">1</span>, <span class="number">2</span>), keepdims=<span class="literal">True</span>) + <span class="number">1e-12</span></span><br><span class="line">    l2_norm = alpha * tf.sqrt(</span><br><span class="line">        tf.reduce_sum(tf.pow(x / alpha, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">2</span>), keepdims=<span class="literal">True</span>) + <span class="number">1e-6</span>)</span><br><span class="line">    x_unit = x / l2_norm</span><br><span class="line">    <span class="keyword">return</span> norm_length * x_unit</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/19/《百面深度学习》笔记3-图神经网络/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/10/19/《百面深度学习》笔记3-图神经网络/" class="post-title-link" itemprop="url">《百面深度学习》笔记3 - 图神经网络</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-21 21:12:12" itemprop="dateModified" datetime="2020-10-21T21:12:12+08:00">2020-10-21</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Interview/" itemprop="url" rel="index"><span itemprop="name">Interview</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/10/19/《百面深度学习》笔记3-图神经网络/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/19/《百面深度学习》笔记3-图神经网络/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="1-什么是图谱和傅里叶变换？"><a href="#1-什么是图谱和傅里叶变换？" class="headerlink" title="1. 什么是图谱和傅里叶变换？"></a>1. 什么是图谱和傅里叶变换？</h2><p>图谱是图的拉普拉斯矩阵的特征值。具体来说，给定图G(V, E)，点集大小为n，边集大小为m。图G的邻接矩阵A为一个n×n的矩阵，如果i, j之间有边相连，则$A_{ij}$为1，否则为0。图的度矩阵为$D=diag (d_1, d_2, …, d_n)$，其中$d_i$是第i个节点在图中的度数。定义<font color="orange">图的拉普拉斯矩阵为L=D-A</font>，对其进行特征值分解：</p>
+<script type="math/tex; mode=display">
+L = U \Lambda U^T</script><p>其中，$\Lambda = diag(\lambda _1, \lambda _2, …, \lambda _n)$是按照特征值<strong>从小到大</strong>的顺序排列的，$U = [\mathbf{u_1}, u_2, …, u_n]$是对应的特征向量组成的正交矩阵。上述特征值集合$\Lambda$ 即为图G的图谱。尽管A会随着G节点编号的改变而改变，但是$\Lambda$不会，它只与图的抽象结构有关。</p>
+<p>图神经网络有两个派系，一个是基于频谱域，例如GCN；一个是基于空间域，例如GAT和GraphSAGE。不过两者殊途同归，在实际的使用中，图神经网络更常见的框架是：</p>
+<script type="math/tex; mode=display">
+\mathbf{Y} = \sigma(\mathbf{\hat{D}^{-1}\hat{A}XW})</script><p>其中，$\mathbf{X}$和$\mathbf{Y}$分别是输入和输出矩阵，$\mathbf{\hat{A}}$是添加了自环边的图邻接矩阵，$\mathbf{\hat{D}}$是对应的度数矩阵，$\mathbf{W}$是待训练的参数矩阵。将框架分解来看：</p>
+<p>(1) $\mathbf{XW}$将节点的特征向量进行线性变化。</p>
+<p>(2) $\mathbf{\hat{A}XW}$将变换后的节点特征传播到邻居节点（包括自身）。</p>
+<p>(3) $\mathbf{\hat{D}^{-1}\hat{A}XW}$将每个节点收到的特征（来自邻居节点和自身）进行归一化。</p>
+<p>(4) $\sigma(\mathbf{\hat{D}^{-1}\hat{A}XW})$将归一化后的特征通过非线性激活单元。
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/10/19/《百面深度学习》笔记3-图神经网络/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/17/《百面深度学习》笔记2-循环神经网络/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/10/17/《百面深度学习》笔记2-循环神经网络/" class="post-title-link" itemprop="url">《百面深度学习》笔记2 - 循环神经网络</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-18 15:14:31" itemprop="dateModified" datetime="2020-10-18T15:14:31+08:00">2020-10-18</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Interview/" itemprop="url" rel="index"><span itemprop="name">Interview</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/10/17/《百面深度学习》笔记2-循环神经网络/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/17/《百面深度学习》笔记2-循环神经网络/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="1-公式推导"><a href="#1-公式推导" class="headerlink" title="1. 公式推导"></a>1. 公式推导</h2><p>记网络的输入为$x_1, x_2, … ,x_n$，则网络展开后可以看作一个$n$层的前馈神经网络，第$t$层对应着$t$时刻的状态 ($t = 1,2, …, n$) 。记第$t$层（时刻）的输入状态、隐藏状态、输出状态分别为$x_t$、$h_t$、$o_t$，训练时的目标输出值为$y_t$，则有：</p>
+<ul>
+<li>$h<em>t = \sigma (Ux_t + Wh</em>{t-1} + b)$，$\sigma$通常采用Tanh函数</li>
+<li><p>$o_t = g(Vh_t + c)$</p>
+</li>
+<li><p>在训练时，网络在整个序列上的损失可以定义为不同时刻的损失之和：$L = \sum _t L_t = \sum _t Loss(o_t, y_t)$</p>
+</li>
+</ul>
+<p>在循环神经网络中，<font color="pink">所有循环或重复的结构都共享参数。</font>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/10/17/《百面深度学习》笔记2-循环神经网络/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/17/《百面深度学习》笔记1-卷积神经网络的基础模块/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -956,1320 +2258,11 @@ P_t(w) = \frac{\exp (\sigma s_w)}{\sum_{w^{'} \in V} \exp(\sigma s_{w^{'}})}</sc
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/11/乐理-五度相生律、纯律与十二平均律/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/11/乐理-五度相生律、纯律与十二平均律/" class="post-title-link" itemprop="url">乐理 - 五度相生律、纯律与十二平均律</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-11 22:02:01" itemprop="dateModified" datetime="2020-10-11T22:02:01+08:00">2020-10-11</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Music/" itemprop="url" rel="index"><span itemprop="name">Music</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/10/11/乐理-五度相生律、纯律与十二平均律/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/11/乐理-五度相生律、纯律与十二平均律/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>由于搞不明白“大二度”与“减三度”的区别和关系，从网上找了一些相关乐理教材，终于弄懂了！😊</p>
-<p>随着年龄增长，越来越觉得学无止境~而且，更多的是要学会学习、主动学习，哈哈哈不感叹了，开始吧~</p>
-<h2 id="五度相生律"><a href="#五度相生律" class="headerlink" title="五度相生律"></a>五度相生律</h2><p>首先应该明白什么是“五度循环圈”，如果不明白，可以参考知乎上的很好的乐理专栏：</p>
-<p><a href="https://zhuanlan.zhihu.com/p/23125945" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/23125945</a></p>
-<p><img src="/images/blog/2020/music/五度圈.jpg" alt></p>
-<p><br></p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/10/11/乐理-五度相生律、纯律与十二平均律/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/10/Conditional-GAN/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/10/Conditional-GAN/" class="post-title-link" itemprop="url">Conditional GAN</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-10 16:17:26" itemprop="dateModified" datetime="2020-10-10T16:17:26+08:00">2020-10-10</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/GAN/" itemprop="url" rel="index"><span itemprop="name">GAN</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/10/10/Conditional-GAN/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/10/Conditional-GAN/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Conditional GAN可以控制生成的图像类别，是非常实用的一种模型。废话不多说，先上效果图：</p>
-<p><img src="/images/blog/2020/CGAN/101.png" alt></p>
-<p>使用MNIST数据集，生成的均为数字7类别。</p>
-<h2 id="TensorFlow代码"><a href="#TensorFlow代码" class="headerlink" title="TensorFlow代码"></a>TensorFlow代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib</span><br><span class="line">matplotlib.use(<span class="string">'Agg'</span>)</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> matplotlib.gridspec <span class="keyword">as</span> gridspec</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mnist = input_data.read_data_sets(<span class="string">'../../MNIST_data'</span>, one_hot=<span class="literal">True</span>)</span><br><span class="line">mb_size = <span class="number">64</span></span><br><span class="line">Z_dim = <span class="number">100</span></span><br><span class="line">X_dim = mnist.train.images.shape[<span class="number">1</span>]</span><br><span class="line">y_dim = mnist.train.labels.shape[<span class="number">1</span>]</span><br><span class="line">h_dim = <span class="number">128</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">xavier_init</span><span class="params">(size)</span>:</span></span><br><span class="line">    in_dim = size[<span class="number">0</span>]</span><br><span class="line">    xavier_stddev = <span class="number">1.</span> / tf.sqrt(in_dim / <span class="number">2.</span>)</span><br><span class="line">    <span class="keyword">return</span> tf.random_normal(shape=size, stddev=xavier_stddev)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="string">""" Discriminator Net model """</span></span><br><span class="line">X = tf.placeholder(tf.float32, shape=[<span class="literal">None</span>, <span class="number">784</span>])</span><br><span class="line">y = tf.placeholder(tf.float32, shape=[<span class="literal">None</span>, y_dim])</span><br><span class="line"></span><br><span class="line">D_W1 = tf.Variable(xavier_init([X_dim + y_dim, h_dim]))</span><br><span class="line">D_b1 = tf.Variable(tf.zeros(shape=[h_dim]))</span><br><span class="line"></span><br><span class="line">D_W2 = tf.Variable(xavier_init([h_dim, <span class="number">1</span>]))</span><br><span class="line">D_b2 = tf.Variable(tf.zeros(shape=[<span class="number">1</span>]))</span><br><span class="line"></span><br><span class="line">theta_D = [D_W1, D_W2, D_b1, D_b2]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">discriminator</span><span class="params">(x, y)</span>:</span></span><br><span class="line">    inputs = tf.concat(axis=<span class="number">1</span>, values=[x, y])  <span class="comment"># 1. D 添加监督信息</span></span><br><span class="line">    D_h1 = tf.nn.relu(tf.matmul(inputs, D_W1) + D_b1)</span><br><span class="line">    D_logit = tf.matmul(D_h1, D_W2) + D_b2</span><br><span class="line">    D_prob = tf.nn.sigmoid(D_logit)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> D_prob, D_logit</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="string">""" Generator Net model """</span></span><br><span class="line">Z = tf.placeholder(tf.float32, shape=[<span class="literal">None</span>, Z_dim])</span><br><span class="line"></span><br><span class="line">G_W1 = tf.Variable(xavier_init([Z_dim + y_dim, h_dim]))</span><br><span class="line">G_b1 = tf.Variable(tf.zeros(shape=[h_dim]))</span><br><span class="line"></span><br><span class="line">G_W2 = tf.Variable(xavier_init([h_dim, X_dim]))</span><br><span class="line">G_b2 = tf.Variable(tf.zeros(shape=[X_dim]))</span><br><span class="line"></span><br><span class="line">theta_G = [G_W1, G_W2, G_b1, G_b2]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generator</span><span class="params">(z, y)</span>:</span></span><br><span class="line">    inputs = tf.concat(axis=<span class="number">1</span>, values=[z, y])  <span class="comment"># 2. G 添加监督信息</span></span><br><span class="line">    G_h1 = tf.nn.relu(tf.matmul(inputs, G_W1) + G_b1)</span><br><span class="line">    G_log_prob = tf.matmul(G_h1, G_W2) + G_b2</span><br><span class="line">    G_prob = tf.nn.sigmoid(G_log_prob)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> G_prob</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sample_Z</span><span class="params">(m, n)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> np.random.uniform(<span class="number">-1.</span>, <span class="number">1.</span>, size=[m, n])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">plot</span><span class="params">(samples)</span>:</span></span><br><span class="line">    fig = plt.figure(figsize=(<span class="number">4</span>, <span class="number">4</span>))</span><br><span class="line">    gs = gridspec.GridSpec(<span class="number">4</span>, <span class="number">4</span>)</span><br><span class="line">    gs.update(wspace=<span class="number">0.05</span>, hspace=<span class="number">0.05</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i, sample <span class="keyword">in</span> enumerate(samples):</span><br><span class="line">        ax = plt.subplot(gs[i])</span><br><span class="line">        plt.axis(<span class="string">'off'</span>)</span><br><span class="line">        ax.set_xticklabels([])</span><br><span class="line">        ax.set_yticklabels([])</span><br><span class="line">        ax.set_aspect(<span class="string">'equal'</span>)</span><br><span class="line">        plt.imshow(sample.reshape(<span class="number">28</span>, <span class="number">28</span>), cmap=<span class="string">'Greys_r'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> fig</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">G_sample = generator(Z, y)</span><br><span class="line">D_real, D_logit_real = discriminator(X, y)</span><br><span class="line">D_fake, D_logit_fake = discriminator(G_sample, y)</span><br><span class="line"></span><br><span class="line">D_loss_real = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=D_logit_real, labels=tf.ones_like(D_logit_real)))</span><br><span class="line">D_loss_fake = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=D_logit_fake, labels=tf.zeros_like(D_logit_fake)))</span><br><span class="line">D_loss = D_loss_real + D_loss_fake</span><br><span class="line">G_loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=D_logit_fake, labels=tf.ones_like(D_logit_fake)))</span><br><span class="line"></span><br><span class="line">D_solver = tf.train.AdamOptimizer().minimize(D_loss, var_list=theta_D)</span><br><span class="line">G_solver = tf.train.AdamOptimizer().minimize(G_loss, var_list=theta_G)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sess = tf.Session()</span><br><span class="line">sess.run(tf.global_variables_initializer())</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">'out/'</span>):</span><br><span class="line">    os.makedirs(<span class="string">'out/'</span>)</span><br><span class="line"></span><br><span class="line">i = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> it <span class="keyword">in</span> range(<span class="number">1000000</span>):</span><br><span class="line">    <span class="keyword">if</span> it % <span class="number">1000</span> == <span class="number">0</span>:</span><br><span class="line">        n_sample = <span class="number">16</span></span><br><span class="line"></span><br><span class="line">        Z_sample = sample_Z(n_sample, Z_dim)</span><br><span class="line">        y_sample = np.zeros(shape=[n_sample, y_dim])</span><br><span class="line">        y_sample[:, <span class="number">7</span>] = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        samples = sess.run(G_sample, feed_dict=&#123;Z: Z_sample, y:y_sample&#125;)</span><br><span class="line"></span><br><span class="line">        fig = plot(samples)</span><br><span class="line">        plt.savefig(<span class="string">'out/&#123;&#125;.png'</span>.format(str(i).zfill(<span class="number">3</span>)), bbox_inches=<span class="string">'tight'</span>)</span><br><span class="line">        i += <span class="number">1</span></span><br><span class="line">        plt.close(fig)</span><br><span class="line"></span><br><span class="line">    X_mb, y_mb = mnist.train.next_batch(mb_size)</span><br><span class="line"></span><br><span class="line">    Z_sample = sample_Z(mb_size, Z_dim)</span><br><span class="line">    _, D_loss_curr = sess.run([D_solver, D_loss], feed_dict=&#123;X: X_mb, Z: Z_sample, y:y_mb&#125;)</span><br><span class="line">    _, G_loss_curr = sess.run([G_solver, G_loss], feed_dict=&#123;Z: Z_sample, y:y_mb&#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> it % <span class="number">1000</span> == <span class="number">0</span>:</span><br><span class="line">        print(<span class="string">'Iter: &#123;&#125;'</span>.format(it))</span><br><span class="line">        print(<span class="string">'D loss: &#123;:.4&#125;'</span>. format(D_loss_curr))</span><br><span class="line">        print(<span class="string">'G_loss: &#123;:.4&#125;'</span>.format(G_loss_curr))</span><br><span class="line">        print()</span><br></pre></td></tr></table></figure>
-<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p><img src="/images/blog/2020/CGAN/000.png" alt></p>
-<p>0个step</p>
-<p><img src="/images/blog/2020/CGAN/010.png" alt></p>
-<p>10 * 1000个step</p>
-<p><img src="/images/blog/2020/CGAN/028.png" alt></p>
-<p>28 * 1000个step</p>
-<p><img src="/images/blog/2020/CGAN/999.png" alt></p>
-<p>999 * 1000个step</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Conditional GAN的思想以及实现都是很简单的，值得借鉴。往往经典的模型都是简单优雅的。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/09/WGAN使用Pytorch简单实现/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/09/WGAN使用Pytorch简单实现/" class="post-title-link" itemprop="url">WGAN使用Pytorch简单实现</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-09 15:02:54" itemprop="dateModified" datetime="2020-10-09T15:02:54+08:00">2020-10-09</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/GAN/" itemprop="url" rel="index"><span itemprop="name">GAN</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/10/09/WGAN使用Pytorch简单实现/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/09/WGAN使用Pytorch简单实现/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>上一篇文章介绍了 WGAN 的原理，这篇文章给出使用Pytorch的简单实现：</p>
-<h2 id="环境配置："><a href="#环境配置：" class="headerlink" title="环境配置："></a>环境配置：</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tensorflow: &gt;= 2.0.0</span><br><span class="line">pytorch: &gt;= 1.5.0</span><br><span class="line">numpy</span><br><span class="line">matplotlib</span><br></pre></td></tr></table></figure>
-<h2 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch.nn</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib</span><br><span class="line">matplotlib.use(<span class="string">'Agg'</span>)</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> matplotlib.gridspec <span class="keyword">as</span> gridspec</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> torch.autograd <span class="keyword">import</span> Variable</span><br><span class="line"><span class="keyword">import</span> tensorflow</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mnist, _ = tensorflow.keras.datasets.mnist.load_data(path=<span class="string">'mnist.npz'</span>)</span><br><span class="line">mb_size = <span class="number">32</span></span><br><span class="line">z_dim = <span class="number">10</span></span><br><span class="line">X_dim = int(pow(mnist[<span class="number">0</span>][<span class="number">0</span>].shape[<span class="number">1</span>], <span class="number">2</span>))</span><br><span class="line">y_dim = <span class="number">10</span>  <span class="comment"># 手写数字 0~9</span></span><br><span class="line">h_dim = <span class="number">128</span></span><br><span class="line">cnt = <span class="number">0</span></span><br><span class="line">lr = <span class="number">1e-4</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">G = torch.nn.Sequential(</span><br><span class="line">    torch.nn.Linear(z_dim, h_dim),</span><br><span class="line">    torch.nn.ReLU(),</span><br><span class="line">    torch.nn.Linear(h_dim, X_dim),</span><br><span class="line">    torch.nn.Sigmoid()</span><br><span class="line">).float()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">D = torch.nn.Sequential(</span><br><span class="line">    torch.nn.Linear(X_dim, h_dim),</span><br><span class="line">    torch.nn.ReLU(),</span><br><span class="line">    torch.nn.Linear(h_dim, <span class="number">1</span>),  <span class="comment"># 1. 不用 sigmoid</span></span><br><span class="line">).float()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">reset_grad</span><span class="params">()</span>:</span></span><br><span class="line">    G.zero_grad()</span><br><span class="line">    D.zero_grad()</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">G_solver = optim.RMSprop(G.parameters(), lr=lr)  <span class="comment"># 2. 采用 RMSprop 优化器</span></span><br><span class="line">D_solver = optim.RMSprop(D.parameters(), lr=lr)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sample_batch</span><span class="params">(mb_size)</span>:</span></span><br><span class="line">    rand_indexes = np.random.randint(<span class="number">0</span>, mnist[<span class="number">0</span>].shape[<span class="number">0</span>], mb_size)</span><br><span class="line">    <span class="keyword">return</span> mnist[<span class="number">0</span>][rand_indexes]</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/10/09/WGAN使用Pytorch简单实现/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/08/Wasserstein-GAN-implementation-in-TensorFlow-and-Pytorch/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/08/Wasserstein-GAN-implementation-in-TensorFlow-and-Pytorch/" class="post-title-link" itemprop="url">Wasserstein GAN implementation in TensorFlow and Pytorch</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-08 13:23:29" itemprop="dateModified" datetime="2020-10-08T13:23:29+08:00">2020-10-08</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/GAN/" itemprop="url" rel="index"><span itemprop="name">GAN</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/10/08/Wasserstein-GAN-implementation-in-TensorFlow-and-Pytorch/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/08/Wasserstein-GAN-implementation-in-TensorFlow-and-Pytorch/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>本文译自：<a href="https://wiseodd.github.io/techblog/2017/02/04/wasserstein-gan/" target="_blank" rel="noopener">https://wiseodd.github.io/techblog/2017/02/04/wasserstein-gan/</a></p>
-</blockquote>
-<p>GAN现在是机器学习中非常受欢迎的研究主题。 GAN有两种类型的研究，一种将GAN应用到有趣的问题中，另一种试图稳定训练。</p>
-<p>确实，稳定GAN培训在该领域非常重要。原始GAN遇到许多困难，例如模式崩溃，即生成器陷入非常狭窄的分布，仅涵盖数据分布中的单个模式。模式崩溃的含义是，生成器只能生成非常相似的样本（例如MNIST中的一位数字），即生成的样本区别不大。这个问题当然违反了GAN的精神。</p>
-<p>GAN中的另一个问题是，没有度量标准可以告诉我们有关收敛的信息。生成器和鉴别器的损失并没有告诉我们任何有关此的信息。当然，我们可以不时查看发生器生成的数据来监视培训进度。但是，这是一个严格的手动过程。因此，拥有一个可解释的指标来告诉我们有关培训进度的信息将非常棒。</p>
-<p>Note, code could be found here: <a href="https://github.com/wiseodd/generative-models" target="_blank" rel="noopener">https://github.com/wiseodd/generative-models</a></p>
-<h2 id="Wasserstein-GAN"><a href="#Wasserstein-GAN" class="headerlink" title="Wasserstein GAN"></a>Wasserstein GAN</h2><p>Wasserstein GAN (WGAN) 是新提出的 GAN 算法旨在解决上面提到的两个问题。</p>
-<p>For the intuition and theoritical background behind WGAN, redirect to <a href="https://paper.dropbox.com/doc/Wasserstein-GAN-GvU0p2V9ThzdwY3BbhoP7" target="_blank" rel="noopener">this excellent summary</a> (credits to the author).</p>
-<p>算法如下：</p>
-<p><img src="/images/blog/2020/WGAN.PNG" alt></p>
-<p>可以看到这个算法非常接近原始的 GAN。但是，值得注意下面几点：</p>
-<ol>
-<li>Loss 函数中没有 log，$D$ (判别器) 的输出不再是概率，因此在输出层不使用 sigmoid 函数</li>
-<li>Clip the weight of $D$</li>
-<li>Train $D$ more than $G$</li>
-<li>Use RMSProp instead of ADAM</li>
-<li>Lower learning rate, the paper uses $\alpha = 0.00005$
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/10/08/Wasserstein-GAN-implementation-in-TensorFlow-and-Pytorch/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </li></ol></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/06/DCGAN的实现及效果/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/06/DCGAN的实现及效果/" class="post-title-link" itemprop="url">DCGAN的实现及效果</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-06 17:17:09" itemprop="dateModified" datetime="2020-10-06T17:17:09+08:00">2020-10-06</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/10/06/DCGAN的实现及效果/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/06/DCGAN的实现及效果/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><a href="https://arxiv.org/abs/1511.06434" target="_blank" rel="noopener">DCGAN (Deep Convolutional Generative Adversarial Networks)</a> 是最简单的GAN模型了，也是在GAN之后最早出现的变种，只是把GAN中的MLP换作了卷积层以及转置卷积层 (Tranposed Convolution)，一份简洁的，使用<a href="https://github.com/tensorlayer/tensorlayer" target="_blank" rel="noopener">TensorLayer</a> 实现的网络结构为：</p>
-<h3 id="1-代码"><a href="#1-代码" class="headerlink" title="1. 代码"></a>1. 代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> tensorlayer <span class="keyword">as</span> tl</span><br><span class="line"><span class="keyword">from</span> tensorlayer.layers <span class="keyword">import</span> Input, Dense, DeConv2d, Reshape, BatchNorm2d, Conv2d, Flatten</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_generator</span><span class="params">(shape, gf_dim=<span class="number">64</span>)</span>:</span> <span class="comment"># Dimension of gen filters in first conv layer. [64]</span></span><br><span class="line">    image_size = <span class="number">64</span></span><br><span class="line">    s16 = image_size // <span class="number">16</span></span><br><span class="line">    <span class="comment"># w_init = tf.glorot_normal_initializer()</span></span><br><span class="line">    w_init = tf.random_normal_initializer(stddev=<span class="number">0.02</span>)  <span class="comment"># 正态初始化</span></span><br><span class="line">    gamma_init = tf.random_normal_initializer(<span class="number">1.</span>, <span class="number">0.02</span>)</span><br><span class="line">    </span><br><span class="line">    ni = Input(shape)</span><br><span class="line">    nn = Dense(n_units=(gf_dim * <span class="number">8</span> * s16 * s16), W_init=w_init, b_init=<span class="literal">None</span>)(ni)</span><br><span class="line">    nn = Reshape(shape=[<span class="number">-1</span>, s16, s16, gf_dim*<span class="number">8</span>])(nn)</span><br><span class="line">    nn = BatchNorm2d(decay=<span class="number">0.9</span>, act=tf.nn.relu, gamma_init=gamma_init, name=<span class="literal">None</span>)(nn)</span><br><span class="line">    <span class="comment"># n_filter, filter_size, strides</span></span><br><span class="line">    nn = DeConv2d(gf_dim * <span class="number">4</span>, (<span class="number">5</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">2</span>), W_init=w_init, b_init=<span class="literal">None</span>)(nn)</span><br><span class="line">    nn = BatchNorm2d(decay=<span class="number">0.9</span>, act=tf.nn.relu, gamma_init=gamma_init)(nn)</span><br><span class="line">    nn = DeConv2d(gf_dim * <span class="number">2</span>, (<span class="number">5</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">2</span>), W_init=w_init, b_init=<span class="literal">None</span>)(nn)</span><br><span class="line">    nn = BatchNorm2d(decay=<span class="number">0.9</span>, act=tf.nn.relu, gamma_init=gamma_init)(nn)</span><br><span class="line">    nn = DeConv2d(gf_dim, (<span class="number">5</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">2</span>), W_init=w_init, b_init=<span class="literal">None</span>)(nn)</span><br><span class="line">    nn = BatchNorm2d(decay=<span class="number">0.9</span>, act=tf.nn.relu, gamma_init=gamma_init)(nn)</span><br><span class="line">    nn = DeConv2d(<span class="number">3</span>, (<span class="number">5</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">2</span>), act=tf.nn.tanh, W_init=w_init)(nn)</span><br><span class="line">    <span class="keyword">return</span> tl.models.Model(inputs=ni, outputs=nn, name=<span class="string">'generator'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_discriminator</span><span class="params">(shape, df_dim=<span class="number">64</span>)</span>:</span> <span class="comment"># Dimension of discrim filters in first conv layer. [64]</span></span><br><span class="line">    <span class="comment"># w_init = tf.glorot_normal_initializer()</span></span><br><span class="line">    w_init = tf.random_normal_initializer(stddev=<span class="number">0.02</span>)</span><br><span class="line">    gamma_init = tf.random_normal_initializer(<span class="number">1.</span>, <span class="number">0.02</span>)</span><br><span class="line">    lrelu = <span class="keyword">lambda</span> x : tf.nn.leaky_relu(x, <span class="number">0.2</span>)</span><br><span class="line"></span><br><span class="line">    ni = Input(shape)</span><br><span class="line">    nn = Conv2d(df_dim, (<span class="number">5</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">2</span>), act=lrelu, W_init=w_init)(ni)</span><br><span class="line">    nn = Conv2d(df_dim*<span class="number">2</span>, (<span class="number">5</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">2</span>), W_init=w_init, b_init=<span class="literal">None</span>)(nn)</span><br><span class="line">    nn = BatchNorm2d(decay=<span class="number">0.9</span>, act=lrelu, gamma_init=gamma_init)(nn)</span><br><span class="line">    nn = Conv2d(df_dim*<span class="number">4</span>, (<span class="number">5</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">2</span>), W_init=w_init, b_init=<span class="literal">None</span>)(nn)</span><br><span class="line">    nn = BatchNorm2d(decay=<span class="number">0.9</span>, act=lrelu, gamma_init=gamma_init)(nn)</span><br><span class="line">    nn = Conv2d(df_dim*<span class="number">8</span>, (<span class="number">5</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">2</span>), W_init=w_init, b_init=<span class="literal">None</span>)(nn)</span><br><span class="line">    nn = BatchNorm2d(decay=<span class="number">0.9</span>, act=lrelu, gamma_init=gamma_init)(nn)</span><br><span class="line">    nn = Flatten()(nn)</span><br><span class="line">    nn = Dense(n_units=<span class="number">1</span>, act=tf.identity, W_init=w_init)(nn)  </span><br><span class="line">    <span class="keyword">return</span> tl.models.Model(inputs=ni, outputs=nn, name=<span class="string">'discriminator'</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="2-实验设置"><a href="#2-实验设置" class="headerlink" title="2. 实验设置"></a>2. 实验设置</h3><p>使用celeba数据集，是名人 (celebrity) 人脸图片数据集，可以在Google Driver中下载：</p>
-<p><a href="https://drive.google.com/drive/folders/0B7EVK8r0v71pWEZsZE9oNnFzTm8" target="_blank" rel="noopener">https://drive.google.com/drive/folders/0B7EVK8r0v71pWEZsZE9oNnFzTm8</a></p>
-<p>使用Nvidia TITAN RTX显卡，显存为24G，batch_size设为64；每个epoch有3165 steps，共训练25个epoch，每个epoch耗时284秒，训练共耗时2h 3min。
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/10/06/DCGAN的实现及效果/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/05/服务器CuDNN版本升级/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/05/服务器CuDNN版本升级/" class="post-title-link" itemprop="url">服务器CuDNN版本升级</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-05 21:12:02" itemprop="dateModified" datetime="2020-10-05T21:12:02+08:00">2020-10-05</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/10/05/服务器CuDNN版本升级/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/05/服务器CuDNN版本升级/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>最近在用到tensorlayer跑代码时，遇到了CuDNN版本问题，编译时的版本与运行时版本不同，导致报错。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2019-12-24 05:34:15.862520: E tensorflow/stream_executor/cuda/cuda_dnn.cc:319] Loaded runtime CuDNN library: 7.4.1 but source was compiled with: 7.6.0. CuDNN library major and minor version needs to match or have higher minor version in case of CuDNN 7.0 or later version. If using a binary install, upgrade your CuDNN library. If building from sources, make sure the library loaded at runtime is compatible with the version specified during compile configuration.</span><br></pre></td></tr></table></figure>
-<p>在服务器上，<strong>没有root权限</strong>，也可以升级CuDNN版本，具体操作下面给出。</p>
-<h3 id="1-下载CuDNN"><a href="#1-下载CuDNN" class="headerlink" title="1. 下载CuDNN"></a>1. 下载CuDNN</h3><p>网址为：<a href="https://developer.nvidia.com/cudnn" target="_blank" rel="noopener">https://developer.nvidia.com/cudnn</a></p>
-<p>需要先注册，之后选择<font color="#4fff60">cnDNN Library for Linux</font></p>
-<h3 id="2-解压安装"><a href="#2-解压安装" class="headerlink" title="2. 解压安装"></a>2. 解压安装</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xzvf cudnn*</span><br></pre></td></tr></table></figure>
-<p>得到一个名为cuda的文件夹</p>
-<h3 id="3-配置环境变量"><a href="#3-配置环境变量" class="headerlink" title="3. 配置环境变量"></a>3. 配置环境变量</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.bashrc</span><br></pre></td></tr></table></figure>
-<p>在末尾加上：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/home/xxx/cuda/lib64"</span><br></pre></td></tr></table></figure>
-<p>最后激活：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source ~/.bashrc</span><br></pre></td></tr></table></figure>
-<p>到这里就大功告成了！</p>
-<h3 id="4-验证"><a href="#4-验证" class="headerlink" title="4. 验证"></a>4. 验证</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo $LD_LIBRARY_PATH</span><br></pre></td></tr></table></figure>
-<p>输出中包含<code>/home/xxx/cuda/lib64</code>，证明激活成功。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/03/深入理解Batch-Normalization/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/03/深入理解Batch-Normalization/" class="post-title-link" itemprop="url">深入理解Batch Normalization</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-03 23:10:31" itemprop="dateModified" datetime="2020-10-03T23:10:31+08:00">2020-10-03</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/10/03/深入理解Batch-Normalization/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/03/深入理解Batch-Normalization/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Batch Normalization具有可以增强神经网络的稳定性，加速神经网络训练等优点，但一直没有深入详细地了解过其原理与实现。通过<a href>coursera</a>的<font color="#0077dd">Generative Adversarial Networks (GANs)</font>专项课程，较为深入的学习了Batch Normalization，在此记录。</p>
-<p>&lt;/br&gt;</p>
-<h3 id="1-原理"><a href="#1-原理" class="headerlink" title="1. 原理"></a>1. 原理</h3><p>假设有一个很简单的神经网络，输入为向量$[x_1, x_2]$，输出为一只猫的概率。</p>
-<p><img src="/images/blog/2020/BN/network.PNG" alt></p>
-<p>而$x_1,x_2$两个维度的分布是不同的，假设两者均服从正态分布，$x_2$的$\mu$值更大，$\sigma$更小：</p>
-<p><img src="/images/blog/2020/BN/x1.PNG" alt></p>
-<p>这导致损失函数被拉长，</p>
-<blockquote>
-<p>So that changes to the weights relating to each of the inputs will have kind of </p>
-<p>a different effect of varying impact on this cost function.</p>
-</blockquote>
-<p>并且导致训练变得困难，网络收敛更慢而且更依赖参数初始化的效果。</p>
-<p><img src="/images/blog/2020/BN/costfunction.PNG" alt></p>
-<hr>
-<p>另外，由于测试集与训练集可能存在数据分布的不一致，即：</p>
-<p><img src="/images/blog/2020/BN/shift.PNG" alt></p>
-<p>会导致损失函数的变化：</p>
-<p><img src="/images/blog/2020/BN/costshift.PNG" alt></p>
-<p>这种现象叫做<strong>covariate shift</strong>。<font color="orange">如果对$[x_1, x_2]$进行规范化，那么数据分布会较为平衡，并且损失函数更顺滑，训练神经网络会更简单、更快速。</font>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/10/03/深入理解Batch-Normalization/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/13/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/13/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2313,7 +2306,7 @@ P_t(w) = \frac{\exp (\sigma s_w)}{\sum_{w^{'} \in V} \exp(\sigma s_{w^{'}})}</sc
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">148</span>
+                    <span class="site-state-item-count">155</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3137,7 +3130,33 @@ P_t(w) = \frac{\exp (\sigma s_w)}{\sum_{w^{'} \in V} \exp(\sigma s_{w^{'}})}</sc
                     
                       
                     
-                    <span class="site-state-item-count">376</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">389</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -3679,9 +3698,9 @@ P_t(w) = \frac{\exp (\sigma s_w)}{\sum_{w^{'} \in V} \exp(\sigma s_{w^{'}})}</sc
   
     
       
-    
-      
         
+      
+    
       
     
       

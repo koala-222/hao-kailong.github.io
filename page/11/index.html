@@ -415,6 +415,1320 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/10/LeetCode-2-动态规划与背包问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/10/LeetCode-2-动态规划与背包问题/" class="post-title-link" itemprop="url">LeetCode-2-动态规划与背包问题</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-11 09:58:47" itemprop="dateModified" datetime="2020-11-11T09:58:47+08:00">2020-11-11</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/10/LeetCode-2-动态规划与背包问题/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/10/LeetCode-2-动态规划与背包问题/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="1-将一个数分解为2的幂次"><a href="#1-将一个数分解为2的幂次" class="headerlink" title="1. 将一个数分解为2的幂次"></a>1. 将一个数分解为2的幂次</h2><p>即将一个数表示为1, 2, 4, … 的和的形式。</p>
+<p><strong>分析</strong>: </p>
+<ol>
+<li>若n为奇数，则n的表示形式中必然含有一个+1，除去+1后剩下的即为n-1的表示形式，即f(n) = f(n-1)</li>
+<li>若n为偶数，第一，若n的表示形式中含有1，则含有至少两个1，除去这两个+1，则为f(n-2)；若n的表示形式中不含有1，则均为偶数，因此，等价于除以2的形式，即f(n/2)</li>
+</ol>
+<p>综上，动态规划公式为：</p>
+<script type="math/tex; mode=display">
+f(n) = \left \{
+\begin{align}
+f(n-1) & \quad & n为奇数\\ 
+f(n-2) + f(n/2) & \quad & n为偶数
+\end{align}
+\right.</script><p>用C++实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> dp[<span class="number">1000001</span>];</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    dp[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    dp[<span class="number">2</span>] = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">3</span>; i &lt;= <span class="number">1000000</span>; i ++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(i&amp;<span class="number">1</span>) <span class="comment">// 按位操作</span></span><br><span class="line">            dp[i] = dp[i<span class="number">-1</span>];</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            dp[i] = dp[i<span class="number">-2</span>] + dp[i/<span class="number">2</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%lld\n"</span>, dp[n]%<span class="number">1000000000</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/11/10/LeetCode-2-动态规划与背包问题/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/09/pytorch的几种坐标选择函数/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/09/pytorch的几种坐标选择函数/" class="post-title-link" itemprop="url">pytorch的几种坐标选择函数</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-09 21:16:39" itemprop="dateModified" datetime="2020-11-09T21:16:39+08:00">2020-11-09</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/09/pytorch的几种坐标选择函数/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/09/pytorch的几种坐标选择函数/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在pytorch中，有多种选择函数，能够明确区分它们之间的区别，才能更好的运用✅</p>
+<h2 id="1-torch-masked-select"><a href="#1-torch-masked-select" class="headerlink" title="1. torch.masked_select()"></a>1. torch.masked_select()</h2><blockquote>
+<p>Returns a new 1-D tensor which indexes the <code>input</code> tensor according to the boolean mask <code>mask</code> which is a BoolTensor.</p>
+</blockquote>
+<p>返回的是1维的向量。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">vectors = torch.tensor([</span><br><span class="line">    [<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>],</span><br><span class="line">    [<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>],</span><br><span class="line">    [<span class="number">3</span>,<span class="number">3</span>,<span class="number">3</span>]</span><br><span class="line">])</span><br><span class="line"><span class="comment"># 想要选择第一个和第三个向量</span></span><br><span class="line">masks = torch.tensor([<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>], dtype=torch.bool).unsqueeze(<span class="number">1</span>)</span><br><span class="line">r = torch.masked_select(vectors, masks)</span><br><span class="line">print(r)</span><br><span class="line">print(r.shape)</span><br><span class="line"></span><br><span class="line">================================================================</span><br><span class="line">tensor([<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">3</span>])</span><br><span class="line">torch.Size([<span class="number">6</span>])</span><br></pre></td></tr></table></figure>
+<h2 id="2-torch-index-select"><a href="#2-torch-index-select" class="headerlink" title="2. torch.index_select()"></a>2. torch.index_select()</h2><p>沿着张量的某个<code>dim</code>方向，按照<code>index</code>规定的选取指定的低一维度张量元素整体，在拼接成一个张量。</p>
+<p>先简单看两个示例：<br><strong>示例1</strong>：沿着<code>dim=0</code>的方向进行</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">a = torch.tensor([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]])</span><br><span class="line"><span class="comment"># a为tensor([[1, 2, 3],</span></span><br><span class="line"><span class="comment">#        [4, 5, 6]])</span></span><br><span class="line"></span><br><span class="line">b = torch.index_select(a, dim=<span class="number">0</span>, index=torch.tensor([<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>]))</span><br><span class="line"><span class="comment"># b为tensor([[1, 2, 3],</span></span><br><span class="line"><span class="comment">#        [4, 5, 6],</span></span><br><span class="line"><span class="comment">#        [1, 2, 3],</span></span><br><span class="line"><span class="comment">#        [4, 5, 6]])</span></span><br></pre></td></tr></table></figure>
+<p><img src="/images/blog/2020/select/1.png" alt></p>
+<p>显然，对于二维张量，<code>dim=0</code>意味着按照<code>index</code>的编号选取指定的行，拼接成目标张量。其返回值仍保持和原始张量相同的<code>ndim</code>。
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/11/09/pytorch的几种坐标选择函数/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/09/PyTorch中expand-与repeat-的区别/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/09/PyTorch中expand-与repeat-的区别/" class="post-title-link" itemprop="url">PyTorch中expand()与repeat()的区别</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-09 20:04:04" itemprop="dateModified" datetime="2020-11-09T20:04:04+08:00">2020-11-09</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/09/PyTorch中expand-与repeat-的区别/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/09/PyTorch中expand-与repeat-的区别/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>二者都是用来扩展某维的数据的尺寸。</p>
+<p><strong>一、expand()</strong><br>       返回当前张量在某维扩展更大后的张量。扩展（expand）张量不会分配新的内存，只是在存在的张量上创建一个新的视图（view），<strong>只能扩展为1的维度</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line">print(<span class="string">'扩展前a的shape:'</span>, a.shape)</span><br><span class="line">a = a.expand(<span class="number">8</span>, <span class="number">4</span>)</span><br><span class="line">print(<span class="string">'扩展后a的shape:'</span>, a.shape)</span><br><span class="line">print(a)</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">扩展前a的shape: torch.Size([<span class="number">4</span>])</span><br><span class="line">扩展后a的shape: torch.Size([<span class="number">8</span>, <span class="number">4</span>])</span><br><span class="line">tensor([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]])</span><br></pre></td></tr></table></figure>
+<p><br></p>
+<p><strong>二、repeat()</strong>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/11/09/PyTorch中expand-与repeat-的区别/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/08/Python-random模块的随机采样函数/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/08/Python-random模块的随机采样函数/" class="post-title-link" itemprop="url">Python random模块的随机采样函数</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-08 15:42:20" itemprop="dateModified" datetime="2020-11-08T15:42:20+08:00">2020-11-08</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/08/Python-random模块的随机采样函数/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/08/Python-random模块的随机采样函数/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>choice(seq): 从seq序列中（可以是列表，元组，字符串）随机取一个元素返回</p>
+<p><code>choices</code>(<em>population</em>, <em>weights=None</em>, ***, <em>cum_weights=None</em>, <em>k=1</em>)：从population中进行k次<strong>有放回随机选取</strong>，每次选取一个元素（注意会出现同一个元素多次被选中的情况），weights是相对权重值，population中有几个元素就要有相对应的weights值，cum_weights是累加权重值，例如，相对权重〔10, 5, 30, 5〕相当于累积权重〔10, 15, 45, 50〕。在内部，在进行选择之前，相对权重被转换为累积权重，因此提供累积权重节省了工作。返回一个列表。</p>
+<p>sample(<em>population</em>, <em>k</em>)：从population中<strong>无放回取样</strong>，一次取k个，返回一个k长的列表。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">可以像这样使用：sample(range(<span class="number">10000000</span>), k=<span class="number">60</span>)</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/07/Hinge-Loss-理解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/07/Hinge-Loss-理解/" class="post-title-link" itemprop="url">Hinge Loss 理解</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-07 20:24:45" itemprop="dateModified" datetime="2020-11-07T20:24:45+08:00">2020-11-07</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/07/Hinge-Loss-理解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/07/Hinge-Loss-理解/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>本文转载自<a href="https://blog.csdn.net/hustqb/article/details/78347713" target="_blank" rel="noopener">https://blog.csdn.net/hustqb/article/details/78347713</a></p>
+</blockquote>
+<p>在机器学习中，<strong>hinge loss</strong>作为一个<strong>损失函数(loss function)</strong>，通常被用于<strong>最大间隔算法(maximum-margin)</strong>，而最大间隔算法又是SVM(支持向量机 support vector machines)用到的重要算法(注意：SVM的学习算法有两种解释：1. 间隔最大化与拉格朗日对偶；2. Hinge Loss)。</p>
+<p>  <strong>Hinge loss专用于二分类问题</strong>，标签值y=±1，预测值$\hat y \in R$。该二分类问题的目标函数的要求如下：<br>  <font color="orange">当$\hat y$大于等于+1或者小于等于-1时，都是分类器确定的分类结果，此时的损失函数loss为0；</font>而当预测值$\hat y$ ∈(−1,1)时，分类器对分类结果不确定，loss不为0。显然，$\hat y$ =0时，loss达到最大值。</p>
+<p>  如果你想到了一个可以定义这种loss的函数，那说明有成为数学家的潜质。想不到的话就乖乖的往下看：hinge loss出场。</p>
+<p>​        <strong>对于输出y=±1，当前$\hat y$ 的损失为</strong>：</p>
+<script type="math/tex; mode=display">
+l(y) = \max(0, 1-y \cdot \hat y)</script><p>上式是Hinge loss在二分类问题的的变体，可以看做双向Hinge loss。难以理解的话，可以先看单方向的hinge loss。以y=+1，为例。当y⩾1时，loss为0，否则loss线性增大。函数图像如下所示：</p>
+<p><div align="center"> <img src="/images/blog/2020/hinge1.png" alt></div></p>
+<p><br></p>
+<h2 id="hinge-loss-在SVM中的应用"><a href="#hinge-loss-在SVM中的应用" class="headerlink" title="hinge loss 在SVM中的应用"></a>hinge loss 在SVM中的应用
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/11/07/Hinge-Loss-理解/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </h2></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/05/聚类损失的实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/05/聚类损失的实现/" class="post-title-link" itemprop="url">聚类损失的实现</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-05 22:59:13" itemprop="dateModified" datetime="2020-11-05T22:59:13+08:00">2020-11-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/05/聚类损失的实现/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/05/聚类损失的实现/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在最近的实验中，需要添加聚类损失，尝试将不同类别样本在特征空间中的距离拉远；同类样本之间距离拉近。如何使用PyTorch实现这一损失，我借鉴了<a href="https://github.com/INK-USC/NERO" target="_blank" rel="noopener">NERO</a>中的实现。</p>
+<p>吐槽：用惯了pytorch，使用tensorflow先定义计算图，再用tf.Session()运行是真的不习惯，而且麻烦……</p>
+<p><br></p>
+<p>首先定义相似度矩阵，shape=(batch, batch)，这里直接给出来。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">tau = <span class="number">1.</span></span><br><span class="line">sim = tf.constant([</span><br><span class="line">    [<span class="number">0.8</span>, <span class="number">0.3</span>, <span class="number">0.6</span>],</span><br><span class="line">    [<span class="number">0.3</span>, <span class="number">0.9</span>, <span class="number">0.5</span>],</span><br><span class="line">    [<span class="number">0.6</span>, <span class="number">0.5</span>, <span class="number">0.8</span>]</span><br><span class="line">], dtype=tf.float64)</span><br></pre></td></tr></table></figure>
+<p>然后定义关系，使用one-hot表示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rels = tf.constant([</span><br><span class="line">    [<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>]</span><br><span class="line">], dtype=tf.float64)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">neg_idxs = tf.matmul(rels, tf.transpose(rels, [<span class="number">1</span>, <span class="number">0</span>]))  <span class="comment"># neg_idxs[i][j] = 1 表示两个样本类别相同</span></span><br><span class="line">pat_pos = tf.square(tf.maximum(tau - sim, <span class="number">0.</span>))  <span class="comment"># (batch, batch)</span></span><br><span class="line">pat_pos = tf.reduce_max(pat_pos - (<span class="number">1</span> - neg_idxs) * <span class="number">1e30</span>, axis=<span class="number">1</span>)  <span class="comment"># 找到了最不相似的正邻居</span></span><br><span class="line">pat_neg = tf.square(tf.maximum(sim, <span class="number">0.</span>))</span><br><span class="line">pat_neg = tf.reduce_max(pat_neg - <span class="number">1e30</span> * neg_idxs, axis=<span class="number">1</span>)</span><br><span class="line"><span class="comment"># l_sim = tf.reduce_sum(self.weight * (pat_pos + pat_neg), axis=0)</span></span><br><span class="line">l_sim = tf.reduce_sum(pat_pos + pat_neg, axis=<span class="number">0</span>)  <span class="comment"># 聚类损失</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/11/05/聚类损失的实现/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/04/LeetCode-1-素数分解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/04/LeetCode-1-素数分解/" class="post-title-link" itemprop="url">LeetCode-1-素数分解</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-04 23:11:30" itemprop="dateModified" datetime="2020-11-04T23:11:30+08:00">2020-11-04</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/04/LeetCode-1-素数分解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/04/LeetCode-1-素数分解/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1. 问题描述"></a>1. 问题描述</h2><p>有10^8个村庄排在一条公路上，依次编号为0~10^8-1，相邻村庄距离为1，其中有n个村庄居住着牛牛，居住牛牛的村庄依次为a0~an-1，保证a0=0.</p>
+<p>现在需要 建设车站，有两个要求：</p>
+<ol>
+<li>每个有牛牛的村庄必须修建车站</li>
+<li>相邻车站距离必须为1或者某个质数</li>
+</ol>
+<p>现给出n和a数组，求需要建设的车站的最小数量。</p>
+<h2 id="2-分析"><a href="#2-分析" class="headerlink" title="2. 分析"></a>2. 分析</h2><p>需要解决两个关键问题：</p>
+<ol>
+<li>给出一个数的最少的素数分解</li>
+<li>判断一个数是否为素数</li>
+</ol>
+<h2 id="3-解决"><a href="#3-解决" class="headerlink" title="3. 解决"></a>3. 解决</h2><h3 id="3-1-问题1"><a href="#3-1-问题1" class="headerlink" title="3.1 问题1"></a>3.1 问题1</h3><p>哥德巴赫猜想：任一大于2的整数都可以写作三个质数之和。</p>
+<p><a href="https://baike.baidu.com/item/%E5%93%A5%E5%BE%B7%E5%B7%B4%E8%B5%AB%E7%8C%9C%E6%83%B3/72364?fr=aladdin" target="_blank" rel="noopener">哥德巴赫猜想的欧拉版本</a>：任一大于2的偶数都可以写成两个质数之和。</p>
+<p>其实，也有一部分奇数可以用两个素数的和表示，大多数的奇数无法用两个素数的和表示，例如15=2+13，而23、25等则无法用两素数的和表示。</p>
+<p><br></p>
+<p><font color="orange">emmm，这样看来，不能直接利用哥德巴赫猜想解决问题。</font>但是，由于<strong>哥德巴赫猜想的欧拉版本</strong>已经被计算机验证到了很大的天文数字，所以可以减少我们一半的工作量。如果两个相邻车站间距离为偶数，我们有理由相信只需要在其中安插一个车站，就可以把距离变为两个质数；因此，只需要考虑两个相邻车站间距离为奇数的情况。</p>
+<p><br></p>
+<p>根据哥德巴赫猜想，奇数可以最少可以被拆分为两个或三个质数的和。没有更好的办法，<strong>只能通过遍历的方式，看能否被分为两个质数之和</strong>，如果不能，则必然可以被分为三个质数之和。而判断一个数是否为素数，就要通过3.2节的方法。
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/11/04/LeetCode-1-素数分解/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/02/向量可视化/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -995,1313 +2309,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/26/Pytorch实战-计算Wasserstein距离/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/26/Pytorch实战-计算Wasserstein距离/" class="post-title-link" itemprop="url">Pytorch实战 计算Wasserstein距离</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-26 18:52:36" itemprop="dateModified" datetime="2020-10-26T18:52:36+08:00">2020-10-26</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/10/26/Pytorch实战-计算Wasserstein距离/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/26/Pytorch实战-计算Wasserstein距离/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>编译：机器之心， 作者： Daniel Daza</p>
-<p>最优传输理论及 Wasserstein 距离是很多读者都希望了解的基础，本文主要通过简单案例展示了它们的基本思想，并通过 PyTorch 介绍如何实战 W 距离。</p>
-</blockquote>
-<p><br></p>
-<p>机器学习中的许多问题都涉及到令两个分布尽可能接近的思想，例如在 GAN 中令生成器分布接近判别器分布就能伪造出逼真的图像。但是 KL 散度等分布的度量方法有很多局限性，本文则介绍了 Wasserstein 距离及 Sinkhorn 迭代方法，它们在 GAN 及众多任务上都展示了杰出的性能。</p>
-<p>在简单的情况下，我们假设从未知数据分布 p(x) 中观测到一些随机变量 x（例如，猫的图片），我们想要找到一个模型 q(x|θ)（例如一个神经网络）能作为 p(x) 的一个很好的近似。如果 p 和 q 的分布很相近，那么就表明我们的模型已经学习到如何识别猫。</p>
-<p>因为 KL 散度可以度量两个分布的距离，所以只需要最小化 KL(q‖p) 就可以了。可以证明，最小化 KL(q‖p) 等价于最小化一个负对数似然，这样的做法在我们训练一个分类器时很常见。例如，对于变分自编码器来说，我们希望后验分布能够接近于某种先验分布，这也是我们通过最小化它们之间的 KL 散度来实现的。</p>
-<p>尽管 KL 散度有很广泛的应用，在某些情况下，KL 散度则会失效。不妨考虑一下如下图所示的离散分布：</p>
-<p><img src="/images/blog/2020/wasserstein/distribution.png" alt></p>
-<p><br></p>
-<p>KL 散度假设这两个分布共享相同的支撑集（也就是说，它们被定义在同一个点集上）。因此，我们不能为上面的例子计算 KL 散度。由于这一个限制和其他计算方面的因素促使研究人员寻找一种更适合于计算两个分布之间差异的方法。</p>
-<p>在本文中，作者将：</p>
-<ul>
-<li>简单介绍最优传输问题</li>
-<li>将 Sinkhorn 迭代描述为对解求近似</li>
-<li>使用 PyTorch 计算 Sinkhorn 距离</li>
-<li>描述用于计算 mini-batch 之间的距离的对该实现的扩展
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/10/26/Pytorch实战-计算Wasserstein距离/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </li></ul></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/25/ReLU家族/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/25/ReLU家族/" class="post-title-link" itemprop="url">ReLU家族</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-26 12:14:13" itemprop="dateModified" datetime="2020-10-26T12:14:13+08:00">2020-10-26</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/10/25/ReLU家族/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/25/ReLU家族/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>ReLU是常用的激活函数，也有很多变种，比如：<a href="https://pytorch.org/docs/stable/generated/torch.nn.ReLU.html#torch.nn.ReLU" target="_blank" rel="noopener">relu</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.LeakyReLU.html#torch.nn.LeakyReLU" target="_blank" rel="noopener">leaky_relu</a>, <a href="https://pytorch.org/docs/stable/nn.functional.html#gelu" target="_blank" rel="noopener">gelu</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.CELU.html#torch.nn.CELU" target="_blank" rel="noopener">celu</a>, 等等，下面选取几种典型的、常用的介绍。</p>
-<h2 id="1-ReLU"><a href="#1-ReLU" class="headerlink" title="1. ReLU"></a>1. ReLU</h2><script type="math/tex; mode=display">
-ReLU(x) = \max (0, x)</script><p><img src="/images/blog/2020/relu/relu.png" alt></p>
-<h2 id="2-LeakyReLU"><a href="#2-LeakyReLU" class="headerlink" title="2. LeakyReLU"></a>2. LeakyReLU</h2><script type="math/tex; mode=display">
-LeakyReLU(x) = \max(0, x) + \gamma * \min (0,x)</script><p>其中$\gamma$为负斜率，下图可以看出，但是负斜率太小了，不太明显。</p>
-<p><img src="/images/blog/2020/relu/leakyrelu.png" alt></p>
-<p>在我个人的PCNN实验中，使用leaky_relu作为激活函数，速度比tanh快了近三倍。
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/10/25/ReLU家族/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/22/Glove-word-embedding添加特殊字符/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/22/Glove-word-embedding添加特殊字符/" class="post-title-link" itemprop="url">Glove word embedding添加特殊字符</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-22 19:34:50" itemprop="dateModified" datetime="2020-10-22T19:34:50+08:00">2020-10-22</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/10/22/Glove-word-embedding添加特殊字符/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/22/Glove-word-embedding添加特殊字符/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="1-问题引入"><a href="#1-问题引入" class="headerlink" title="1. 问题引入"></a>1. 问题引入</h2><p>对于一些特殊字符，例如[CLS], [SEP], [PAD], [UNK]等，在GLOVE词向量中没有对应的值。另外，在进行词嵌入时，难免会有OOV (out of vocabulary) 的现象，需要特殊处理。</p>
-<p>在阅读<a href="https://github.com/INK-USC/NERO" target="_blank" rel="noopener">NERO</a>源码时，注意到作者在对未登录词处理时，并没有按照其他词的分布来生成，通过统计，GLOVE词向量均值应该为0附近，<strong>但是作者采用的是$N(-1., 1.)$的正态分布，均值是-1</strong>，不明白这样做是出于什么特殊的原因吗？</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">token2id</span><span class="params">(config, counter, embedding_dict)</span>:</span></span><br><span class="line">    <span class="string">"""添加 &lt;PAD&gt;, &lt;UNK&gt;, 实体遮罩 的词嵌入"""</span></span><br><span class="line">    vec_size = len(list(embedding_dict.values())[<span class="number">0</span>])</span><br><span class="line">    masks = entity_masks()</span><br><span class="line">    token2idx_dict = &#123;&#125;</span><br><span class="line">    token2idx_dict[constant.PAD_TOKEN] = constant.PAD_ID</span><br><span class="line">    token2idx_dict[constant.UNK_TOKEN] = constant.UNK_ID</span><br><span class="line">    embedding_dict[constant.PAD_TOKEN] = [<span class="number">0.</span> <span class="keyword">for</span> _ <span class="keyword">in</span> range(vec_size)]  <span class="comment"># 初始化为零向量</span></span><br><span class="line">    embedding_dict[constant.UNK_TOKEN] = [<span class="number">0.</span> <span class="keyword">for</span> _ <span class="keyword">in</span> range(vec_size)]</span><br><span class="line">    <span class="keyword">for</span> token <span class="keyword">in</span> list(embedding_dict.keys()) + masks:</span><br><span class="line">        <span class="keyword">if</span> token <span class="keyword">not</span> <span class="keyword">in</span> token2idx_dict:</span><br><span class="line">            token2idx_dict[token] = len(token2idx_dict)</span><br><span class="line">        <span class="keyword">if</span> token <span class="keyword">not</span> <span class="keyword">in</span> embedding_dict:</span><br><span class="line">            embedding_dict[token] = [np.random.normal(<span class="number">-1.</span>, <span class="number">1.</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> range(vec_size)]  <span class="comment"># <span class="doctag">TODO:</span> why loc = -1.</span></span><br><span class="line">    idx2emb_dict = &#123;idx: embedding_dict[token] <span class="keyword">for</span> token, idx <span class="keyword">in</span> token2idx_dict.items()&#125;</span><br><span class="line">    word_emb = np.array([idx2emb_dict[idx] <span class="keyword">for</span> idx <span class="keyword">in</span> range(len(token2idx_dict))], dtype=np.float32)</span><br><span class="line">    <span class="keyword">return</span> token2idx_dict, word_emb</span><br></pre></td></tr></table></figure>
-<h2 id="2-阅读源码"><a href="#2-阅读源码" class="headerlink" title="2. 阅读源码"></a>2. 阅读源码</h2><p>pytorch中nn.Embedding.weight初始化分布是满足$N(0., 1.)$的，参考<a href="https://blog.csdn.net/weixin_30788619/article/details/99645247" target="_blank" rel="noopener">https://blog.csdn.net/weixin_30788619/article/details/99645247</a> ，pytorch源码：
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/10/22/Glove-word-embedding添加特殊字符/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/21/Piecewise-CNN/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/21/Piecewise-CNN/" class="post-title-link" itemprop="url">Piecewise CNN</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-21 22:00:29" itemprop="dateModified" datetime="2020-10-21T22:00:29+08:00">2020-10-21</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/10/21/Piecewise-CNN/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/21/Piecewise-CNN/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>PCNN是<a href="https://www.aclweb.org/anthology/D15-1203.pdf" target="_blank" rel="noopener">Zeng et al. 2015</a>提出的算法，理解起来很容易，但是实现却有问题。</p>
-<p>首先给出自己的实现：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_piecewise_pool</span><span class="params">(self, x, mask)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    :param x: (batch_size, cur_max_len, filters)</span></span><br><span class="line"><span class="string">    :param mask: (batch_size, cur_max_len)</span></span><br><span class="line"><span class="string">    :return: </span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    mask_part1 = (mask == <span class="number">1</span>).float().unsqueeze(<span class="number">2</span>)  <span class="comment"># (batch_size, cur_max_len, 1)</span></span><br><span class="line">    mask_part2 = (mask == <span class="number">2</span>).float().unsqueeze(<span class="number">2</span>)</span><br><span class="line">    mask_part3 = (mask == <span class="number">3</span>).float().unsqueeze(<span class="number">2</span>)</span><br><span class="line">    x1 = (x * mask_part1).transpose(<span class="number">1</span>, <span class="number">2</span>)  <span class="comment"># (batch_size, filters, cur_max_len)</span></span><br><span class="line">    x2 = (x * mask_part2).transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">    x3 = (x * mask_part3).transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">    x1 = self.pool(x1)  <span class="comment"># (batch_size, filters, 1)</span></span><br><span class="line">    x2 = self.pool(x2)</span><br><span class="line">    x3 = self.pool(x3)</span><br><span class="line">    x = torch.cat((x1, x2, x3), dim=<span class="number">1</span>).squeeze()</span><br><span class="line">    <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
-<p>这里的mask按照句子的不同位置分为[1, 1, 1, 2, 2, 3, 3, 3, 0, 0, 0]的向量。
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/10/21/Piecewise-CNN/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/20/Text-Adversarial-Training/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/20/Text-Adversarial-Training/" class="post-title-link" itemprop="url">Text Adversarial Training</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-20 19:56:24" itemprop="dateModified" datetime="2020-10-20T19:56:24+08:00">2020-10-20</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/10/20/Text-Adversarial-Training/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/20/Text-Adversarial-Training/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>本文是对一个好人😁 (Ian Goodfellow) ，大名鼎鼎的GAN的提出者，的论文 <a href="https://arxiv.org/abs/1605.07725" target="_blank" rel="noopener">ADVERSARIAL TRAINING METHODS FOR SEMI-SUPERVISED TEXT CLASSIFICATION</a> 核心部分的理解以及实现。</p>
-<h2 id="1-论文核心思想"><a href="#1-论文核心思想" class="headerlink" title="1. 论文核心思想"></a>1. 论文核心思想</h2><p>对抗训练是一种新颖的正则化方法，用以提高分类器对微小扰动的鲁棒性。令$\mathbf{x}$代表输入，$\mathbf{\theta}$代表分类器的参数，对抗训练是在损失函数上添加一项：</p>
-<script type="math/tex; mode=display">
--\log p(y| \mathbf{x + r_{adv}}; \mathbf{\theta}) \quad where \quad \mathbf{r_{adv}} = \arg  \min _ {\mathbf{r}, \mathbf{||r||} \leq \epsilon } \log p(y | \mathbf{x + r}; \mathbf{\hat{\theta}})</script><p>即添加当前状态下使损失最大的扰动项。但是，在实际操作中，寻找最优项是NP难问题；于是作者提出了一种线性近似方法，即：</p>
-<script type="math/tex; mode=display">
-\mathbf{r_{adv}} = -\epsilon \mathbf{g} / ||\mathbf{g}||_2 \quad where \quad \mathbf{g} = \nabla _ \mathbf{x} \log p(y|\mathbf{x};\hat{\mathbf{\theta}})</script><p>如何理解上式呢？<font color="orange"><strong>对当前损失函数求导后取负数</strong></font>，是使得损失增大的最快方向。通过梯度反向传播很容易计算。$\epsilon$用于控制扰动项的范数，将扰动的大小限制在合理范围内。</p>
-<h2 id="2-实现"><a href="#2-实现" class="headerlink" title="2. 实现"></a>2. 实现</h2><p>使用pytorch进行实现。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_add_perturbation</span><span class="params">(self, embedded, loss)</span>:</span></span><br><span class="line">    <span class="string">"""Adds gradient to embedding and recomputes classification loss."""</span></span><br><span class="line">    grad, = tf.gradients(</span><br><span class="line">        loss,</span><br><span class="line">        embedded,</span><br><span class="line">        aggregation_method=tf.AggregationMethod.EXPERIMENTAL_ACCUMULATE_N)</span><br><span class="line">    grad = tf.stop_gradient(grad)</span><br><span class="line">    <span class="comment"># L2 norm constraint</span></span><br><span class="line">    perturb = scale_l2(grad, self.epsilon)</span><br><span class="line">    <span class="keyword">return</span> embedded + perturb</span><br></pre></td></tr></table></figure>
-<p>scale_l2用于$L_2$ norm constraint。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">scale_l2</span><span class="params">(x, norm_length)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    L2 normalization</span></span><br><span class="line"><span class="string">    :param x:</span></span><br><span class="line"><span class="string">    :param norm_length: 范数长度</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="comment"># shape(x) = (batch, num_timesteps, d)</span></span><br><span class="line">    <span class="comment"># Divide x by max(abs(x)) for a numerically stable L2 norm.</span></span><br><span class="line">    <span class="comment"># 2norm(x) = a * 2norm(x/a)</span></span><br><span class="line">    <span class="comment"># Scale over the full sequence, dims (1, 2)</span></span><br><span class="line">    alpha = tf.reduce_max(tf.abs(x), (<span class="number">1</span>, <span class="number">2</span>), keepdims=<span class="literal">True</span>) + <span class="number">1e-12</span></span><br><span class="line">    l2_norm = alpha * tf.sqrt(</span><br><span class="line">        tf.reduce_sum(tf.pow(x / alpha, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">2</span>), keepdims=<span class="literal">True</span>) + <span class="number">1e-6</span>)</span><br><span class="line">    x_unit = x / l2_norm</span><br><span class="line">    <span class="keyword">return</span> norm_length * x_unit</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/19/《百面深度学习》笔记3-图神经网络/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/19/《百面深度学习》笔记3-图神经网络/" class="post-title-link" itemprop="url">《百面深度学习》笔记3 - 图神经网络</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-21 21:12:12" itemprop="dateModified" datetime="2020-10-21T21:12:12+08:00">2020-10-21</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Interview/" itemprop="url" rel="index"><span itemprop="name">Interview</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/10/19/《百面深度学习》笔记3-图神经网络/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/19/《百面深度学习》笔记3-图神经网络/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="1-什么是图谱和傅里叶变换？"><a href="#1-什么是图谱和傅里叶变换？" class="headerlink" title="1. 什么是图谱和傅里叶变换？"></a>1. 什么是图谱和傅里叶变换？</h2><p>图谱是图的拉普拉斯矩阵的特征值。具体来说，给定图G(V, E)，点集大小为n，边集大小为m。图G的邻接矩阵A为一个n×n的矩阵，如果i, j之间有边相连，则$A_{ij}$为1，否则为0。图的度矩阵为$D=diag (d_1, d_2, …, d_n)$，其中$d_i$是第i个节点在图中的度数。定义<font color="orange">图的拉普拉斯矩阵为L=D-A</font>，对其进行特征值分解：</p>
-<script type="math/tex; mode=display">
-L = U \Lambda U^T</script><p>其中，$\Lambda = diag(\lambda _1, \lambda _2, …, \lambda _n)$是按照特征值<strong>从小到大</strong>的顺序排列的，$U = [\mathbf{u_1}, u_2, …, u_n]$是对应的特征向量组成的正交矩阵。上述特征值集合$\Lambda$ 即为图G的图谱。尽管A会随着G节点编号的改变而改变，但是$\Lambda$不会，它只与图的抽象结构有关。</p>
-<p>图神经网络有两个派系，一个是基于频谱域，例如GCN；一个是基于空间域，例如GAT和GraphSAGE。不过两者殊途同归，在实际的使用中，图神经网络更常见的框架是：</p>
-<script type="math/tex; mode=display">
-\mathbf{Y} = \sigma(\mathbf{\hat{D}^{-1}\hat{A}XW})</script><p>其中，$\mathbf{X}$和$\mathbf{Y}$分别是输入和输出矩阵，$\mathbf{\hat{A}}$是添加了自环边的图邻接矩阵，$\mathbf{\hat{D}}$是对应的度数矩阵，$\mathbf{W}$是待训练的参数矩阵。将框架分解来看：</p>
-<p>(1) $\mathbf{XW}$将节点的特征向量进行线性变化。</p>
-<p>(2) $\mathbf{\hat{A}XW}$将变换后的节点特征传播到邻居节点（包括自身）。</p>
-<p>(3) $\mathbf{\hat{D}^{-1}\hat{A}XW}$将每个节点收到的特征（来自邻居节点和自身）进行归一化。</p>
-<p>(4) $\sigma(\mathbf{\hat{D}^{-1}\hat{A}XW})$将归一化后的特征通过非线性激活单元。
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/10/19/《百面深度学习》笔记3-图神经网络/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/17/《百面深度学习》笔记2-循环神经网络/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/17/《百面深度学习》笔记2-循环神经网络/" class="post-title-link" itemprop="url">《百面深度学习》笔记2 - 循环神经网络</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-18 15:14:31" itemprop="dateModified" datetime="2020-10-18T15:14:31+08:00">2020-10-18</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Interview/" itemprop="url" rel="index"><span itemprop="name">Interview</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/10/17/《百面深度学习》笔记2-循环神经网络/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/17/《百面深度学习》笔记2-循环神经网络/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="1-公式推导"><a href="#1-公式推导" class="headerlink" title="1. 公式推导"></a>1. 公式推导</h2><p>记网络的输入为$x_1, x_2, … ,x_n$，则网络展开后可以看作一个$n$层的前馈神经网络，第$t$层对应着$t$时刻的状态 ($t = 1,2, …, n$) 。记第$t$层（时刻）的输入状态、隐藏状态、输出状态分别为$x_t$、$h_t$、$o_t$，训练时的目标输出值为$y_t$，则有：</p>
-<ul>
-<li>$h<em>t = \sigma (Ux_t + Wh</em>{t-1} + b)$，$\sigma$通常采用Tanh函数</li>
-<li><p>$o_t = g(Vh_t + c)$</p>
-</li>
-<li><p>在训练时，网络在整个序列上的损失可以定义为不同时刻的损失之和：$L = \sum _t L_t = \sum _t Loss(o_t, y_t)$</p>
-</li>
-</ul>
-<p>在循环神经网络中，<font color="pink">所有循环或重复的结构都共享参数。</font>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/10/17/《百面深度学习》笔记2-循环神经网络/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2345,7 +2357,7 @@ L = U \Lambda U^T</script><p>其中，$\Lambda = diag(\lambda _1, \lambda _2, �
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">148</span>
+                    <span class="site-state-item-count">155</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3169,7 +3181,33 @@ L = U \Lambda U^T</script><p>其中，$\Lambda = diag(\lambda _1, \lambda _2, �
                     
                       
                     
-                    <span class="site-state-item-count">376</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">389</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -3711,13 +3749,13 @@ L = U \Lambda U^T</script><p>其中，$\Lambda = diag(\lambda _1, \lambda _2, �
   
     
       
-    
-      
-    
-      
-    
-      
         
+      
+    
+      
+    
+      
+    
       
     
       

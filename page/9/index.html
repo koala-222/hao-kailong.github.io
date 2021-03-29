@@ -415,6 +415,1299 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/21/NYT-baseline-笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/21/NYT-baseline-笔记/" class="post-title-link" itemprop="url">NYT baseline 笔记</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-23 15:28:16" itemprop="dateModified" datetime="2020-11-23T15:28:16+08:00">2020-11-23</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/21/NYT-baseline-笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/21/NYT-baseline-笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="1-Conv1d与Conv2d的区别"><a href="#1-Conv1d与Conv2d的区别" class="headerlink" title="1. Conv1d与Conv2d的区别"></a>1. Conv1d与Conv2d的区别</h1><p>之前写PCNN时都是使用Conv1d实现，但是在阅读别人的源码时发现是用的Conv2d，难道是自己搞错了？</p>
+<h2 id="Conv2D"><a href="#Conv2D" class="headerlink" title="Conv2D"></a>Conv2D</h2><p><img src="https://pic1.zhimg.com/80/v2-10c0d7782638fb59f5746508503e4a58_720w.jpg" alt="img"></p>
+<p>如图，输入为 <img src="https://www.zhihu.com/equation?tex=%287%2C7%2C3%29" alt="[公式]"> 的图片，卷积核的尺寸为 <img src="https://www.zhihu.com/equation?tex=%283%2C3%29" alt="[公式]"> ，卷积核个数为2，所以</p>
+<p>参数总数<img src="https://www.zhihu.com/equation?tex=%3D3%2A3%2A3%2A2" alt="[公式]"> 。</p>
+<p>多出来的3为图片的channel，每个卷积核会自动扩充到3维，对应每个通道。</p>
+<h2 id="Conv1D"><a href="#Conv1D" class="headerlink" title="Conv1D"></a>Conv1D</h2><p><img src="https://pic2.zhimg.com/80/v2-0df2ad2e4d63f8c9da6940293cf8fab1_720w.jpg" alt="img"></p>
+<p>如图，输入有两个序列，第一个序列为 <img src="https://www.zhihu.com/equation?tex=%283%2C3%29" alt="[公式]"> 的文本，卷积核的尺寸为 2，卷积核个数为1，所以</p>
+<p>参数总数<img src="https://www.zhihu.com/equation?tex=%3D3%2A2%2A1" alt="[公式]"> 。</p>
+<p>多出来的3为文本的词向量维度，<strong>卷积核会自动扩充到2维，对应每个隐维度</strong>。</p>
+<p><strong>所以结论是两者是一样的，怎样用都可以，只是写法不同！</strong>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/11/21/NYT-baseline-笔记/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/20/计算机AI顶会审稿流程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/20/计算机AI顶会审稿流程/" class="post-title-link" itemprop="url">计算机AI顶会审稿流程</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-20 20:20:28" itemprop="dateModified" datetime="2020-11-20T20:20:28+08:00">2020-11-20</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/20/计算机AI顶会审稿流程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/20/计算机AI顶会审稿流程/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="1-EMNLP-2020"><a href="#1-EMNLP-2020" class="headerlink" title="1. EMNLP 2020"></a>1. EMNLP 2020</h1><p><strong>NLP可解释性和模型分析主题的投稿数量有显著上升</strong>。这是ACL2020新引入的主题，收到95篇投稿。但在EMNLP投稿数字翻倍了，展现了社区在对NLP可解释性和模型分析这一主题上的兴趣增长更为迅速。</p>
+<h2 id="审稿过程：作者即审稿"><a href="#审稿过程：作者即审稿" class="headerlink" title="审稿过程：作者即审稿"></a><strong>审稿过程：作者即审稿</strong></h2><p>在Yulan He介绍完整体数据之后，本次评审之一，墨尔本大学教授Trevor Cohn介绍了本次会议的投稿过程。</p>
+<p>对投稿格式和审稿格式做了很多改变。<strong>本次评委会有超过3000名成员，评委工作正如往年大会一样，按照分级结构标准开展。</strong> <strong>改变了一件事就是要求所有投稿至少提名一位作者作为审稿人</strong>。随后把他们分入不同研究领域，将更有经验的审稿人编入最终审稿库。</p>
+<p>对每位审稿人也使用他们的语义学学术资料数据来抓取他们的论文以得到他们之前的出版物记录，通过这样的方式能识别出更多的高级审稿人。</p>
+<p><img src="/images/blog/2020/IJCAI/distri.png" alt></p>
+<p>再次给你们展示数据库中的一个想法。上图展示了每个审稿人过去出版物的数量。发现大部分审稿人都有大量论文，他们都是研究的“行家里手”。也发现两侧有一些数据偏离的学者，可能是由于没有语义学学术资料或者可能和其他研究者重名。从这份数据，可以高精度的识别那些有大量论文并且有博士学位的个人。将他们称之为星级审稿人并且确保每一篇论文都被至少一位星级审稿人审阅。</p>
+<p>审稿要求使用的自动化算法与ACL相似。这建立在投稿和审稿人之间的大致相似性上。论文确认之后交给匹配算法做一个受限的优化选择来保证尊重审稿人的负担限制以保证审稿质量。对审稿任务和区域主席分配都这么做并且这些任务被高级区主席团手动调整。总体上认为这项工作完成的很出色因为移除了强制性命令这个额外之举。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/11/20/计算机AI顶会审稿流程/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/20/PR曲线的绘制/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/20/PR曲线的绘制/" class="post-title-link" itemprop="url">PR曲线的绘制</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-20 20:41:28" itemprop="dateModified" datetime="2020-11-20T20:41:28+08:00">2020-11-20</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/20/PR曲线的绘制/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/20/PR曲线的绘制/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="1-二分类"><a href="#1-二分类" class="headerlink" title="1. 二分类"></a>1. 二分类</h1><p>P-R曲线的生成方法：<strong>根据学习器的预测结果对样本进行排序，排在前面的是学习器认为最可能是正例的样本，排在最后的是最不可能是正例的样本，按此顺序逐个将样本作为正例预测，则每次可以计算出当前的查全率、查准率，以查全率为横轴、查准率为纵轴做图，得到的查准率-查全率曲线即为P-R曲线</strong>。</p>
+<p>也就是说对每个样本预测其为正例的概率，然后将所有样本按预测的概率进行排序，然后依次将排序后的样本做为正例进行预测，从而得到每次预测的查全率与查准率。这个依次将样本做为正例的过程实际上就是逐步降低样本为正例的概率的域值，通过降低域值，更多的样本会被预测为正例，从而会提高查全率，相对的查准率可能降低，而随着后面负样本的增加，查全率提高缓慢甚至没有提升，精度降低会更快。</p>
+<p>sklearn的计算过程与定义相反是按概率从小到大递增的顺序来计算查准率与查全率的，并且分别为查准率和查全率添加了1和0。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> precision_recall_curve</span><br><span class="line"><span class="keyword">from</span> sklearn.utils.fixes <span class="keyword">import</span> signature</span><br><span class="line"></span><br><span class="line">plt.figure(<span class="string">"P-R Curve"</span>)</span><br><span class="line">plt.title(<span class="string">'Precision/Recall Curve'</span>)</span><br><span class="line">plt.xlabel(<span class="string">'Recall'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'Precision'</span>)</span><br><span class="line"><span class="comment">#y_true为样本实际的类别，y_scores为样本为正例的概率</span></span><br><span class="line">y_true = np.array([<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>])</span><br><span class="line">y_scores = np.array([<span class="number">0.9</span>, <span class="number">0.75</span>, <span class="number">0.86</span>, <span class="number">0.47</span>, <span class="number">0.55</span>, <span class="number">0.56</span>, <span class="number">0.74</span>, <span class="number">0.62</span>, <span class="number">0.5</span>, <span class="number">0.86</span>, <span class="number">0.8</span>, <span class="number">0.47</span>, <span class="number">0.44</span>, <span class="number">0.67</span>, <span class="number">0.43</span>, <span class="number">0.4</span>, <span class="number">0.52</span>, <span class="number">0.4</span>, <span class="number">0.35</span>, <span class="number">0.1</span>])</span><br><span class="line">precision, recall, thresholds = precision_recall_curve(y_true, y_scores)</span><br><span class="line"><span class="comment">#print(precision)</span></span><br><span class="line"><span class="comment">#print(recall)</span></span><br><span class="line"><span class="comment">#print(thresholds)</span></span><br><span class="line">plt.plot(recall,precision)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>但是这个只支持二分类：</p>
+<p><img src="/images/blog/2020/pr.png" alt></p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/11/20/PR曲线的绘制/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/20/陈奕迅给唱歌爱好者的十条建议/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/20/陈奕迅给唱歌爱好者的十条建议/" class="post-title-link" itemprop="url">陈奕迅给唱歌爱好者的十条建议</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-20 14:10:01" itemprop="dateModified" datetime="2020-11-20T14:10:01+08:00">2020-11-20</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Music/" itemprop="url" rel="index"><span itemprop="name">Music</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/20/陈奕迅给唱歌爱好者的十条建议/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/20/陈奕迅给唱歌爱好者的十条建议/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>本文转载自耳帝：<a href="https://mp.weixin.qq.com/s/hjkXYs7YQBw9LoafUa-C-A" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/hjkXYs7YQBw9LoafUa-C-A</a></p>
+</blockquote>
+<p>我是陈奕迅的歌迷，在我看来，他是一个几乎没有短板的歌手，也是我认为当今最会唱的华语流行男歌手。</p>
+<p>首先他有一个天然“昂贵”的音色，这点跟唱功与技巧都无关，是一个人内在人格与精神格调的反映；</p>
+<p>二是他有出色的语感与乐感，不仅演唱华语听众最喜欢的芭乐抒情曲风是一流好手，非常会表达，同时因为有极佳的律动感与节奏感，唱各种现代律动型曲风、复古风格的舞曲音乐，以及乐队化的Jam型音乐也相当出色，因为即兴能力也很出众，不像很多传统的“声乐唱功型”歌手，唱传统曲风挺好，唱现代点的曲风或是欧美化的曲风，会感觉过时又死板；</p>
+<p>三是他有独到的声乐技巧，他的声乐技巧不是如今网络上流行讨论的那一套声乐标准，他的声乐风格是柔顺、通畅、丰满、无痕，听似简单，换个人一唱就知道不简单，即使换的那个人是公认的唱将；</p>
+<p>四是他的演唱有“厚度”，这个厚度不是指音色的浑厚，而是有内在的支撑，比如说千禧年的一些青春时代的歌手，唱年轻化气质的音乐倒是不错，但偶尔在大型颁奖典礼上致敬一些民歌时代的经典或者有文化底蕴的老歌，就感觉像是小孩在唱大人的歌，而陈奕迅，从出道时就开始唱港乐两大代表性词人所写的深刻晦涩的词，有大量超出年轻个人体验与生活阅历的，关于时代、情感与人生体会的主题，从一开始演唱的“厚度”就在；</p>
+<p>五是他有非常强烈的身体自由，这点我去年经常说到，身体不自由的歌手唱歌必然存在问题，而这点不仅是呈现在他如“大娱乐家”一般的舞台表演中，而且会常出现在他各种访谈的肢体语言中。</p>
+<p>另外还有一些我个人的观察，他是一个很“通”的人，单纯又通透，关于音乐与人生都有很多自己的想法，但可能局限在语言表达与普通话上，这点不容易被内地观众所感受到，今天看到抖音宣布陈奕迅入驻了抖音，想必近期会有一些大动作，也更会在短视频时代让更多内地观众深入了解他，我收集了一些多年来他在各种访谈中谈论到的，关于唱歌与音乐上的建议与体会，想必对于年轻歌手会很受用。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/11/20/陈奕迅给唱歌爱好者的十条建议/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/19/python中的测试单元-doctest/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/19/python中的测试单元-doctest/" class="post-title-link" itemprop="url">python中的测试单元 - doctest</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-19 16:33:42" itemprop="dateModified" datetime="2020-11-19T16:33:42+08:00">2020-11-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/19/python中的测试单元-doctest/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/19/python中的测试单元-doctest/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>使用python的doctest的模块，可以很容易的对函数进行测试~</p>
+<font color="orange">
+
+在函数体中，在开头的注释部分，使用">>> function(...)"输入测试参数
+
+在下一行输出目标结果
+
+</font>
+
+<p>例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">leaky_data</span><span class="params">(file1, file2)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    查看训练集和测试集是否存在数据泄露</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; leaky_data('train.txt', 'test.txt')</span></span><br><span class="line"><span class="string">    []</span></span><br><span class="line"><span class="string">    数据集中训练集和验证集不存在重复数据</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    leaky = []</span><br><span class="line">    samples = set()</span><br><span class="line">    <span class="keyword">with</span> open(file1, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="keyword">for</span> l <span class="keyword">in</span> f:</span><br><span class="line">            samples.add(json.loads(l)[<span class="string">'text'</span>])</span><br><span class="line">    <span class="keyword">with</span> open(file2, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="keyword">for</span> l <span class="keyword">in</span> f:</span><br><span class="line">            record = json.loads(l)</span><br><span class="line">            sample = record[<span class="string">'text'</span>]</span><br><span class="line">            <span class="keyword">if</span> sample <span class="keyword">in</span> samples:</span><br><span class="line">                leaky.append(sample)</span><br><span class="line">    leaky = list(set(leaky))</span><br><span class="line">    <span class="keyword">return</span> leaky</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/11/19/python中的测试单元-doctest/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/19/torch-nn-CrossEntropyLoss/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/19/torch-nn-CrossEntropyLoss/" class="post-title-link" itemprop="url">torch.nn.CrossEntropyLoss()</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-19 13:36:14" itemprop="dateModified" datetime="2020-11-19T13:36:14+08:00">2020-11-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/19/torch-nn-CrossEntropyLoss/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/19/torch-nn-CrossEntropyLoss/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><em>CLASS</em><code>torch.nn.CrossEntropyLoss</code>(<em>weight: Optional[torch.Tensor] = None</em>, <em>size_average=None</em>, <em>ignore_index: int = -100</em>, <em>reduce=None</em>, <em>reduction: str = ‘mean’</em>)<a href="https://pytorch.org/docs/stable/_modules/torch/nn/modules/loss.html#CrossEntropyLoss" target="_blank" rel="noopener">[SOURCE]</a></p>
+<p>This criterion combines <code>nn.LogSoftmax()</code> and <code>nn.NLLLoss()</code> in one single class.</p>
+<p>It is useful when training a classification problem with C classes. If provided, the optional argument <code>weight</code> should be a 1D Tensor assigning weight to each of the classes. This is particularly useful when you have an unbalanced training set.</p>
+<font color="orange">**The input is expected to contain raw, unnormalized scores for each class.**</font>
+
+<p><em>PS: 我之前不会一直用错了吧？在用这个函数的时候是不需要自己手动Softmax()的……去做实验试一下。。。</em></p>
+<p><br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/11/19/torch-nn-CrossEntropyLoss/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/18/韩先培-开放式知识获取/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/18/韩先培-开放式知识获取/" class="post-title-link" itemprop="url">韩先培 - 开放式知识获取</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-18 23:07:44" itemprop="dateModified" datetime="2020-11-18T23:07:44+08:00">2020-11-18</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/18/韩先培-开放式知识获取/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/18/韩先培-开放式知识获取/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>近期了解到<a href="http://www.icip.org.cn/team/hanxianpei/" target="_blank" rel="noopener">韩先培</a>是中科院软件研究所的一位老师，在Bootstrapping RE方面做了很多的工作，这也是我之前想要尝试的方向，所以后面会多留意追踪大佬的步伐。</p>
+<p><img src="/images/blog/2020/hanxianpei.png" alt></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/18/和老师赶Deadline的注意事项/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -978,1349 +2271,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/18/谈谈未来：NLP路在何方？/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/11/18/谈谈未来：NLP路在何方？/" class="post-title-link" itemprop="url">谈谈未来：NLP路在何方？</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-11-18 10:39:57" itemprop="dateModified" datetime="2020-11-18T10:39:57+08:00">2020-11-18</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/11/18/谈谈未来：NLP路在何方？/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/18/谈谈未来：NLP路在何方？/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p> 本文转载自：“夕小瑶的卖萌屋”</p>
-<p>这是一个很萌很干货的公众号，强烈安利一下~</p>
-<p><a href="https://mp.weixin.qq.com/s?__biz=MzIwNzc2NTk0NQ==&amp;mid=2247500560&amp;idx=1&amp;sn=f80675e02c36ff1c99eb2adb5a3c9205&amp;chksm=970febc6a07862d06a375a70ba21a63200dc0b8521d9655b48b4c37cfe00e8972bcb37644afc&amp;scene=126&amp;sessionid=1605625565&amp;key=1e61c84483e13f9471ee0797d016c58ad2c5650c2da9838f5a72d9628e9968cb2de25800764d4886b46fc6369be40d19db24e806b3df2775b2735adb3b07026fd4f9a606ea6808c12cf5c315c448e9320c0d6c3398f8042d2a272a48f2b1b74a3c08daf500b18c90b33a9389de250c682340459bc12840bc2a10de67ec55aa35&amp;ascene=1&amp;uin=MjExODc0NDkwMg%3D%3D&amp;devicetype=Windows+10+x64&amp;version=6300002f&amp;lang=zh_CN&amp;exportkey=AUEDy2LXhDbW1ZdKANZsG%2Fo%3D&amp;pass_ticket=JMu0tZ8lnp%2FRuz1okqXGKHCSZV44b5P1Q0yYYVTQAtVTaM8NrMmb5T6PBnHGy2oL&amp;wx_header=0" target="_blank" rel="noopener">https://mp.weixin.qq.com/s?__biz=MzIwNzc2NTk0NQ==&amp;mid=2247500560&amp;idx=1&amp;sn=f80675e02c36ff1c99eb2adb5a3c9205&amp;chksm=970febc6a07862d06a375a70ba21a63200dc0b8521d9655b48b4c37cfe00e8972bcb37644afc&amp;scene=126&amp;sessionid=1605625565&amp;key=1e61c84483e13f9471ee0797d016c58ad2c5650c2da9838f5a72d9628e9968cb2de25800764d4886b46fc6369be40d19db24e806b3df2775b2735adb3b07026fd4f9a606ea6808c12cf5c315c448e9320c0d6c3398f8042d2a272a48f2b1b74a3c08daf500b18c90b33a9389de250c682340459bc12840bc2a10de67ec55aa35&amp;ascene=1&amp;uin=MjExODc0NDkwMg%3D%3D&amp;devicetype=Windows+10+x64&amp;version=6300002f&amp;lang=zh_CN&amp;exportkey=AUEDy2LXhDbW1ZdKANZsG%2Fo%3D&amp;pass_ticket=JMu0tZ8lnp%2FRuz1okqXGKHCSZV44b5P1Q0yYYVTQAtVTaM8NrMmb5T6PBnHGy2oL&amp;wx_header=0</a></p>
-</blockquote>
-<p><strong>CMU、华盛顿大学、南加州大学、MIT、MILA、密歇根大学、爱丁堡大学、DeepMind、伯克利、Apple</strong>…如果我说来自这些地方的dalao共同发表了一篇文章，你相信么？但别惊讶，在即将召开的EMNLP’20的长文列表里，我们就真找到了这样一篇“奇文”。一篇论文引得众星云集，那解决的必然不是小问题。这不，作者也很贴心地把他们所希望解决的问题斜体独行地放在了论文的首栏里——</p>
-<p><strong>Where is NLP going？</strong></p>
-<p>……</p>
-<p>在未来的这几分钟里，让我们暂时放下自己正在改的模型、正在写的论文和正在追的SOTA，重拾自然语言处理的初心，跟随大佬们的脚步，去畅想一下未来的NLP究竟是什么样的吧。</p>
-<p><strong>论文题目</strong>：</p>
-<p>《Experience Grounds Language》</p>
-<p><strong>论文链接</strong>：</p>
-<p><em><a href="https://arxiv.org/abs/2004.10151" target="_blank" rel="noopener">https://arxiv.org/abs/2004.10151</a></em></p>
-<p>Arxiv访问慢的小伙伴也可以在【<strong>夕小瑶的卖萌屋</strong>】订阅号后台回复关键词【<strong><em>1117</em></strong>】下载论文PDF~</p>
-<h2 id="NLP，到底该怎么搞？"><a href="#NLP，到底该怎么搞？" class="headerlink" title="NLP，到底该怎么搞？"></a>NLP，到底该怎么搞？</h2><p>这是每一个NLP人都希望探索的终极问题。在经历了21世纪初的神经语言模型、2013年word2vec算法、2018年的预训练模型等等的里程碑过后，当今的NLP已经在许多任务上取得了令人欣喜的效果。但是，在欣喜于一个个子任务的突破之后，我们也该停下来思考我们每个人在初识NLP时的那个问题：如何才能让机器<strong>真正地</strong>理解人类语言呢？</p>
-<p>本文提出了未来NLP的发展方向：只靠文本，是学不会语言的；学会语言，需要的是“<strong>语言之外的事件</strong>”和“<strong>社会环境</strong>”。这样虚无缥缈的两个词，隐含的却是未来NLP所需要添加的潜在的新组件。</p>
-<p>为了更加具象，作者引入了“<strong>世界范围</strong>”的概念，英文名称World Scope，简称<strong>WS</strong>（不觉得和作者王苏有点关系么（逃））</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/IVz4ZzrQibgTFQmNH95NicHuicZqKFlMK2jkapjAo00uZS6tuIGrjUvKUuPsicKDW7ozpVia6pm4gw4njoCkbfPJN9g/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
-<p>那么这五个世界分别表示什么，又象征着NLP的发展到了哪个阶段呢？现在，让我们把NLP系统想象成自家孩子，看看咱家宝贝儿是怎么一步步从过去只会总结文本模式到未来能够能动地改变世界的吧~（为了方便，我们就叫她<strong>N宝</strong>）
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/11/18/谈谈未来：NLP路在何方？/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/18/可解释性-interpretability/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/11/18/可解释性-interpretability/" class="post-title-link" itemprop="url">可解释性 (interpretability)</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-11-18 11:01:13" itemprop="dateModified" datetime="2020-11-18T11:01:13+08:00">2020-11-18</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/11/18/可解释性-interpretability/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/18/可解释性-interpretability/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>本文是对TACL2019《Analysis Methods in Neural Language Processing: A Survey》的翻译和整理。</p>
-</blockquote>
-<p>随着模型精度的提高，可解释性却不断下降，下图形象的表明了这一点：</p>
-<p><div align="center"> <img src="/images/blog/2020/interpretability.webp" alt></div></p>
-<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>NLP领域发展迅猛，其模型分析方法也正逐渐火热。为什么要研究NLP的可解释性？某种程度上，这一问题又落入更大的范畴——为什么要研究机器学习模型的可解释性？其支持者认为，在于增加ML系统的可靠性、可信度、公平性和安全性等。此外，知其所以然也有助于改进机器学习模型的效果。</p>
-<p>而在NLP领域，这一问题需要联系其发展历程来解答：</p>
-<p>早期的NLP工作通常涉及特征工程，这些手工特征的含义是易于理解的——形态特性，词法类别，句法类别，语义关系等等。理论上，人们可以通过观察模型对这些特征赋予的权重来更好地理解模型在做什么。而对于现在普遍的端到端的（比如，从词向量输入到文本分类的输出）神经网络模型，理解和分析它们的工作不是那么直观。但是，既然这些模型结构能够捕捉文本的特征，那么早期的关于语言学概念的分析工作也应当适用于现在的NLP研究。</p>
-<p>本文尝试分析近年来NLP可解释领域的工作，概括当下的主流方向，并针对当前工作的不足提出一些可能的未来方向。本文将围绕以下几方面展开：</p>
-<ul>
-<li>语义特征学习</li>
-<li>可视化方法</li>
-<li>挑战集</li>
-<li>对抗样本</li>
-<li>解释模型预测</li>
-<li>其他研究</li>
-</ul>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/11/18/可解释性-interpretability/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/17/对偶图/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/11/17/对偶图/" class="post-title-link" itemprop="url">对偶图</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-11-17 21:50:50" itemprop="dateModified" datetime="2020-11-17T21:50:50+08:00">2020-11-17</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/11/17/对偶图/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/17/对偶图/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>今天组会上偶然听到“对偶图”这个词，就再次回顾一下相关的定义~</p>
-<p>一个图G=(V,E)，若能将其画在平面上，且任意两条边的交点只能是G的顶点，则称G可嵌入平面，或称G是可平面的。可平面图在平面上的一个嵌入称为一个平面图。</p>
-<p>由平面图的边包围而成，其中不含图的顶点。也称为面。包围面R的所有边组成的回路称为该面的边界，回路长度称为该面的度，记为deg(R)。具有相同边界的面称为相邻面。由平面图的边包围且无穷大的面称为外部面。一个平面图有且只有一个外部面。</p>
-<p>利用欧拉公式和数学归纳法可以证明平面图G的所有面的度之和等于其边数|E|的2倍。</p>
-<p>下面我们引入对偶图，设有平面图G=(V, E)，满足下列条件的图G’= (V’, E’) 称为图G的对偶图：G的任一面$R_i$对应且仅对应一点$V_i^{‘}$；对G的面$R_i$和$R_j$的共同边$E_k$，画一条边$E_k^{‘} = (V_i^{‘}, V_j^{‘})$且只与$E_k$交于一点；若$E_k$完全处于某个面$R_i$中，则$V_i^{‘}$有一自环$E_k^{‘}$，如下图G’是G的对偶图：</p>
-<p><div align="center"> <img src="/images/blog/2020/dual.png" alt></div></p>
-<p>对偶图可以应用到<strong>最大流</strong>中，具体的以后再看吧~</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/17/关于NYT-Riedel-et-al-2010-数据集/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/11/17/关于NYT-Riedel-et-al-2010-数据集/" class="post-title-link" itemprop="url">关于NYT(Riedel et al. 2010)数据集</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-11-17 22:04:16" itemprop="dateModified" datetime="2020-11-17T22:04:16+08:00">2020-11-17</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/Distant-Supervision/" itemprop="url" rel="index"><span itemprop="name">Distant Supervision</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/11/17/关于NYT-Riedel-et-al-2010-数据集/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/17/关于NYT-Riedel-et-al-2010-数据集/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>NYT10 (Riedel et al. 2010) 是远程监督关系抽取必不可少的数据集，对于数据集的一些疑问以及探索，在这里记录，也供大家参考🤭</p>
-<h1 id="1-OpenNRE提供的数据集和Riedel提供的数据集是否一致？"><a href="#1-OpenNRE提供的数据集和Riedel提供的数据集是否一致？" class="headerlink" title="1. OpenNRE提供的数据集和Riedel提供的数据集是否一致？"></a>1. OpenNRE提供的数据集和Riedel提供的数据集是否一致？</h1><p>Riedel原始数据集在这里：<a href="http://iesl.cs.umass.edu/riedel/ecml/" target="_blank" rel="noopener">http://iesl.cs.umass.edu/riedel/ecml/</a></p>
-<p>采用的是protocol buffer的形式，不能直接阅读，需要自己用工具处理成text形式。</p>
-<p>OpenNRE处理后的数据集：<a href="https://github.com/thunlp/OpenNRE/tree/master/benchmark" target="_blank" rel="noopener">https://github.com/thunlp/OpenNRE/tree/master/benchmark</a></p>
-<p>这两个数据集有没有什么不一致呢？清华在处理的时候有没有加一些特殊的操作呢？这是我一直疑问的一个点，因为要开展实验，必须确保数据集的一致性，才可以和前人的工作进行比较。</p>
-<p><a href="https://github.com/thunlp/OpenNRE/issues/17" target="_blank" rel="noopener">https://github.com/thunlp/OpenNRE/issues/17</a></p>
-<blockquote>
-<p>train.txt and test.txt are labeled by distant supervision. As for details, you can refer to the issue <a href="https://github.com/thunlp/OpenNRE/issues/15" target="_blank" rel="noopener">#15</a><br>The train/test data are exactly same with the data in (Riedel et al. 2010) .<br>Because test data is smaller than train and the unbalance of relation truth numbers exists, the total number of relations in test.txt is smaller than train.txt</p>
-</blockquote>
-<p>OpenNRE提供的数据和原始数据是<strong>完全一致</strong>的。👍
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/11/17/关于NYT-Riedel-et-al-2010-数据集/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/14/对比学习-Contrastive-Learning-相关进展梳理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/11/14/对比学习-Contrastive-Learning-相关进展梳理/" class="post-title-link" itemprop="url">对比学习 (Contrastive Learning) 相关进展梳理</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-11-14 17:16:11" itemprop="dateModified" datetime="2020-11-14T17:16:11+08:00">2020-11-14</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/11/14/对比学习-Contrastive-Learning-相关进展梳理/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/14/对比学习-Contrastive-Learning-相关进展梳理/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>本文转载自：</p>
-<p><a href="https://zhuanlan.zhihu.com/p/141141365" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/141141365</a></p>
-</blockquote>
-<p><br></p>
-<p>最近深度学习两巨头 Bengio 和 LeCun 在 ICLR 2020 上点名 Self-Supervised Learning（SSL，自监督学习） 是 AI 的未来，而其的代表的 Framework 便是 Contrastive Learning（CL，对比学习）。 另一巨头 Hinton 和 Kaiming 两尊大神也在这问题上隔空过招，MoCo、SimCLR、MoCo V2 打得火热，这和 BERT 之后，各大公司出 XL-Net、RoBerta 刷榜的场景何其相似。本篇文章，将会从对比学习的背后的直觉原理出发，介绍其框架，并且对目前的一些相关的工作进行简要介绍，希望能够为感兴趣的同学提供一些帮助。</p>
-<h2 id="Motivation-amp-Framework"><a href="#Motivation-amp-Framework" class="headerlink" title="Motivation &amp; Framework"></a><strong>Motivation &amp; Framework</strong></h2><p>很多研究者认为，深度学习的本质就是做两件事情：<strong>Representation Learning（表示学习）和 Inductive Bias Learning（归纳偏好学习）</strong>。目前的一个趋势就是，学好了样本的表示，在一些不涉及逻辑、推理等的问题上，例如判断句子的情感极性、识别图像中有哪些东西，AI 系统都可以完成非常不错；而涉及到更高层的语义、组合逻辑，则需要设计一些过程来辅助 AI 系统去分解复杂的任务，<a href="https://link.zhihu.com/?target=http%3A//arxiv.org/abs/1904.12584" target="_blank" rel="noopener">ICLR 19</a> 的一篇 oral 就是做的类似的事情。因为归纳偏好的设计更多的是 任务相关的，复杂的过程需要非常精心的设计，所以很多工作都开始关注到表示学习上，NLP 最近大火的预训练模型，例如 BERT，就是利用大规模的语料预训练得到文本的好的表示。那么，CV 领域的 BERT 是什么呢？答案已经呼之欲出，就是对比学习。</p>
-<p>基于此，也就意味着<strong>表示学习算法并不一定要关注到样本的每一个细节，只要学到的特征能够使其和其他样本区别开来就行</strong>，这就是对比学习和对抗生成网络（GAN）的一个主要不同所在。</p>
-<ul>
-<li>如何定义目标函数？最简单的一种就是上面提到的内积函数，另外一中 triplet 的形式就是 <img src="https://www.zhihu.com/equation?tex=l+%3D+max%280%2C+%CE%B7+%2B+s+%28x%2C+x%5E%2B%29+%E2%88%92+s+%28x%2C+x%5E%E2%88%92%29%29" alt="[公式]"> ，直观上理解，就是希望正例 pair 和负例 pair 隔开至少 <img src="https://www.zhihu.com/equation?tex=%5Ceta" alt="[公式]"> 的距离，这一函数同样可以写成另外一种形式，让正例 pair 和负例 pair 采用不同的 <img src="https://www.zhihu.com/equation?tex=s" alt="[公式]"> 函数，例如，<img src="https://www.zhihu.com/equation?tex=s%28x%2C+x%5E%2B%29+%3D+%5C%7C+%5Cmax+%280%2C+f%28x%29-f%28x%5E%2B%29%5C%7C" alt="[公式]"> ，<img src="https://www.zhihu.com/equation?tex=s%28x%2C+x%5E%2B%29+%3D+%5C%7C+%5Cmax+%28%5Ceta%2C+f%28x%29-f%28x%5E-%29%5C%7C" alt="[公式]">。</li>
-<li>如何构建正例和负例？针对不同类型数据，例如图像、文本和音频，如何合理的定义哪些样本应该被视作是 <img src="https://www.zhihu.com/equation?tex=x%5E%2B" alt="[公式]">，哪些该被视作是 <img src="https://www.zhihu.com/equation?tex=x%5E-" alt="[公式]">，；如何增加负例样本的数量，也就是上面式子里的 <img src="https://www.zhihu.com/equation?tex=N" alt="[公式]">？这个问题是目前很多 paper 关注的一个方向，因为虽然自监督的数据有很多，但是<strong>设计出合理的正例和负例 pair，并且尽可能提升 pair 能够 cover 的 semantic relation，才能让得到的表示在 downstream task 表现的更好</strong>。</li>
-</ul>
-<p><br></p>
-<p>接下来，就会介绍一下 MoCo、SimCLR 以及 Contrasitve Predictive Coding（CPC） 这三篇文章，在构建对比样例中的一些核心观点。
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/11/14/对比学习-Contrastive-Learning-相关进展梳理/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/14/什么是对比学习-Constrastive-Learning/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/11/14/什么是对比学习-Constrastive-Learning/" class="post-title-link" itemprop="url">什么是对比学习 (Constrastive Learning) ?</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-11-14 16:33:56" itemprop="dateModified" datetime="2020-11-14T16:33:56+08:00">2020-11-14</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/11/14/什么是对比学习-Constrastive-Learning/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/14/什么是对比学习-Constrastive-Learning/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>近年来，自我监督模式的成功可以归因于研究者对对比学习这一自我监督学习范式的重新兴趣。例如，人类可以辨认出野外的物体，即使我们不记得物体的确切样子。 我们通过记住高层特征而忽略微观层面的细节来做到这点。所以，现在的问题是，<strong>我们是否可以建立一个不关注像素级细节，只编码足以区分不同对象的高级特征的表示学习算法</strong>？通过对比学习，研究人员正试图解决这一问题。 最近，甚至连Google的<font color="orange"><strong>SimCLR</strong></font>也展示了对比学习的含义，我们将在本文的最后简要介绍这一点。</p>
-<h1 id="对比学习的基本原则"><a href="#对比学习的基本原则" class="headerlink" title="对比学习的基本原则"></a>对比学习的基本原则</h1><p><div align="center"> <img src="/images/blog/2020/constrastive.png" alt></div></p>
-<p>对比学习是一种为ML模型描述相似和不同事物的任务的方法。利用这种方法，可以训练机器学习模型来区分相似和不同的图像。 对比学习的内部工作可以表述为一个分数函数，它是衡量两个特征之间相似度的一个尺度。</p>
-<script type="math/tex; mode=display">
-\mathrm{score}(f(x), f(x^+)) >> \mathrm{score}(f(x), f(x^-))</script><ul>
-<li>x+是与x相似的数据点，称为阳性样本</li>
-<li>x−是与x不同的数据点，称为阴性样本 </li>
-</ul>
-<p>在此基础上，可以构建一个softmax分类器来正确地对正样本和负样本进行分类。在最近引入的<a href="https://ai.googleblog.com/2020/04/advancing-self-supervised-and-semi.html" target="_blank" rel="noopener">SimCLR</a>框架中也可以找到这种技术的类似应用。</p>
-<font color="blue">PS: SimCLR是Hinton在2019年提出的工作，最近在不同的地方反复看到四五次了，一定要找个时间了解一下。</font>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/11/14/什么是对比学习-Constrastive-Learning/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/13/Contrastive-Loss/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/11/13/Contrastive-Loss/" class="post-title-link" itemprop="url">Contrastive Loss</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-11-13 23:43:35" itemprop="dateModified" datetime="2020-11-13T23:43:35+08:00">2020-11-13</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/11/13/Contrastive-Loss/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/13/Contrastive-Loss/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>部分内容参考以下文章：</p>
-<p><a href="https://zhuanlan.zhihu.com/p/93917636" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/93917636</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/149748513" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/149748513</a></p>
-</blockquote>
-<p><br></p>
-<h1 id="1-什么是对比损失？"><a href="#1-什么是对比损失？" class="headerlink" title="1. 什么是对比损失？"></a>1. 什么是对比损失？</h1><p>最近Kaiming He, Haoqi Fan, Yuxin Wu, Saining Xie 与 Ross Girshick在图像处理任务上使用自监督预训练从图像中提取特征，在7个下游任务中超过监督学习的特征提取表现。使用的核心技术是对比损失(Contrastive Loss Function)，如何理解这个对比损失呢？这篇文章记录个人的直观理解。</p>
-<p>先说大家熟悉的损失函数，categorical crossentropy, 它计算了类概率与标准答案的距离。softmax 用作最后一层的激活函数，计算归一化的类概率。每个类的标准答案是 one-hot 表示。比如在猫，狗，猪三分类任务中, one-hot 表示为，</p>
-<p>=(1, 0, 0)</p>
-<p>=(0, 1, 0)</p>
-<p>=(0, 0, 1)</p>
-<p>这对应3维空间沿 x-轴， y-轴，z-轴的3个单位基向量。</p>
-<p>这样做没有任何问题。但是如果我们添加更多类别，比如额外添加 树，花和草，将这6种生物放在6维空间的单位基向量上，softmax 函数会将他们一视同仁，不会认为猫和狗之间的距离应该小于猫与草的距离，虽然前2者同属动物。</p>
-<p>最直接的想法是我们假设存在一个损失函数，它满足如下的基本准则</p>
-<ol>
-<li>近似样本之间的距离越小越好</li>
-<li>不似样本之间的距离越大越好</li>
-</ol>
-<p>如果一个损失函数只要求满足条件 1，那么相当于说我只要同一个类的样本都放在同一个点即可。神经网络将猫都放在(1, 0, 0)之后，就算将狗和猪也放在（1，0， 0），仍然不会破坏条件1。这样，神经网络只要对所有样本作出一样的预测就可以了。</p>
-<p>如果再加上条件2，是不是就好了呢？优化的时候，神经网络将猫放在(1, 0, 0)，第一轮将狗放在（0，1， 0），第二轮将狗放在（0，2， 0），然后一轮轮训练下去，狗的坐标被放的越来越远，不相似样本之间的距离越来越大，但训练的目标却仿佛永远无法达到 。。。</p>
-<p><strong>这是因为训练目标没有边界。</strong>来到 <strong>LeCun 和他的合作者们在2006年提出的对比损失（Contrastive Loss Function)</strong>。这个损失函数定下的基本准则是：
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/11/13/Contrastive-Loss/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2364,7 +2319,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">148</span>
+                    <span class="site-state-item-count">155</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3188,7 +3143,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">376</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">389</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -3730,15 +3711,15 @@
   
     
       
-    
-      
-    
-      
-    
-      
-    
-      
         
+      
+    
+      
+    
+      
+    
+      
+    
       
     
       

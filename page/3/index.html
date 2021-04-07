@@ -415,7 +415,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/03/04/阿里面试要点/">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/03/23/C-变长数组/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dinosaur">
@@ -435,7 +435,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2021/03/04/阿里面试要点/" class="post-title-link" itemprop="url">阿里面试要点</a>
+                <a href="/2021/03/23/C-变长数组/" class="post-title-link" itemprop="url">C++变长数组</a>
               
             
           </h1>
@@ -462,7 +462,188 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2021-03-04 15:25:41" itemprop="dateModified" datetime="2021-03-04T15:25:41+08:00">2021-03-04</time>
+                <time title="修改时间：2021-03-23 13:17:22" itemprop="dateModified" datetime="2021-03-23T13:17:22+08:00">2021-03-23</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/03/23/C-变长数组/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/23/C-变长数组/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>之前在DEV C++中，对于变长数组，习惯采用以下写法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> <span class="built_in">array</span>[m][n];</span><br></pre></td></tr></table></figure>
+<p>但是，在按照这种方式书写三维数组时，出现了内存错误。</p>
+<p>查阅网上的博客，有这种说法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;  </span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;    </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>  </span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">    <span class="keyword">int</span> len;  </span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; len;  </span><br><span class="line">    <span class="comment">//用指针p指向new动态分配的长度为len*sizeof(int)的内存空间  </span></span><br><span class="line">    <span class="keyword">int</span> *p = <span class="keyword">new</span> <span class="keyword">int</span>[len];  </span><br><span class="line">    <span class="comment">/*注意int *p = new int[len];这一句，你不能这样做：  </span></span><br><span class="line"><span class="comment">    int p[len];  </span></span><br><span class="line"><span class="comment">    C++编译器会报错说len的大小不能确定，因为用这种形式声明数组，数组的大小需要在编译时确定。</span></span><br><span class="line"><span class="comment">    而且这样也不行：</span></span><br><span class="line"><span class="comment">    int p[] = new int[len];  </span></span><br><span class="line"><span class="comment">    编译器会说不能把int*型转化为int[]型，因为用new开辟了一段内存空间后会返回这段内存的首地址，所以要把这个地址赋给一个指针，所以要用： </span></span><br><span class="line"><span class="comment">    int *p = new int[len]*/</span></span><br><span class="line">    <span class="keyword">delete</span>[] p; <span class="comment">//注意要注销指针p，使程序释放用new开辟的内存空间</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2021/03/23/C-变长数组/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/03/20/hexo-error-spawn-failed解决办法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/03/20/hexo-error-spawn-failed解决办法/" class="post-title-link" itemprop="url">hexo error spawn failed解决办法</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-03-20 12:09:46" itemprop="dateModified" datetime="2021-03-20T12:09:46+08:00">2021-03-20</time>
               
             
           </span>
@@ -483,13 +664,6 @@
 
                 
                 
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Interview/" itemprop="url" rel="index"><span itemprop="name">Interview</span></a></span>
-
-                
-                
               
             </span>
           
@@ -505,8 +679,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/03/04/阿里面试要点/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/04/阿里面试要点/" itemprop="commentCount"></span>
+                <a href="/2021/03/20/hexo-error-spawn-failed解决办法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/20/hexo-error-spawn-failed解决办法/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -536,16 +710,17 @@
       
         
           
-            <ol>
-<li>需要有自己的职业规划，简单一些也可以？</li>
-</ol>
-<p>答：首先，熟悉业务，将算法能力用到真正的业务中；其次，主要专注于迁移学习和多模态NLP两个方向，产生更多的研究成果；最后，理解产业，能够主动发掘方向和着力点。</p>
+            <p>出现错误：</p>
+<p><code>error: spawn failed...</code></p>
+<p>总结：</p>
+<p>问题大多是因为<code>git</code>进行<code>push</code>或者<code>hexo d</code>的时候改变了一些<code>.deploy_git</code>文件下的内容。</p>
+<p>解决办法：</p>
 <ol>
-<li>面试一般经过：初面、终面、交叉面、HR面。</li>
-<li>为了对自己求职的岗位有更深的理解，可以去查看同样岗位的社招要求。面经可适度参考。</li>
-<li>笔试采用牛客网，可以自动补全，需手动处理IO。</li>
-<li>面试练习可以采用模拟面试的方法，争取做到游刃有余、落落大方。STAR法则 (situation, target, action, result) 可以让叙述更清晰。</li>
+<li>删除<code>.deploy_git</code>文件夹;</li>
+<li>输入<code>git config --global core.autocrlf false</code></li>
+<li>然后，依次执行：<br><code>hexo clean</code><br><code>hexo g</code><br><code>hexo d</code></li>
 </ol>
+<p>问题解决。暴力直接，有效。</p>
 
           
         
@@ -602,7 +777,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/16/再生核希尔伯特空间-RKHS/">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/03/19/ELECTRA预训练模型/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dinosaur">
@@ -622,7 +797,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2021/01/16/再生核希尔伯特空间-RKHS/" class="post-title-link" itemprop="url">再生核希尔伯特空间 (RKHS)</a>
+                <a href="/2021/03/19/ELECTRA预训练模型/" class="post-title-link" itemprop="url">ELECTRA预训练模型</a>
               
             
           </h1>
@@ -649,7 +824,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2021-01-16 20:30:21" itemprop="dateModified" datetime="2021-01-16T20:30:21+08:00">2021-01-16</time>
+                <time title="修改时间：2021-03-19 23:30:16" itemprop="dateModified" datetime="2021-03-19T23:30:16+08:00">2021-03-19</time>
               
             
           </span>
@@ -666,14 +841,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/Transfer-Learning/" itemprop="url" rel="index"><span itemprop="name">Transfer Learning</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/Pretrained-Language-Model/" itemprop="url" rel="index"><span itemprop="name">Pretrained Language Model</span></a></span>
 
                 
                 
@@ -692,8 +867,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/01/16/再生核希尔伯特空间-RKHS/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/16/再生核希尔伯特空间-RKHS/" itemprop="commentCount"></span>
+                <a href="/2021/03/19/ELECTRA预训练模型/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/19/ELECTRA预训练模型/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -722,783 +897,23 @@
 
       
         
-          
-            <h1 id="希尔伯特空间"><a href="#希尔伯特空间" class="headerlink" title="希尔伯特空间"></a>希尔伯特空间</h1><p>先来说一下什么是<strong>希尔伯特空间</strong>。<br>这个概念听起来高大上，其实是个非常简单的概念。<br>先说什么是<strong>线性空间</strong></p>
-<h2 id="线性空间"><a href="#线性空间" class="headerlink" title="线性空间"></a>线性空间</h2><p>线性空间即定义了数乘和加法的空间。这个就是具有线性结构的空间。<br>有了线性空间的概念之后，因为有数乘和加法，所以空间中可以找到一组基底（Basis）能够通过线性组合得到空间中所有的点。</p>
-<h2 id="度量空间和赋范空间"><a href="#度量空间和赋范空间" class="headerlink" title="度量空间和赋范空间"></a>度量空间和赋范空间</h2><p>距离的定义必须满足如下三个条件：</p>
-<ol>
-<li><p>d(x,y)≥0;d(x,y)=0 的充要条件是x=y即非负性</p>
-</li>
-<li><p>d(x,y)=d(y,x);对称性</p>
-</li>
-<li><p>d(x,z)+d(z,y)≥d(x,y)满足三角不等式。</p>
-</li>
-</ol>
-<p>定义了距离的空间叫<strong>度量空间</strong>。<br>定义了距离的线性空间叫<strong>线性度量空间</strong></p>
-<p>接下来再定义范数||x||，范数的定义必须满足：</p>
-<ol>
-<li>||x||≥0即非负性</li>
-<li>||αx||=|α|||x||</li>
-<li>||x||+||y||≥||x+y||满足三角不等式</li>
-</ol>
-<p><font color="orange">所以范数这个概念，可以看成从零点到x的距离</font>，同时比价第二条（2），即数乘可以提取出来。<br>所以：<strong>由范数可以定义距离，即d(x,y)=||x−y||，但是距离不可以定义范数因为距离的定义，不满足范数的第二条条件</strong></p>
-<p><strong>因为</strong>，$||x|| = d(0,x)$</p>
-<p><strong>但</strong> $||\alpha x|| = d(0,\alpha x) \neq |\alpha||x||$</p>
-<p><strong>举个栗子</strong>，$d(x,y) = \frac{\sqrt{\sum(x_i-y_i)^2}}{1 + \sqrt{\sum(x_i-y_i)^2}}$</p>
-<p><strong>这个满足距离定义，但是不满足范数定义。所以范数是比距离更具体的一个东西</strong></p>
-<p><strong>而定义了范数的空间，叫赋范空间和度量空间。另外完备的赋范空间叫巴拿赫空间。而定义了范数的线性空间，叫赋范线性空间</strong></p>
-<h2 id="希尔伯特空间-1"><a href="#希尔伯特空间-1" class="headerlink" title="希尔伯特空间"></a><strong>希尔伯特空间</strong></h2><p><strong>定义了范数之后，还没有定义角度。那就再来定义角度，所以可以定义内积如下：</strong></p>
-<p><strong>1. 对称性</strong></p>
-<p><strong>2. 对第一变元的线性性质，即$&lt;\alpha x,y&gt; = \alpha&lt; x,y&gt;$</strong></p>
-<p><strong>3. 正定性</strong></p>
-<p><strong>另外还要再说一下函数空间的内积。一个函数可以看成一个无穷维的向量。</strong></p>
-<p><strong>将一个函数按照x进行采样，可以得到一个函数的表示为一个向量的形式</strong></p>
-<p>$(f(x_0),f(x_1),f(x_2),…,f(x_n))$</p>
-<p><strong>如果采样的间隔变得无穷的小，则这个函数就可以表示为一个无穷维的向量。所以一个函数空间的内积可以定义为：</strong></p>
-<p>$\int f(x)g(x)dx$，由内积可以导出范数，但是范数不可以导出内积。因为可以定义 $||x||^2=<x,x>$</x,x></p>
-<p>另外函数空间的概念，还可以从另外一个角度来思考，例如：</p>
-<ol>
-<li>泰勒级数展开，可以看成将一个函数用${x^i}_0^∞$作为基底表示的一个空间</li>
-<li>傅立叶级数展开，即将一个函数用三角函数的形式进行无穷维的展开</li>
-</ol>
-<p>一个n维的的空间，且定义了内积，就叫欧几里德空间（即有线性结构和夹角，垂直，投影这些）。</p>
-<p><strong>引入无穷维的空间（一般指函数空间），具有线性结构同时定义了内积，同时还具有完备性的空间就叫希尔伯特空间</strong></p>
-<p>比如上面讲的傅立叶变换就是一个希尔伯特空间。</p>
-<h1 id="核函数"><a href="#核函数" class="headerlink" title="核函数"></a>核函数</h1>
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/16/最大平均差异MMD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2021/01/16/最大平均差异MMD/" class="post-title-link" itemprop="url">最大平均差异MMD</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2021-01-16 18:52:30" itemprop="dateModified" datetime="2021-01-16T18:52:30+08:00">2021-01-16</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/Transfer-Learning/" itemprop="url" rel="index"><span itemprop="name">Transfer Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/01/16/最大平均差异MMD/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/16/最大平均差异MMD/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="MMD理解"><a href="#MMD理解" class="headerlink" title="MMD理解"></a>MMD理解</h1><h2 id="1-定义"><a href="#1-定义" class="headerlink" title="1.定义"></a>1.定义</h2><p>MMD：maximum mean discrepancy。最大平均差异。最先提出的时候用于双样本的检测（two-sample test）问题<a href="https://www.jmlr.org/papers/volume13/gretton12a/gretton12a.pdf" target="_blank" rel="noopener">A kernel two sample test</a>，用于判断两个分布p和q是否相同。它的基本假设是：如果对于所有以分布生成的样本空间为输入的函数f，如果两个分布生成的足够多的样本在f上的对应的像的均值都相等，那么那么可以认为这两个分布是同一个分布。如果这个值足够小，就认为两个分布相同，否则就认为它们不相同。同时这个值也用来判断两个分布之间的相似程度。</p>
-<h2 id="2-数学步骤"><a href="#2-数学步骤" class="headerlink" title="2.数学步骤"></a>2.数学步骤</h2><p>如果用F表示一个在样本空间上的连续函数集，那么MMD可以用下面的式子表示：</p>
-<script type="math/tex; mode=display">\mathrm{MMD}[\mathcal{F},p,q] := \sup_{f\in\mathcal{F}}(\mathbf{E}_{x\sim p}[f(x)] -\mathbf{E}_{y\sim q}[f(y)])</script><p>$\sup$表示上界。</p>
-<p>假设X和Y分别是从分布p和q通过独立同分布(i.i.d.)采样得到的两个数据集，数据集的大小分别为m和n。基于X和Y可以得到MMD的经验估计(empirical estimate)为：</p>
-<p>$\mathrm{MMD}[\mathcal{F},X,Y] := \sup<em>{f\in\mathcal{F}}(\frac{1}{m}\sum</em>{i=1}^mf(x<em>i) -\frac{1}{n}\sum</em>{i=1}^nf(y_i))$</p>
-<p>在给定两个分布的观测集X,Y的情况下，这个结果会严重依赖于给定的函数集F。为了能表示MMD的性质：当且仅当p和q是相同分布的时候MMD为0，那么要求F足够rich；另一方面为了使检验具有足够的连续性（be consistent in power），从而使得MMD的经验估计可以随着观测集规模增大迅速收敛到它的期望，F必须足够restrictive。文中证明了当F是universal RKHS上的（unit ball）单位球时，可以满足上面两个性质。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2021/01/16/最大平均差异MMD/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/15/深度子域适应网络/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2021/01/15/深度子域适应网络/" class="post-title-link" itemprop="url">深度子域适应网络</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2021-01-15 21:31:18" itemprop="dateModified" datetime="2021-01-15T21:31:18+08:00">2021-01-15</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/Transfer-Learning/" itemprop="url" rel="index"><span itemprop="name">Transfer Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/01/15/深度子域适应网络/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/15/深度子域适应网络/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h1><p>深度学习需要大量的标签样本，为解决标签问题提出了迁移学习，即从相关的source domain 去学习标签好的数据。但由于不同域间的数据分布也不同，所以学习得到的模型泛化能力不高。<br>在训练、测试数据的分布有变动的情况下去学习一个判别模型叫做domain adaptation 或transfer distributions。<br>在深度特征学习中嵌入domain adaptation模块去提取固定特征 已经证明能带来新的优势。之前的domain adaptation都是在全局域上做迁移，导致一个域内不同类别的数据会被混淆，因此不能学习到好的特征结构。</p>
-<h1 id="2、方法"><a href="#2、方法" class="headerlink" title="2、方法"></a>2、方法</h1><h2 id="2-1新方法的概念"><a href="#2-1新方法的概念" class="headerlink" title="2.1新方法的概念"></a>2.1新方法的概念</h2><p>提出DSAN网络：在DANs网络的基础上对其子域来增强特征的表现能力。<br>为了实现正确的对齐，早期使用的方法是MMD：把source和target用一个相同的映射映射在一个再生核希尔伯特空间（RKHS）中，然后求映射后两部分数据的均值差异。现设计了一个局部最大平均差（LMMD）（它在考虑不同样本权重的情况下，测量源域和目标域中相关子域的经验分布的核平均嵌入之间的Hilbert-Schmidt范数）LMMD方法可以在大多数前馈网络模型中实现，并且可以使用标准反向传播进行有效的训练。</p>
-<h2 id="2-2方法的实现"><a href="#2-2方法的实现" class="headerlink" title="2.2方法的实现"></a>2.2方法的实现</h2><h3 id="2-2-1网络的结构"><a href="#2-2-1网络的结构" class="headerlink" title="2.2.1网络的结构"></a>2.2.1网络的结构</h3><p><img src="/images/blog/2021/DSAN.png" alt></p>
-<p>在ResNet的基础上添加LMMD模块来使得相关子域更相近。LMMD计算公式如下:</p>
-<script type="math/tex; mode=display">
-\hat{d}_\mathcal{H}(p,q) = \frac{1}{C} \sum_{c=1}^C||\sum_{\mathbf{x}_i^s \in \mathcal{D}_s} w_i^{sc}\phi(\mathbf{x}_i^s) - \sum_{\mathbf{x}_j^t \in \mathcal{D}_t} w_j^{tc}\phi(\mathbf{x}_j^t)||_\mathcal{H}^2</script><script type="math/tex; mode=display">
-w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</script>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2021/01/15/深度子域适应网络/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/15/什么是KL散度？/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2021/01/15/什么是KL散度？/" class="post-title-link" itemprop="url">什么是KL散度？</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2021-01-15 19:55:59" itemprop="dateModified" datetime="2021-01-15T19:55:59+08:00">2021-01-15</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/01/15/什么是KL散度？/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/15/什么是KL散度？/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><code>Kullback-Leibler Divergence</code>，即<code>K-L散度</code>，是一种<strong>量化两种概率分布P和Q之间差异</strong>的方式，又叫<code>相对熵</code>。在概率学和统计学上，我们经常会使用一种<code>更简单的、近似的分布</code>来替代<code>观察数据</code>或<code>太复杂的分布</code>。K-L散度能帮助我们度量使用一个分布来近似另一个分布时所损失的信息量。</p>
-<blockquote>
-<p>假设我们是一群太空科学家，经过遥远的旅行，来到了一颗新发现的星球。在这个星球上，生存着一种长有牙齿的蠕虫，引起了我们的研究兴趣。我们发现这种蠕虫生有10颗牙齿，但是因为不注意口腔卫生，又喜欢嚼东西，许多蠕虫会掉牙。收集大量样本之后，我们得到关于蠕虫牙齿数量的经验分布，如下图所示</p>
+          <blockquote>
+<p>ELECTRA详解：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/118135466" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/118135466</a></p>
 </blockquote>
-<p><img src="/images/blog/2021/teeth-distribution.webp" alt></p>
-<p>显然我们的原始数据并非均分布的，但也不是我们已知的分布，至少不是常见的分布。作为备选，我们想到的另一种简单模型是<code>二项式分布binomial distribution</code>。蠕虫嘴里面共有<code>n=10</code>个牙槽，每个牙槽出现牙齿与否为独立事件，且概率均为<code>p</code>。则蠕虫牙齿数量即为期望值<code>E[x]=n*p</code>，真实期望值即为观察数据的平均值，比如说<code>5.7</code>，则<code>p=0.57</code>，得到如下图所示的二项式分布：<br>
+<p><img src="https://pic4.zhimg.com/80/v2-93eaff2a96a1b7d2991417ba10aab35f_720w.jpg" alt></p>
+<h2 id="1-创新点"><a href="#1-创新点" class="headerlink" title="1. 创新点"></a>1. 创新点</h2><ul>
+<li>提出了新的模型预训练的框架，采用generator和discriminator的结合方式，但又不同于GAN</li>
+<li>将Masked Language Model的方式改为了replaced token detection</li>
+<li>因为masked language model 能有效地学习到context的信息，所以能很好地学习embedding，所以使用了weight sharing的方式将generator的embedding的信息共享给discriminator</li>
+<li>dicriminator 预测了generator输出的每个token是不是original的，从而高效地更新transformer的各个参数，使得模型的熟练速度加快</li>
+<li>该模型采用了小的generator以及discriminator的方式共同训练，并且采用了两者loss相加，使得discriminator的学习难度逐渐地提升，学习到更难的token（plausible tokens）</li>
+<li>模型在fine-tuning 的时候，丢弃generator，只使用discrinator</li>
+</ul>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/2021/01/15/什么是KL散度？/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/12/sklearn-metrics-precision-recall-curve-源码阅读/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2021/01/12/sklearn-metrics-precision-recall-curve-源码阅读/" class="post-title-link" itemprop="url">sklearn.metrics.precision_recall_curve()源码阅读</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2021-01-12 13:54:36" itemprop="dateModified" datetime="2021-01-12T13:54:36+08:00">2021-01-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/01/12/sklearn-metrics-precision-recall-curve-源码阅读/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/12/sklearn-metrics-precision-recall-curve-源码阅读/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="主函数"><a href="#主函数" class="headerlink" title="主函数"></a>主函数</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@_deprecate_positional_args</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">precision_recall_curve</span><span class="params">(y_true, probas_pred, *, pos_label=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                           sample_weight=None)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    ----------</span></span><br><span class="line"><span class="string">    y_true : ndarray of shape (n_samples,)</span></span><br><span class="line"><span class="string">        True binary labels. If labels are not either &#123;-1, 1&#125; or &#123;0, 1&#125;, then</span></span><br><span class="line"><span class="string">        pos_label should be explicitly given.</span></span><br><span class="line"><span class="string">    probas_pred : ndarray of shape (n_samples,)</span></span><br><span class="line"><span class="string">        Estimated probabilities or output of a decision function.</span></span><br><span class="line"><span class="string">    pos_label : int or str, default=None</span></span><br><span class="line"><span class="string">        The label of the positive class.</span></span><br><span class="line"><span class="string">        When ``pos_label=None``, if y_true is in &#123;-1, 1&#125; or &#123;0, 1&#125;,</span></span><br><span class="line"><span class="string">        ``pos_label`` is set to 1, otherwise an error will be raised.</span></span><br><span class="line"><span class="string">    sample_weight : array-like of shape (n_samples,), default=None</span></span><br><span class="line"><span class="string">        Sample weights.</span></span><br><span class="line"><span class="string">    Returns</span></span><br><span class="line"><span class="string">    -------</span></span><br><span class="line"><span class="string">    precision : ndarray of shape (n_thresholds + 1,)</span></span><br><span class="line"><span class="string">        Precision values such that element i is the precision of</span></span><br><span class="line"><span class="string">        predictions with score &gt;= thresholds[i] and the last element is 1.</span></span><br><span class="line"><span class="string">    recall : ndarray of shape (n_thresholds + 1,)</span></span><br><span class="line"><span class="string">        Decreasing recall values such that element i is the recall of</span></span><br><span class="line"><span class="string">        predictions with score &gt;= thresholds[i] and the last element is 0.</span></span><br><span class="line"><span class="string">    thresholds : ndarray of shape (n_thresholds,)</span></span><br><span class="line"><span class="string">        Increasing thresholds on the decision function used to compute</span></span><br><span class="line"><span class="string">        precision and recall. n_thresholds &lt;= len(np.unique(probas_pred)).</span></span><br><span class="line"><span class="string">    See Also</span></span><br><span class="line"><span class="string">    --------</span></span><br><span class="line"><span class="string">    plot_precision_recall_curve : Plot Precision Recall Curve for binary</span></span><br><span class="line"><span class="string">        classifiers.</span></span><br><span class="line"><span class="string">    PrecisionRecallDisplay : Precision Recall visualization.</span></span><br><span class="line"><span class="string">    average_precision_score : Compute average precision from prediction scores.</span></span><br><span class="line"><span class="string">    det_curve: Compute error rates for different probability thresholds.</span></span><br><span class="line"><span class="string">    roc_curve : Compute Receiver operating characteristic (ROC) curve.</span></span><br><span class="line"><span class="string">    Examples</span></span><br><span class="line"><span class="string">    --------</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; import numpy as np</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; from sklearn.metrics import precision_recall_curve</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; y_true = np.array([0, 0, 1, 1])</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; y_scores = np.array([0.1, 0.4, 0.35, 0.8])</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; precision, recall, thresholds = precision_recall_curve(</span></span><br><span class="line"><span class="string">    ...     y_true, y_scores)</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; precision</span></span><br><span class="line"><span class="string">    array([0.66666667, 0.5       , 1.        , 1.        ])</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; recall</span></span><br><span class="line"><span class="string">    array([1. , 0.5, 0.5, 0. ])</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; thresholds</span></span><br><span class="line"><span class="string">    array([0.35, 0.4 , 0.8 ])</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    fps, tps, thresholds = _binary_clf_curve(y_true, probas_pred,</span><br><span class="line">                                             pos_label=pos_label,</span><br><span class="line">                                             sample_weight=sample_weight)</span><br><span class="line"></span><br><span class="line">    precision = tps / (tps + fps)</span><br><span class="line">    precision[np.isnan(precision)] = <span class="number">0</span></span><br><span class="line">    recall = tps / tps[<span class="number">-1</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># stop when full recall attained</span></span><br><span class="line">    <span class="comment"># and reverse the outputs so recall is decreasing</span></span><br><span class="line">    last_ind = tps.searchsorted(tps[<span class="number">-1</span>])</span><br><span class="line">    sl = slice(last_ind, <span class="literal">None</span>, <span class="number">-1</span>)</span><br><span class="line">    <span class="keyword">return</span> np.r_[precision[sl], <span class="number">1</span>], np.r_[recall[sl], <span class="number">0</span>], thresholds[sl]</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2021/01/12/sklearn-metrics-precision-recall-curve-源码阅读/#more" rel="contents">
+              <a class="btn" href="/2021/03/19/ELECTRA预训练模型/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1558,7 +973,7 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/11/箱线图/">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/03/19/RoBERTa预训练模型/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dinosaur">
@@ -1578,7 +993,7 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2021/01/11/箱线图/" class="post-title-link" itemprop="url">箱线图</a>
+                <a href="/2021/03/19/RoBERTa预训练模型/" class="post-title-link" itemprop="url">RoBERTa预训练模型</a>
               
             
           </h1>
@@ -1605,7 +1020,572 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2021-01-11 21:48:35" itemprop="dateModified" datetime="2021-01-11T21:48:35+08:00">2021-01-11</time>
+                <time title="修改时间：2021-03-19 21:12:45" itemprop="dateModified" datetime="2021-03-19T21:12:45+08:00">2021-03-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/Pretrained-Language-Model/" itemprop="url" rel="index"><span itemprop="name">Pretrained Language Model</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/03/19/RoBERTa预训练模型/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/19/RoBERTa预训练模型/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>相比于BERT的调整：</p>
+<ol>
+<li>训练时间更长，batch size更大，训练数据更多</li>
+<li>移除next sentence prediction loss</li>
+<li>训练序列更长</li>
+<li>动态mask机制</li>
+</ol>
+<p>BERT原型使用的是 character-level BPE vocabulary of size 30K, RoBERTa使用了GPT2的 BPE 实现，使用的是byte而不是unicode characters作为subword的单位。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/03/19/C-数组填充方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/03/19/C-数组填充方法/" class="post-title-link" itemprop="url">C++数组填充方法</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-03-19 14:52:17" itemprop="dateModified" datetime="2021-03-19T14:52:17+08:00">2021-03-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/03/19/C-数组填充方法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/19/C-数组填充方法/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在对数组初始化时，往往需要赋予同样的值，例如布尔型数组全部设为false</p>
+<p>现在要把a里面1000个全部初始化为5；str里面全部初始化为a；</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">1000</span>] = &#123;<span class="number">0</span>&#125;; </span><br><span class="line"><span class="keyword">char</span> str[<span class="number">1000</span>] = &#123;<span class="string">'a'</span>&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>但这样只有第一个元素被设置，其余999个自动默认是int 的0</strong>；</p>
+<h1 id="1-memset"><a href="#1-memset" class="headerlink" title="1. memset"></a>1. memset</h1><p>首先，<strong>memset函数是逐字节进行填充</strong>，所以不适合int型数组。</p>
+<p>对于字符型数组：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="built_in">memset</span>(str,<span class="string">'a'</span>,<span class="keyword">sizeof</span>(str))</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2021/03/19/C-数组填充方法/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/03/17/python执行原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/03/17/python执行原理/" class="post-title-link" itemprop="url">python执行原理</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-03-17 20:59:31" itemprop="dateModified" datetime="2021-03-17T20:59:31+08:00">2021-03-17</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/03/17/python执行原理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/17/python执行原理/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>转载自：<a href="https://blog.csdn.net/helloxiaozhe/article/details/78104975" target="_blank" rel="noopener">python编译过程和执行原理</a></p>
+</blockquote>
+<hr>
+
+<h1 id="1-python执行原理"><a href="#1-python执行原理" class="headerlink" title="1. python执行原理"></a>1. python执行原理</h1><p>这里的解释执行是相对于编译执行而言的。我们都知道，使用C/C++之类的编译性语言编写的程序，是需要从源文件转换成计算机使用的机器语言，经过链接器链接之后形成了二进制的可执行文件。运行该程序的时候，就可以把二进制程序从硬盘载入到内存中并运行。</p>
+<p>但是对于Python而言，python源码不需要编译成二进制代码，它可以直接从源代码运行程序。当我们运行python文件程序的时候，python解释器将源代码转换为字节码，然后再由python解释器来执行这些字节码。这样，python就不用担心程序的编译,库的链接加载等问题了。</p>
+<p>对于python解释语言，有以下3方面的特性：</p>
+<ol>
+<li>每次运行都要进行转换成字节码，然后再有虚拟机把字节码转换成机器语言，最后才能在硬件上运行。与编译性语言相比，每次多出了编译和链接的过程，性能肯定会受到影响；而python并不是每次都需要转换字节码，解释器在转换之前会判断代码文件的修改时间是否与上一次转换后的字节码pyc文件的修改时间一致，若不一致才会重新转换。</li>
+<li>由于不用关心程序的编译和库的链接等问题，开发的工作也就更加轻松啦。</li>
+<li>python代码与机器底层更远了，python程序更加易于移植，基本上无需改动就能在多平台上运行。</li>
+</ol>
+<p>​      在具体计算机上实现一种语言，首先要确定的是表示该语言语义解释的虚拟计算机，一个关键的问题是程序执行时的基本表示是实际计算机上的机器语言还是虚拟机的机器语言。这个问题决定了语言的实现。根据这个问题的回答，可以将程序设计语言划分为两大类：编译型语言和解释型语言。</p>
+<ol>
+<li>编译实现的语言，如：C、C++、Fortran、Pascal、Ada。由编译型语言编写的源程序需要经过编译,汇编和链接才能输出目标代码，然后由机器执行目标代码。目标代码是有机器指令组成，不能独立运行，因为源程序中可能使用了一些汇编程序不能解释引用的库函数，而库函数又不在源程序中，此时还需要链接程序完成外部引用和目标模板调用的链接任务，最后才能输出可执行代码。</li>
+<li>解释型语言，解释器不产生目标机器代码，而是产生中间代码，这种中间代码与机器代码不同，中间代码的解释是由软件支持的，不能直接使用在硬件上。该软件解释器通常会导致执行效率较低，用解释型语言编写的程序是由另一个可以理解中间代码的解释程序执行的。和编译的程序不同的是, 解释程序的任务是逐一将源代码的语句解释成可执行的机器指令，不需要将源程序翻译成目标代码再执行。对于解释型语言，需要一个专门的解释器来执行该程序，每条语句只有在执行是才能被翻译，这种解释型语言每执行一次就翻译一次，因而效率低下。</li>
+<li>Java解释器，java很特殊，java是需要编译的，但是没有直接编译成机器语言，而是编译成字节码，然后在Java虚拟机上用解释的方式执行字节码。Python也使用了类似的方式，先将python编译成python字节码，然后由一个专门的python字节码解释器负责解释执行字节码。</li>
+<li>python是一门解释语言，但是出于效率的考虑，提供了一种编译的方法。编译之后就得到pyc文件，存储了字节码。python这点和java很类似，但是java与python不同的是，python是一个解释型的语言，所以编译字节码不是一个强制的操作，事实上，编译是一个自动的过程，一般不会在意它的存在。编译成字节码可以节省加载模块的时间，提高效率。</li>
+<li>除了效率之外，字节码的形式也增加了反向工程的难度，可以保护源代码。这个只是一定程度上的保护，反编译还是可以的。</li>
+</ol>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2021/03/17/python执行原理/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/03/15/conda添加源/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/03/15/conda添加源/" class="post-title-link" itemprop="url">conda添加源</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-03-15 20:28:11" itemprop="dateModified" datetime="2021-03-15T20:28:11+08:00">2021-03-15</time>
               
             
           </span>
@@ -1648,8 +1628,8 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/01/11/箱线图/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/11/箱线图/" itemprop="commentCount"></span>
+                <a href="/2021/03/15/conda添加源/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/15/conda添加源/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1678,15 +1658,21 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
 
       
         
+          <h1 id="1-通过命令行"><a href="#1-通过命令行" class="headerlink" title="1. 通过命令行"></a>1. 通过命令行</h1><p>添加清华源，命令行中直接输入以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/</span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/</span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge </span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/msys2/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置搜索时显示通道地址</span></span><br><span class="line">conda config --<span class="built_in">set</span> show_channel_urls yes</span><br></pre></td></tr></table></figure>
+<p>如果还需要<strong>pytorch</strong>，就添加pytorch镜像：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/</span><br></pre></td></tr></table></figure>
+<p>添加中科大源：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/</span><br><span class="line">conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/</span><br><span class="line">conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/conda-forge/</span><br><span class="line">conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/msys2/</span><br><span class="line">conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/bioconda/</span><br><span class="line">conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/menpo/</span><br><span class="line"> </span><br><span class="line">conda config --<span class="built_in">set</span> show_channel_urls yes</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
           
-            <p>总是可以看到箱线图，但是却不知道怎么读？今天又看到了，就做一个了解。</p>
-<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>箱形图（Box-plot）又称为盒须图、盒式图或箱线图，是一种用作显示一组数据分散情况资料的统计图。因形状如箱子而得名。在各种领域也经常被使用，常见于<a href="https://baike.baidu.com/item/品质管理/9207881" target="_blank" rel="noopener">品质管理</a>。它主要用于反映原始数据分布的特征，还可以进行多组数据分布特征的比 较。箱线图的绘制方法是：先找出一组数据的上边缘、下边缘、中位数和两个四分位数；然后， 连接两个四分位数画出箱体；再将上边缘和下边缘与箱体相连接，中位数在箱体中间。</p>
-<p><img src="/images/blog/2021/box-plot.jpg" alt></p>
-<p>“盒式图”或叫”<a href="https://baike.baidu.com/item/盒须图" target="_blank" rel="noopener">盒须图</a>“”箱形图”boxplot（也称箱须图(Box-whiskerPlot）须图又称为箱形图，其绘制须使用常用的<a href="https://baike.baidu.com/item/统计量" target="_blank" rel="noopener">统计量</a>，能提供有关数据位置和分散情况的关键信息，尤其在比较不同的母体数据时更可表现其差异。</p>
-<p>如上图所示，标示了图中每条线表示的含义，其中应用到了分位值（数）的概念。</p>
-<p>主要包含六个数据节点，将一组数据从大到小排列，分别计算出他的上边缘，上<a href="https://baike.baidu.com/item/四分位数" target="_blank" rel="noopener">四分位数</a>Q3，<a href="https://baike.baidu.com/item/中位数" target="_blank" rel="noopener">中位数</a>，下四分位数Q1，下边缘，还有一个<a href="https://baike.baidu.com/item/异常值" target="_blank" rel="noopener">异常值</a>。</p>
-
+            <div class="post-button text-center">
+              <a class="btn" href="/2021/03/15/conda添加源/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
           
+          <!--/noindex-->
         
       
     </div>
@@ -1741,7 +1727,7 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/11/深度异常检测/">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/03/14/C-二维数组传参/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dinosaur">
@@ -1761,7 +1747,7 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2021/01/11/深度异常检测/" class="post-title-link" itemprop="url">异常检测</a>
+                <a href="/2021/03/14/C-二维数组传参/" class="post-title-link" itemprop="url">C++二维数组传参</a>
               
             
           </h1>
@@ -1788,7 +1774,7 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2021-01-11 22:35:11" itemprop="dateModified" datetime="2021-01-11T22:35:11+08:00">2021-01-11</time>
+                <time title="修改时间：2021-03-15 14:25:39" itemprop="dateModified" datetime="2021-03-15T14:25:39+08:00">2021-03-15</time>
               
             
           </span>
@@ -1809,6 +1795,13 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
 
                 
                 
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a></span>
+
+                
+                
               
             </span>
           
@@ -1824,8 +1817,8 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/01/11/深度异常检测/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/11/深度异常检测/" itemprop="commentCount"></span>
+                <a href="/2021/03/14/C-二维数组传参/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/14/C-二维数组传参/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1854,15 +1847,15 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
 
       
         
-          <h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>根据维基百科：</p>
-<blockquote>
-<p>在<a href="https://zh.wikipedia.org/wiki/数据挖掘" target="_blank" rel="noopener">数据挖掘</a>中，<strong>异常检测</strong>（英语：<strong>anomaly detection</strong>）对不符合预期模式或<a href="https://zh.wikipedia.org/w/index.php?title=数据集&amp;action=edit&amp;redlink=1" target="_blank" rel="noopener">数据集</a>中其他项目的项目、事件或观测值的识别。<a href="https://zh.wikipedia.org/wiki/异常检测#cite_note-ChandolaSurvey-1" target="_blank" rel="noopener">[1]</a> 通常异常项目会转变成<a href="https://zh.wikipedia.org/w/index.php?title=银行欺诈&amp;action=edit&amp;redlink=1" target="_blank" rel="noopener">银行欺诈</a>、结构缺陷、医疗问题、文本错误等类型的问题。异常也被称为离群值、新奇、噪声、偏差和例外。</p>
-</blockquote>
-<p>有三大类异常检测方法。<a href="https://zh.wikipedia.org/wiki/异常检测#cite_note-ChandolaSurvey-1" target="_blank" rel="noopener">[1]</a> 在假设数据集中大多数实例都是正常的前提下，<strong>无监督异常检测</strong>方法能通过寻找与其他数据最不匹配的实例来检测出未标记测试数据的异常。<strong>监督式异常检测</strong>方法需要一个已经被标记“正常”与“异常”的数据集，并涉及到训练分类器（与许多其他的<a href="https://zh.wikipedia.org/wiki/分类问题" target="_blank" rel="noopener">统计分类问题</a>的关键区别是异常检测的内在不均衡性）。<strong>半监督式异常检测</strong>方法根据一个给定的<em>正常</em>训练数据集创建一个表示正常行为的模型，然后检测由学习模型生成的测试实例的可能性。</p>
+          <p>在LeetCode上，总是需要用到对不固定维度的二维数组传参，传参有多种方式，这里进行一下探究和复习。</p>
+<h1 id="1-一级指针"><a href="#1-一级指针" class="headerlink" title="1. 一级指针"></a>1. 一级指针</h1><p>高维数组在栈中存放时内存是连续的，也可以看作一维数组，并手动计算索引对应的地址。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> *dp, <span class="keyword">int</span> m, <span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;m;++i) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;n;++j) &#123;</span><br><span class="line">			<span class="built_in">cout</span> &lt;&lt; *(dp + i * n + j) &lt;&lt; <span class="string">' '</span>; </span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> m, n;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; m &gt;&gt; n;</span><br><span class="line">	<span class="keyword">int</span> dp[m][n];</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;m;++i) <span class="comment">// 初始化</span></span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;n;++j)</span><br><span class="line">			dp[i][j] = i + j;</span><br><span class="line">			 </span><br><span class="line">	func((<span class="keyword">int</span>*)dp, m, n);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出结果为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0 1 2 </span><br><span class="line">1 2 3</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/2021/01/11/深度异常检测/#more" rel="contents">
+              <a class="btn" href="/2021/03/14/C-二维数组传参/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1922,7 +1915,7 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/10/DSRE测试时的batch-size/">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/03/13/pandas-merge-函数/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dinosaur">
@@ -1942,7 +1935,7 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2021/01/10/DSRE测试时的batch-size/" class="post-title-link" itemprop="url">DSRE测试时的batch_size</a>
+                <a href="/2021/03/13/pandas-merge-函数/" class="post-title-link" itemprop="url">pandas.merge()函数</a>
               
             
           </h1>
@@ -1969,205 +1962,7 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2021-01-10 12:47:51" itemprop="dateModified" datetime="2021-01-10T12:47:51+08:00">2021-01-10</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/Distant-Supervision/" itemprop="url" rel="index"><span itemprop="name">Distant Supervision</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/01/10/DSRE测试时的batch-size/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/10/DSRE测试时的batch-size/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在进行远程监督关系抽取测试阶段，由于每个包中含有的句子数不同，少的只含有1个句子的包有1149个，但是最多的1个包含有138个句子。担心使用BERT测试时，会出现爆显存的问题。</p>
-<h1 id="显存占用"><a href="#显存占用" class="headerlink" title="显存占用"></a>显存占用</h1><p>在评估时batch_size设为8也完全不会超显存，才占用9875MB左右。<br>将batch_size设为64占用16547MB左右显存，<strong>峰值28539MB</strong>，再多可能就超了。</p>
-<h1 id="是否截断？"><a href="#是否截断？" class="headerlink" title="是否截断？"></a>是否截断？</h1><p>测试集中含有1758个包，每个包53个类别，总类别数为：</p>
-<p>$1758 * 53 = 93174$</p>
-<p>是否需要对其截断呢？</p>
-<p>按照DISTRE的方式，截取前50000个，得到的<code>auc</code>值为：0.0290428</p>
-<p>若不截断，得到的<code>auc</code>值为：0.0290428</p>
-<p>可以看到是否截断对<code>auc</code>值的计算还是有影响的，保留的越多，理所应当对应的面积就越大，所以<code>auc</code>值就越高。<strong><em>但是，由于后面数值过小，所以可以忽略不计，也可能对结果没有影响。</em></strong></p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2021/01/10/DSRE测试时的batch-size/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/09/论文题目怎么起？/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2021/01/09/论文题目怎么起？/" class="post-title-link" itemprop="url">论文题目怎么起？</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2021-01-09 18:37:00" itemprop="dateModified" datetime="2021-01-09T18:37:00+08:00">2021-01-09</time>
+                <time title="修改时间：2021-03-13 21:04:18" itemprop="dateModified" datetime="2021-03-13T21:04:18+08:00">2021-03-13</time>
               
             
           </span>
@@ -2188,6 +1983,13 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
 
                 
                 
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
+
+                
+                
               
             </span>
           
@@ -2203,8 +2005,8 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/01/09/论文题目怎么起？/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/09/论文题目怎么起？/" itemprop="commentCount"></span>
+                <a href="/2021/03/13/pandas-merge-函数/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/13/pandas-merge-函数/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2233,24 +2035,208 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
 
       
         
+          <p>在使用pandas时，合并两个DataFrame，可以采用不同的连接方法，类似于数据库中表格的join操作，对不同的操作进行实验尝试。</p>
+<h1 id="建表"><a href="#建表" class="headerlink" title="建表"></a>建表</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; import pandas</span><br><span class="line">&gt;&gt;&gt; sheet1 = pandas.DataFrame(&#123;<span class="string">"ID"</span>:[<span class="string">"A01"</span>, <span class="string">"B01"</span>, <span class="string">"A02"</span>], <span class="string">"name"</span>:[<span class="string">"Bob"</span>, <span class="string">"Mary"</span>, <span class="string">"Bob"</span>], <span class="string">"age"</span>: [20, 22, 35]&#125;)</span><br><span class="line">&gt;&gt;&gt; sheet1</span><br><span class="line">    ID  name  age</span><br><span class="line">0  A01   Bob   20</span><br><span class="line">1  B01  Mary   22</span><br><span class="line">2  A02   Bob   35</span><br><span class="line">&gt;&gt;&gt; sheet2 = pandas.DataFrame(&#123;<span class="string">"name"</span>: [<span class="string">"Bob"</span>, <span class="string">"Mary"</span>, <span class="string">"Jack"</span>], <span class="string">"country"</span>: [<span class="string">"US"</span>, <span class="string">"Singapore"</span>, <span class="string">"China"</span>]&#125;)</span><br><span class="line">&gt;&gt;&gt; sheet2</span><br><span class="line">   name    country</span><br><span class="line">0   Bob         US</span><br><span class="line">1  Mary  Singapore</span><br><span class="line">2  Jack      China</span><br></pre></td></tr></table></figure>
+<h1 id="1-left"><a href="#1-left" class="headerlink" title="1. left"></a>1. left</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sheet1.merge(sheet2, how=<span class="string">"left"</span>, on=<span class="string">"name"</span>)</span><br></pre></td></tr></table></figure>
+<p>结果为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">    ID  name  age    country</span><br><span class="line">0  A01   Bob   20         US</span><br><span class="line">1  B01  Mary   22  Singapore</span><br><span class="line">2  A02   Bob   35         US</span><br></pre></td></tr></table></figure>
+<p>按照左表的”name”将两个sheet的属性合并。</p>
+          <!--noindex-->
           
-            <p>最近在写论文准备投稿，但是论文题目还没有想好，该怎么给论文起一个好名字呢？去看了一些相关工作的论文题目，总结一些经验。</p>
-<h1 id="论文题目"><a href="#论文题目" class="headerlink" title="论文题目"></a>论文题目</h1><h2 id="问句式"><a href="#问句式" class="headerlink" title="问句式"></a>问句式</h2><p>Are Noisy Sentences Useless for Distant Supervised Relation Extraction?</p>
-<p>这种可以给人留下较深的印象，在众多的论文中脱颖而出。而且很清晰地表达了论文的核心部分。类似的还有大名鼎鼎的：</p>
-<p>Attention is All You Need</p>
-<h2 id="冒号式"><a href="#冒号式" class="headerlink" title="冒号式"></a>冒号式</h2><p>以冒号将题目分为两部分，前面一部分是方法或模型名；后一部分是针对的任务。比如：</p>
-<p>Uncover the Ground Truth Relations in Distant Supervision: A Neural Expectation-Maximization Framework</p>
-<p>From Bag of Sentences to Document: Distantly Supervised Relation Extraction via Machine Reading Comprehension</p>
-<p>Towards Accurate and Consistent Evaluation: A Dataset for Distantly-Supervised Relation Extraction</p>
-<h2 id="动名词"><a href="#动名词" class="headerlink" title="动名词"></a>动名词</h2><p>使用动词的动名词形式表达使用的主要技术：</p>
-<p>Reducing Wrong Labels in Distant Supervision for Relation Extraction</p>
-<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><ol>
-<li>用Method, Approach还是Framework?</li>
-<li>要不要在标题中加上False Negative Problems?</li>
-<li>要不要强调Semi-Supervised?</li>
-</ol>
+            <div class="post-button text-center">
+              <a class="btn" href="/2021/03/13/pandas-merge-函数/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/03/12/二分类中softmax对比sigmoid/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/03/12/二分类中softmax对比sigmoid/" class="post-title-link" itemprop="url">二分类中softmax对比sigmoid</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-03-12 23:04:21" itemprop="dateModified" datetime="2021-03-12T23:04:21+08:00">2021-03-12</time>
+              
+            
+          </span>
 
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/03/12/二分类中softmax对比sigmoid/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/12/二分类中softmax对比sigmoid/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>题外话：在Pycharm中<code>Ctrl+左键</code>就可以跳转到源码！用了这么多年竟然都不知道！😓</p>
+<blockquote>
+<p>本文引用自：<a href="https://www.aiuai.cn/aifarm679.html" target="_blank" rel="noopener">https://www.aiuai.cn/aifarm679.html</a></p>
+</blockquote>
+<h1 id="1-理论分析"><a href="#1-理论分析" class="headerlink" title="1. 理论分析"></a>1. 理论分析</h1><p>[1] Sigmoid</p>
+<script type="math/tex; mode=display">
+\begin{equation} \begin{cases} p(y=1|x) = \frac{1}{1 + e ^{-\theta ^ T x}} \\ p(y=0|x) = 1 - p(y=1|x) = \frac{e ^{-\theta ^ T x}}{1 + e ^{-\theta ^ T x}} \end{cases} \end{equation}</script><p>[2] Softmax</p>
+<script type="math/tex; mode=display">
+\begin{equation} \begin{cases} p(y=0|x) = \frac{e ^{\theta _0^T x} }{e ^{\theta _0^T x} + e ^{\theta _1^T x} } = \frac{e ^{(\theta _0^T - \theta _1^T)x} }{1 + e ^{(\theta _0^T - \theta _1^T) x} } \\ p(y=1|x) = 1 - p(y=0|x) \end{cases} \end{equation}</script><p>令 $\beta = -(\theta_0^T - \theta _1^T)$，则有：</p>
+<script type="math/tex; mode=display">\begin{equation} \begin{cases} p(y=1|x) = \frac{1}{1 + e ^{-\beta ^ T x}} \\ p(y=0|x) = \frac{e ^{-\beta ^ T x}}{1 + e ^{-\beta ^ T x}} \end{cases} \end{equation}</script><p>可见，此时，Softmax 与 Sigmoid 二者理论公式的等价性.</p>
+<h1 id="2-基于Keras的实验对比"><a href="#2-基于Keras的实验对比" class="headerlink" title="2. 基于Keras的实验对比"></a>2. 基于Keras的实验对比</h1>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2021/03/12/二分类中softmax对比sigmoid/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -2294,7 +2280,7 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2338,7 +2324,7 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">155</span>
+                    <span class="site-state-item-count">167</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2393,7 +2379,11 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
                     
                       
                     
-                    <span class="site-state-item-count">19</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -3188,7 +3178,63 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
                     
                       
                     
-                    <span class="site-state-item-count">389</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">417</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -3732,9 +3778,9 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
       
     
       
-        
-      
     
+      
+        
       
     
       

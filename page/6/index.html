@@ -415,7 +415,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/26/将GAN用于Domain-Adaption/">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/05/使用BibTeX生成参考文献列表/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dinosaur">
@@ -435,7 +435,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2020/12/26/将GAN用于Domain-Adaption/" class="post-title-link" itemprop="url">将GAN用于Domain Adaptation</a>
+                <a href="/2021/01/05/使用BibTeX生成参考文献列表/" class="post-title-link" itemprop="url">使用BibTeX生成参考文献列表</a>
               
             
           </h1>
@@ -462,7 +462,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-12-27 17:20:33" itemprop="dateModified" datetime="2020-12-27T17:20:33+08:00">2020-12-27</time>
+                <time title="修改时间：2021-01-05 14:33:04" itemprop="dateModified" datetime="2021-01-05T14:33:04+08:00">2021-01-05</time>
               
             
           </span>
@@ -479,14 +479,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/GAN/" itemprop="url" rel="index"><span itemprop="name">GAN</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
 
                 
                 
@@ -505,8 +505,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/26/将GAN用于Domain-Adaption/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/26/将GAN用于Domain-Adaption/" itemprop="commentCount"></span>
+                <a href="/2021/01/05/使用BibTeX生成参考文献列表/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/05/使用BibTeX生成参考文献列表/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -535,1553 +535,108 @@
 
       
         
-          <h1 id="SimGAN"><a href="#SimGAN" class="headerlink" title="SimGAN"></a>SimGAN</h1><p><img src="/images/blog/2020/DCGAN/simgan.png" alt></p>
-<p>理解：将输入的合成图片投入生成器中，首先编码压缩为向量，然后转置卷积，再复原为图片。然后用判别器区分图像是真实图片还是合成图片。最终目的是使判别器无法区分真实图片和合成图片。</p>
-<h2 id="关键点："><a href="#关键点：" class="headerlink" title="关键点："></a>关键点：</h2><ol>
-<li>输入生成器的是合成图片，不再是随机噪音（隐变量）</li>
-<li>添加损失$l_{reg} = || \phi(\widetilde{\mathrm{x}}) - \mathrm{x}||_1$，逐像素误差。使生成的图像保留标注信息。</li>
-</ol>
-<h2 id="生成器结构"><a href="#生成器结构" class="headerlink" title="生成器结构"></a>生成器结构</h2><p>以gaze的实验为例，refiner网络<img src="https://private.codecogs.com/gif.latex?R_%5Ctheta" alt="R_\theta">主体是残差结构，4个残差块(residual block)叠加，每个残差块中包含两个卷积层，卷积核大小3<em>3，输出64个特征图。最后的残差块接一个卷积核大小1</em>1的卷积层，输出一张特征图作为refined synthetic image，如下图所示：左侧为自己画的具体结构图，右侧为论文中残差模块的示意图。</p>
-<p>注意：看了一下代码，残差应该是和残差块输入进行了element-wise相加，因此有相同的通道数。所以在残差模块前必须将输入图像batch变换到64个channels。代码里是通过卷积核为3*3，无步幅(因此尺度不变)的卷积实现的，共64个卷积核，因此得到的特征图是64个。然后才输入到四个连续的残差块中。因此下图input后应更改为加入一个卷积层，然后再进入ResNet Block。</p>
-<p><img src="/images/blog/2020/DCGAN/simganrefiner.png" alt></p>
-          <!--noindex-->
           
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/12/26/将GAN用于Domain-Adaption/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/24/用BERT计算语义相似度/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/24/用BERT计算语义相似度/" class="post-title-link" itemprop="url">用BERT计算语义相似度</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-27 16:57:44" itemprop="dateModified" datetime="2020-12-27T16:57:44+08:00">2020-12-27</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/Pretrained-Language-Model/" itemprop="url" rel="index"><span itemprop="name">Pretrained Language Model</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/24/用BERT计算语义相似度/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/24/用BERT计算语义相似度/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>最近在实验中需要计算句子之间的相似度，偶然看到了一篇文章，有以下说法：</p>
-<blockquote>
-<p>自2018年BERT惊艳众人之后，基于预训练模型对下游任务进行微调已成为炼丹的标配。然而近两年的研究却发现，没有经过微调，直接由BERT得到的句子表示在语义文本相似性方面明显薄弱，甚至会弱于GloVe得到的表示。此篇论文中首先从理论上探索了masked language model 跟语义相似性任务上的联系，并通过实验分析了BERT的句子表示，最后提出了BERT-Flow来解决上述问题。</p>
+            <blockquote>
+<p>本篇文章转载自：</p>
+<p><a href="https://liam.page/2016/01/23/using-bibtex-to-generate-reference/" target="_blank" rel="noopener">https://liam.page/2016/01/23/using-bibtex-to-generate-reference/</a></p>
 </blockquote>
-<h1 id="为什么BERT的句子Embeddings表现弱？"><a href="#为什么BERT的句子Embeddings表现弱？" class="headerlink" title="为什么BERT的句子Embeddings表现弱？"></a>为什么BERT的句子Embeddings表现弱？</h1><font color="orange">由于Reimers等人之前已实验证明 context embeddings 取平均要优于[CLS] token的embedding。因而在文章中，**作者都以最后几层文本嵌入向量的平均值来作为BERT句子的表示向量**。</font>
-
-<p><a href="*https://arxiv.org/pdf/2011.05864.pdf*"><strong><em>On the Sentence Embeddings from Pre-trained Language Models</em></strong></a></p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/12/24/用BERT计算语义相似度/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/23/pip虚拟环境-使用virtualenv/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/23/pip虚拟环境-使用virtualenv/" class="post-title-link" itemprop="url">pip虚拟环境-使用virtualenv</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-23 22:24:43" itemprop="dateModified" datetime="2020-12-23T22:24:43+08:00">2020-12-23</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/23/pip虚拟环境-使用virtualenv/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/23/pip虚拟环境-使用virtualenv/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在开发Python应用程序的时候，系统安装的Python3只有一个版本：3.4。所有第三方的包都会被<code>pip</code>安装到Python3的<code>site-packages</code>目录下。</p>
-<p>如果我们要同时开发多个应用程序，那这些应用程序都会共用一个Python，就是安装在系统的Python 3。如果应用A需要jinja 2.7，而应用B需要jinja 2.6怎么办？</p>
-<p>这种情况下，每个应用可能需要各自拥有一套“独立”的Python运行环境。virtualenv就是用来为一个应用创建一套“隔离”的Python运行环境。</p>
-<p>首先，我们用<code>pip</code>安装virtualenv：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip3 install virtualenv</span><br></pre></td></tr></table></figure>
-<p>然后，假定我们要开发一个新的项目，需要一套独立的Python运行环境，可以这么做：
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/12/23/pip虚拟环境-使用virtualenv/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/23/对GAN再次学习/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/23/对GAN再次学习/" class="post-title-link" itemprop="url">对GAN再次学习</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-24 15:11:56" itemprop="dateModified" datetime="2020-12-24T15:11:56+08:00">2020-12-24</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/23/对GAN再次学习/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/23/对GAN再次学习/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <ol>
-<li>Z是噪声，也就是G的输入，可以是高斯噪声，一般为均匀噪声；</li>
-<li>从贝叶斯的角度上做，生成模型可以认为是都是属于ML(最大化似然）的过程，因为，ML就是找到能使样本数据的类条件概率最大化的分布参数。那如果经过训练集训练，我们找到该参数,此时我们的模型是有最大可能生成和样本训练数据具有同样分布的数据，这个也是生成模型的一个目标。当然这个方法的前提就是对数据的分布进行一个假设，然后才能求参数。比如假设数据分布是符合高斯分布的。</li>
-</ol>
-<p><img src="/images/blog/2020/generative_model.webp" alt></p>
+<p>LaTeX 是一些理工专业论文排版的事实标准。既然是论文排版，就不可避免会涉及到参考文献的处理。Oren Patashnik 和 Leslie Lamport 在 1985 年开发的 BibTeX 是在 LaTeX 社区相当流行的参考文献格式化工具。</p>
+<p>其实网络上流传的 BibTeX 教程很多，本不用我再来插一句嘴。不过这么多年来，始终有很多朋友会对几个问题反复提问。这让我感到，现有的教程恐怕是不够的。这篇文章尝试将 BibTeX 的基本用法讲解清楚，同时适当地提及一些处理流程，争取在有限的篇幅里，讲清楚 BibTeX 的来龙去脉。</p>
+<h1 id="bst-和-bib-格式简介"><a href="#bst-和-bib-格式简介" class="headerlink" title="bst 和 bib 格式简介"></a>bst 和 bib 格式简介</h1><p>BibTeX 涉及到两种特有的辅助的文件格式：<code>bst</code> 和 <code>bib</code>。</p>
+<p><code>bst</code> 是 (B)ibliography (ST)yle 的缩写。顾名思义，和 <code>sty</code> 文件是 style 的缩写一样，<code>bst</code> 文件控制着参考文献列表的格式。在这里说的「格式」，主要指参考文献列表中的编号、排序规则、对人名的处理（是否缩写）、月份的处理（是否缩写）、期刊名称的缩写等。</p>
+<p><code>bib</code> 是 BibTeX 定义的「参考文献数据库」。通常，我们会按照 BibTeX 规定的格式，向 <code>bib</code> 文件写入多条文献信息。在实际使用时，我们就可以根据 <code>bib</code> 文件中定义的文献标记（label），从数据库中调取文献信息，继而排版成参考文献列表。</p>
+<p>值得注意的是，<code>bib</code> 是一个数据库，其中的内容并不一定等于 LaTeX 排版参考文献列表时的内容。也就是说，如果 <code>bib</code> 数据库中有 10 条文献信息，并不一定说 LaTeX 排版出来的 PDF 文件中，参考文献列表里也一定有 10 条。实际排版出来的参考文献列表中有多少条文献，实际是哪几条，具体由文中使用的 <code>\cite</code> 命令（以及 <code>\nocite</code> 命令）指定。如果没有使用 <code>\cite</code> 命令调取文献信息，那么即使在 <code>bib</code> 文件中定义了文献信息，也不会展现在参考文献列表中。很多人对此误解甚深，于是经常有人问道「为什么我在 <code>bib</code> 文件里写的文献，不出现在参考文献中」之类的问题。</p>
+<h1 id="BibTeX-工作流程"><a href="#BibTeX-工作流程" class="headerlink" title="BibTeX 工作流程"></a>BibTeX 工作流程</h1><p>介绍中提到，BibTeX 是一个参考文献格式化工具。这个定义，给 BibTeX 的用处做了良好的界定：BibTeX 不是用来排版参考文献的，更不是个排版工具，<strong>它只是根据需要，按照（bst 文件规定的）某种格式，将（bib 文件中包含的）参考文献信息，格式化 为 LaTeX 能够使用的列表信息</strong>。</p>
+<p>清楚了 BibTeX 需要做的事情（用软件工程的话说，就是清楚了 BibTeX 的 API），我们就可以理清 BibTeX 的工作流程。</p>
+<h3 id="知道需要哪些参考文献信息"><a href="#知道需要哪些参考文献信息" class="headerlink" title="知道需要哪些参考文献信息"></a>知道需要哪些参考文献信息</h3><p>既然 BibTeX 会<em>根据需要</em> 格式化数据，那么首先要解决的问题就是：BibTeX 如何了解此处的「需求」。</p>
+<p>对 BibTeX 稍有了解的读者可能知道，运行 BibTeX 的命令行命令是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bibtex foo.aux # 其中后缀名 .aux 可以省略</span><br></pre></td></tr></table></figure>
+<p>实际上，BibTeX 正是通过读取 <code>aux</code> 文件中的 <code>\citation{}</code> 标记，来确定用户需要哪些参考文献的。</p>
+<p>举个例子，假设用户用 LaTeX 编译了以下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">foo.tex\documentclass&#123;article&#125;\begin&#123;document&#125;bar\cite&#123;baz&#125;\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p>如果该文件名为 <code>foo.tex</code>，那么就会生成 <code>foo.aux</code>。其内容大约是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">foo.aux\relax\citation&#123;baz&#125;</span><br></pre></td></tr></table></figure>
+<p>在这里，<code>\relax</code> 表示休息一会儿，什么也不做；<code>\citation</code> 则是由 <code>tex</code> 文件中的 <code>\cite</code> 命令写入 <code>aux</code> 文件的标记。它说明了：用户需要标记为 <code>baz</code> 的参考文献信息。</p>
+<p>当 BibTeX 读入 <code>aux</code> 文件的时候，它就会记录下所有 <code>\citation</code> 命令中的内容（即文献标记——label），这样就知道了用户需要哪些参考文献信息。</p>
+<h3 id="了解文献列表格式以及读取文献数据库"><a href="#了解文献列表格式以及读取文献数据库" class="headerlink" title="了解文献列表格式以及读取文献数据库"></a>了解文献列表格式以及读取文献数据库</h3><p>当 BibTeX 清楚了用户需要哪些文献信息，接下来自然应该搞清楚用户想要什么样的格式。而知道了格式之后，就可以从数据库中抽取所需的文献信息，按照格式准备数据。</p>
+<p>为了讲清楚这个步骤，我们对上述 LaTeX 代码做些许的修改。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">foo.tex</span><br><span class="line">\documentclass&#123;article&#125;</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line">\bibliographystyle&#123;unsrt&#125;</span><br><span class="line">bar\cite&#123;baz&#125;</span><br><span class="line">\bibliography&#123;foobar&#125;</span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p>同样，我们将它保存为 <code>foo.tex</code>，经由 LaTeX 编译之后得到一个 <code>foo.aux</code> 文件，其内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">foo.aux</span><br><span class="line">\relax</span><br><span class="line">\bibstyle&#123;unsrt&#125;</span><br><span class="line">\citation&#123;baz&#125;</span><br><span class="line">\bibdata&#123;foobar&#125;</span><br></pre></td></tr></table></figure>
+<p>简单的对比，不难发现：</p>
 <ol>
-<li>GoodFellow的论文证明了Gans 全局最小点的充分必要条件是:</li>
+<li><code>foo.tex</code> 中新增的 <code>\bibliographystyle{unsrt}</code> 与 <code>aux</code> 文件中的 <code>\bibstyle{unsrt}</code> 相对应。</li>
+<li><code>foo.tex</code> 中新增的 <code>\bibliography{foobar}</code> 与 <code>aux</code> 文件中的 <code>\bibdata{foobar}</code> 相对应。</li>
 </ol>
-<script type="math/tex; mode=display">
-p_g = p_{real}</script><p>pg表示generate 生成数据的分布函数</p>
-<p>pdata表示真实data的分布函数</p>
-<ol>
-<li>我们知道，G和D是一个对抗的过程，而这个对抗是，G不断的学习，D也不断的学习，而且需要保证两者学习速率基本一致，也就是都能不断的从对方那里学习到“知识”来提升自己。否则，就是这两者哪一个学习的过快，或过慢，以至于双方的实力不再均衡，就会导致实力差的那一方的“loss”不再能“下降”，也就不在学到“知识”。一般的对抗模型中的G和D的网络框架大小基本上是相似(可能存在较小的差异)，而且，训练的过程就是先训练G一次，再训练D一次，这也是为了稳定训练的一个保证。当然这并不能完全稳定训练，所以，对抗网络的稳定训练，依然是一个研究的热点和方向。</li>
-<li>这是DCGAN的生成网络模型的架构 (5层反卷积)，对于LSUN，Imagenet-1k大小的数据集，我们可以使用这个架构，但并不是说对于任何数据集，都可以，比如，更大，或者更小的，那对应的卷积架构就需要进行改变。<strong>比如，对于mnist数据集，G和D的网络架构都相应地减小了，否则不能拟合</strong>，产生不了好的结果(亲测)。</li>
-<li>因为“反卷积”存在于卷积的反向传播中。<font color="red">其中反向传播的滤波器矩阵，是前向传播(卷积)的转置</font> (<strong>如何理解？</strong>)，所以，这就是它的名字的由来。只不过我们把反向传播的操作拿到了前向传播来做，就产生了所谓的反卷积一说。但是transport-convolution只能还原信号的大小，不能还原其value，所以，不能叫做反卷积，不是真正的逆操作。</li>
-</ol>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/12/23/对GAN再次学习/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/21/RESIDE-实体类型-Entity-Type-质量考察/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/21/RESIDE-实体类型-Entity-Type-质量考察/" class="post-title-link" itemprop="url">RESIDE 实体类型 (Entity Type) 质量考察</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-21 22:45:58" itemprop="dateModified" datetime="2020-12-21T22:45:58+08:00">2020-12-21</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/Distant-Supervision/" itemprop="url" rel="index"><span itemprop="name">Distant Supervision</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/21/RESIDE-实体类型-Entity-Type-质量考察/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/21/RESIDE-实体类型-Entity-Type-质量考察/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="Entity-Type"><a href="#Entity-Type" class="headerlink" title="Entity Type"></a>Entity Type</h1><h2 id="发现1-RESIDE更详细"><a href="#发现1-RESIDE更详细" class="headerlink" title="发现1. RESIDE更详细"></a>发现1. RESIDE更详细</h2><p>例如对于m.01wgcvn，我识别出类型为people.person，而RESIDE更全面：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">"/person/actor"</span>, <span class="string">"/person"</span>, <span class="string">"/person/artist"</span>]</span><br></pre></td></tr></table></figure>
-<h2 id="发现2-RESIDE准确率很高"><a href="#发现2-RESIDE准确率很高" class="headerlink" title="发现2. RESIDE准确率很高"></a>发现2. RESIDE准确率很高</h2><p>随机采样我个人生成的实体类别，在people, location, organization, sports_team, religion, language中随机采样若干样本，与RESIDE比较，发现一致率在95%以上。</p>
-<h2 id="发现3-可以补充RESIDE"><a href="#发现3-可以补充RESIDE" class="headerlink" title="发现3. 可以补充RESIDE"></a>发现3. 可以补充RESIDE</h2><p>对于m.05qv655，RESIDE为空，而我们可以正确识别出religion.religion</p>
-<h2 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h2><font color="orange">如果RESIDE对应mid的Type为空，则对其进行补充；否则维持原状。</font>
-
-<p>在对RESIDE进行补充的时候，按照以下方式映射：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    '': '', </span><br><span class="line">    'film.film_festival': '/art/film', </span><br><span class="line">    'people.family': ['/people/family', '/person'], </span><br><span class="line">    'organization.organization': '/organization',</span><br><span class="line">    'people.person': '/person', </span><br><span class="line">    'people.ethnicity': '/people/ethnicity', </span><br><span class="line">    'location.location': '/location', </span><br><span class="line">    'religion.religion': '/religion/religion', </span><br><span class="line">    'sports.sports_team': '/organization/sports_team', </span><br><span class="line">    'film.film': '/art/film', </span><br><span class="line">    'language.human_language': '/language', </span><br><span class="line">    'people.profession': '/title'</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>最终得到的实体类型type2id为：
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/12/21/RESIDE-实体类型-Entity-Type-质量考察/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/21/利用预训练语言模型计算句子相似度/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/21/利用预训练语言模型计算句子相似度/" class="post-title-link" itemprop="url">利用预训练语言模型计算句子相似度</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-31 16:38:50" itemprop="dateModified" datetime="2020-12-31T16:38:50+08:00">2020-12-31</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/Pretrained-Language-Model/" itemprop="url" rel="index"><span itemprop="name">Pretrained Language Model</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/21/利用预训练语言模型计算句子相似度/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/21/利用预训练语言模型计算句子相似度/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>使用huggingface的BertForMaskedLM做预训练后的二次预训练，即fine-tuning，在NYT数据集上。</p>
-<p>具体的代码实现可以参考官方的<a href="https://github.com/huggingface/transformers/tree/master/examples" target="_blank" rel="noopener">github</a>, 有很多的例子可以学习，非常不错~</p>
-<h1 id="插曲"><a href="#插曲" class="headerlink" title="插曲"></a>插曲</h1><p>在询问学长后得知，使用wwm，即whole-word-masking，可以比较显著的提高效果。但是，在<a href="https://huggingface.co/transformers/pretrained_models.html" target="_blank" rel="noopener">huggingface的网站</a>上，目前只有bert-large-cased-whole-word-masking，考虑到对比的方法目前用到的是bert-base和gpt，而且预训练语言模型不是我们的创新点，<strong>所以最终采用bert-base-cased，暂时不用wwm</strong></p>
-<p>另外，在训练的时候整个进度条显示的是全部训练需要花费的时间，举个栗子，如果训练epoch数为3，则显示的为3个epoch对应的所有步数。</p>
-<p><img src="/images/blog/2020/run_mlm.png" alt></p>
-<p>在150MB的文本语料上训练，利用两个RTX 24GB显卡，batch_size设为16，epoch为3，每张卡显存占用为11GB左右，整个训练过程耗时9个小时。</p>
-<h1 id="run-mlm-py"><a href="#run-mlm-py" class="headerlink" title="run_mlm.py"></a>run_mlm.py</h1><p>我们采用<a href="https://github.com/huggingface/transformers/tree/master/examples/language-modeling" target="_blank" rel="noopener">run_mlm.py</a>来进行bert的fine-tuning过程。</p>
-<h2 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h2><p>在进行MLM任务之前，是否需要对文本进行预处理呢？常见的预处理技术有转换为小写、去除标点、去除停用词、提取词干等等，<font color="orange">但是，考虑到预训练语言模型词表足够大，见过的语料足够多，能力足够强</font>，所以，<strong>不进行任何的文本预处理工作</strong>，直接丢给BERT。</p>
-<h2 id="sh"><a href="#sh" class="headerlink" title=".sh"></a>.sh</h2><p>使用以下命令运行程序：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">python run_mlm.py \</span><br><span class="line">  --model_name_or_path /data/klhao/BERT/bert-base-cased \</span><br><span class="line">  --train_file nyt_corpus_train.txt \</span><br><span class="line">  --validation_file nyt_corpus_valid.txt \</span><br><span class="line">  --do_train \</span><br><span class="line">  --do_eval \</span><br><span class="line">  --output_dir output \</span><br><span class="line">  --line_by_line \</span><br><span class="line">  --max_seq_length 500</span><br></pre></td></tr></table></figure>
-<p>程序开始愉快的运行了！~</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/12/21/利用预训练语言模型计算句子相似度/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/20/DISTRE-debug-记录/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/20/DISTRE-debug-记录/" class="post-title-link" itemprop="url">DISTRE debug 记录</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-20 20:10:27" itemprop="dateModified" datetime="2020-12-20T20:10:27+08:00">2020-12-20</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/Distant-Supervision/" itemprop="url" rel="index"><span itemprop="name">Distant Supervision</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/20/DISTRE-debug-记录/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/20/DISTRE-debug-记录/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="1-en-core-web-sm"><a href="#1-en-core-web-sm" class="headerlink" title="1. en_core_web_sm"></a>1. en_core_web_sm</h1><p>在Spacy中需要用到这个，但是在服务器上使用代理，会报错：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"/data/klhao/.conda/klhao-allennlp/lib/python3.6/site-packages/urllib3/connectionpool.py"</span>, line 696, <span class="keyword">in</span> urlopen</span><br><span class="line">    self._prepare_proxy(conn)</span><br><span class="line">  File <span class="string">"/data/klhao/.conda/klhao-allennlp/lib/python3.6/site-packages/urllib3/connectionpool.py"</span>, line 964, <span class="keyword">in</span> _prepare_proxy</span><br><span class="line">    conn.connect()</span><br><span class="line">  File <span class="string">"/data/klhao/.conda/klhao-allennlp/lib/python3.6/site-packages/urllib3/connection.py"</span>, line 366, <span class="keyword">in</span> connect</span><br><span class="line">    self._tunnel()</span><br><span class="line">  File <span class="string">"/data/klhao/.conda/klhao-allennlp/lib/python3.6/http/client.py"</span>, line 930, <span class="keyword">in</span> _tunnel</span><br><span class="line">    (version, code, message) = response._read_status()</span><br><span class="line">  File <span class="string">"/data/klhao/.conda/klhao-allennlp/lib/python3.6/http/client.py"</span>, line 280, <span class="keyword">in</span> _read_status</span><br><span class="line">    raise RemoteDisconnected(<span class="string">"Remote end closed connection without"</span></span><br><span class="line">http.client.RemoteDisconnected: Remote end closed connection without response</span><br></pre></td></tr></table></figure>
-<p><a href="https://stackoom.com/question/3mGaI/%E7%94%B1%E4%BA%8E%E4%BB%A3%E7%90%86%E9%97%AE%E9%A2%98-%E6%97%A0%E6%B3%95%E7%82%B9%E7%82%B9%E5%AE%89%E8%A3%85spacy-%E6%A8%A1%E5%9E%8B" target="_blank" rel="noopener">文档中</a>建议可以直接下载：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.1.0/en_core_web_sm-2.1.0.tar.gz</span><br></pre></td></tr></table></figure>
-<p>ok, it worked! ✨</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/12/20/DISTRE-debug-记录/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/20/AllenNLP-Jsonnet-模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/20/AllenNLP-Jsonnet-模式/" class="post-title-link" itemprop="url">AllenNLP Jsonnet 模式</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-20 16:31:50" itemprop="dateModified" datetime="2020-12-20T16:31:50+08:00">2020-12-20</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/20/AllenNLP-Jsonnet-模式/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/20/AllenNLP-Jsonnet-模式/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>这篇文章是对官方教程的翻译：</p>
-<p><a href="https://github.com/allenai/allennlp/blob/v0.6.1/tutorials/getting_started/using_as_a_library_pt1.md" target="_blank" rel="noopener">https://github.com/allenai/allennlp/blob/v0.6.1/tutorials/getting_started/using_as_a_library_pt1.md</a></p>
-<p>正如前文中所提到的，Allennlp的基本使用流程是需要自定义两个文件：<code>datareader</code>；<code>model</code>;<br> 同时，如果存在已经定义好的<code>datareader</code>我们也是可以直接拿来就用。接下来要介绍的这个例子呢，主要起到了两个作用：①熟悉allennlp的基本框架和逻辑②学习如何自定义自己的模型。模型全部都定义完成了之后，需要写一个json文件用来完成对模型的基本配置。</p>
-<p>  在这篇博客完成之后，我们将会能够构建一个对学术论文进行分类的模型，并且会使用该模型在其他的数据集上进行测试。目的是通过这篇博客让你对如何修改代码，如何训练模型，如何进行预测等等基本操作过程有一个大致的了解。在最后我们会贴出来源代码。</p>
-<h4 id="3-2-构建自己的代码库"><a href="#3-2-构建自己的代码库" class="headerlink" title="3.2 构建自己的代码库"></a>3.2 构建自己的代码库</h4><p>  正如前面所提到的，要想自己利用<code>AllenNLP</code>实现一个模型，那么就需要写两部分的代码：DatasetReader/Model。所以呢，我们的下一步就是要把我们自己写的代码放在python能够找到的位置，这样我们的<code>AllenNLP</code>才能够调用这些模块呀。假设我们自己的代码库基础包名叫<code>my_library</code>，当然啦，你想起啥名字都行，只要这个库符合两个条件：①位于<code>python</code>的查找包的路径上②这个库里包含你写的<code>models</code>以及<code>dataset_readers</code></p>
-<h4 id="3-3-编写你自己的DatasetReader"><a href="#3-3-编写你自己的DatasetReader" class="headerlink" title="3.3 编写你自己的DatasetReader"></a>3.3 编写你自己的DatasetReader</h4><p>  现在我们自己的代码库已经建立好啦，要开始写代码啦！当然啦，我们首先需要有一些数据。在这个教程中，我们想要预测某一篇学术论文的发表场合。具体一点说，就是给出一篇论文的标题和摘要，我们想要判断它到底是在”自然语言处理领域“，“机器学习领域”还是”人工智能领域”的论文。</p>
-<p>  我们使用的数据是从<code>Semantic Scholar</code>搜索引擎上下载的，每篇文章都标注好了所属的领域。下载下来的数据文件是JSON格式的，每个文件都应该至少包含标题（<code>title</code>），摘要(<code>paperAbstract</code>)，以及所属领域（<code>venue</code>）这样三部分内容。</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"title"</span>: <span class="string">"A review of Web searching studies and a framework for future research"</span>,</span><br><span class="line">  <span class="attr">"paperAbstract"</span>: <span class="string">"Research on Web searching is at an incipient stage. ..."</span>,</span><br><span class="line">  <span class="attr">"venue"</span>: <span class="string">"&#123;AI|ML|ACL&#125;"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/12/20/AllenNLP-Jsonnet-模式/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/19/Allennlp-入门/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/19/Allennlp-入门/" class="post-title-link" itemprop="url">Allennlp 入门</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-20 13:28:40" itemprop="dateModified" datetime="2020-12-20T13:28:40+08:00">2020-12-20</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/19/Allennlp-入门/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/19/Allennlp-入门/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在最近的实验中，对比方法里有一个需要用到AllenNLP，因此，对AllenNLP进行一个入门的了解。</p>
-<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>Allennlp将NLP任务处理流程中的各个阶段都做了一定程度的抽象，在软件设计上讲就是，实现了高内聚，低耦合，让我们能够专注于特定模块的逻辑，而无需其他流程的改动，极大程度上减少了工作量。</p>
-<p>那基础且重要的处理流程有：</p>
-<ul>
-<li>DatasetReader：从文件中读取数据，转化为Instance集合</li>
-<li>Model：模型主体</li>
-<li>Iterator：迭代数据，提取batch数据</li>
-<li>Trainer：模型训练器，并记录metric</li>
-<li>Predictor：使用训练好的模型来预测数据</li>
+<p>根据命令的名字，我们很容易猜测各个命令的作用。<code>tex</code> 文件中的 <code>\bibliographystyle</code> 指定了用户期待的参考文献列表格式文件，并将其写入 <code>aux</code> 文件备用，通过 <code>\bibstyle</code> 标记。与此同时，<code>\bibliography</code> 命令则用 <code>\bibdata</code> 在 <code>aux</code> 文件中记录了参考文献数据库的名字（不含扩展名）。</p>
+<p>在这里，<code>unsrt</code> 是 unsort 的缩写，它对应着 <code>unsrt.bst</code> 文件，是大多数 TeX 发行版自带的标准格式文件之一；<code>foobar</code> 则对应着 <code>foobar.bib</code> 文件，该文件是用户自己编写或生成的参考文献数据库。</p>
+<h3 id="实际操作看看"><a href="#实际操作看看" class="headerlink" title="实际操作看看"></a>实际操作看看</h3><p>我们假设上述 <code>foobar.bib</code> 文件有如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@BOOK&#123;baz,    </span><br><span class="line">title = &#123;Dummy Book&#125;,    </span><br><span class="line">publisher = &#123;Egypt&#125;,    </span><br><span class="line">year = &#123;321&#125;,    </span><br><span class="line">author = &#123;The King&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们在命令行执行以下操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">latex foo.tex   # .tex 可以省略</span><br><span class="line">bibtex foo.aux  # .aux 可以省略</span><br></pre></td></tr></table></figure>
+<p>我们会发现，BibTeX 生成了两个文件：<code>foo.bbl</code> 和 <code>foo.blg</code>。其中 <code>foo.bbl</code> 的内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;thebibliography&#125;&#123;1&#125;</span><br><span class="line">\bibitem&#123;baz&#125;The King.</span><br><span class="line">\newblock &#123;\em Dummy Book&#125;.</span><br><span class="line">\newblock Egypt, 321.</span><br><span class="line">\end&#123;thebibliography&#125;</span><br></pre></td></tr></table></figure>
+<p>显然，这就是一个标准的 LaTeX 环境。对 LaTeX 参考文献排版稍有了解的读者可能知道 <code>thebibliography</code> 环境正是 LaTeX 中手工编排参考文献时使用的环境。因此，<strong>foo.bbl 就是 BibTeX 格式化输出的结果</strong>，LaTeX 只需要将该文件的内容读入，就能在相应的位置输出格式化之后的参考文献列表了。</p>
+<p>接下来，我们看看 <code>foo.blg</code> 的内容。<code>blg</code> 实际是 BibTeX Log 的缩写，亦即这是一个日志文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">foo.blgThis is BibTeX, Version 0.99d (TeX Live 2015)</span><br><span class="line">Capacity: max_strings=35307, hash_size=35307, hash_prime=30011</span><br><span class="line">The top-level auxiliary file: foo.aux</span><br><span class="line">The style file: unsrt.bst</span><br><span class="line">Database file #1: foobar.bib</span><br><span class="line">You&apos;ve used 1 entry,</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>我们看到，BibTeX 打出的日志文件中，记录了读入 <code>aux</code>/<code>bst</code>/<code>bib</code> 文件的情况。特别地，记录了所需的参考文献条目（entry）的数量（此处为 1）。</p>
+<p>日志中值得注意的地方是在提到 <code>bib</code> 文件时，使用了 <code>#1</code> 的标记。既然存在 <code>#1</code>，那么合理推测也可以存在 <code>#2</code>。也就是说，BibTeX 可能支持两个或更多的 <code>bib</code> 数据库共同工作。具体如何实现，请读者自己阅读相关资料（手册或 Google 检索）后实验。</p>
+<p>紧接着，我们再执行一次 LaTeX：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">latex foo.tex</span><br></pre></td></tr></table></figure>
+<p>首先，来看看 <code>aux</code> 文件会发生什么变化：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\relax</span><br><span class="line">\bibstyle&#123;unsrt&#125;</span><br><span class="line">\citation&#123;baz&#125;</span><br><span class="line">\bibdata&#123;foobar&#125;</span><br><span class="line">\bibcite&#123;baz&#125;&#123;1&#125;</span><br></pre></td></tr></table></figure>
+<p>相比上一次的 <code>foo.aux</code>，在读入 BibTeX 之后，LaTeX 向 <code>aux</code> 文件写入了更多的信息。这里 <code>\bibcite{baz}{1}</code> 将 <code>baz</code> 这一参考文献标记（label）与参考文献编号（数字 1）绑定起来了。</p>
+<p>接下来，我们看看 <code>dvi</code> 文件的内容：</p>
+<p><img src="/images/blog/2021/latex.png" alt></p>
+<p>不难发现，由于读入了 <code>foo.bbl</code> 文件，参考文献列表已经正确展现出来了。然而，正文中依然有一个问号。</p>
+<p>实际上，LaTeX 需要 <code>aux</code> 文件中的 <code>\bibcite</code> 命令，将参考文献标记与参考文献编号关联起来，从而在 <code>tex</code> 文件中的 <code>\cite</code> 命令位置填上正确的参考文献编号。我们注意到，在我们第二次执行 LaTeX 命令编译之前，<code>foo.aux</code> 文件中是没有这些信息的，直到编译完成，这些信息才被正确写入。因此，第二次执行 LaTeX 命令时，LaTeX 还不能填入正确的文献编号，于是就写入了一个问号作为占位符。</p>
+<p>解决这个问题的办法也很简单——此时 <code>aux</code> 文件中已经有了需要的信息，再编译一遍就好了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">latex foo.tex</span><br></pre></td></tr></table></figure>
+<p>如果没有意外，此时的 <code>foo.dvi</code> 文件应该看起来一切正常了。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><ul>
+<li>BibTeX 是一个参考文献格式化工具，它会根据需要，按照（<code>bst</code> 文件规定的）某种格式，将（<code>bib</code> 文件中包含的）参考文献信息，<em>格式化</em> 为 LaTeX 能够使用的列表信息。</li>
+<li>正确使用 BibTeX 处理参考文献，需要先用 (Xe/PDF)LaTeX 编译 <code>tex</code> 文件，生成 <code>aux</code> 辅助文件。</li>
+<li>执行 BibTeX 将读入 <code>aux</code> 文件，搞清楚用户需要哪些文献。</li>
+<li>紧接着，BibTeX 根据 <code>aux</code> 文件中的内容，找到正确的 <code>bst</code> 和 <code>bib</code> 文件，并将参考文献信息格式化为 LaTeX 的 <code>thebibliography</code> 环境，作为 <code>bbl</code> 文件输出。</li>
+<li>第二次执行 (Xe/PDF)LaTeX 将会读入新生成的 <code>bbl</code> 文件，同时更新 <code>aux</code> 文件。</li>
+<li>此时，参考文献列表将会正常展示，但是正文中的引用标记显示为问号。</li>
+<li>第三次执行 (Xe/PDF)LaTeX 将会读入 <code>bbl</code> 文件和更新过后的 <code>aux</code> 文件。此时，参考文献相关内容都正常显示。</li>
 </ul>
-<p>以上每个流程是松耦合的，没有强关联，需要全局配置的东西非常少。比如在NLP处理中最常见的一个：num_embedding/vocab_size 需要提前全局给定，或者使用单独的配置来存储，只不过带来的问题就是这个配置在很多地方都可能会使用到，故参数的传递就又会增加代码的冗杂度，使用起来很不方便。在Allennlp中会有一个vocabulary全局存储，无需单独配置，且提供函数接口调用获取，非常简单。
-          <!--noindex-->
+<p>因此，总的来说，想要正确使用 BibTeX 协同 LaTeX 处理参考文献，需要编译四次：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(xe/pdf)latex foo.tex   <span class="comment"># 表示使用 latex, pdflatex 或 xelatex 编译，下同</span></span><br><span class="line">bibtex foo.aux</span><br><span class="line">(xe/pdf)latex foo.tex</span><br><span class="line">(xe/pdf)latex foo.tex</span><br></pre></td></tr></table></figure>
+<h1 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h1><blockquote>
+<p>我希望将一条文献展示在参考文献列表中，但不想在正文中用 <code>\cite</code> 命令引用，怎么办？</p>
+</blockquote>
+<p>首先，确保这条文献已经写入了 <code>bib</code> 文件。其次，可以在 <code>\bibliography</code> 命令之前，用 <code>\nocite{label}</code> 提示 BibTeX 调取这条文献。</p>
+<blockquote>
+<p>我有很多条文献，都存在这样的情况。每条文献逐一 <code>\nocite</code> 太繁琐了，有没有懒人适用的办法？</p>
+</blockquote>
+<p>有的。<code>\nocite{*}</code>。</p>
+<blockquote>
+<p>每次都要编译四次，我感觉懒癌又要发作了，有没有办法治疗？</p>
+</blockquote>
+<p>有的。可以尝试 LaTeXmk, TeXify 之类的自动化工具。</p>
+<blockquote>
+<p>我对默认提供的 <code>bst</code> 文件的格式效果不满意，哪里能找到更多的 <code>bst</code>？</p>
+</blockquote>
+<p>现代 TeX 发行版都提供了多种 <code>bst</code> 可供选择，每个 <code>bst</code> 文件的格式、适用范围、使用条件都不一样，需要仔细甄别。具体可以去安装目录下搜索试试。</p>
+<blockquote>
+<p>有没有遵循国家标准的 <code>bst</code>？</p>
+</blockquote>
+<p>有的，<a href="https://liam.page/2014/05/09/gbt7714-2005-bibtex-style/" target="_blank" rel="noopener">这里</a>。</p>
+<blockquote>
+<p>我找到的 <code>bst</code>，效果都不满意，怎么办？</p>
+</blockquote>
+<p>你可以在命令行执行 <code>latex makebst</code>，制作一个符合自己要求的 <code>bst</code> 文件。你需要回答大约 100 个关于参考文献列表效果的问题。</p>
+<blockquote>
+<p><code>bib</code> 文件怎么生成？</p>
+</blockquote>
+<p>你可以手写，或者用 JabRef 之类的文献工具生成。具体请自行 Google 检索，篇幅所限就不展开了。</p>
+
           
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/12/19/Allennlp-入门/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
         
       
-    </p></div>
+    </div>
 
     
 
@@ -2133,7 +688,7 @@ p_g = p_{real}</script><p>pg表示generate 生成数据的分布函数</p>
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/19/pip-安装路径/">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/04/conda安装环境报错-Solving-environment-failed-with-initial-frozen-solve/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dinosaur">
@@ -2153,7 +708,7 @@ p_g = p_{real}</script><p>pg表示generate 生成数据的分布函数</p>
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2020/12/19/pip-安装路径/" class="post-title-link" itemprop="url">pip 安装路径</a>
+                <a href="/2021/01/04/conda安装环境报错-Solving-environment-failed-with-initial-frozen-solve/" class="post-title-link" itemprop="url">conda安装环境报错 Solving environment failed with initial frozen solve</a>
               
             
           </h1>
@@ -2180,7 +735,7 @@ p_g = p_{real}</script><p>pg表示generate 生成数据的分布函数</p>
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-12-19 22:21:09" itemprop="dateModified" datetime="2020-12-19T22:21:09+08:00">2020-12-19</time>
+                <time title="修改时间：2021-01-04 23:10:10" itemprop="dateModified" datetime="2021-01-04T23:10:10+08:00">2021-01-04</time>
               
             
           </span>
@@ -2216,8 +771,8 @@ p_g = p_{real}</script><p>pg表示generate 生成数据的分布函数</p>
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/19/pip-安装路径/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/19/pip-安装路径/" itemprop="commentCount"></span>
+                <a href="/2021/01/04/conda安装环境报错-Solving-environment-failed-with-initial-frozen-solve/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/04/conda安装环境报错-Solving-environment-failed-with-initial-frozen-solve/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2246,15 +801,204 @@ p_g = p_{real}</script><p>pg表示generate 生成数据的分布函数</p>
 
       
         
-          <p>今天在服务器上安装包时，提示空间已满，原因是/home目录磁盘满了。</p>
-<h1 id="查看pip默认安装路径"><a href="#查看pip默认安装路径" class="headerlink" title="查看pip默认安装路径"></a>查看pip默认安装路径</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip show numpy</span><br></pre></td></tr></table></figure>
-<p>结果显示如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Name: numpy</span><br><span class="line">Version: 1.19.4</span><br><span class="line">Summary: NumPy is the fundamental package <span class="keyword">for</span> array computing with Python.</span><br><span class="line">Home-page: https://www.numpy.org</span><br><span class="line">Author: Travis E. Oliphant et al.</span><br><span class="line">Author-email: None</span><br><span class="line">License: BSD</span><br><span class="line">Location: /home/klhao/.conda/envs/klhao-allennlp/lib/python3.6/site-packages</span><br><span class="line">Requires: </span><br><span class="line">Required-by: thinc, tensorboardX, spacy, scipy, msgpack-numpy</span><br></pre></td></tr></table></figure>
-<p>可以看到，由于我们是在conda创建的虚拟环境中安装，所以pip安装的位置是conda默认的位置。为了使空间充足，需要在创建conda环境时指定安装目录。
+          
+            <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查询版本</span></span><br><span class="line">$ conda -V</span><br><span class="line"><span class="comment"># 升级</span></span><br><span class="line">$ conda update -n base conda</span><br><span class="line">Collecting package metadata (current_repodata.json): <span class="keyword">done</span></span><br><span class="line">Solving environment: \ </span><br><span class="line">The environment is inconsistent, please check the package plan carefully</span><br><span class="line">The following packages are causing the inconsistency:</span><br><span class="line"></span><br><span class="line">  - https://repo.anaconda.com/pkgs/main/linux-64::anaconda==2019.07=py37_0</span><br><span class="line">  - https://repo.anaconda.com/pkgs/main/linux-64::numba==0.44.1=py37h962f231_0</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## Package Plan ##</span></span><br><span class="line"></span><br><span class="line">  environment location: /home/lab305/anaconda3</span><br><span class="line"></span><br><span class="line">  added / updated specs:</span><br><span class="line">    - conda</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">The following packages will be downloaded:</span><br><span class="line">...</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>升级<code>conda</code>到最新版本后再更新全部应用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ conda update --all</span><br><span class="line">Collecting package metadata (current_repodata.json): <span class="keyword">done</span></span><br><span class="line">Solving environment: <span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## Package Plan ##</span></span><br><span class="line"></span><br><span class="line">  environment location: /home/lab305/anaconda3/envs/pytorch1.3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">The following packages will be downloaded:</span><br></pre></td></tr></table></figure>
+<p>就可以继续使用<code>conda</code>安装应用。</p>
+<p>但是我按照以上步骤后依然报错，后来等待soft-solving后提示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">allennlp requires python&gt;=3.6 &lt;3.7</span><br></pre></td></tr></table></figure>
+<p>而我创建conda环境时使用的python3.7版本…</p>
+<p>fix这个bug之后，就没有问题了！🎉</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/04/DISTRE源码阅读/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/01/04/DISTRE源码阅读/" class="post-title-link" itemprop="url">DISTRE源码阅读</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-01-07 16:16:24" itemprop="dateModified" datetime="2021-01-07T16:16:24+08:00">2021-01-07</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/Distant-Supervision/" itemprop="url" rel="index"><span itemprop="name">Distant Supervision</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/01/04/DISTRE源码阅读/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/04/DISTRE源码阅读/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="Instance模型部分"><a href="#Instance模型部分" class="headerlink" title="Instance模型部分"></a>Instance模型部分</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self,</span></span></span><br><span class="line"><span class="function"><span class="params">            sentence: Dict[str, torch.Tensor],</span></span></span><br><span class="line"><span class="function"><span class="params">            label: torch.Tensor = None)</span> -&gt; torch.Tensor:</span></span><br><span class="line">    </span><br><span class="line">    sentence_encoded = self.embedder(sentence[<span class="string">'byte_pairs'</span>])</span><br><span class="line"></span><br><span class="line">    output = &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> label <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        output[<span class="string">"loss"</span>] = self._loss(sentence, sentence_encoded, label)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> self.clf_head <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        byte_pairs = sentence[<span class="string">'byte_pairs'</span>][:, :sentence_encoded.size(<span class="number">1</span>)]</span><br><span class="line">        clf_logits = self.clf_head(sentence_encoded, byte_pairs)</span><br><span class="line">        output[<span class="string">'logits'</span>] = clf_logits</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> output</span><br></pre></td></tr></table></figure>
+<p>模型很简单，主要分为两个部分，一个编码器，一个分类器。下面去看<code>_loss()</code>和<code>clf_head()</code>函数。</p>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/2020/12/19/pip-安装路径/#more" rel="contents">
+              <a class="btn" href="/2021/01/04/DISTRE源码阅读/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -2262,7 +1006,1470 @@ p_g = p_{real}</script><p>pg表示generate 生成数据的分布函数</p>
           <!--/noindex-->
         
       
-    </p></div>
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/03/PR曲线横纵坐标轴的数据来源/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/01/03/PR曲线横纵坐标轴的数据来源/" class="post-title-link" itemprop="url">PR曲线横纵坐标轴的数据来源</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-01-03 23:04:26" itemprop="dateModified" datetime="2021-01-03T23:04:26+08:00">2021-01-03</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/Distant-Supervision/" itemprop="url" rel="index"><span itemprop="name">Distant Supervision</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/01/03/PR曲线横纵坐标轴的数据来源/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/03/PR曲线横纵坐标轴的数据来源/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">test_loss, test_acc, y, y_pred, logit_list, y_hot = self.predict(sess, self.data[<span class="string">'test'</span>])</span><br></pre></td></tr></table></figure>
+<p>查看predict()函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict</span><span class="params">(self, sess, data, wLabels=True, shuffle=False, label=<span class="string">'Evaluating on Test'</span>)</span>:</span></span><br><span class="line">	<span class="string">"""</span></span><br><span class="line"><span class="string">	Evaluate model on valid/test data</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	Parameters</span></span><br><span class="line"><span class="string">	----------</span></span><br><span class="line"><span class="string">	sess:		Session of tensorflow</span></span><br><span class="line"><span class="string">	data:		Data to evaluate on</span></span><br><span class="line"><span class="string">	wLabels:	Does data include labels or not</span></span><br><span class="line"><span class="string">	shuffle:	Shuffle data while before creates batches</span></span><br><span class="line"><span class="string">	label:		Log label to be used while logging</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	Returns</span></span><br><span class="line"><span class="string">	-------</span></span><br><span class="line"><span class="string">	losses:		Loss over the entire data</span></span><br><span class="line"><span class="string">	accuracies:	Overall Accuracy</span></span><br><span class="line"><span class="string">	y: 		Actual label</span></span><br><span class="line"><span class="string">	y_pred:		Predicted labels</span></span><br><span class="line"><span class="string">	logit_list:	Logit list for each bag in the data</span></span><br><span class="line"><span class="string">	y_actual_hot:	One hot represetnation of actual label for each bag in the data</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	"""</span></span><br><span class="line">	losses, accuracies, y_pred, y, logit_list, y_actual_hot = [], [], [], [], [], []</span><br><span class="line">	bag_cnt = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> step, batch <span class="keyword">in</span> enumerate(self.getBatches(data, shuffle)):</span><br><span class="line">		<span class="comment"># nn_out =&gt; logits &#125; =&gt; loss</span></span><br><span class="line">		<span class="comment">#           y</span></span><br><span class="line">		<span class="comment"># nn_out =&gt; y_pred   &#125; =&gt; accuracy</span></span><br><span class="line">		<span class="comment">#           y_actual</span></span><br><span class="line">		loss, logits, accuracy = sess.run([self.loss, self.logits, self.accuracy], feed_dict = self.create_feed_dict(batch, split=<span class="string">'test'</span>))</span><br><span class="line">		losses.    append(loss)</span><br><span class="line">		accuracies.append(accuracy)</span><br><span class="line"></span><br><span class="line">		<span class="comment"># <span class="doctag">TODO:</span> 只预测一个标签, 对真实标签也是只取第一个</span></span><br><span class="line">		pred_ind      = logits.argmax(axis=<span class="number">1</span>)  <span class="comment"># (batch, )</span></span><br><span class="line">		y_pred += pred_ind.tolist()  <span class="comment"># (batch, )</span></span><br><span class="line"></span><br><span class="line">		y_actual_hot += self.getOneHot(batch[<span class="string">'Y'</span>], self.num_class).tolist()  <span class="comment"># 保留所有 gold label</span></span><br><span class="line">		y 	     += np.argmax(self.getOneHot(batch[<span class="string">'Y'</span>], self.num_class), <span class="number">1</span>).tolist()  <span class="comment"># 只取第一个 gold label</span></span><br><span class="line"></span><br><span class="line">		logit_list += logits.tolist()</span><br><span class="line">		bag_cnt      += len(batch[<span class="string">'sent_num'</span>])</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> step % <span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">			self.logger.info(<span class="string">'&#123;&#125; (&#123;&#125;/&#123;&#125;):\t&#123;:.5&#125;\t&#123;:.5&#125;\t&#123;&#125;'</span>.format(label, bag_cnt, len(self.data[<span class="string">'test'</span>]), np.mean(accuracies)*<span class="number">100</span>, np.mean(losses), self.p.name))</span><br><span class="line"></span><br><span class="line">	self.logger.info(<span class="string">'Test Accuracy: &#123;&#125;'</span>.format(accuracy))</span><br><span class="line">	<span class="keyword">return</span> np.mean(losses), np.mean(accuracies)*<span class="number">100</span>, y, y_pred, logit_list, y_actual_hot</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2021/01/03/PR曲线横纵坐标轴的数据来源/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/03/matplotlib-plot/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/01/03/matplotlib-plot/" class="post-title-link" itemprop="url">matplotlib.plot()</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-01-03 21:09:15" itemprop="dateModified" datetime="2021-01-03T21:09:15+08:00">2021-01-03</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/01/03/matplotlib-plot/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/03/matplotlib-plot/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>alpha</td>
+<td>float</td>
+</tr>
+<tr>
+<td>animated</td>
+<td>[True \</td>
+<td>False]</td>
+</tr>
+<tr>
+<td>antialiased or aa</td>
+<td>[True \</td>
+<td>False]</td>
+</tr>
+<tr>
+<td>clip_box</td>
+<td>a matplotlib.transform.Bbox instance</td>
+</tr>
+<tr>
+<td>clip_on</td>
+<td>[True \</td>
+<td>False]</td>
+</tr>
+<tr>
+<td>clip_path</td>
+<td>a Path instance and a Transform instance, a Patch</td>
+</tr>
+<tr>
+<td>color or c</td>
+<td>any matplotlib color</td>
+</tr>
+<tr>
+<td>contains</td>
+<td>the hit testing function</td>
+</tr>
+<tr>
+<td>dash_capstyle</td>
+<td>[<code>&#39;butt&#39;</code></td>
+<td><code>&#39;round&#39;</code></td>
+<td><code>&#39;projecting&#39;</code>]</td>
+</tr>
+<tr>
+<td>dash_joinstyle</td>
+<td>[<code>&#39;miter&#39;</code></td>
+<td><code>&#39;round&#39;</code></td>
+<td><code>&#39;bevel&#39;</code>]</td>
+</tr>
+<tr>
+<td>dashes</td>
+<td>sequence of on/off ink in points</td>
+</tr>
+<tr>
+<td>data</td>
+<td>(np.array xdata, np.array ydata)</td>
+</tr>
+<tr>
+<td>figure</td>
+<td>a matplotlib.figure.Figure instance</td>
+</tr>
+<tr>
+<td>label</td>
+<td>any string</td>
+</tr>
+<tr>
+<td>linestyle or ls</td>
+<td>[ <code>&#39;-&#39;</code></td>
+<td><code>&#39;--&#39;</code></td>
+<td><code>&#39;-.&#39;</code></td>
+<td><code>&#39;:&#39;</code></td>
+<td><code>&#39;steps&#39;</code> \</td>
+<td>…]</td>
+</tr>
+<tr>
+<td>linewidth or lw</td>
+<td>float value in points</td>
+</tr>
+<tr>
+<td>marker</td>
+<td>[ <code>&#39;+&#39;</code></td>
+<td><code>&#39;,&#39;</code></td>
+<td><code>&#39;.&#39;</code></td>
+<td><code>&#39;1&#39;</code></td>
+<td><code>&#39;2&#39;</code></td>
+<td><code>&#39;3&#39;</code></td>
+<td><code>&#39;4&#39;</code> ]</td>
+</tr>
+<tr>
+<td>markeredgecolor or mec</td>
+<td>any matplotlib color</td>
+</tr>
+<tr>
+<td>markeredgewidth or mew</td>
+<td>float value in points</td>
+</tr>
+<tr>
+<td>markerfacecolor or mfc</td>
+<td>any matplotlib color</td>
+</tr>
+<tr>
+<td>markersize or ms</td>
+<td>float</td>
+</tr>
+<tr>
+<td>markevery</td>
+<td>[ None \</td>
+<td>integer \</td>
+<td>(startind, stride) ]</td>
+</tr>
+<tr>
+<td>picker</td>
+<td>used in interactive line selection</td>
+</tr>
+<tr>
+<td>pickradius</td>
+<td>the line pick selection radius</td>
+</tr>
+<tr>
+<td>solid_capstyle</td>
+<td>[<code>&#39;butt&#39;</code></td>
+<td><code>&#39;round&#39;</code></td>
+<td><code>&#39;projecting&#39;</code>]</td>
+</tr>
+<tr>
+<td>solid_joinstyle</td>
+<td>[<code>&#39;miter&#39;</code></td>
+<td><code>&#39;round&#39;</code></td>
+<td><code>&#39;bevel&#39;</code>]</td>
+</tr>
+<tr>
+<td>transform</td>
+<td>a matplotlib.transforms.Transform instance</td>
+</tr>
+<tr>
+<td>visible</td>
+<td>[True \</td>
+<td>False]</td>
+</tr>
+<tr>
+<td>xdata</td>
+<td>np.array</td>
+</tr>
+<tr>
+<td>ydata</td>
+<td>np.array</td>
+</tr>
+<tr>
+<td>zorder</td>
+<td>any number</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/31/两个句子之间的注意力机制/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/12/31/两个句子之间的注意力机制/" class="post-title-link" itemprop="url">两个句子之间的注意力机制</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-01-01 12:21:03" itemprop="dateModified" datetime="2021-01-01T12:21:03+08:00">2021-01-01</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/12/31/两个句子之间的注意力机制/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/31/两个句子之间的注意力机制/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="来源"><a href="#来源" class="headerlink" title="来源"></a>来源</h1><p>首先需要清楚，注意力机制的来源是Encoder-Decoder模型，即Seq2Seq模型，从一个句子到另一个句子，从一个序列到另一个序列。</p>
+<h1 id="理解"><a href="#理解" class="headerlink" title="理解"></a>理解</h1><p>怎么理解Attention模型的物理含义呢？一般在自然语言处理应用里<strong>会把Attention模型看作是输出Target句子中某个单词和输入Source句子每个单词的对齐模型</strong>，这是非常有道理的。</p>
+<p>如果把Attention机制从上文讲述例子中的Encoder-Decoder框架中剥离，并进一步做抽象，可以更容易看懂Attention机制的本质思想。</p>
+<p>我们可以这样来看待Attention机制：将Source中的构成元素想象成是由一系列的数据对构成，此时给定Target中的<strong>某个元素Query</strong>，通过计算Query和各个Key的相似性或者相关性，得到每个Key对应Value的权重系数，然后对Value进行加权求和，即得到了最终的Attention数值。所以本质上Attention机制是对Source中元素的Value值进行加权求和，而Query和Key用来计算对应Value的权重系数。</p>
+<font color="purple">可以引出另外一种理解，也可以将Attention机制看作一种软寻址（Soft Addressing）:Source可以看作存储器内存储的内容，元素由地址Key和值Value组成，当前有个Key=Query的查询，目的是取出存储器中对应的Value值，即Attention数值。通过Query和存储器内元素Key的地址进行相似性比较来寻址，之所以说是软寻址，指的不像一般寻址只从存储内容里面找出一条内容，而是可能从每个Key地址都会取出内容，取出内容的重要性根据Query和Key的相似性来决定，之后对Value进行加权求和，这样就可以取出最终的Value值，也即Attention值。所以不少研究人员将Attention机制看作软寻址的一种特例，这也是非常有道理的。</font>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/12/31/两个句子之间的注意力机制/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/30/ridge-regression-岭回归/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/12/30/ridge-regression-岭回归/" class="post-title-link" itemprop="url">ridge regression 岭回归</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-30 16:05:51" itemprop="dateModified" datetime="2020-12-30T16:05:51+08:00">2020-12-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/12/30/ridge-regression-岭回归/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/30/ridge-regression-岭回归/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>已经有多次看到岭回归 (ridge regression) 这个名词了，因此，在这里对这个概念进行一个更深入的学习。</p>
+<h1 id="一、一般线性回归遇到的问题"><a href="#一、一般线性回归遇到的问题" class="headerlink" title="一、一般线性回归遇到的问题"></a>一、一般线性回归遇到的问题</h1><p> 在处理复杂的数据的回归问题时，普通的线性回归会遇到一些问题，主要表现在：</p>
+<ul>
+<li>预测精度：这里要处理好这样一对为题，即样本的数量<img src="http://latex.codecogs.com/gif.latex?n" alt="n">和特征的数量<img src="http://latex.codecogs.com/gif.latex?p" alt="p"><ul>
+<li><img src="http://latex.codecogs.com/gif.latex?n\gg&space;p" alt="n\gg p">时，最小二乘回归会有较小的方差</li>
+<li><img src="http://latex.codecogs.com/gif.latex?n\approx&space;p" alt="n\approx p">时，容易产生过拟合</li>
+<li><img src="http://latex.codecogs.com/gif.latex?n%3C&space;p" alt="n&lt; p">时，最小二乘回归得不到有意义的结果</li>
+</ul>
+</li>
+<li>模型的解释能力：如果模型中的特征之间有相互关系，这样会增加模型的复杂程度，并且对整个模型的解释能力并没有提高，这时，我们就要进行特征选择。</li>
+</ul>
+<p>以上的这些问题，主要就是表现在模型的方差和偏差问题上，这样的关系可以通过下图说明：</p>
+<p><img src="/images/blog/2020/regression.jpg" alt></p>
+<p>方差指的是模型之间的差异，而偏差指的是模型预测值和数据之间的差异。我们需要找到方差和偏差的折中。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/12/30/ridge-regression-岭回归/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/29/OpenIE初探/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/12/29/OpenIE初探/" class="post-title-link" itemprop="url">OpenIE初探</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-01-01 12:41:21" itemprop="dateModified" datetime="2021-01-01T12:41:21+08:00">2021-01-01</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/12/29/OpenIE初探/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/29/OpenIE初探/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>开放关系抽取，指没有给定预定义的关系本体 (ontology)，从文本或网页上直接抽取phrases，是一类无监督的任务。这篇博客对开放关系抽取进行了一个初步的了解。</p>
+<h1 id="OpenIE"><a href="#OpenIE" class="headerlink" title="OpenIE"></a>OpenIE</h1><h2 id="ReVerb"><a href="#ReVerb" class="headerlink" title="ReVerb"></a><a href="http://reverb.cs.washington.edu/" target="_blank" rel="noopener">ReVerb</a></h2><p>是OpenIE的一个子项目，都是主要由华盛顿大学开发研制的。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>OpenIE主要能够抽取一些头尾实体之间距离较短的关系短语，主要是利用语法信息和依赖信息。</p>
+<p><img src="/images/blog/2020/openie.png" alt></p>
+<p><strong>可以借鉴其方法，并作为资源加以利用</strong>。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/12/29/OpenIE初探/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/28/python调用-sh脚本/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/12/28/python调用-sh脚本/" class="post-title-link" itemprop="url">python调用.sh脚本</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-28 21:23:08" itemprop="dateModified" datetime="2020-12-28T21:23:08+08:00">2020-12-28</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/12/28/python调用-sh脚本/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/28/python调用-sh脚本/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在使用服务器跑程序时，为了充分利用服务器显卡的时间，希望机器可以24小时运行，因此需要用python自动的执行一些进程，来调参~</p>
+<h1 id="os-system"><a href="#os-system" class="headerlink" title="os.system"></a>os.system</h1><p>可以使用os.system()执行bash命令，举个简单的例子，比如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">print(os.system(<span class="string">"touch a.txt"</span>))</span><br></pre></td></tr></table></figure>
+<p>会返回一个0，表示执行成功了，在当前文件夹下创建了一个新的a.txt文件</p>
+<h1 id="python脚本"><a href="#python脚本" class="headerlink" title="python脚本"></a>python脚本</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">r1 = os.system(</span><br><span class="line">    <span class="string">"python -u run.py --description='NYT-H training with bert on sentence-level' --task_name='sent' "</span></span><br><span class="line">    <span class="string">"--model_name='sent_bert' --data_dir='./data/NYT-H/' --eval_model='best' --embedding_path='../Glove/glove.6B.50d.txt' "</span></span><br><span class="line">    <span class="string">"--overwrite_output_dir --output_dir='outputs/sent_bert_200' --seed=77 --embedding_dim=50 --main_device='cuda:0' "</span></span><br><span class="line">    <span class="string">"--device_ids='[0]' --epoch=1 --batch_size=16 --dropout_rate=0.5 --lr=5e-5 --max_len=200 --pos_dis=75 --pos_dim=5 "</span></span><br><span class="line">    <span class="string">"--save_best_model --do_eval --do_train --select_score='non_na_macro_f1' --tb_logging_step=1000 --encoder=bert "</span></span><br><span class="line">    <span class="string">"--pretrain=../BERT/bert-base-cased-nyt --split --threshold=0.9"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">r2 = os.system(</span><br><span class="line">    <span class="string">"python -u run.py --description='NYT-H training with bert on sentence-level' --task_name='sent' "</span></span><br><span class="line">    <span class="string">"--model_name='sent_bert' --data_dir='./data/NYT-H/' --eval_model='best' --embedding_path='../Glove/glove.6B.50d.txt' "</span></span><br><span class="line">    <span class="string">"--overwrite_output_dir --output_dir='outputs/sent_bert_200_sh_try' --seed=77 --embedding_dim=50 --main_device='cuda:0' "</span></span><br><span class="line">    <span class="string">"--device_ids='[0]' --epoch=10 --batch_size=16 --dropout_rate=0.5 --lr=5e-5 --max_len=200 --pos_dis=75 --pos_dim=5 "</span></span><br><span class="line">    <span class="string">"--save_best_model --do_eval --do_train --select_score='non_na_macro_f1' --tb_logging_step=1000 --encoder=bert "</span></span><br><span class="line">    <span class="string">"--pretrain=../BERT/bert-base-cased-nyt"</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>第一个程序执行完之后，会紧接着执行第二个程序。<strong>如果第一个程序因为异常退出了，也不会影响第二个程序的执行~</strong>，完美🎉🎉🎉</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/27/对NYT数据集二分类/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/12/27/对NYT数据集二分类/" class="post-title-link" itemprop="url">对NYT数据集二分类</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-28 14:50:52" itemprop="dateModified" datetime="2020-12-28T14:50:52+08:00">2020-12-28</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/Distant-Supervision/" itemprop="url" rel="index"><span itemprop="name">Distant Supervision</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/12/27/对NYT数据集二分类/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/27/对NYT数据集二分类/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在最近的实验中，考虑到远程监督数据集NYT的去噪问题，设想能否利用预训练语言模型的强大能力，对数据集的噪音进行一个预先的划分，进行二分类的尝试。</p>
+<h1 id="实验设置"><a href="#实验设置" class="headerlink" title="实验设置"></a>实验设置</h1><p>以56种关系作为POS，以NA关系作为NEG，进行0-1的二分类学习，编码器采用BERT，由于类别不平衡，对负样本进行采样，不超过正样本的类别数。由于训练数据过多，训练时长太久，于是，对正负样本各取10000个，然后进行实验。</p>
+<h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">TRAINING: <span class="number">625</span>it [<span class="number">02</span>:<span class="number">56</span>,  <span class="number">3.54</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">37</span>, <span class="number">10.72</span>it/s]</span><br><span class="line">epoch <span class="number">0</span>, loss <span class="number">0.3108509671562363</span>, accuracy <span class="number">0.8750775915580384</span></span><br><span class="line">TRAINING: <span class="number">625</span>it [<span class="number">02</span>:<span class="number">58</span>,  <span class="number">3.50</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">37</span>, <span class="number">10.69</span>it/s]</span><br><span class="line">epoch <span class="number">1</span>, loss <span class="number">0.2790242659515024</span>, accuracy <span class="number">0.8945530726256983</span></span><br><span class="line">TRAINING: <span class="number">573</span>it [<span class="number">02</span>:<span class="number">44</span>,  <span class="number">3.53</span>it/s]</span><br><span class="line">TRAINING: <span class="number">625</span>it [<span class="number">02</span>:<span class="number">59</span>,  <span class="number">3.49</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">37</span>, <span class="number">10.69</span>it/s]</span><br><span class="line">epoch <span class="number">2</span>, loss <span class="number">0.27044483414959747</span>, accuracy <span class="number">0.9058038485412787</span></span><br><span class="line">TRAINING: <span class="number">625</span>it [<span class="number">02</span>:<span class="number">58</span>,  <span class="number">3.50</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">37</span>, <span class="number">10.72</span>it/s]</span><br><span class="line">epoch <span class="number">3</span>, loss <span class="number">0.3372199231719427</span>, accuracy <span class="number">0.8947082557417753</span></span><br><span class="line">TRAINING: <span class="number">625</span>it [<span class="number">02</span>:<span class="number">58</span>,  <span class="number">3.50</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">37</span>, <span class="number">10.67</span>it/s]</span><br><span class="line">epoch <span class="number">4</span>, loss <span class="number">0.35960243281818205</span>, accuracy <span class="number">0.8975791433891993</span></span><br><span class="line">TRAINING: <span class="number">625</span>it [<span class="number">02</span>:<span class="number">58</span>,  <span class="number">3.50</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">37</span>, <span class="number">10.68</span>it/s]</span><br><span class="line">epoch <span class="number">5</span>, loss <span class="number">0.3635644751425287</span>, accuracy <span class="number">0.8998292985723153</span></span><br><span class="line">TRAINING: <span class="number">625</span>it [<span class="number">02</span>:<span class="number">58</span>,  <span class="number">3.51</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">37</span>, <span class="number">10.68</span>it/s]</span><br><span class="line">epoch <span class="number">6</span>, loss <span class="number">0.43025128015637093</span>, accuracy <span class="number">0.9021570453134699</span></span><br><span class="line">TRAINING: <span class="number">625</span>it [<span class="number">02</span>:<span class="number">58</span>,  <span class="number">3.50</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">37</span>, <span class="number">10.68</span>it/s]</span><br><span class="line">epoch <span class="number">7</span>, loss <span class="number">0.5122146993227276</span>, accuracy <span class="number">0.8918373680943513</span></span><br></pre></td></tr></table></figure>
+<p>可以看到，分类准确率（accuracy）在90%左右，具体应用到实验中效果会怎么样呢？还有待实验~</p>
+<h2 id="全量数据"><a href="#全量数据" class="headerlink" title="全量数据"></a>全量数据</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">epoch <span class="number">0</span>, loss <span class="number">0.19445358777635965</span>, accuracy <span class="number">0.9276846679081316</span></span><br><span class="line">BIMODEL.pkl saved, best accuracy <span class="number">0.9276846679081316</span></span><br><span class="line">TRAINING: <span class="number">8560</span>it [<span class="number">40</span>:<span class="number">00</span>,  <span class="number">3.57</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">36</span>, <span class="number">11.01</span>it/s]</span><br><span class="line">epoch <span class="number">1</span>, loss <span class="number">0.2355663737937318</span>, accuracy <span class="number">0.9197703289882061</span></span><br><span class="line">TRAINING: <span class="number">8560</span>it [<span class="number">39</span>:<span class="number">57</span>,  <span class="number">3.57</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">36</span>, <span class="number">11.00</span>it/s]</span><br><span class="line">epoch <span class="number">2</span>, loss <span class="number">0.29970387574681023</span>, accuracy <span class="number">0.914804469273743</span></span><br><span class="line">TRAINING: <span class="number">8560</span>it [<span class="number">40</span>:<span class="number">02</span>,  <span class="number">3.56</span>it/s]</span><br><span class="line">TESTING: <span class="number">403</span>it [<span class="number">00</span>:<span class="number">36</span>, <span class="number">11.00</span>it/s]</span><br><span class="line">epoch <span class="number">3</span>, loss <span class="number">0.2967500277536646</span>, accuracy <span class="number">0.9183736809435133</span></span><br></pre></td></tr></table></figure>
+<p>可以看到，准确率可以接近93%，挺不错的~</p>
+
+          
+        
+      
+    </div>
 
     
 
@@ -2303,7 +2510,7 @@ p_g = p_{real}</script><p>pg表示generate 生成数据的分布函数</p>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2347,7 +2554,7 @@ p_g = p_{real}</script><p>pg表示generate 生成数据的分布函数</p>
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">155</span>
+                    <span class="site-state-item-count">167</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2402,7 +2609,11 @@ p_g = p_{real}</script><p>pg表示generate 生成数据的分布函数</p>
                     
                       
                     
-                    <span class="site-state-item-count">19</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -3197,7 +3408,63 @@ p_g = p_{real}</script><p>pg表示generate 生成数据的分布函数</p>
                     
                       
                     
-                    <span class="site-state-item-count">389</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">417</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -3745,11 +4012,11 @@ p_g = p_{real}</script><p>pg表示generate 生成数据的分布函数</p>
       
     
       
+    
+      
+    
+      
         
-      
-    
-      
-    
       
     
       

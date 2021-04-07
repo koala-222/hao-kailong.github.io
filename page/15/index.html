@@ -415,7 +415,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/08/14/优化方法总结：SGD-Momentum-AdaGrad-RMSProp-Adam/">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/26/利用Freebase远程监督-SPARQL查询/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dinosaur">
@@ -435,7 +435,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2020/08/14/优化方法总结：SGD-Momentum-AdaGrad-RMSProp-Adam/" class="post-title-link" itemprop="url">优化方法总结：SGD, Momentum, AdaGrad, RMSProp, Adam</a>
+                <a href="/2020/09/26/利用Freebase远程监督-SPARQL查询/" class="post-title-link" itemprop="url">利用Freebase远程监督-SPARQL查询</a>
               
             
           </h1>
@@ -462,7 +462,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-08-14 12:00:06" itemprop="dateModified" datetime="2020-08-14T12:00:06+08:00">2020-08-14</time>
+                <time title="修改时间：2020-09-26 16:35:36" itemprop="dateModified" datetime="2020-09-26T16:35:36+08:00">2020-09-26</time>
               
             
           </span>
@@ -479,7 +479,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
 
                 
                 
@@ -498,8 +505,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/08/14/优化方法总结：SGD-Momentum-AdaGrad-RMSProp-Adam/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/08/14/优化方法总结：SGD-Momentum-AdaGrad-RMSProp-Adam/" itemprop="commentCount"></span>
+                <a href="/2020/09/26/利用Freebase远程监督-SPARQL查询/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/26/利用Freebase远程监督-SPARQL查询/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -528,21 +535,1371 @@
 
       
         
-          <h2 id="1-SGD"><a href="#1-SGD" class="headerlink" title="1. SGD"></a>1. SGD</h2><h3 id="Batch-Gradient-Descent"><a href="#Batch-Gradient-Descent" class="headerlink" title="Batch Gradient Descent"></a>Batch Gradient Descent</h3><p>在每一轮的训练过程中，Batch Gradient Descent算法用整个训练集的数据计算cost function的梯度，并用该梯度对模型参数进行更新：</p>
-<script type="math/tex; mode=display">
-\Theta = \Theta - \alpha \cdot \nabla _\Theta J(\Theta)</script><p><strong>优点:</strong></p>
-<ul>
-<li>cost fuction若为凸函数，能够保证收敛到全局最优值；若为非凸函数，能够收敛到局部最优值</li>
-</ul>
-<p><strong>缺点:</strong></p>
-<ul>
-<li>由于每轮迭代都需要在整个数据集上计算一次，所以批量梯度下降可能非常慢</li>
-<li>训练数较多时，需要较大内存</li>
-<li>批量梯度下降不允许在线更新模型，例如新增实例。
+          <p>在DisFeb实验中，需要利用远程监督生成数据，因此记录一下<a href>Freebase</a>的查询方法：</p>
+<p>在个人实验中，采用下面5种关系作为demo：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/business/company/place_founded</span><br><span class="line">/location/administrative_division/country</span><br><span class="line">/location/country/capital</span><br><span class="line">/people/deceased_person/place_of_death</span><br><span class="line">/people/person/children</span><br></pre></td></tr></table></figure>
+<p>以<code>/location/country/capital</code>为例，介绍查询过程：</p>
+<h4 id="1-查询头尾实体"><a href="#1-查询头尾实体" class="headerlink" title="1. 查询头尾实体"></a>1. 查询头尾实体</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">select *</span><br><span class="line">where</span><br><span class="line">&#123;</span><br><span class="line">	?s &lt;http://rdf.freebase.com/ns/location.country.capital&gt; ?o</span><br><span class="line">&#125;</span><br><span class="line">limit 100</span><br></pre></td></tr></table></figure>
+<p>得到结果：</p>
+<p><img src="/images/blog/2020/head_tail.PNG" alt></p>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/2020/08/14/优化方法总结：SGD-Momentum-AdaGrad-RMSProp-Adam/#more" rel="contents">
+              <a class="btn" href="/2020/09/26/利用Freebase远程监督-SPARQL查询/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/23/生成对抗网络-GAN-初探/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/09/23/生成对抗网络-GAN-初探/" class="post-title-link" itemprop="url">生成对抗网络(GAN)初探</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-23 21:34:15" itemprop="dateModified" datetime="2020-09-23T21:34:15+08:00">2020-09-23</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/GAN/" itemprop="url" rel="index"><span itemprop="name">GAN</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/09/23/生成对抗网络-GAN-初探/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/23/生成对抗网络-GAN-初探/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>一直对GAN即生成对抗网络很感兴趣，随着科研的进展，近期可能会用到GAN来做文本数据的增强和去噪，所以简单尝试了一下，真的很有意思！😄</p>
+<p>推荐两个GAN的GitHub代码库：</p>
+<p><a href="https://github.com/eriklindernoren/PyTorch-GAN" target="_blank" rel="noopener">https://github.com/eriklindernoren/PyTorch-GAN</a></p>
+<p><a href="https://github.com/eriklindernoren/Keras-GAN" target="_blank" rel="noopener">https://github.com/eriklindernoren/Keras-GAN</a></p>
+<p>下面用<strong>MNIST</strong>来做实验，使用的是generator和discriminator均为多层感知机的最简单的GAN网络，代码非常易读，就不过多解释了：
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/09/23/生成对抗网络-GAN-初探/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/21/tensorboard-projector-不显示问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/09/21/tensorboard-projector-不显示问题/" class="post-title-link" itemprop="url">tensorboard projector 不显示问题</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-21 20:37:50" itemprop="dateModified" datetime="2020-09-21T20:37:50+08:00">2020-09-21</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/09/21/tensorboard-projector-不显示问题/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/21/tensorboard-projector-不显示问题/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="1-问题"><a href="#1-问题" class="headerlink" title="1. 问题"></a>1. 问题</h2><p>使用Pytorch的过程中，想要将得到的句子向量可视化显示，查看特征向量在特征空间中的分布情况，但是在使用tensorboard可视化过程中，却显示空白。</p>
+<h2 id="2-解决方案"><a href="#2-解决方案" class="headerlink" title="2. 解决方案"></a>2. 解决方案</h2><h3 id="2-1-版本问题"><a href="#2-1-版本问题" class="headerlink" title="2.1 版本问题"></a>2.1 版本问题</h3><p>可能是因为tensorboard版本问题，可以参考我之前写的一篇文章<a href="https://haokailong.top/2020/09/05/tensorboard%E6%98%BE%E7%A4%BA%E7%A9%BA%E7%99%BD%E9%97%AE%E9%A2%98/">tensorboard显示空白</a>，尝试将tensorboard降级为2.0.0版本。</p>
+<h3 id="2-2-Windows注册表问题"><a href="#2-2-Windows注册表问题" class="headerlink" title="2.2 Windows注册表问题"></a>2.2 Windows注册表问题</h3><p>在Linux下，没有问题；但在Windows下，一些其他程序会修改注册表，导致tensorboard显示异常。</p>
+<p>在Github中有相关issue：<a href="https://github.com/tensorflow/tensorboard/issues/3077" target="_blank" rel="noopener">https://github.com/tensorflow/tensorboard/issues/3077</a></p>
+<p>但直接看我的文章可以更快速地解决问题😄</p>
+<h4 id="2-2-1-修改注册表"><a href="#2-2-1-修改注册表" class="headerlink" title="2.2.1 修改注册表"></a>2.2.1 修改注册表</h4><p>首先，打开注册表编辑器</p>
+<p><code>win + R</code> 然后输入<code>regedit</code>，依次点击<code>HKEY_CLASSES_ROOT\.js</code>，如果注册表被修改过 ，可以看到<font color="green">Content Type</font>对应“数据”被改成了<font color="red">text/plain</font> </p>
+<p>点击<font color="green">Content Type</font>，并将对应数据修改为<font color="blue">application/javascript</font>，修改后注册表为：</p>
+<p><img src="/images/blog/2020/regedit.PNG" alt></p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/09/21/tensorboard-projector-不显示问题/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/21/EMNLP-2020-审稿指南/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/09/21/EMNLP-2020-审稿指南/" class="post-title-link" itemprop="url">EMNLP-2020 审稿指南</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-21 15:41:27" itemprop="dateModified" datetime="2020-09-21T15:41:27+08:00">2020-09-21</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/09/21/EMNLP-2020-审稿指南/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/21/EMNLP-2020-审稿指南/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>对于审稿标准，<a href="https://2020.emnlp.org/blog/2020-05-17-write-good-reviews" target="_blank" rel="noopener">EMNLP-2020</a>给出了审稿指南，要求除SOTA以外，要更注重创新性、实在贡献等方面。对于我们开展科研工作也有一定的指导，下面是官方说明：</p>
+<p>The intention for this post is to provide some advice to reviewers, such that we can identify the best research to be presented in the conference, and provide constructive feedback in order for authors to further improve their papers. We recognize and appreciate the amount of efforts reviewers have contributed, and hope to make that more beneficial. We want all the authors to feel the delight when they read the peer reviews for their papers.</p>
+<p>This is not the first attempt to educate reviewers. Many major conferences have included advice to reviewers, in NLP and in other fields, and there’s also plentiful advice relating to journal reviewing. Within the field of NLP, we would highlight:</p>
+<ul>
+<li><a href="https://acl2017.wordpress.com/2017/02/23/last-minute-reviewing-advice/" target="_blank" rel="noopener">Discursive advice</a> in ACL 2017 from leading lights in the field: Mirella Lapata, Marco Baroni, Yoav Artzi, Emily Bender, Joel Tetreault, Ani Nenkova, and Tim Baldwin</li>
+<li><a href="https://naacl2018.wordpress.com/2018/01/20/a-review-form-faq/" target="_blank" rel="noopener">Two example good reviews</a> from NAACL 2018 presented in their reviewing form</li>
+<li><a href="https://soundcloud.com/nlp-highlights/77-on-writing-quality-peer-reviews-with-noah-a-smith" target="_blank" rel="noopener">A podcast by Noah Smith</a> about peer reviews</li>
+</ul>
+<p>Please take the time to look through these excellent resources.</p>
+<p>We hope reiterating some dos and don’ts here can help reviewers as well as authors.</p>
+<p>First, evaluate the paper’s contributions. This is where you will use your NLP domain knowledge. We advise that you should not accept papers just because their reported results are better, or that they appear to be mathematically sophisticated. These are not sufficient or necessary to constitute contributions. And we advise that you should not reject papers just because their results are not better than state-of-the-art. In the previous <em>ACL conferences, some reviewers placed too much emphasis on SOTA performance, giving low scores to any systems that failed to reach that. While we aim to publish the very best work, a more constructive question to ask is “<em>*state of which art?</em></em>“. As discussed in <a href="https://hackingsemantics.xyz/2020/reviewing-models/" target="_blank" rel="noopener">this blog post</a>, a paper could offer a step forward in terms of efficiency, generalizability, interpretability, and many other criteria. A convincing contribution of any kind should not be rejected only for not topping the leaderboards.</p>
+<p>Regarding different kinds of contributions, here’s what Prof. Philip Resnik at University of Maryland says:</p>
+<blockquote>
+<p>I think there would be significant value in encouraging reviewers to think explicitly about the nature of the contribution, and what questions then need to be asked. As a first pass for consideration/discussion:</p>
+<ul>
+<li>Is this research making a <strong>scientific</strong> contribution? If so:<ul>
+<li>What is the phenomenon in the world that the authors are seeking to improve our understanding of?</li>
+<li>What do we now know about this phenomenon that we did not know before?</li>
+</ul>
+</li>
+<li>Is this research making an <strong>engineering</strong> contribution? If so:<ul>
+<li>What is the real-world problem (or set of problems) that this work is making progress on solving?</li>
+<li>Alternatively, if it’s not targeting a current real-world problem, what real-world problem(s) will this work help <em>enable</em> solutions of?</li>
+</ul>
+</li>
+<li>Is this research making a <strong>theoretical</strong> (e.g. mathematical) contribution? If so:<ul>
+<li>What do we know now that we did not know before?</li>
+<li>How does this theoretical or mathematical advance connect to either scientific or engineering goals? (See above.)</li>
+</ul>
+</li>
+</ul>
+<p>Work in computational linguistics might include a mixture of scientific, engineering, and theoretical contributions, rather than just one. But, I am suggesting, if a paper does not make a contribution in <em>any</em> of those three categories, with the sub-bullets having understandable answers, one should seriously consider whether it belongs at the conference.</p>
+</blockquote>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/09/21/EMNLP-2020-审稿指南/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/20/SemEval-2020自由文本关系抽取冠军方案解读/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/09/20/SemEval-2020自由文本关系抽取冠军方案解读/" class="post-title-link" itemprop="url">SemEval-2020自由文本关系抽取冠军方案解读</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-20 20:42:19" itemprop="dateModified" datetime="2020-09-20T20:42:19+08:00">2020-09-20</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/09/20/SemEval-2020自由文本关系抽取冠军方案解读/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/20/SemEval-2020自由文本关系抽取冠军方案解读/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>以下文章来自于平安寿险PAI，作者谢舒翼</p>
+</blockquote>
+<h2 id="1-全文框架概览"><a href="#1-全文框架概览" class="headerlink" title="1. 全文框架概览"></a>1. 全文框架概览</h2><p><img src="/images/blog/2020/SemEval-2020/overview.webp" alt></p>
+<h2 id="2-赛题介绍"><a href="#2-赛题介绍" class="headerlink" title="2. 赛题介绍"></a>2. 赛题介绍</h2><p><strong>SemEval</strong> 由 ACL（国际计算语言学协会）主办，是全球范围影响力最强、规模最大、参赛人数最多的词汇与语义计算领域权威赛事，迄今已举办 14 届，历届吸引了卡内基梅隆大学、TCS Research、百度、美团、科大讯飞等国内外一流高校、顶级科研机构和知名企业参与。</p>
+<h3 id="2-1-任务简介"><a href="#2-1-任务简介" class="headerlink" title="2.1 任务简介"></a>2.1 任务简介</h3><p>本次我们参赛任务为DeftEval: Extracting term-definition pairs in free text（自由文本定义抽取）。在该任务中，我们团队以满分成绩夺得了关系抽取赛道冠军。 </p>
+<p><img src="/images/blog/2020/SemEval-2020/2.1.webp" alt></p>
+<p>主办方提供了两万多条从专业工具书筛选的句子，覆盖生物、历史、物理、心理学、金融、社会、政治等多个专业领域。该任务包含以下三个子任务：</p>
+<ul>
+<li><strong>Subtask1：</strong>给定一个句子，判断该句子里是否包含定义</li>
+<li><strong>Subtask2：</strong>在给定tag schema下的词粒度BIO标签预测</li>
+<li><strong>Subtask3：</strong>在给定relation schema下的关系抽取</li>
+</ul>
+<p>其中，Subtask2的tag schema包含以下六种：</p>
+<ol>
+<li><strong>Term:</strong> A primary term.</li>
+<li><strong>Alias Term:</strong> A secondary or less common name for the primary term. Links to a term tag.</li>
+<li><strong>Referential Term:</strong> A noun phrase(NP) reference to a previously mentioned term tag. Typically this/that/these + NP following a sentence boundary.</li>
+<li><strong>Definition:</strong> A primary definition of a term. May not exist without a matching term.</li>
+<li><strong>Referential Definition:</strong> NP reference to a previously mentioned definition tag. See Referential Term.</li>
+<li><strong>Qualifier:</strong> A specific date, location, or other condition under which the definition holds true. Typically seen at the clause level.
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/09/20/SemEval-2020自由文本关系抽取冠军方案解读/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </li></ol></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/19/局部敏感哈希-LSH/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/09/19/局部敏感哈希-LSH/" class="post-title-link" itemprop="url">局部敏感哈希(LSH)</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-19 13:34:26" itemprop="dateModified" datetime="2020-09-19T13:34:26+08:00">2020-09-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Data-Mining/" itemprop="url" rel="index"><span itemprop="name">Data Mining</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/09/19/局部敏感哈希-LSH/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/19/局部敏感哈希-LSH/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="1-引入"><a href="#1-引入" class="headerlink" title="1. 引入"></a>1. 引入</h2><p>​        在做微博文本挖掘的时候，会发现很多微博是高度相似的，因为大量的微博都是转发其他人的微博，并且没有添加评论，导致很多数据是重复或者高度相似的。这给我们进行数据处理带来很大的困扰，我们得想办法把找出这些相似的微博，再对其进行去重处理。</p>
+<p>　　如果只是要找到重复的微博，我们可以用两两比较所有的微博，对相同的微博值保留一条即可；但这只能在数据量很小的情况下才有可能，当我们有1000万条微博时，需要两两比较的微博有10^6亿（n*(n-1)/2）对，这个计算量是惊人的，即便你用map-reduce，拥有强大的集群，那也顶不住数据再增加一两个数量级。一种稍微好一点的办法是对所以微博进行一次hash，再对桶内的微博进行比较，利用hash可以过滤了绝大多数不相同的微博，避免了无谓的比较，时间复杂度O(n)，显著提高效率。Hash的一个基本特性就是随机性，它将一个字符串随机的hash到一个桶中，对于相同的两个字符串，hash值总是相同的，但两个hash值只要相差一点，hash值就就可能大相径庭，可谓差之毫厘谬以千里：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; s1 = <span class="string">"我是一个字符串"</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; s2 = <span class="string">"我是一个字符串"</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="built_in">hash</span>(s1)</span></span><br><span class="line">2006838971</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="built_in">hash</span>(s2)</span></span><br><span class="line">2006838971</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; s3 = <span class="string">"我就是一个字符串"</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="built_in">hash</span>(s3)</span></span><br><span class="line">-1823451294</span><br></pre></td></tr></table></figure>
+<p>　    如果能有一种hash算法，能将相似的字符串hash得到相似的hash值，那就能在接近线性的时间解决海量微博中的去重问题。幸好，这样的hash已经有大牛发明了，它叫局部敏感哈希（Locality Sensitive Hashing，简称LSH）。接下来我们通过海量微博文本相似项发现的例子来探讨这个神奇的hash。
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/09/19/局部敏感哈希-LSH/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/15/Freebase-Search-Cookbook/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/09/15/Freebase-Search-Cookbook/" class="post-title-link" itemprop="url">Freebase Search Cookbook</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-15 19:29:55" itemprop="dateModified" datetime="2020-09-15T19:29:55+08:00">2020-09-15</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Knowledge-Graph/" itemprop="url" rel="index"><span itemprop="name">Knowledge Graph</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/09/15/Freebase-Search-Cookbook/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/15/Freebase-Search-Cookbook/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>内容来自于：<a href="https://developers.google.com/freebase/v1/search-cookbook" target="_blank" rel="noopener">https://developers.google.com/freebase/v1/search-cookbook</a></p>
+</blockquote>
+<h1 id="Search-Cookbook"><a href="#Search-Cookbook" class="headerlink" title="Search Cookbook"></a>Search Cookbook</h1><p>This page contains a list of recipes for different ways to constrain search queries using the <a href="https://developers.google.com/freebase/v1/search-overview" target="_blank" rel="noopener">Search Service</a>.</p>
+<h2 id="Textual-constraints"><a href="#Textual-constraints" class="headerlink" title="Textual constraints"></a>Textual constraints</h2><p>Textual data for a Freebase entity comes first from its name and its aliases, then from its keys and other textual properties, and finally from its Wikipedia anchor data if it was reconciled with a language-specific Wikipedia topic.</p>
+<p>Textual constraints are language-specific; currently, 18 languages are supported. English has by far the most coverage and is the default language.</p>
+<p>For a list of all currently supported language codes, visit the following:</p>
+<p><a href="https://www.googleapis.com/freebase/v1/search?help=langs&amp;indent=true" target="_blank" rel="noopener">https://www.googleapis.com/freebase/v1/search?help=langs&amp;indent=true</a></p>
+<p>A textual constraint is specified with the <code>query</code> parameter. Its language is specified with the <code>lang</code> parameter. For example:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;gore&quot;</span><br><span class="line">query: &quot;gore&quot; lang: &quot;fr&quot;</span><br><span class="line">query: &quot;gore&quot; lang: &quot;de&quot;</span><br></pre></td></tr></table></figure>
+<p>During indexing, <strong>textual data is normalized</strong> in a language-specific way. For example, in English, text is converted to lowercase and accents are removed. At query time, the same language-specific normalization is performed on the query text. For example:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;beyoncé&quot;</span><br><span class="line">query: &quot;beyonce&quot;</span><br></pre></td></tr></table></figure>
+<p>Several parameters control how a textual constraint is matched. Setting the <code>prefixed</code> parameter to <code>true</code> triggers a prefix match on name and aliases only (and a regular match on other textual data). For example:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;bob dy&quot; prefixed: true</span><br></pre></td></tr></table></figure>
+<p>Setting <code>stemmed</code> to <code>true</code> triggers a stemmed match on name and aliases only (and a regular match on other textual data). Stemmed matches may be used to paste over language-specific suffix differences introduced by plurals or other grammatical forms. For example:
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/09/15/Freebase-Search-Cookbook/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/15/Freebase介绍/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/09/15/Freebase介绍/" class="post-title-link" itemprop="url">Freebase介绍</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-15 15:39:40" itemprop="dateModified" datetime="2020-09-15T15:39:40+08:00">2020-09-15</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Knowledge-Graph/" itemprop="url" rel="index"><span itemprop="name">Knowledge Graph</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/09/15/Freebase介绍/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/15/Freebase介绍/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>内容来自于Freebase官方文档：<a href="https://developers.google.com/freebase/guide/basic_concepts" target="_blank" rel="noopener">https://developers.google.com/freebase/guide/basic_concepts</a></p>
+</blockquote>
+<h1 id="Basic-Concepts"><a href="#Basic-Concepts" class="headerlink" title="Basic Concepts"></a>Basic Concepts</h1><p>If you are new to Freebase, this section covers the basic terminology and concepts required to understand how Freebase works.</p>
+<h2 id="Graphs"><a href="#Graphs" class="headerlink" title="Graphs"></a>Graphs</h2><p>Freebase data is stored in a data structure called a <a href="http://en.wikipedia.org/wiki/Graph_(abstract_data_type" target="_blank" rel="noopener">graph</a>). A graph is composed on nodes connected by edges. In Freebase, the nodes are defined using <a href="http://www.freebase.com/type/object" target="_blank" rel="noopener">/type/object</a> and edges are defined using <a href="http://www.freebase.com/type/link" target="_blank" rel="noopener">/type/link</a>. By storing the data as a graph, Freebase can quickly traverse arbitrary connections between topics and easily add new schema without having to change structure of the data.</p>
+<h2 id="Topics"><a href="#Topics" class="headerlink" title="Topics"></a>Topics</h2><p>Freebase has over 39 million topics about real-world entities like people, places and things. Since Freebase data is represented a graph, these topics correspond to the nodes in the graph. However, not every node is a topic. See the section on <a href="https://developers.google.com/freebase/guide/basic_concepts#cvts" target="_blank" rel="noopener">CVTs</a> to as an example of nodes that are not topics.</p>
+<p>Examples of the types of topics found in Freebase:</p>
+<ul>
+<li>Physical entities, e.g., <a href="http://www.freebase.com/en/bob_dylan" target="_blank" rel="noopener">Bob Dylan</a>, <a href="http://www.freebase.com/en/louvre" target="_blank" rel="noopener">the Louvre Museum</a>, the <a href="http://www.freebase.com/en/saturn" target="_blank" rel="noopener">Saturn planet</a>, to</li>
+<li>Artistic/media creations, e.g., <a href="http://www.freebase.com/en/the_dark_knight" target="_blank" rel="noopener">The Dark Knight (film)</a>, <a href="http://http//www.freebase.com/guid/9202a8c04000641f80000000002e46af" target="_blank" rel="noopener">Hotel California (song)</a>, to</li>
+<li>Classifications, e.g., <a href="http://www.freebase.com/en/noble_gas" target="_blank" rel="noopener">noble gas</a>, <a href="http://www.freebase.com/en/chordate" target="_blank" rel="noopener">Chordate</a>, to</li>
+<li>Abstract concepts, e.g., <a href="http://www.freebase.com/en/love" target="_blank" rel="noopener">love</a>, to</li>
+<li>Schools of thoughts or artistic movements, e.g., <a href="http://www.freebase.com/en/impressionism" target="_blank" rel="noopener">Impressionism</a>.</li>
+</ul>
+<p>Some topics are notable because they hold a lot of data (e.g., <a href="http://www.freebase.com/en/wal-mart" target="_blank" rel="noopener">Wal-Mart</a>), and some are notable because they link to many other topics, potentially in different domains of information. For example, abstract topics like love, poverty, chivalry, etc. don’t have many properties associated with them but they appear often as book subjects, poetry subjects, film subjects, etc. making them more notable.</p>
+<h2 id="Types-and-Properties"><a href="#Types-and-Properties" class="headerlink" title="Types and Properties"></a>Types and Properties</h2><p>Any given topic can be seen for many different perspectives for example:</p>
+<ul>
+<li>Bob Dylan was a song writer, singer, performer, book author, and film actor;</li>
+<li>Leonardo da Vinci was a painter, a sculptor, an anatomist, an architect, an engineer, …;</li>
+<li>Love is a book subject, film subject, play subject, poetry subject, …;</li>
+<li>Any city is a location, potentially a tourist destination, and an employer of civil servants.
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/09/15/Freebase介绍/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -602,7 +1959,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/08/10/深度学习debug沉思录/">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/07/Focal-Loss/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dinosaur">
@@ -622,7 +1979,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2020/08/10/深度学习debug沉思录/" class="post-title-link" itemprop="url">深度学习debug沉思录</a>
+                <a href="/2020/09/07/Focal-Loss/" class="post-title-link" itemprop="url">Focal Loss</a>
               
             
           </h1>
@@ -649,7 +2006,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-08-10 21:21:43" itemprop="dateModified" datetime="2020-08-10T21:21:43+08:00">2020-08-10</time>
+                <time title="修改时间：2020-09-08 14:44:52" itemprop="dateModified" datetime="2020-09-08T14:44:52+08:00">2020-09-08</time>
               
             
           </span>
@@ -685,8 +2042,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/08/10/深度学习debug沉思录/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/08/10/深度学习debug沉思录/" itemprop="commentCount"></span>
+                <a href="/2020/09/07/Focal-Loss/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/07/Focal-Loss/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -715,12 +2072,41 @@
 
       
         
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>接触深度学习也有一两年了，一直没有将一些实战经验整理一下形成文字。本文打算用来记录一些<strong>在深度学习实践中的调试过程</strong>，记录一些经验之谈。因为目前深度学习业界的理论基础尚且薄弱，很多工程实践中的问题没法用理论解释得很好，这里的只是实践中的一些经验之谈，以供参考以及排错。本文将持续更新。</p>
-<p>需要强调的是，本文的很多单纯只是经验，在尽可能列出参考文献的同时却并无严格理论验证，希望大家见谅。欢迎大家集思广益，共同维护这个经验集，为整个社区贡献微弱力量。
+          <h2 id="1-总述"><a href="#1-总述" class="headerlink" title="1. 总述"></a>1. 总述</h2><p>Focal Loss是由何恺明大神在论文<a href="https://arxiv.org/abs/1708.02002" target="_blank" rel="noopener">Focal Loss for Dense Object Detection</a>中提出的。</p>
+<p>Focal Loss主要是为了解决one-stage目标检测中正负样本比例严重失衡的问题。该损失函数降低了大量负样本在训练中所占的权重，也可以理解为一种困难样本挖掘。</p>
+<h2 id="2-损失函数形式"><a href="#2-损失函数形式" class="headerlink" title="2. 损失函数形式"></a>2. 损失函数形式</h2><p>Focal Loss是在交叉熵损失函数基础上进行的修改，首先回顾二分类交叉熵损失：</p>
+<script type="math/tex; mode=display">
+Loss = - [y\log y^{'} + (1-y) \log (1-y^{'})] = 
+\left\{\begin{aligned}
+-\log y^{'}\quad \quad y=1 \\
+-\log (1-y^{'}) \quad y=0
+\end{aligned}
+\right.</script><p>$y^{‘}$是经过激活函数的输出，介于0-1之间。可见普通的交叉熵对于正样本而言，输出概率越大损失越小。对于负样本而言，输出概率越小则损失越小。此时的损失函数在大量简单样本的迭代过程中收敛比较缓慢而且可能无法优化到最优。那么Focal Loss是怎么改进的呢？</p>
+<script type="math/tex; mode=display">
+Loss_{focal} = 
+\left\{
+\begin{aligned}
+-(1-y^{'})^\gamma \log y^{'}  & \quad & y=1\\
+-y^{'\gamma} \log (1-y^{'}) & \quad & y=0
+\end{aligned}
+\right.</script><p>首先在原有的基础上添加了$(1-y^{‘})$和$y^{‘}$项，可以看作当前样本在损失函数中所占的权重。当$y=1$时，预测结果$y^{‘}$越接近$1$，说明当前样本置信度越高、越容易分类，对应的权重$(1-y^{‘})$就越低。$y=0$时类似。</p>
+<p>而$\gamma$用于控制惩罚力度，$\gamma$越大，惩罚力度越小：</p>
+<p><img src="/images/blog/2020/focalloss.png" alt></p>
+<h2 id="3-补充"><a href="#3-补充" class="headerlink" title="3. 补充"></a>3. 补充</h2><p>对于正负样本类别不平衡，可以在上式基础上继续添加平衡因子$\alpha$，形式变为：</p>
+<script type="math/tex; mode=display">
+Loss_{focal} = 
+\left\{
+\begin{aligned}
+-\alpha(1-y^{'})^\gamma \log y^{'} \quad & \quad & y=1\\
+-(1-\alpha)y^{'\gamma} \log (1-y^{'}) & \quad & y=0
+\end{aligned}
+\right.</script><p>在文中负样本比重较大，论文中取$\alpha=0.25$</p>
+<p>在论文中实验发现$\gamma$取$2.0$效果最优</p>
+<p>对于不同的数据集，最优参数不同，可以通过grid-search的方法选择适合自己实验的参数。
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/2020/08/10/深度学习debug沉思录/#more" rel="contents">
+              <a class="btn" href="/2020/09/07/Focal-Loss/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -780,7 +2166,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/07/05/NLP数据增强技术/">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/05/tensorboard显示空白问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dinosaur">
@@ -800,7 +2186,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2020/07/05/NLP数据增强技术/" class="post-title-link" itemprop="url">NLP数据增强技术</a>
+                <a href="/2020/09/05/tensorboard显示空白问题/" class="post-title-link" itemprop="url">tensorboard显示空白问题</a>
               
             
           </h1>
@@ -827,368 +2213,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-07-05 20:48:55" itemprop="dateModified" datetime="2020-07-05T20:48:55+08:00">2020-07-05</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/07/05/NLP数据增强技术/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/07/05/NLP数据增强技术/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>对于CV领域，数据增强技术已经成为一种标准操作被广泛使用，例如旋转、镜像、添加高斯白噪声等。</p>
-<p>但是，对于NLP领域，数据增强技术却不是那么多见，很多CV领域的技术不能直接用于文本数据。</p>
-<p><img src="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/NLP%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%8A%80%E6%9C%AF/CVvsNLP.PNG" alt></p>
-<p>因此，本文对常见的NLP领域数据增强技术进行汇总。
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/07/05/NLP数据增强技术/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/04/20/Normalization神经网络中的正则化/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/04/20/Normalization神经网络中的正则化/" class="post-title-link" itemprop="url">Normalization神经网络中的正则化</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-04-20 17:31:31" itemprop="dateModified" datetime="2020-04-20T17:31:31+08:00">2020-04-20</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/04/20/Normalization神经网络中的正则化/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/20/Normalization神经网络中的正则化/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在神经网络中经常需要用到正则化方法，来加速神经网络的训练以及减少震荡等</p>
-<h2 id="Batch-Normalization"><a href="#Batch-Normalization" class="headerlink" title="Batch Normalization"></a>Batch Normalization</h2><p>对每个batch中同一维度的特征做normalization</p>
-<h2 id="Layer-Normalization"><a href="#Layer-Normalization" class="headerlink" title="Layer Normalization"></a>Layer Normalization</h2><p>针对单个训练样本的所有维度做normalization。之前的BN是纵向规范化，而layer normalization是横向规范化</p>
-<h2 id="Instance-Normalization"><a href="#Instance-Normalization" class="headerlink" title="Instance Normalization"></a>Instance Normalization</h2><p>与BN只有一点不同，BN是作用于一个batch，而IN是作用于单个样本</p>
-<h2 id="Group-Normalization"><a href="#Group-Normalization" class="headerlink" title="Group Normalization"></a>Group Normalization</h2><p>划分区域，然后进行normalization
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/04/20/Normalization神经网络中的正则化/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/03/09/使用CCproxy使实验室服务器联网/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/03/09/使用CCproxy使实验室服务器联网/" class="post-title-link" itemprop="url">使用CCproxy使实验室服务器联网</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-03-09 11:34:22" itemprop="dateModified" datetime="2020-03-09T11:34:22+08:00">2020-03-09</time>
+                <time title="修改时间：2020-09-05 19:49:48" itemprop="dateModified" datetime="2020-09-05T19:49:48+08:00">2020-09-05</time>
               
             
           </span>
@@ -1224,8 +2249,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/03/09/使用CCproxy使实验室服务器联网/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/03/09/使用CCproxy使实验室服务器联网/" itemprop="commentCount"></span>
+                <a href="/2020/09/05/tensorboard显示空白问题/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/05/tensorboard显示空白问题/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1254,940 +2279,25 @@
 
       
         
-          <p>实验室的服务器是不能联网的，但有时需要通过pip, conda命令下载一些包。经过师兄的建议，使用CCproxy软件，用自己的可以联网的windows台式机作为代理，成功的让服务器可以使用conda install 命令了！这里记录一下过程。</p>
-<p>首先，下载并安装CCproxy软件，官网地址为：<a href="http://www.ccproxy.com/" target="_blank" rel="noopener">www.ccproxy.com</a>
+          <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>在服务器上执行pytorch代码训练深度神经网络，用<a href="https://github.com/huggingface/transformers/tree/master/examples/language-modeling" target="_blank" rel="noopener">run_language_modeling.py</a>在<code>bert-base-uncased</code>基础上基于Amazon情感分析语料进行fine-tuning，服务器上版本为：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python==3.6.10</span><br><span class="line">tensorboard==2.1.1</span><br><span class="line">pytorch==1.5.1</span><br></pre></td></tr></table></figure>
+<p>得到结果记录保存在runs文件夹中，在个人电脑上，执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tensorboard --logdir runs</span><br></pre></td></tr></table></figure>
+<p>然后打开本地服务器<a href="http://localhost:6006，结果页面显示空白。" target="_blank" rel="noopener">http://localhost:6006，结果页面显示空白。</a></p>
+<p>在网上查询了相关资料，最后问题定位为tensorboard版本问题，由于tensorboard升级后对某些原有的API不再支持，所以使用pytorch的SummaryWriter旧API写得的记录文件不能直接显示。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>将tensorboard降级为2.0.0版本：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install tensorboard==2.0.0</span><br></pre></td></tr></table></figure>
+<p>再次尝试，看到页面可以正常显示了。</p>
+<p><img src="/images/blog/2020/scalars.PNG" alt></p>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/2020/03/09/使用CCproxy使实验室服务器联网/#more" rel="contents">
+              <a class="btn" href="/2020/09/05/tensorboard显示空白问题/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
           
           <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/03/05/测试MathJax显示数学公式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/03/05/测试MathJax显示数学公式/" class="post-title-link" itemprop="url">测试MathJax显示数学公式</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-03-05 15:59:44" itemprop="dateModified" datetime="2020-03-05T15:59:44+08:00">2020-03-05</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/03/05/测试MathJax显示数学公式/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/03/05/测试MathJax显示数学公式/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <script type="math/tex; mode=display">
-y_t = softmax(W^{(a)}a_t)</script><script type="math/tex; mode=display">
-a_t = GRU([y_{t-1}, q],a_{t-1})</script><script type="math/tex; mode=display">
-o = \sum_ip_{h_i}A\theta_V(v_{h_i})</script><p>是否可以正常显示常用的数学符号？</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2019/11/16/形态还原、中文分词和句法分析Demo/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/11/16/形态还原、中文分词和句法分析Demo/" class="post-title-link" itemprop="url">词形还原、中文分词和句法分析Demo</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-02-29 11:34:08" itemprop="dateModified" datetime="2020-02-29T11:34:08+08:00">2020-02-29</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2019/11/16/形态还原、中文分词和句法分析Demo/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/11/16/形态还原、中文分词和句法分析Demo/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在学校的自然语言处理课程中，需要完成几个小实验，采用传统方法，下面给出解释：</p>
-<h2 id="词形还原"><a href="#词形还原" class="headerlink" title="词形还原"></a>词形还原</h2><p>使用<a href="http://nlp.nju.edu.cn/MT_Lecture/dic_ec.rar" target="_blank" rel="noopener">这个词典</a>，对输入的单词进行词形还原，也可以叫做提取词干</p>
-<p>算法设计如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.输入一个单词</span><br><span class="line">2.词典中含有该词，输出其属性，转4</span><br><span class="line">3.如果含有该词的还原规则，并且词典中含有还原后的词，输出属性；否则，寻找该词的最近邻，输出属性</span><br><span class="line">4.输入中还有单词，转1；否则结束</span><br></pre></td></tr></table></figure>
-<p>具体实现可以参照以下规则，采用正则表达式进行匹配：</p>
-<p><img src="https://raw.githubusercontent.com/Hao-Kailong/BlogImage/master/nlp_traditional/形态还原规则.PNG" alt></p>
-<p>更加具体详细的规则可以参考：<a href="https://wenku.baidu.com/view/4eec6eca326c1eb91a37f111f18583d048640f76.html" target="_blank" rel="noopener">百度文库-英语单词的形态变化</a>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/11/16/形态还原、中文分词和句法分析Demo/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2019/10/22/Hexo-Blog-迁移/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/10/22/Hexo-Blog-迁移/" class="post-title-link" itemprop="url">Hexo Blog 迁移</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-02-29 11:29:56" itemprop="dateModified" datetime="2020-02-29T11:29:56+08:00">2020-02-29</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2019/10/22/Hexo-Blog-迁移/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/22/Hexo-Blog-迁移/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="博客迁移"><a href="#博客迁移" class="headerlink" title="博客迁移"></a>博客迁移</h2><p>之前的笔记本不用了，但是hexo博客内容还在上面，要把它迁移到新的主机上来~</p>
-<ol>
-<li>拷贝原文件夹中以下几个目录：</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">_config.yml</span><br><span class="line">package.json</span><br><span class="line">scaffolds/</span><br><span class="line">sources/</span><br><span class="line">themes/</span><br></pre></td></tr></table></figure>
-<ol>
-<li><p>在新主机上安装hexo，可参考<a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">hexo官方文档</a></p>
-</li>
-<li><p>进入hexo目录，执行命令：</p>
-</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br><span class="line">npm install hexo-deployer-git --save</span><br><span class="line">npm install hexo-generator-feed --save</span><br><span class="line">npm install hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/10/22/Hexo-Blog-迁移/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2019/09/05/利用Scrapy爬取百度百科，互动百科/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/09/05/利用Scrapy爬取百度百科，互动百科/" class="post-title-link" itemprop="url">利用Scrapy爬取百度百科，互动百科</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-02-29 11:33:03" itemprop="dateModified" datetime="2020-02-29T11:33:03+08:00">2020-02-29</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Data-Mining/" itemprop="url" rel="index"><span itemprop="name">Data Mining</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2019/09/05/利用Scrapy爬取百度百科，互动百科/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/09/05/利用Scrapy爬取百度百科，互动百科/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="项目简介"><a href="#项目简介" class="headerlink" title="项目简介"></a>项目简介</h2><p>中文百科数据中蕴含了大量的知识，利用Scrapy爬取百科页面，为接下来的信息抽取等打下基础。</p>
-<p>具体实践采用了Scrapy框架，这可能是python中最成熟的爬虫框架，利用代理ip池等技术，爬取全部的百科页面。</p>
-<h2 id="Scrapy架构"><a href="#Scrapy架构" class="headerlink" title="Scrapy架构"></a>Scrapy架构</h2><p>scrapy整体的结构如下图所示：</p>
-<p><img src="https://raw.githubusercontent.com/Hao-Kailong/BlogImage/master/Scrapy架构.jpg" alt></p>
-<p>由Spider发送Request请求，Scheduler进行请求调度，Downloader执行具体的下载任务，并经过Pipeline写入数据库或磁盘等。用户可以自定义下载器中间件，比如在中间件中更换代理ip等，具有很大的简便性和灵活性。
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/09/05/利用Scrapy爬取百度百科，互动百科/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2019/06/10/Relation-Inductive-Biases-Deep-Learning-and-Graph-Networks/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/10/Relation-Inductive-Biases-Deep-Learning-and-Graph-Networks/" class="post-title-link" itemprop="url">Relation Inductive Biases, Deep Learning, and Graph Networks</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-02-29 11:31:12" itemprop="dateModified" datetime="2020-02-29T11:31:12+08:00">2020-02-29</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/GNN/" itemprop="url" rel="index"><span itemprop="name">GNN</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2019/06/10/Relation-Inductive-Biases-Deep-Learning-and-Graph-Networks/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/10/Relation-Inductive-Biases-Deep-Learning-and-Graph-Networks/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>这是论文 <a href="https://arxiv.org/pdf/1806.01261.pdf" target="_blank" rel="noopener">Relation Inductive Biases, Deep Learning, and Graph Networks</a> 的阅读笔记。</p>
-<p>Pearl指出当前的深度学习无法解决推理的问题，所做的不过是拟合曲线罢了。</p>
-<p>机器学习主要有三个主要学派：</p>
-<ul>
-<li><p>符号主义 (Symbolicism)</p>
-<ul>
-<li><p>符号主义的起源，注重研究知识表达和逻辑推理。经过几十年的研究，目前这一学派的主要成果，一个是贝叶斯因果网络，另一个是知识图谱。</p>
-<p>贝叶斯因果网络的旗手是 Judea Pearl 教授，2011年的图灵奖获得者。但是据说 2017年 NIPS 学术会议上，老爷子演讲时，听众寥寥。2018年，老爷子出版了一本新书，“The Book of Why”，为因果网络辩护，同时批判深度学习缺乏严谨的逻辑推理过程。而知识图谱主要由搜索引擎公司，包括谷歌、微软、百度推动，目标是把搜索引擎，由关键词匹配，推进到语义匹配。</p>
-</li>
-</ul>
-</li>
-<li><p>连接主义 (Connectionism)</p>
-<ul>
-<li>连接主义的起源是仿生学，用数学模型来模仿神经元。Marvin Minsky 教授因为对神经元研究的推动，获得了1969年图灵奖。把大量神经元拼装在一起，就形成了深度学习模型，深度学习的旗手是 Geoffrey Hinton 教授。深度学习模型最遭人诟病的缺陷，是不可解释。 </li>
-</ul>
-</li>
-<li><p>行为主义 (Actionism)</p>
-<ul>
-<li>行为主义把控制论引入机器学习，最著名的成果是强化学习。强化学习的旗手是 Richard Sutton 教授。近年来Google DeepMind 研究员，把传统强化学习，与深度学习融合，实现了 AlphaGo，战胜当今世界所有人类围棋高手。 </li>
-</ul>
-</li>
-</ul>
-<p>这篇论文，提议把传统的贝叶斯因果网络和知识图谱，与深度强化学习融合，并梳理了与这个主题相关的研究进展。 </p>
-<h2 id="论文阅读"><a href="#论文阅读" class="headerlink" title="论文阅读"></a>论文阅读</h2><h3 id="Relation-Inductive-Biases"><a href="#Relation-Inductive-Biases" class="headerlink" title="Relation Inductive Biases"></a>Relation Inductive Biases</h3><p>An <em>inductive bias</em> allows a learning algorithm to prioritize one solution (or interpretation) over another, independent of the observed data.</p>
-<p>全连接层几乎没有归纳偏向，所有的输入单元直接影响到输出单元，并且独立。</p>
-<p>卷积层的归纳偏向：局部性和Translation Invariance。Translation Invariance表现为对不同的局部采用同样的函数。</p>
-<p>循环层的归纳偏向：局部性和Temporal Invariance，即时间不变性，对不同的step采用相同的函数。</p>
-
-          
         
       
     </div>
@@ -2231,7 +2341,7 @@ o = \sum_ip_{h_i}A\theta_V(v_{h_i})</script><p>是否可以正常显示常用的
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/14/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/16/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/14/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/page/16/">16</a><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/16/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2275,7 +2385,7 @@ o = \sum_ip_{h_i}A\theta_V(v_{h_i})</script><p>是否可以正常显示常用的
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">155</span>
+                    <span class="site-state-item-count">167</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2330,7 +2440,11 @@ o = \sum_ip_{h_i}A\theta_V(v_{h_i})</script><p>是否可以正常显示常用的
                     
                       
                     
-                    <span class="site-state-item-count">19</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -3125,7 +3239,63 @@ o = \sum_ip_{h_i}A\theta_V(v_{h_i})</script><p>是否可以正常显示常用的
                     
                       
                     
-                    <span class="site-state-item-count">389</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">417</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -3667,15 +3837,15 @@ o = \sum_ip_{h_i}A\theta_V(v_{h_i})</script><p>是否可以正常显示常用的
   
     
       
+    
+      
+    
+      
+    
+      
+    
+      
         
-      
-    
-      
-    
-      
-    
-      
-    
       
     
       

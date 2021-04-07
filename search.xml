@@ -1,6 +1,315 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>C++中头文件<bits/stdc++.h></title>
+    <url>/2021/04/06/C-%E4%B8%AD%E5%A4%B4%E6%96%87%E4%BB%B6-bits-stdc-h/</url>
+    <content><![CDATA[<p>在刷题的过程中，发现有<code>&lt;bits/stdc++.h&gt;</code>这样一个头文件。</p>
+<p>发现它是部分C++中支持的一个几乎万能的头文件，包含所有的可用到的C++库函数，如<istream>/<ostream>/<stack>/<queue>.</queue></stack></ostream></istream></p>
+<p>该头文件的详细内容如下</p>
+<a id="more"></a>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// C++ includes used for precompiling -*- C++ -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Copyright (C) 2003-2013 Free Software Foundation, Inc.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// This file is part of the GNU ISO C++ Library.  This library is free</span></span><br><span class="line"><span class="comment">// software; you can redistribute it and/or modify it under the</span></span><br><span class="line"><span class="comment">// terms of the GNU General Public License as published by the</span></span><br><span class="line"><span class="comment">// Free Software Foundation; either version 3, or (at your option)</span></span><br><span class="line"><span class="comment">// any later version.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// This library is distributed in the hope that it will be useful,</span></span><br><span class="line"><span class="comment">// but WITHOUT ANY WARRANTY; without even the implied warranty of</span></span><br><span class="line"><span class="comment">// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></span><br><span class="line"><span class="comment">// GNU General Public License for more details.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Under Section 7 of GPL version 3, you are granted additional</span></span><br><span class="line"><span class="comment">// permissions described in the GCC Runtime Library Exception, version</span></span><br><span class="line"><span class="comment">// 3.1, as published by the Free Software Foundation.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// You should have received a copy of the GNU General Public License and</span></span><br><span class="line"><span class="comment">// a copy of the GCC Runtime Library Exception along with this program;</span></span><br><span class="line"><span class="comment">// see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see</span></span><br><span class="line"><span class="comment">// &lt;Licenses - GNU Project - Free Software Foundation&gt;.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/** @file stdc++.h</span></span><br><span class="line"><span class="comment"> *  This is an implementation file for a precompiled header.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 17.4.1.2 Headers</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// C</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _GLIBCXX_NO_ASSERT</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cassert&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cctype&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cerrno&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cfloat&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ciso646&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;climits&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;clocale&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;csetjmp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;csignal&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdarg&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstddef&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctime&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> __cplusplus &gt;= 201103L</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ccomplex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cfenv&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cinttypes&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdalign&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdbool&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdint&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctgmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cwchar&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cwctype&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// C++</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bitset&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;complex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;deque&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;exception&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iomanip&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ios&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iosfwd&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;istream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iterator&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;limits&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;list&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;locale&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;new&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;numeric&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;set&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdexcept&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;streambuf&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;typeinfo&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;utility&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;valarray&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> __cplusplus &gt;= 201103L</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;array&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;atomic&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;chrono&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;condition_variable&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;forward_list&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;future&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;initializer_list&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;mutex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;random&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ratio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;regex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;scoped_allocator&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;system_error&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;tuple&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;typeindex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;type_traits&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unordered_map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unordered_set&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<h1 id="bits-stdc-h的缺点"><a href="#bits-stdc-h的缺点" class="headerlink" title="bits/stdc++.h的缺点"></a><code>bits/stdc++.h</code>的缺点</h1><ul>
+<li>bits/stdc++.h 不是GNU C++库的标准头文件，所以如果你在一些编译器（除了GCC）上编译你的代码，可能会失败，比如MSVC没有这个头文件。</li>
+<li>使用它会包含很多不必要的东西，并且会增加编译时间</li>
+<li>这个头文件不是C++标准的一部分，所以是不可移植的，应该尽量避免。</li>
+<li>尽管标准中有一些通用的头文件，但还是应该避免使用它来代替特定的头文件，因为编译器在每次编译转换单元时都实际地读取并解析每个包含的头文件(包括递归包含的头文件)。</li>
+</ul>
+<h1 id="bits-stdc-h的优点"><a href="#bits-stdc-h的优点" class="headerlink" title="bits/stdc++.h的优点"></a><code>bits/stdc++.h</code>的优点</h1><ul>
+<li>在比赛中,使用这个文件是一个好主意,当你想减少时间浪费在做选择的时候;特别是当你的排名对时间很敏感的时候。</li>
+<li>这还减少了编写所有必要头文件的所有杂务。</li>
+<li>你不必为使用的每个函数都记住GNU c++的所有STL。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>笔试经验总结</title>
+    <url>/2021/04/04/%E7%AC%94%E8%AF%95%E7%BB%8F%E9%AA%8C%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p>已经有过几次笔试的经验了，也经历了不少的失败和挫折，做一个总结：</p>
+<ol>
+<li>ACM格式比LeetCode要难，因为要自己处理输入输出，需要保证处理的正确而且速度快；另外，需要自己考虑到所有的corner case。<strong>在LeetCode上会提示测试通不过的样例，不要看！</strong>这是一个很不好的习惯，会形成依赖。要在脑海中自己把问题考虑周全。</li>
+<li>要先把题目看一遍，<strong>如果某个题短时间内不能有一个</strong><font color="orange"><strong>清晰直接</strong></font><strong>的思路，多半是自己搞错了</strong>。不要浪费时间！</li>
+<li>要熟练掌握C++中的STL和常用函数。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Others</category>
+        <category>Interview</category>
+      </categories>
+      <tags>
+        <tag>ACM</tag>
+        <tag>OJ</tag>
+        <tag>LeetCode</tag>
+        <tag>Interview</tag>
+        <tag>春招</tag>
+        <tag>笔试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>int long 和 long long 的区别</title>
+    <url>/2021/04/03/int-long-%E5%92%8C-long-long-%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><h3 id="int"><a href="#int" class="headerlink" title="int"></a>int</h3><p>(4个字节，32位)</p>
+<p>unsigned int: 0 ~ 4294967295</p>
+<p>int: -2147483648 ~ 2147483647</p>
+<h3 id="int32"><a href="#int32" class="headerlink" title="_int32"></a>_int32</h3><p>(4个字节，32位)<br>unsigned _int32: 0～4294967295<br>_int32: -2147483648 ~ 2147483647</p>
+<h3 id="long"><a href="#long" class="headerlink" title="long"></a>long</h3><p>(4个字节，32位)<br>unsigned long: 0～4294967295<br>long: -2147483648～2147483647</p>
+<h3 id="long-long"><a href="#long-long" class="headerlink" title="long long"></a>long long</h3><p>(8个字节，64位)<br>unsigned long long：0~1844674407370955161<br>long long：-9223372036854775808~9223372036854775807</p>
+<a id="more"></a>
+<h3 id="int64"><a href="#int64" class="headerlink" title="_int64"></a>_int64</h3><p>(8个字节，64位)<br>unsigned _int64：0~18446744073709551615<br>_int64：-9223372036854775808~9223372036854775807</p>
+<h2 id="为什么有long和long-long"><a href="#为什么有long和long-long" class="headerlink" title="为什么有long和long long?"></a>为什么有long和long long?</h2><ul>
+<li>早期的操作系统是16位系统</li>
+</ul>
+<p>int用两个字节表示，范围是-32768 ~ 32767</p>
+<p>long用四个字节表示，范围是-2147483648 ~ 2147483647</p>
+<ul>
+<li>后来发展到32位操作系统</li>
+</ul>
+<p>int用四个字节表示，与long相同</p>
+<ul>
+<li>目前操作系统已经发展到64位操作系统，<strong>但因程序编译工艺的不同，两者表现出不同的差别</strong>:</li>
+</ul>
+<p>32位编译系统：int占四字节，与long相同</p>
+<p>64位编译系统：int占四字节，long占八字节，long数据范围变为：$-2^{63} \sim 2^{63}-1$</p>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>int</tag>
+        <tag>long</tag>
+        <tag>long long</tag>
+        <tag>整型</tag>
+        <tag>integer</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>快速排序</title>
+    <url>/2021/04/01/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<h1 id="一、算法思想"><a href="#一、算法思想" class="headerlink" title="一、算法思想"></a>一、算法思想</h1><p>快速排序的基本思想：通过一趟排序将待排记录分隔成独立的两部分，其中一部分记录的关键字均比另一部分的关键字小，则可分别对这两部分记录继续进行排序，以达到整个序列有序。</p>
+<h1 id="二、实现原理"><a href="#二、实现原理" class="headerlink" title="二、实现原理"></a>二、实现原理</h1><p>2.1、设置两个变量 low、high，<strong>排序开始时：low=0，high=size-1。</strong><br>2.2、整个数组找基准正确位置，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面</p>
+<ul>
+<li>默认数组的第一个数为基准数据，赋值给key，即key=array[low]。</li>
+<li>因为默认数组的第一个数为基准，<strong>所以从后面开始向前搜索（high—）</strong>，找到第一个<strong>小于</strong>key的array[high]，就将 array[high] 赋给 array[low]，即 array[low] = array[high]。（循环条件是 array[high] &gt;= key；结束时 array[high] &lt; key）</li>
+<li>此时从前面开始向后搜索（low++），找到第一个<strong>大于</strong>key的array[low]，就将 array[low] 赋给 array[high]，即 array[high] = array[low]。（循环条件是 array[low] &lt;= key；结束时 array[low] &gt; key）</li>
+<li>循环 2-3 步骤，直到 low=high，该位置就是基准位置。</li>
+<li>把基准数据赋给当前位置。</li>
+</ul>
+<p>2.3、第一趟找到的基准位置，作为下一趟的分界点。<br>2.4、递归调用（recursive）分界点前和分界点后的子数组排序，重复2.2、2.3、2.4的步骤。<br>2.5、最终就会得到排序好的数组。</p>
+<a id="more"></a>
+<h1 id="三、稳定性"><a href="#三、稳定性" class="headerlink" title="三、稳定性"></a>三、稳定性</h1><p>快速排序算法是不稳定的。也就是说，相同大小的元素可能在排序前后位置有所调换。</p>
+<p>可以将排序算法实现为稳定算法，但是可能会带来性能的下降。</p>
+<blockquote>
+<p>参考CSDN博客：</p>
+<p><a href="https://blog.csdn.net/gaoxueyi551/article/details/89413936" target="_blank" rel="noopener">https://blog.csdn.net/gaoxueyi551/article/details/89413936</a></p>
+</blockquote>
+<h1 id="四、C-实现"><a href="#四、C-实现" class="headerlink" title="四、C++实现"></a>四、C++实现</h1><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">quicksort</span><span class="params">(<span class="keyword">int</span>* a, <span class="keyword">int</span> s, <span class="keyword">int</span> e)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (s &gt;= e)  <span class="comment">// 终止条件 </span></span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	<span class="keyword">int</span> pivot = a[s];</span><br><span class="line">	<span class="keyword">int</span> high = e;</span><br><span class="line">	<span class="keyword">int</span> low = s;</span><br><span class="line">	<span class="keyword">while</span> (low &lt; high) &#123;</span><br><span class="line">		<span class="keyword">while</span> (low &lt; high &amp;&amp; a[high] &gt;= pivot) --high;</span><br><span class="line">		a[low] = a[high];</span><br><span class="line">		<span class="keyword">while</span> (low &lt; high &amp;&amp; a[low] &lt;= pivot) ++low;</span><br><span class="line">		a[high] = a[low];	</span><br><span class="line">	&#125;</span><br><span class="line">	a[low] = pivot;  <span class="comment">// low == high</span></span><br><span class="line">	quicksort(a, s, low - <span class="number">1</span>);</span><br><span class="line">	quicksort(a, low + <span class="number">1</span>, e);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> a[<span class="number">10</span>] = &#123;<span class="number">0</span>,<span class="number">5</span>,<span class="number">5</span>,<span class="number">5</span>,<span class="number">5</span>,<span class="number">5</span>,<span class="number">5</span>,<span class="number">9</span>,<span class="number">4</span>,<span class="number">8</span>&#125;;</span><br><span class="line">	quicksort(a, <span class="number">0</span>, <span class="number">10</span>);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;++i)</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; a[i] &lt;&lt; <span class="string">' '</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Others</category>
+        <category>Interview</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>sort</tag>
+        <tag>quick sort</tag>
+        <tag>algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>文件路径分割</title>
+    <url>/2021/03/30/%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84%E5%88%86%E5%89%B2/</url>
+    <content><![CDATA[<p>直接垒代码</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">file_path = <span class="string">"E:/tt/abc.py"</span></span><br><span class="line">filepath,fullflname = os.path.split(file_path)</span><br><span class="line">fname,ext = os.path.splitext(fullflname)</span><br></pre></td></tr></table></figure>
+<p>运行结果:<br>filepath为文件的目录,即E:/tt<br>fullflname为文件名的全名，即abc.py<br>fname为文件的名字,即abc<br>ext为文件的扩展名,即.py</p>
+]]></content>
+      <categories>
+        <category>Others</category>
+        <category>Tool</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>os</tag>
+        <tag>split</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python遍历文件夹获取文件</title>
+    <url>/2021/03/29/python%E9%81%8D%E5%8E%86%E6%96%87%E4%BB%B6%E5%A4%B9%E8%8E%B7%E5%8F%96%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<h2 id="1-手写递归"><a href="#1-手写递归" class="headerlink" title="1. 手写递归"></a>1. 手写递归</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getallfile</span><span class="params">(path)</span>:</span></span><br><span class="line">    allfilelist=os.listdir(path)</span><br><span class="line">    <span class="keyword">for</span> file <span class="keyword">in</span> allfilelist:</span><br><span class="line">        filepath=os.path.join(path,file)</span><br><span class="line">        <span class="comment">#判断是不是文件夹</span></span><br><span class="line">        <span class="keyword">if</span> os.path.isdir(filepath):</span><br><span class="line">            getallfile(filepath)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">        	allfile.append(filepath)</span><br><span class="line">    <span class="keyword">return</span> allfile</span><br></pre></td></tr></table></figure>
+<h2 id="2-os-walk"><a href="#2-os-walk" class="headerlink" title="2. os.walk()"></a>2. os.walk()</h2><p><code>os.walk(top, topdown=True, οnerrοr=None, followlinks=False)</code><br>返回一个3个元素的元祖，(dirpath, dirnames, filenames),<br>dirpath：要列出指定目录的路径<br>dirnames：目录下的所有文件夹<br>filenames：目录下的所有文件</p>
+<a id="more"></a>
+<p>参数一：top – 根目录下的每一个文件夹(包含它自己), 产生3-元组 (dirpath, dirnames, filenames)【文件夹路径, 文件夹名字, 文件名】。</p>
+<p>参数二：topdown –可选，为True或者没有指定, 一个目录的的3-元组将比它的任何子文件夹的3-元组先产生 (目录自上而下)。如果topdown为 False, 一个目录的3-元组将比它的任何子文件夹的3-元组后产生 (目录自下而上)。</p>
+<p>参数三：onerror – 可选，是一个函数; 它调用时有一个参数, 一个OSError实例。报告这错误后，继续walk,或者抛出exception终止walk。</p>
+<p>参数四：followlinks – 设置为 true，则通过软链接访问目录。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getallfiles</span><span class="params">(path)</span>:</span></span><br><span class="line">    allfile=[]</span><br><span class="line">    <span class="keyword">for</span> dirpath,dirnames,filenames <span class="keyword">in</span> os.walk(path):</span><br><span class="line">        <span class="keyword">for</span> dir <span class="keyword">in</span> dirnames:</span><br><span class="line">            allfile.append(os.path.join(dirpath,dir))</span><br><span class="line">        <span class="keyword">for</span> name <span class="keyword">in</span> filenames:</span><br><span class="line">            allfile.append(os.path.join(dirpath, name))</span><br><span class="line">    <span class="keyword">return</span> allfile</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Others</category>
+        <category>Tool</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>walk</tag>
+        <tag>os</tag>
+        <tag>recursive</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>直观理解线性变换</title>
+    <url>/2021/03/29/%E7%9B%B4%E8%A7%82%E7%90%86%E8%A7%A3%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2/</url>
+    <content><![CDATA[<p>直观一点理解，线性变换是一种运动，即让每一个输入向量都<strong>移动</strong>到对应输出向量的位置。</p>
+<p>那么这样，线性变换这个关于向量的移动，就可以直观地变成了坐标系上点的运动。</p>
+<p>简单来说，线性变换可以看作是坐标系“<strong>整体、均匀</strong>”的变换。</p>
+<p>更详细地参见以下这个视频：</p>
+<p><a href="https://www.bilibili.com/video/av6043439" target="_blank" rel="noopener">https://www.bilibili.com/video/av6043439</a></p>
+<p>而<strong>仿射变换 (Affine Transformation)</strong>会改变原点的位置，而<strong>线性变换 (Linear Transformation)</strong>不改变原点的位置。</p>
+]]></content>
+      <categories>
+        <category>Mathmatic</category>
+      </categories>
+      <tags>
+        <tag>Linear Transformation</tag>
+        <tag>Affine Transformation</tag>
+        <tag>线性变换</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SMOTE上采样方法</title>
+    <url>/2021/03/29/SMOTE%E4%B8%8A%E9%87%87%E6%A0%B7%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>SMOTE or <strong>Synthetic Minority Oversampling Technique</strong></p>
+<p>经典的上采样方法是直接将少数类别的样本重复若干次。但是这种方法没有带来新的信息。</p>
+<blockquote>
+<p>SMOTE works by utilizing a <strong>k-nearest neighbor</strong> algorithm to create synthetic data. SMOTE first start by choosing random data from the minority class, then k-nearest neighbors from the data are set. Synthetic data would then made between the random data and the randomly selected k-nearest neighbor. Let me show you the example below.</p>
+</blockquote>
+<h2 id="1-SMOTE使用"><a href="#1-SMOTE使用" class="headerlink" title="1. SMOTE使用"></a>1. SMOTE使用</h2><p>SMOTE适用于特征值为连续值而不是离散值。这样才可以进行插值，产生新的训练数据。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> seaborns <span class="keyword">as</span> sns</span><br><span class="line"><span class="comment">#I read the csv churn data into variable called df. Here I would only use two continuous features CreditScore and Age with the target Exited</span></span><br><span class="line">df_example = df[[<span class="string">'CreditScore'</span>, <span class="string">'Age'</span>, <span class="string">'Exited'</span>]]</span><br><span class="line">sns.scatterplot(data = df, x =<span class="string">'CreditScore'</span>, y = <span class="string">'Age'</span>, hue = <span class="string">'Exited'</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://miro.medium.com/max/487/1*53v1-PbF5uCiSZnLKDJZ5w.png" alt></p>
+<p>然后使用SMOTE上采样，查看采样之后的结果：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install -U imbalanced-learn</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#Importing SMOTE</span></span><br><span class="line"><span class="keyword">from</span> imblearn.over_sampling <span class="keyword">import</span> SMOTE</span><br><span class="line"><span class="comment">#Oversampling the data</span></span><br><span class="line">smote = SMOTE(random_state = <span class="number">101</span>)</span><br><span class="line">X, y = smote.fit_resample(df[[<span class="string">'CreditScore'</span>, <span class="string">'Age'</span>]], df[<span class="string">'Exited'</span>])</span><br><span class="line"><span class="comment">#Creating a new Oversampling Data Frame</span></span><br><span class="line">df_oversampler = pd.DataFrame(X, columns = [<span class="string">'CreditScore'</span>, <span class="string">'Age'</span>])</span><br><span class="line">df_oversampler[<span class="string">'Exited'</span>]</span><br><span class="line">sns.countplot(df_oversampler[<span class="string">'Exited'</span>])</span><br><span class="line">sns.scatterplot(data = df_oversampler, x =<span class="string">'CreditScore'</span>, y = <span class="string">'Age'</span>, hue = <span class="string">'Exited'</span>)</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p><img src="https://miro.medium.com/max/498/1*BVlx5Mo-1L3pbnKCT_N9Nw.png" alt></p>
+<h2 id="2-SMOTE原理"><a href="#2-SMOTE原理" class="headerlink" title="2. SMOTE原理"></a>2. SMOTE原理</h2><p>算法流程：</p>
+<ol>
+<li>对于少数类中每一个样本$x$，以欧氏距离为标准计算它到少数类样本集$S_{min}$所有样本的距离，得到其k近邻。</li>
+<li>根据样本不平衡比例设置一个采样比例以确定采样倍率N，对于每一个少数类样本$x$，从其k近邻中随机选择若干个样本，假设选择的近邻为$x_n$</li>
+<li>对于每一个随机选出的近邻$x_n$，分别与原样本按照如下的公式构建新的样本</li>
+</ol>
+<script type="math/tex; mode=display">
+x_{new} = x + \mathrm{rand}（0,1）*|x - x_n|</script><p>很直白很容易理解，就是用某个样本与其近邻做插值。</p>
+]]></content>
+      <categories>
+        <category>Machine Learning</category>
+      </categories>
+      <tags>
+        <tag>SMOTE</tag>
+        <tag>oversampling</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>通俗理解困惑度(Perplexity)</title>
+    <url>/2021/03/29/%E9%80%9A%E4%BF%97%E7%90%86%E8%A7%A3%E5%9B%B0%E6%83%91%E5%BA%A6-Perplexity/</url>
+    <content><![CDATA[<h2 id="一、语言模型"><a href="#一、语言模型" class="headerlink" title="一、语言模型"></a><strong>一、语言模型</strong></h2><p>本文尽量通俗解释一下困惑度的概念。既然题目中写了是用来评价语言模型的好坏，那么首先来看一下语言模型：</p>
+<p><strong>简单地说，语言模型就是用来计算一个句子的概率的模型，也就是判断一句话是否是人话的概率？</strong></p>
+<p>那么如何计算一个句子的概率呢？给定句子（词语序列）</p>
+<p>$S= W_1, …, W_k$</p>
+<p>它的概率可以表示为：</p>
+<p>$\mathrm{P}(x) = \mathrm{P}(W<em>1, …, W_k) = \mathrm{P}(W_1)\mathrm{P}(W_2|W_1)…\mathrm{P}(W_k|W_1,…,W</em>{k-1})$</p>
+<p>也就是说在给定一句话的前k个词，我们希望<strong>语言模型</strong>可以预测第k+1个词是什么，即给出一个第k+1个词可能出现的概率的分布。</p>
+<p>那么如何学习到一个语言模型呢，这里不详细叙述。</p>
+<h2 id="二、如何评价一个语言模型好坏"><a href="#二、如何评价一个语言模型好坏" class="headerlink" title="二、如何评价一个语言模型好坏"></a><strong>二、如何评价一个语言模型好坏</strong></h2><p>在得到不同的语言模型（一元语言模型、二元语言模型….）的时候，我们如何判断一个语言模型是否好还是坏，一般有两种方法：</p>
+<p>1、一种方法将其应用到具体的问题当中，比如机器翻译、speech recognition、spelling corrector等。然后看这个语言模型在这些任务中的表现（extrinsic evaluation，or in-vivo evaluation）。但是，这种方法一方面难以操作，另一方面可能非常耗时，可能跑一个evaluation需要大量时间，费时难操作。</p>
+<p>2、针对第一种方法的缺点，大家想是否可以根据与语言模型自身的一些特性，来设计一种简单易行，而又行之有效的评测指标。于是，人们就发明了perplexity这个指标。</p>
+<p>困惑度（perplexity）的基本思想是：<strong>给测试集的句子赋予较高概率值的语言模型较好,当语言模型训练完之后，测试集中的句子都是正常的句子，那么训练好的模型就是在测试集上的概率越高越好，</strong>公式如下：</p>
+<p>$\mathrm{PP}(W) = \mathrm{P}(w_1, …,w_N) ^ {-\frac{1}{N}} = \sqrt[N]{\frac{1}{\mathrm{P}(w_1,…,w_N)}} $</p>
+<p>由公式可知，<strong>句子概率越大，语言模型越好，迷惑度越小。</strong></p>
+<a id="more"></a>
+<p>下面是一些 ngra­m 模型经 训练文本后在测试集上的困惑度值：</p>
+<p><img src="https://pic1.zhimg.com/80/v2-da6384d62d15cd61e36d5749ff127670_720w.jpg" alt></p>
+<p>可以看到， trigram 模型经训练后，相比于 unigram 模型，困惑度由955跌减至74，这是十分可观的结果。</p>
+<p>这节的核心就是<strong>句子概率越大，语言模型越好，迷惑度越小。</strong></p>
+]]></content>
+      <categories>
+        <category>Pretrained Language Model</category>
+      </categories>
+      <tags>
+        <tag>PLM</tag>
+        <tag>Perplexity</tag>
+        <tag>困惑度</tag>
+        <tag>Pretrained Language Model</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>点互信息</title>
+    <url>/2021/03/29/%E7%82%B9%E4%BA%92%E4%BF%A1%E6%81%AF/</url>
+    <content><![CDATA[<p>在数据挖掘或者信息检索的相关资料里，经常会用到PMI（Pointwise Mutual Information）这个指标来衡量两个事物之间的相关性。PMI的定义如下：</p>
+<script type="math/tex; mode=display">
+\mathrm{PMI}(x, y) = \log \frac{\mathrm{p}(x,y)}{\mathrm{p}(x)\mathrm{p}(y)}</script><p>这个定义所体现的原理其实是相当直白的。<strong>在概率论中，我们知道，如果x跟y不相关，则 P(x,y) = P(x)P(y)。二者相关性越大，则 P(x,y) 就相比于 P(x)P(y) 越大。</strong>根据条件概率公式，你还可以写成</p>
+<script type="math/tex; mode=display">
+\mathrm{PMI}(x,y) \equiv \log \frac{\mathrm{p}(x,y)}{\mathrm{p}(x)\mathrm{p}(y)} \equiv \log \frac{\mathrm{p}(x|y)}{\mathrm{p}(x)} \equiv \log \frac{\mathrm{p}(y|x)}{\mathrm{p}(y)}</script><p>这里的log来自于信息论的理论，而且 log 1 = 0 ，也恰恰表明P(x,y) = P(x)P(y)，相关性为0，而且log是单调递增函数，所以 “P(x,y) 就相比于 P(x)P(y) 越大，x 和 y 相关性越大” 这一性质也得到保留。</p>
+<p>但是若$\mathrm{p}(x,y) = 0$，那就是你有可能会去计算 log 0 = -inf，即得到一个负无穷。为此人们通常会计算一个PPMI（Positive PMI）来避免出现 -inf，即</p>
+<script type="math/tex; mode=display">
+\mathrm{PPMI}(x, y) =\max( \log \frac{\mathrm{p}(x,y)}{\mathrm{p}(x)\mathrm{p}(y)}, 0)</script>]]></content>
+      <categories>
+        <category>Machine Learning</category>
+      </categories>
+      <tags>
+        <tag>点互信息</tag>
+        <tag>Pointwise Mutual Information</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>生成模型vs判别模型</title>
+    <url>/2021/03/29/%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8Bvs%E5%88%A4%E5%88%AB%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<blockquote>
+<p>版权声明：本文为CSDN博主「CAM-TAY」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a href="https://blog.csdn.net/u010358304/article/details/79748153" target="_blank" rel="noopener">https://blog.csdn.net/u010358304/article/details/79748153</a></p>
+</blockquote>
+<p>从概率分布的角度考虑，对于一堆样本数据，每个均有特征Xi对应分类标记yi。</p>
+<p>生成模型：学习得到联合概率分布P(x,y)，即特征x和标记y共同出现的概率，然后求条件概率分布。能够学习到数据生成的机制。</p>
+<p>判别模型：学习得到条件概率分布P(y|x)，即在特征x出现的情况下标记y出现的概率。</p>
+<p>数据要求：生成模型需要的数据量比较大，能够较好地估计概率密度；而判别模型对数据样本量的要求没有那么多。</p>
+<p><img src="https://img-blog.csdn.net/20180329224547767?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAzNTgzMDQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt></p>
+]]></content>
+      <categories>
+        <category>Machine Learning</category>
+      </categories>
+      <tags>
+        <tag>生成模型</tag>
+        <tag>判别模型</tag>
+        <tag>generative</tag>
+        <tag>discriminative</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>nvidia-smi报错NVIDIA-SMI has failed because it couldn't...</title>
+    <url>/2021/03/29/nvidia-smi%E6%8A%A5%E9%94%99NVIDIA-SMI-has-failed-because-it-couldn-t/</url>
+    <content><![CDATA[<font color="red">NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running.</font>
+
+<p>原因是版本不匹配导致的检测显卡驱动程序异常。</p>
+<h1 id="1-检测版本"><a href="#1-检测版本" class="headerlink" title="1. 检测版本"></a>1. 检测版本</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install dkms</span><br></pre></td></tr></table></figure>
+<p>然后查看对应的驱动版本：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ls /usr/src</span><br></pre></td></tr></table></figure>
+<p>对应结果为目录：<code>nvidia-418.87.01</code></p>
+<h1 id="2-重新生成对应的驱动模块"><a href="#2-重新生成对应的驱动模块" class="headerlink" title="2. 重新生成对应的驱动模块"></a>2. 重新生成对应的驱动模块</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo dkms install -m nvidia -v 418.87.01</span><br></pre></td></tr></table></figure>
+<p>祝大家科研顺利🤭</p>
+]]></content>
+      <categories>
+        <category>Others</category>
+      </categories>
+      <tags>
+        <tag>nvidia</tag>
+        <tag>NVIDIA-SMI</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>unordered_map使用方法</title>
     <url>/2021/03/28/unordered-map%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<blockquote>
@@ -29,8 +338,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>unordered_map</tag>
         <tag>STL</tag>
+        <tag>unordered_map</tag>
       </tags>
   </entry>
   <entry>
@@ -408,8 +717,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>array</tag>
         <tag>dynamic</tag>
+        <tag>array</tag>
       </tags>
   </entry>
   <entry>
@@ -836,9 +1145,9 @@ y = c + \log \sum_{i=1}^n \exp(x_n-c)</script><p>如果设置$c = \max{x_1,…,x
       </categories>
       <tags>
         <tag>Interview</tag>
+        <tag>春招</tag>
         <tag>阿里巴巴</tag>
         <tag>Alibaba</tag>
-        <tag>春招</tag>
       </tags>
   </entry>
   <entry>
@@ -1124,8 +1433,8 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
         <category>Distant Supervision</category>
       </categories>
       <tags>
-        <tag>distant supervision</tag>
         <tag>relation extraction</tag>
+        <tag>distant supervision</tag>
         <tag>batch_size</tag>
         <tag>batch</tag>
         <tag>auc</tag>
@@ -1203,8 +1512,8 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
         <category>Tool</category>
       </categories>
       <tags>
-        <tag>LaTeX</tag>
         <tag>IJCAI</tag>
+        <tag>LaTeX</tag>
       </tags>
   </entry>
   <entry>
@@ -1733,8 +2042,8 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
       </categories>
       <tags>
         <tag>DISTRE</tag>
-        <tag>relation extraction</tag>
         <tag>source code</tag>
+        <tag>relation extraction</tag>
       </tags>
   </entry>
   <entry>
@@ -2469,8 +2778,8 @@ L_I(G,Q) = E_{c \sim P(c), x \sim G(z,c)} [\log  Q(c|x)] + H(c)</script><p>很�
       <tags>
         <tag>Freebase</tag>
         <tag>Relation Extraction</tag>
-        <tag>RE</tag>
         <tag>Distant Supervision</tag>
+        <tag>RE</tag>
         <tag>Entity Type</tag>
         <tag>NER</tag>
         <tag>Relation Aliases</tag>
@@ -3021,8 +3330,8 @@ L_I(G,Q) = E_{c \sim P(c), x \sim G(z,c)} [\log  Q(c|x)] + H(c)</script><p>很�
       </categories>
       <tags>
         <tag>GAN</tag>
-        <tag>RE</tag>
         <tag>Distant Supervision</tag>
+        <tag>RE</tag>
         <tag>DSGAN</tag>
         <tag>noise</tag>
       </tags>
@@ -3712,8 +4021,8 @@ AP = \sum (R_n - R_{n-1})P_n</script><blockquote>
         <tag>NLP</tag>
         <tag>AI</tag>
         <tag>Machine Learning</tag>
-        <tag>CV</tag>
         <tag>Data Mining</tag>
+        <tag>CV</tag>
         <tag>ML</tag>
         <tag>DM</tag>
         <tag>Artificial Intelligence</tag>
@@ -5510,10 +5819,10 @@ f(n-2) + f(n/2) & \quad & n为偶数
         <category>LeetCode</category>
       </categories>
       <tags>
-        <tag>背包问题</tag>
         <tag>DP</tag>
-        <tag>动态规划</tag>
         <tag>Algorithms</tag>
+        <tag>动态规划</tag>
+        <tag>背包问题</tag>
         <tag>Dynamic Programming</tag>
       </tags>
   </entry>
@@ -5735,11 +6044,11 @@ l(y) = \frac{1}{2\gamma} \max(0, 1-ty)^2</script><p>其中通常取$\gamma = 2$<
       </categories>
       <tags>
         <tag>LeetCode</tag>
-        <tag>Algothrim</tag>
-        <tag>背包问题</tag>
-        <tag>素数</tag>
         <tag>DP</tag>
         <tag>动态规划</tag>
+        <tag>背包问题</tag>
+        <tag>Algothrim</tag>
+        <tag>素数</tag>
         <tag>哥德巴赫猜想</tag>
       </tags>
   </entry>
@@ -6418,11 +6727,11 @@ D = \frac{9}{4} \times \frac{1}{2} = \frac{9}{8}</script><p><br></p>
         <category>GAN</category>
       </categories>
       <tags>
-        <tag>GAN</tag>
-        <tag>生成模型</tag>
         <tag>Conditional GAN</tag>
+        <tag>GAN</tag>
         <tag>CGAN</tag>
         <tag>生成对抗网络</tag>
+        <tag>生成模型</tag>
       </tags>
   </entry>
   <entry>
@@ -6502,8 +6811,8 @@ D = \frac{9}{4} \times \frac{1}{2} = \frac{9}{8}</script><p><br></p>
         <tag>GAN</tag>
         <tag>Loss Function</tag>
         <tag>Neural Networks</tag>
-        <tag>Wasserstein Loss</tag>
         <tag>WGAN</tag>
+        <tag>Wasserstein Loss</tag>
         <tag>TensorFlow</tag>
       </tags>
   </entry>
@@ -6527,8 +6836,8 @@ D = \frac{9}{4} \times \frac{1}{2} = \frac{9}{8}</script><p><br></p>
 ]]></content>
       <tags>
         <tag>GAN</tag>
-        <tag>DCGAN</tag>
         <tag>生成模型</tag>
+        <tag>DCGAN</tag>
       </tags>
   </entry>
   <entry>
@@ -6699,8 +7008,8 @@ y_i^{[l]} = \gamma \hat{z}_i ^{[l]} + \beta</script><p><strong>这是普通的�
       </categories>
       <tags>
         <tag>GAN</tag>
-        <tag>生成模型</tag>
         <tag>生成对抗网络</tag>
+        <tag>生成模型</tag>
         <tag>Generative Adversarial Networks</tag>
         <tag>MNIST</tag>
       </tags>

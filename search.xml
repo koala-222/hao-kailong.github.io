@@ -1,6 +1,491 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>剑指offer-丑数</title>
+    <url>/2021/04/11/%E5%89%91%E6%8C%87offer-%E4%B8%91%E6%95%B0/</url>
+    <content><![CDATA[<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">GetUglyNumber_Solution</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (index &lt; <span class="number">7</span>)<span class="keyword">return</span> index;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res(index);</span><br><span class="line">        res[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> t2 = <span class="number">0</span>, t3 = <span class="number">0</span>, t5 = <span class="number">0</span>, i;</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt; index; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            res[i] = min(res[t2] * <span class="number">2</span>, min(res[t3] * <span class="number">3</span>, res[t5] * <span class="number">5</span>));</span><br><span class="line">            <span class="keyword">if</span> (res[i] == res[t2] * <span class="number">2</span>)t2++;</span><br><span class="line">            <span class="keyword">if</span> (res[i] == res[t3] * <span class="number">3</span>)t3++;</span><br><span class="line">            <span class="keyword">if</span> (res[i] == res[t5] * <span class="number">5</span>)t5++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res[index - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>Key Point: <strong>每一个丑数都是由之前的丑数乘二、乘三、乘五得到的</strong>。</p>
+]]></content>
+      <categories>
+        <category>Others</category>
+        <category>Interview</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>LeetCode</tag>
+        <tag>剑指offer</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>形象理解进程与线程的区别</title>
+    <url>/2021/04/10/%E5%BD%A2%E8%B1%A1%E7%90%86%E8%A7%A3%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<blockquote>
+<p>在知乎上看到了一个大佬的答案，感觉很形象：</p>
+<p><a href="https://www.zhihu.com/question/25532384/answer/81152571" target="_blank" rel="noopener">https://www.zhihu.com/question/25532384/answer/81152571</a></p>
+<p><a href="http://biaodianfu.com" target="_blank" rel="noopener">biaodianfu</a>的回答：</p>
+</blockquote>
+<p>看了一遍排在前面的答案，类似”<strong>进程是资源分配的最小单位，线程是CPU调度的最小单位“</strong>这样的回答感觉太抽象，都不太容易让人理解。</p>
+<p>做个简单的比喻：进程=火车，线程=车厢</p>
+<ul>
+<li>线程在进程下行进（单纯的车厢无法运行）</li>
+<li>一个进程可以包含多个线程（一辆火车可以有多个车厢）</li>
+<li>不同进程间数据很难共享（一辆火车上的乘客很难换到另外一辆火车，比如站点换乘）</li>
+<li>同一进程下不同线程间数据很易共享（A车厢换到B车厢很容易）</li>
+<li>进程要比线程消耗更多的计算机资源（采用多列火车相比多个车厢更耗资源）</li>
+<li>进程间不会相互影响，一个线程挂掉将导致整个进程挂掉（一列火车不会影响到另外一列火车，但是如果一列火车上中间的一节车厢着火了，将影响到所有车厢）</li>
+<li>进程可以拓展到多机，线程最多扩展到多核CPU，而不能扩展到多机（不同火车可以开在多个轨道上，同一火车的车厢不能在行进的不同的轨道上）</li>
+<li>进程使用的内存地址可以上锁，即一个线程使用某些共享内存时，其他线程必须等它结束，才能使用这一块内存。（比如火车上的洗手间）－”互斥锁”</li>
+<li>进程使用的内存地址可以限定使用量（比如火车上的餐厅，最多只允许多少人进入，如果满了需要在门口等，等有人出来了才能进去）－“信号量”</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Others</category>
+        <category>Interview</category>
+      </categories>
+      <tags>
+        <tag>进程</tag>
+        <tag>线程</tag>
+        <tag>操作系统</tag>
+        <tag>OS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>百度2022春招面经</title>
+    <url>/2021/04/10/%E7%99%BE%E5%BA%A62022%E6%98%A5%E6%8B%9B%E9%9D%A2%E7%BB%8F/</url>
+    <content><![CDATA[<h1 id="一面"><a href="#一面" class="headerlink" title="一面"></a>一面</h1><ul>
+<li>介绍简历项目</li>
+<li>在项目中遇到了什么困难？</li>
+<li>算法题：有8升、3升、5升的水杯，8升满，其余空，如何得到4升水？<ul>
+<li>8升    3升    5升</li>
+<li>8    0    0</li>
+<li>3    0    5</li>
+<li>3    3    2</li>
+<li>6    0    2</li>
+<li>1    2    5</li>
+<li>1    3    4</li>
+</ul>
+</li>
+</ul>
+<h1 id="二面"><a href="#二面" class="headerlink" title="二面"></a>二面</h1><a id="more"></a>
+<ul>
+<li>给定下述代码，提出存在的问题以及优化方法</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TONUM(x) x - <span class="meta-string">'0'</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">matoi</span><span class="params">(<span class="keyword">char</span> *p)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> res;</span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;<span class="built_in">strlen</span>(p);i++)</span><br><span class="line">	&#123;</span><br><span class="line">		res = res * <span class="number">10</span> + TONUM(p[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>存在的问题：</p>
+<ol>
+<li><code>res</code>没有初始化</li>
+<li>没有<code>#include&lt;string.h&gt;</code></li>
+<li>可能存在<code>int</code>型溢出</li>
+</ol>
+<p>优化：</p>
+<ol>
+<li><code>res</code>初始化为零</li>
+<li><code>#include&lt;string.h&gt;</code></li>
+<li>在<code>res</code>更新前进行溢出判断，是否超出<code>2147483647</code></li>
+<li>前置零可直接跳过，提高效率</li>
+<li><code>n=strlen(p)</code>，避免重复调用</li>
+</ol>
+<ul>
+<li>共享单车如何找到最近的车辆？对问题建模。</li>
+</ul>
+<p>建模为二维坐标，在数据库中按照横纵轴从小到大的顺序排列，然后二分查找。可以分区存储，将各个城市存到不同的表格中，减小搜索空间。</p>
+<ul>
+<li>都知道哪些排序算法？快排简单介绍。</li>
+<li>进程与线程的区别？</li>
+<li>进程间的通信方法？</li>
+</ul>
+<h1 id="三面"><a href="#三面" class="headerlink" title="三面"></a>三面</h1><ul>
+<li>自己的兴趣爱好？</li>
+<li>简历上的论文详细介绍</li>
+<li>实习想要做什么方向？</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>面试官都挺好的，友善轻松的氛围。面试体验不错~希望自己顺利拿到offer~</p>
+]]></content>
+      <categories>
+        <category>Others</category>
+        <category>Interview</category>
+      </categories>
+      <tags>
+        <tag>百度</tag>
+        <tag>Baidu</tag>
+        <tag>interview</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>DivideMix: Learning with Noisy Labels as Semi-supervised Learning</title>
+    <url>/2021/04/09/DivideMix-Learning-with-Noisy-Labels-as-Semi-supervised-Learning/</url>
+    <content><![CDATA[<h1 id="1-任务"><a href="#1-任务" class="headerlink" title="1. 任务"></a>1. 任务</h1><p>提升模型在远程监督数据（含噪音标签的数据）建模中的性能</p>
+<p>远程监督：Distant Supervision，将已有的知识库对应到丰富的非结构化数据中，从而生成大量的训练数据</p>
+<h1 id="2-背景"><a href="#2-背景" class="headerlink" title="2. 背景"></a>2. 背景</h1><p>模型发展：深度神经网络（ DNNs ）结构复杂性，需要更多的数据来拟合</p>
+<p>高质量的标注数据耗时、代价昂贵</p>
+<p>远程监督方法获取数据标签不纯净</p>
+<p>有研究表明，DNNs 可轻易地过拟合噪音标签，导致模型泛化性能差</p>
+<h1 id="3-噪音标签学习研究现状"><a href="#3-噪音标签学习研究现状" class="headerlink" title="3. 噪音标签学习研究现状"></a>3. 噪音标签学习研究现状</h1><p>Learning with Noisy Labels (LNL) 主流方法：损失校正方法</p>
+<ul>
+<li>噪音转移矩阵：利用 DNNs 的预测结果修正。<em>高噪音比</em>时效果差，DNNs 的预测结果受噪音影响大</li>
+</ul>
+<ul>
+<li>Reweight 噪音数据，使其损失占比小。一般认为损失小的为干净样本</li>
+</ul>
+<p>半监督学习（SSL）</p>
+<ul>
+<li>数据：labeled and unlabeled data</li>
+<li>旨在通过利用未标注数据提升模型的性能</li>
+<li>MixMatch：一个框架中统一几种先进SSL方法</li>
+</ul>
+<h1 id="4-DivideMix"><a href="#4-DivideMix" class="headerlink" title="4. DivideMix"></a>4. DivideMix</h1><p><img src="https://pic4.zhimg.com/80/v2-12cf60095f2bbad803c2b60e7437e2bf_720w.jpg" alt></p>
+<a id="more"></a>
+<p><img src="https://pic1.zhimg.com/80/v2-86ae8211b4b26dd847f34c04b034aa1c_720w.jpg" alt></p>
+<p>为了避免在self-traning过程中的<strong>确认偏差</strong>导致的误差累积，同时训练两个网络去过滤彼此的错误：Epoch-level隐式的teaching &amp; Batch-level显式的teaching</p>
+<p><strong>Co-Divide</strong></p>
+<p>DNNs学习干净的数据比噪音数据快，干净数据低损失</p>
+<p>使用交叉熵损失函数来计算每个样本的损失：</p>
+<p>$\mathcal{l} (\theta) = {-\sum<em>{c=1}^{C} y_i^c\log(\mathrm{p}</em>{model}^c(x<em>i;\theta))}</em>{i=1}^N$</p>
+<h2 id="4-1-高斯混合模型"><a href="#4-1-高斯混合模型" class="headerlink" title="4.1. 高斯混合模型"></a>4.1. 高斯混合模型</h2><p><strong>高斯混合模型</strong>（Gaussian Mixture Model ，GMM），由于其在分布锐度上的灵活性较好，能够更好地区分干净和噪音样本，所以本文使用 GMM，<strong>在每个样本的损失分布上动态拟合高斯混合模型</strong>：$wi =p(g|l_i)$ . 通过在$w_i$上设置阈值t，将数据分为干净数据（标注数据）和噪音数据（未标注数据），用于后续 SSL</p>
+<p>A、B网络由于不同的(随机)参数初始化、不同的训练数据划分、不同的(随机)小批序列以及不同的训练目标，使得两个网络保持了一定的离散性，使得两种网络具有不同的过滤不同类型错误的能力，使得模型对噪声的鲁棒性更强</p>
+<h2 id="4-2-非对称噪音置信度惩罚"><a href="#4-2-非对称噪音置信度惩罚" class="headerlink" title="4.2. 非对称噪音置信度惩罚"></a>4.2. 非对称噪音置信度惩罚</h2><p>为了模型的收敛，起始几个epoch会用全部数据训练，即warm-up,对在均匀随机的对称噪音数据是有效的，但是本文讨论的数据噪音是不对（类条件）称的，因此在warm-up的过程中会快速的拟合噪音，产生低熵预测，导致GMM不能有效的区分干净和噪音数据，本文添加一个负熵项惩罚置信预测，使其产生的预测能后产生低熵损失，有利于产生高置信度的标签</p>
+<p>$\mathcal{H} = -\sum<em>c \mathrm{p}</em>{model}^c(x;\theta) \log (\mathrm{p}_{model}^c(x;\theta))$</p>
+<p><img src="https://pic1.zhimg.com/80/v2-674851389a1a8776cda043f2198a95bc_720w.jpg" alt></p>
+<h1 id="5-评价"><a href="#5-评价" class="headerlink" title="5. 评价"></a>5. 评价</h1><blockquote>
+<p>Co-teaching的思路+MixMatch缝合出来的东西。唯一觉得有意思的地方就是问题设定的强制转换。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Machine Learning</category>
+        <category>Noisy Label</category>
+      </categories>
+      <tags>
+        <tag>distant supervision</tag>
+        <tag>noisy label</tag>
+        <tag>deep learning</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>递减栈</title>
+    <url>/2021/04/08/%E9%80%92%E5%87%8F%E6%A0%88/</url>
+    <content><![CDATA[<h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>定义栈的数据结构，请在该类型中实现一个能够得到栈中所含最小元素的min函数（时间复杂度应为O（1））。</p>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; Sdata;</span><br><span class="line">	<span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; Smin;  <span class="comment">// 递减栈，保留当前最小值 </span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">        Sdata.push(value);</span><br><span class="line">        <span class="keyword">if</span> (Smin.empty() || value &lt;= Smin.top())  <span class="comment">// 注意小于等于符号，重复元素 </span></span><br><span class="line">        	Smin.push(value);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!Smin.empty() &amp;&amp; Sdata.top() &lt;= Smin.top())</span><br><span class="line">        	Smin.pop();</span><br><span class="line">        Sdata.pop();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">top</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Sdata.top();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">min</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Smin.top();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>递增栈，递减栈，递减队列在刷题时多次遇到，需要格外注意。</p>
+<p>其实有种DP的感觉在里面，需要领会👓</p>
+]]></content>
+      <categories>
+        <category>Others</category>
+        <category>Interview</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>LeetCode</tag>
+        <tag>剑指offer</tag>
+        <tag>Stack</tag>
+        <tag>栈</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++运算符优先级</title>
+    <url>/2021/04/08/C-%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BC%98%E5%85%88%E7%BA%A7/</url>
+    <content><![CDATA[<p>在使用逻辑和算数运算符时，需要注意运算符的优先级，不然会出现意想不到的错误。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">优先级</th>
+<th style="text-align:center">运算符</th>
+<th style="text-align:center">说明</th>
+<th style="text-align:center">结合性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">::</td>
+<td style="text-align:center">范围解析</td>
+<td style="text-align:center">自左向右</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">++  —</td>
+<td style="text-align:center">后缀自增/后缀自减</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">()</td>
+<td style="text-align:center">括号</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">[]</td>
+<td style="text-align:center">数组下标</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">.</td>
+<td style="text-align:center">成员选择（对象）</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">−&gt;</td>
+<td style="text-align:center">成员选择（指针）</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">++  —</td>
+<td style="text-align:center">前缀自增/前缀自减</td>
+<td style="text-align:center">自右向左</td>
+</tr>
+<tr>
+<td style="text-align:center">+  −</td>
+<td style="text-align:center">加/减</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">!  ~</td>
+<td style="text-align:center">逻辑非/按位取反</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">(type)</td>
+<td style="text-align:center">强制类型转换</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">*</td>
+<td style="text-align:center">取指针指向的值</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">&amp;</td>
+<td style="text-align:center">某某的地址</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">sizeof</td>
+<td style="text-align:center">某某的大小</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">new,new[]</td>
+<td style="text-align:center">动态内存分配/动态数组内存分配</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">delete,delete[]</td>
+<td style="text-align:center">动态内存释放/动态数组内存释放</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">.<em>  -&gt;</em></td>
+<td style="text-align:center">成员对象选择/成员指针选择</td>
+<td style="text-align:center">自左向右</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">*  /   %</td>
+<td style="text-align:center">乘法/除法/取余</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">+  −</td>
+<td style="text-align:center">加号/减号</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center">&lt;&lt;  &gt;&gt;</td>
+<td style="text-align:center">位左移/位右移</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center">&lt;  &lt;=</td>
+<td style="text-align:center">小于/小于等于</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">&gt;  &gt;=</td>
+<td style="text-align:center">大于/大于等于</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">9</td>
+<td style="text-align:center">==  !=</td>
+<td style="text-align:center">等于/不等于</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">10</td>
+<td style="text-align:center">&amp;</td>
+<td style="text-align:center">按位与</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">11</td>
+<td style="text-align:center">^</td>
+<td style="text-align:center">按位异或</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">12</td>
+<td style="text-align:center">\</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">按位或</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">13</td>
+<td style="text-align:center">&amp;&amp;</td>
+<td style="text-align:center">与运算</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">14</td>
+<td style="text-align:center">\</td>
+<td style="text-align:center">\</td>
+<td style="text-align:center"></td>
+<td>或运算</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">15</td>
+<td style="text-align:center">?:</td>
+<td style="text-align:center">三目运算符</td>
+<td style="text-align:center">自右向左</td>
+</tr>
+<tr>
+<td style="text-align:center">16</td>
+<td style="text-align:center">=</td>
+<td style="text-align:center">赋值</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">+=  −=</td>
+<td style="text-align:center">相加后赋值/相减后赋值</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">*=  /=   %=</td>
+<td style="text-align:center">相乘后赋值/相除后赋值/取余后赋值</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">&lt;&lt;=  &gt;&gt;=</td>
+<td style="text-align:center">位左移赋值/位右移赋值</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">&amp;=  ^=  \</td>
+<td style="text-align:center">=</td>
+<td style="text-align:center">位与运算后赋值/位异或运算后赋值/位或运算后赋值</td>
+<td style="text-align:center"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">17</td>
+<td style="text-align:center">throw</td>
+<td style="text-align:center">抛出异常</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">18</td>
+<td style="text-align:center">,</td>
+<td style="text-align:center">逗号</td>
+<td style="text-align:center">自左向右</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>如果记不清楚的话，加一个括号总是没错的！(●’◡’●)</p>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>优先级</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++ STL中的sort()排序稳定吗？</title>
+    <url>/2021/04/08/C-STL%E4%B8%AD%E7%9A%84sort-%E6%8E%92%E5%BA%8F%E7%A8%B3%E5%AE%9A%E5%90%97%EF%BC%9F/</url>
+    <content><![CDATA[<h1 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h1><p><code>sort()</code>排序<strong>当然不是稳定排序</strong>，sort是主要用到了快速排序（平均时间复杂度为O(nlogn)），还结合了插入排序（时间复杂度为O(n2)）和堆排序（时间复杂度为O(nlogn)）。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-8fa032e195365f77fb6b980a4ed71958_720w.jpg" alt></p>
+<a id="more"></a>
+<h1 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h1><p><img src="https://img-blog.csdnimg.cn/20190826224720541.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMTUyMDUy,size_16,color_FFFFFF,t_70" alt></p>
+<p>Effective STL对如何选择排序函数总结的很好：<br>1）若需对vector, string, deque, 或array容器进行全排序，你可选择sort或stable_sort；<br>2）若只需对vector, string, deque, 或array容器中取得top n的元素，部分排序partial_sort是首选.<br>3）若对于vector, string, deque, 或array容器，你需要找到第n个位置的元素或者你需要得到top n且不关系top n中的内部 顺序，nth_element是最 理想的；<br>4）若你需要从标准序列容器或者array中把满足某个条件 或者不满足某个条件的元素分开，你最好使用partition或stable_partition；<br>5）若使用的list容器，你可以直接使用partition和stable_partition算法，你可以使用list::sort代替sort和stable_sort排序。</p>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>sort</tag>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Latex基本表格绘制</title>
+    <url>/2021/04/08/Latex%E5%9F%BA%E6%9C%AC%E8%A1%A8%E6%A0%BC%E7%BB%98%E5%88%B6/</url>
+    <content><![CDATA[<blockquote>
+<p>————————————————<br>版权声明：本文为CSDN博主「派大星爱摸鱼」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a href="https://blog.csdn.net/JueChenYi/article/details/77116011" target="_blank" rel="noopener">https://blog.csdn.net/JueChenYi/article/details/77116011</a></p>
+</blockquote>
+<h1 id="1-基本格式"><a href="#1-基本格式" class="headerlink" title="1. 基本格式"></a>1. 基本格式</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\documentclass&#123;article&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;tabular&#125;&#123;cc&#125;%一个c表示有一列，格式为居中显示(center)</span><br><span class="line">(1,1)&amp;(1,2)\\%第一行第一列和第二列  中间用&amp;连接</span><br><span class="line">(2,1)&amp;(2,2)\\%第二行第一列和第二列  中间用&amp;连接</span><br><span class="line">\end&#123;tabular&#125;</span><br><span class="line"></span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdn.net/20170812124223652?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvSnVlQ2hlbllp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt></p>
+<h1 id="2-添加竖线和横线"><a href="#2-添加竖线和横线" class="headerlink" title="2. 添加竖线和横线"></a>2. 添加竖线和横线</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\documentclass&#123;article&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;tabular&#125;&#123;|c|c|&#125;% 通过添加 | 来表示是否需要绘制竖线</span><br><span class="line">\hline  % 在表格最上方绘制横线</span><br><span class="line">(1,1)&amp;(1,2)\\</span><br><span class="line">\hline  %在第一行和第二行之间绘制横线</span><br><span class="line">(2,1)&amp;(2,2)\\</span><br><span class="line">\hline % 在表格最下方绘制横线</span><br><span class="line">\end&#123;tabular&#125;</span><br><span class="line"></span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdn.net/20170812124527902?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvSnVlQ2hlbllp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt></p>
+<h1 id="3-设置每一列的单元格格式"><a href="#3-设置每一列的单元格格式" class="headerlink" title="3. 设置每一列的单元格格式"></a>3. 设置每一列的单元格格式</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\documentclass&#123;article&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;tabular&#125;&#123;|l|c|r|&#125; %l(left)居左显示 r(right)居右显示 c居中显示</span><br><span class="line">\hline </span><br><span class="line">Name&amp;Steve&amp;Bill\\</span><br><span class="line">\hline  </span><br><span class="line">Matlab&amp;Mathmatica&amp;Maple\\</span><br><span class="line">\hline </span><br><span class="line">\end&#123;tabular&#125;</span><br><span class="line"></span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdn.net/20170812125307589?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvSnVlQ2hlbllp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt></p>
+<a id="more"></a>
+<h1 id="4-常见的三线表"><a href="#4-常见的三线表" class="headerlink" title="4. 常见的三线表"></a>4. 常见的三线表</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\documentclass[UTF8]&#123;ctexart&#125;</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;tabular&#125;&#123;ccc&#125;</span><br><span class="line">\hline</span><br><span class="line">姓名&amp; 学号&amp; 性别\\</span><br><span class="line">\hline</span><br><span class="line">Steve Jobs&amp; 001&amp; Male\\</span><br><span class="line">Bill Gates&amp; 002&amp; Female\\</span><br><span class="line">\hline</span><br><span class="line">\end&#123;tabular&#125;</span><br><span class="line"></span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdn.net/20170812125712341?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvSnVlQ2hlbllp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt></p>
+<p>通常来说，我们会希望表格的第一根线和最后一根线比表格中的横线更粗一些。</p>
+<p>booktabs 宏包为我们提供了这个功能，加载 booktabs 宏包之后可以使用 \toprule 和 \bottomrule 命令分别画出表格头和表格底的粗横线，而用 \midrule 画出表格中的横线。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\documentclass[UTF8]&#123;ctexart&#125;</span><br><span class="line">\usepackage&#123;booktabs&#125; %需要加载宏包&#123;booktabs&#125;</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;tabular&#125;&#123;ccc&#125;</span><br><span class="line">\toprule  %添加表格头部粗线</span><br><span class="line">姓名&amp; 学号&amp; 性别\\</span><br><span class="line">\midrule  %添加表格中横线</span><br><span class="line">Steve Jobs&amp; 001&amp; Male\\</span><br><span class="line">Bill Gates&amp; 002&amp; Female\\</span><br><span class="line">\bottomrule %添加表格底部粗线</span><br><span class="line">\end&#123;tabular&#125;</span><br><span class="line"></span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdn.net/20170812130235218?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvSnVlQ2hlbllp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt></p>
+<h1 id="5-table环境"><a href="#5-table环境" class="headerlink" title="5. table环境"></a>5. table环境</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\documentclass[UTF8]&#123;ctexart&#125;</span><br><span class="line">\usepackage&#123;booktabs&#125;</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;table&#125;[!htbp]</span><br><span class="line">\centering</span><br><span class="line">\caption&#123;这是一张三线表&#125;\label&#123;tab:aStrangeTable&#125;%添加标题 设置标签</span><br><span class="line">\begin&#123;tabular&#125;&#123;ccc&#125;</span><br><span class="line">\toprule</span><br><span class="line">姓名&amp; 学号&amp; 性别\\</span><br><span class="line">\midrule</span><br><span class="line">Steve Jobs&amp; 001&amp; Male\\</span><br><span class="line">Bill Gates&amp; 002&amp; Female\\</span><br><span class="line">\bottomrule</span><br><span class="line">\end&#123;tabular&#125;</span><br><span class="line">%\caption&#123;这是一张三线表&#125;\label&#123;tab:aStrangeTable&#125;  标题放在这里也是可以的</span><br><span class="line">\end&#123;table&#125;</span><br><span class="line"></span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p>{table}有若干可选参数 [!htbp]<br><code>h</code>代表here,将表格排在当前文字位置<br><code>t</code> 表示将表格放在下一页的 top (页首)<br><code>b</code> 表示将表格放在当前页的 bottom (底部)<br><code>!</code>表示忽略美观因素，尽可能按照参数指定的方式来处理表格浮动位置。<br>表格将会按照所给参数，依次尝试按照每个参数进行排版，当无法排版时，将会按照下一个参数</p>
+<h1 id="6-单元格合并"><a href="#6-单元格合并" class="headerlink" title="6. 单元格合并"></a>6. 单元格合并</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\documentclass[UTF8]&#123;ctexart&#125;</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;table&#125;[!htbp]</span><br><span class="line">\centering</span><br><span class="line">\begin&#123;tabular&#125;&#123;|c|c|c|&#125;</span><br><span class="line">\hline</span><br><span class="line">\multicolumn&#123;3&#125;&#123;|c|&#125;&#123;学生信息&#125;\\ % 用\multicolumn&#123;3&#125;表示横向合并三列 </span><br><span class="line">                        % |c|表示居中并且单元格两侧添加竖线 最后是文本</span><br><span class="line">\hline</span><br><span class="line">姓名&amp;学号&amp;性别\\</span><br><span class="line">\hline</span><br><span class="line">Jack&amp; 001&amp; Male\\</span><br><span class="line">\hline</span><br><span class="line">Angela&amp; 002&amp; Female\\</span><br><span class="line">\hline</span><br><span class="line">\end&#123;tabular&#125;</span><br><span class="line">\caption&#123;这是一张三线表&#125;</span><br><span class="line">\end&#123;table&#125;</span><br><span class="line"></span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdn.net/20170812134011249?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvSnVlQ2hlbllp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\documentclass[UTF8]&#123;ctexart&#125;</span><br><span class="line">\usepackage&#123;multirow&#125;</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;table&#125;[!htbp]</span><br><span class="line">\centering</span><br><span class="line">\begin&#123;tabular&#125;&#123;|c|c|c|c|c|c|c|&#125; %表格7列 全部居中显示</span><br><span class="line">\hline</span><br><span class="line">\multicolumn&#123;7&#125;&#123;|c|&#125;&#123;事件&#125;\\  %横向合并7列单元格  两侧添加竖线</span><br><span class="line">\hline</span><br><span class="line">\multirow&#123;4&#125;*&#123;策略&#125;&amp;50&amp;0&amp;100&amp;200&amp;300&amp;300\\  %纵向合并4行单元格 </span><br><span class="line">\cline&#123;2-7&#125;  %为第二列到第七列添加横线</span><br><span class="line">&amp;100&amp;100&amp;0&amp;100&amp;200&amp;200\\</span><br><span class="line">\cline&#123;2-7&#125;</span><br><span class="line">&amp;150&amp;200&amp;100&amp;0&amp;100&amp;200\\</span><br><span class="line">\cline&#123;2-7&#125;</span><br><span class="line">&amp;200&amp;300&amp;200&amp;100&amp;0&amp;300\\</span><br><span class="line">\hline</span><br><span class="line">\end&#123;tabular&#125;</span><br><span class="line">\end&#123;table&#125;</span><br><span class="line"></span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdn.net/20170812134954627?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvSnVlQ2hlbllp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt></p>
+<p>横向合并和纵向合并可以嵌套，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\documentclass[UTF8]&#123;ctexart&#125;</span><br><span class="line">\usepackage&#123;multirow&#125;</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;table&#125;[!htbp]</span><br><span class="line">\centering</span><br><span class="line">\begin&#123;tabular&#125;&#123;|c|c|c|c|c|c|c|&#125;</span><br><span class="line">\hline</span><br><span class="line"></span><br><span class="line">\multicolumn&#123;2&#125;&#123;|c|&#125;&#123; \multirow&#123;2&#125;*&#123;$S_i$&#125; &#125;&amp; \multicolumn&#123;4&#125;&#123;c|&#125;&#123;事件&#125; &amp;\multirow&#123;2&#125;*&#123;max&#125;\\</span><br><span class="line">\cline&#123;3-6&#125;</span><br><span class="line">\multicolumn&#123;2&#125;&#123;|c|&#125;&#123;&#125;&amp;50&amp;100&amp;150&amp;200&amp;\\</span><br><span class="line">\hline</span><br><span class="line">\multirow&#123;4&#125;*&#123;策略&#125;&amp;50&amp;0&amp;100&amp;200&amp;300&amp;300\\</span><br><span class="line">\cline&#123;2-7&#125;</span><br><span class="line">&amp;100&amp;100&amp;0&amp;100&amp;200&amp;200\\</span><br><span class="line">\cline&#123;2-7&#125;</span><br><span class="line">&amp;150&amp;200&amp;100&amp;0&amp;100&amp;200\\</span><br><span class="line">\cline&#123;2-7&#125;</span><br><span class="line">&amp;200&amp;300&amp;200&amp;100&amp;0&amp;300\\</span><br><span class="line">\hline</span><br><span class="line">\end&#123;tabular&#125;</span><br><span class="line">\end&#123;table&#125;</span><br><span class="line"></span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdn.net/20170812140522713?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvSnVlQ2hlbllp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt></p>
+<h1 id="7-斜线表头"><a href="#7-斜线表头" class="headerlink" title="7. 斜线表头"></a>7. 斜线表头</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\documentclass&#123;UTF8&#125;&#123;ctexart&#125;</span><br><span class="line">\usepackage&#123;diagbox&#125; % 加载宏包</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;table&#125;[!htbp]</span><br><span class="line">\centering</span><br><span class="line">\begin&#123;tabular&#125;&#123;|c|c|c|c|&#125;</span><br><span class="line">\hline</span><br><span class="line">\diagbox&#123;甲&#125;&#123;$\alpha_&#123;i,j&#125;$&#125;&#123;乙&#125;&amp;$\beta_1$&amp;$\beta_2$&amp;$\beta_3$\\ %添加斜线表头</span><br><span class="line">\hline</span><br><span class="line">$\alpha_1$&amp;-4&amp;0&amp;-8\\</span><br><span class="line">\hline</span><br><span class="line">$\alpha_2$&amp;3&amp;2&amp;4\\</span><br><span class="line">\hline</span><br><span class="line">$\alpha_3$&amp;16&amp;1&amp;-9\\</span><br><span class="line">\hline</span><br><span class="line">$\alpha_4$&amp;-1&amp;1&amp;7\\</span><br><span class="line">\hline</span><br><span class="line">\end&#123;tabular&#125;</span><br><span class="line">\end&#123;table&#125;</span><br><span class="line"></span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdn.net/20170812141817940?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvSnVlQ2hlbllp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt></p>
+<h1 id="8-其他"><a href="#8-其他" class="headerlink" title="8. 其他"></a>8. 其他</h1><p>对于多行多列嵌套斜线表头的情况，不加参数会出现斜线不处于对角线位置的情况</p>
+<p><img src="https://img-blog.csdnimg.cn/20181123122742980.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0p1ZUNoZW5ZaQ==,size_16,color_FFFFFF,t_70" alt></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\documentclass&#123;ctexart&#125;</span><br><span class="line">\usepackage&#123;multirow&#125;</span><br><span class="line">\usepackage&#123;diagbox&#125; % 加载宏包</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;table&#125;[!htbp]</span><br><span class="line">  \centering</span><br><span class="line">  \begin&#123;tabular&#125;&#123;|c|c|c|c|c|c|c|&#125;</span><br><span class="line">   \hline</span><br><span class="line">   \multicolumn&#123;2&#125;&#123;|c|&#125;&#123;\multirow&#123;2&#125;*&#123;\diagbox[innerwidth=2cm]&#123;$S_i$&#125;&#123;$\lambda_i$&#125;&#125;&#125;&amp; \multicolumn&#123;4&#125;&#123;c|&#125;&#123;事件&#125; &amp;\multirow&#123;2&#125;*&#123;max&#125;\\</span><br><span class="line">   \cline&#123;3-6&#125;</span><br><span class="line">   \multicolumn&#123;2&#125;&#123;|c|&#125;&#123;&#125;&amp;50&amp;100&amp;150&amp;200&amp;\\</span><br><span class="line">   \hline</span><br><span class="line">   \multirow&#123;4&#125;*&#123;策略&#125;&amp;50&amp;0&amp;100&amp;200&amp;300&amp;300\\</span><br><span class="line">   \cline&#123;2-7&#125;</span><br><span class="line">   &amp;100&amp;100&amp;0&amp;100&amp;200&amp;200\\</span><br><span class="line">   \cline&#123;2-7&#125;</span><br><span class="line">   &amp;150&amp;200&amp;100&amp;0&amp;100&amp;200\\</span><br><span class="line">   \cline&#123;2-7&#125;</span><br><span class="line">   &amp;200&amp;300&amp;200&amp;100&amp;0&amp;300\\</span><br><span class="line">   \hline</span><br><span class="line">  \end&#123;tabular&#125;</span><br><span class="line"> \end&#123;table&#125;</span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20181123123351647.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0p1ZUNoZW5ZaQ==,size_16,color_FFFFFF,t_70" alt></p>
+]]></content>
+      <categories>
+        <category>Others</category>
+        <category>Tool</category>
+      </categories>
+      <tags>
+        <tag>Latex</tag>
+        <tag>table</tag>
+        <tag>overleaf</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C++中头文件<bits/stdc++.h></title>
     <url>/2021/04/06/C-%E4%B8%AD%E5%A4%B4%E6%96%87%E4%BB%B6-bits-stdc-h/</url>
     <content><![CDATA[<p>在刷题的过程中，发现有<code>&lt;bits/stdc++.h&gt;</code>这样一个头文件。</p>
@@ -4021,8 +4506,8 @@ AP = \sum (R_n - R_{n-1})P_n</script><blockquote>
         <tag>NLP</tag>
         <tag>AI</tag>
         <tag>Machine Learning</tag>
-        <tag>Data Mining</tag>
         <tag>CV</tag>
+        <tag>Data Mining</tag>
         <tag>ML</tag>
         <tag>DM</tag>
         <tag>Artificial Intelligence</tag>
@@ -5819,10 +6304,10 @@ f(n-2) + f(n/2) & \quad & n为偶数
         <category>LeetCode</category>
       </categories>
       <tags>
-        <tag>DP</tag>
-        <tag>Algorithms</tag>
-        <tag>动态规划</tag>
         <tag>背包问题</tag>
+        <tag>DP</tag>
+        <tag>动态规划</tag>
+        <tag>Algorithms</tag>
         <tag>Dynamic Programming</tag>
       </tags>
   </entry>
@@ -6044,11 +6529,11 @@ l(y) = \frac{1}{2\gamma} \max(0, 1-ty)^2</script><p>其中通常取$\gamma = 2$<
       </categories>
       <tags>
         <tag>LeetCode</tag>
+        <tag>Algothrim</tag>
+        <tag>背包问题</tag>
+        <tag>素数</tag>
         <tag>DP</tag>
         <tag>动态规划</tag>
-        <tag>背包问题</tag>
-        <tag>Algothrim</tag>
-        <tag>素数</tag>
         <tag>哥德巴赫猜想</tag>
       </tags>
   </entry>

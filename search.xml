@@ -1202,8 +1202,8 @@ x_{new} = x + \mathrm{rand}（0,1）*|x - x_n|</script><p>很直白很容易理�
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>array</tag>
         <tag>dynamic</tag>
+        <tag>array</tag>
       </tags>
   </entry>
   <entry>
@@ -2060,8 +2060,8 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
       </categories>
       <tags>
         <tag>DISTRE</tag>
-        <tag>Relation Extraction</tag>
         <tag>NYT</tag>
+        <tag>Relation Extraction</tag>
         <tag>PR-Curve</tag>
         <tag>RESIDE</tag>
         <tag>Distant Supervision</tag>
@@ -2912,8 +2912,8 @@ PADDING MASK在attention的计算过程中处于softmax之前(图1中的opt表�
       </categories>
       <tags>
         <tag>pytorch</tag>
-        <tag>Relation Extraction</tag>
         <tag>NYT</tag>
+        <tag>Relation Extraction</tag>
         <tag>Distant Supervision</tag>
       </tags>
   </entry>
@@ -3725,9 +3725,9 @@ L_I(G,Q) = E_{c \sim P(c), x \sim G(z,c)} [\log  Q(c|x)] + H(c)</script><p>很�
         <category>Pretrained Language Model</category>
       </categories>
       <tags>
+        <tag>BERT</tag>
         <tag>BPE</tag>
         <tag>Embedding</tag>
-        <tag>BERT</tag>
         <tag>GPT</tag>
       </tags>
   </entry>
@@ -5313,8 +5313,8 @@ AP = \sum (R_n - R_{n-1})P_n</script><blockquote>
         <category>Distant Supervision</category>
       </categories>
       <tags>
-        <tag>Relation Extraction</tag>
         <tag>NYT</tag>
+        <tag>Relation Extraction</tag>
         <tag>Distant Supervision</tag>
       </tags>
   </entry>
@@ -6262,8 +6262,8 @@ p(n, right) = 1 - \sigma(\theta_n^T \cdot h)</script><p>其中$\theta$是非叶�
         <category>Relation Extraction</category>
       </categories>
       <tags>
-        <tag>Relation Extraction</tag>
         <tag>NYT</tag>
+        <tag>Relation Extraction</tag>
         <tag>RE</tag>
         <tag>SemEval</tag>
         <tag>TACRED</tag>
@@ -7293,11 +7293,11 @@ D = \frac{9}{4} \times \frac{1}{2} = \frac{9}{8}</script><p><br></p>
       </categories>
       <tags>
         <tag>Pytorch</tag>
-        <tag>GAN</tag>
         <tag>Loss Function</tag>
+        <tag>GAN</tag>
         <tag>Neural Networks</tag>
-        <tag>WGAN</tag>
         <tag>Wasserstein Loss</tag>
+        <tag>WGAN</tag>
         <tag>TensorFlow</tag>
       </tags>
   </entry>
@@ -9615,8 +9615,8 @@ o = \sum_ip_{h_i}A\theta_V(v_{h_i})</script><p>是否可以正常显示常用的
         <category>Relation Extraction</category>
       </categories>
       <tags>
-        <tag>知识图谱</tag>
         <tag>NLP</tag>
+        <tag>知识图谱</tag>
         <tag>关系识别</tag>
       </tags>
   </entry>

@@ -1918,8 +1918,8 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
         <category>Distant Supervision</category>
       </categories>
       <tags>
-        <tag>relation extraction</tag>
         <tag>distant supervision</tag>
+        <tag>relation extraction</tag>
         <tag>batch_size</tag>
         <tag>batch</tag>
         <tag>auc</tag>
@@ -1997,8 +1997,8 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
         <category>Tool</category>
       </categories>
       <tags>
-        <tag>IJCAI</tag>
         <tag>LaTeX</tag>
+        <tag>IJCAI</tag>
       </tags>
   </entry>
   <entry>
@@ -2060,8 +2060,8 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
       </categories>
       <tags>
         <tag>DISTRE</tag>
-        <tag>NYT</tag>
         <tag>Relation Extraction</tag>
+        <tag>NYT</tag>
         <tag>PR-Curve</tag>
         <tag>RESIDE</tag>
         <tag>Distant Supervision</tag>
@@ -2527,8 +2527,8 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
       </categories>
       <tags>
         <tag>DISTRE</tag>
-        <tag>source code</tag>
         <tag>relation extraction</tag>
+        <tag>source code</tag>
       </tags>
   </entry>
   <entry>
@@ -2912,8 +2912,8 @@ PADDING MASK在attention的计算过程中处于softmax之前(图1中的opt表�
       </categories>
       <tags>
         <tag>pytorch</tag>
-        <tag>NYT</tag>
         <tag>Relation Extraction</tag>
+        <tag>NYT</tag>
         <tag>Distant Supervision</tag>
       </tags>
   </entry>
@@ -5313,8 +5313,8 @@ AP = \sum (R_n - R_{n-1})P_n</script><blockquote>
         <category>Distant Supervision</category>
       </categories>
       <tags>
-        <tag>NYT</tag>
         <tag>Relation Extraction</tag>
+        <tag>NYT</tag>
         <tag>Distant Supervision</tag>
       </tags>
   </entry>
@@ -6262,8 +6262,8 @@ p(n, right) = 1 - \sigma(\theta_n^T \cdot h)</script><p>其中$\theta$是非叶�
         <category>Relation Extraction</category>
       </categories>
       <tags>
-        <tag>NYT</tag>
         <tag>Relation Extraction</tag>
+        <tag>NYT</tag>
         <tag>RE</tag>
         <tag>SemEval</tag>
         <tag>TACRED</tag>
@@ -7293,8 +7293,8 @@ D = \frac{9}{4} \times \frac{1}{2} = \frac{9}{8}</script><p><br></p>
       </categories>
       <tags>
         <tag>Pytorch</tag>
-        <tag>Loss Function</tag>
         <tag>GAN</tag>
+        <tag>Loss Function</tag>
         <tag>Neural Networks</tag>
         <tag>Wasserstein Loss</tag>
         <tag>WGAN</tag>

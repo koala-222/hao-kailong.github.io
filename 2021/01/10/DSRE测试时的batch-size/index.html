@@ -132,7 +132,7 @@
 
 
   <meta name="description" content="在进行远程监督关系抽取测试阶段，由于每个包中含有的句子数不同，少的只含有1个句子的包有1149个，但是最多的1个包含有138个句子。担心使用BERT测试时，会出现爆显存的问题。 显存占用在评估时batch_size设为8也完全不会超显存，才占用9875MB左右。将batch_size设为64占用16547MB左右显存，峰值28539MB，再多可能就超了。 是否截断？测试集中含有1758个包，每个包">
-<meta name="keywords" content="relation extraction,distant supervision,batch_size,batch,auc">
+<meta name="keywords" content="distant supervision,relation extraction,batch_size,batch,auc">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DSRE测试时的batch_size">
 <meta property="og:url" content="http://haokailong.top/2021/01/10/DSRE测试时的batch-size/index.html">
@@ -589,9 +589,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/relation-extraction/" rel="tag"><i class="fa fa-tag"></i> relation extraction</a>
-          
             <a href="/tags/distant-supervision/" rel="tag"><i class="fa fa-tag"></i> distant supervision</a>
+          
+            <a href="/tags/relation-extraction/" rel="tag"><i class="fa fa-tag"></i> relation extraction</a>
           
             <a href="/tags/batch-size/" rel="tag"><i class="fa fa-tag"></i> batch_size</a>
           

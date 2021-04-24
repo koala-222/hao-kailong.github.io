@@ -415,6 +415,950 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/04/24/Failed-to-initialize-NVML/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/04/24/Failed-to-initialize-NVML/" class="post-title-link" itemprop="url">Failed to initialize NVML</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-04-24 20:15:11" itemprop="dateModified" datetime="2021-04-24T20:15:11+08:00">2021-04-24</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/04/24/Failed-to-initialize-NVML/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/04/24/Failed-to-initialize-NVML/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在使用<code>nvidia-smi</code>命令时报错，</p>
+<blockquote>
+<p>Failed to initialize NVML: Driver/library version mismatch</p>
+</blockquote>
+<p>原因：</p>
+<p>Nvidia 驱动器内核版本错误</p>
+<p>解决方案：</p>
+<ol>
+<li><p><code>lsmod | grep nvidia</code></p>
+</li>
+<li><p>执行以下命令：</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo rmmod nvidia_drm</span><br><span class="line">sudo rmmod nvidia_modeset</span><br><span class="line">sudo rmmod nvidia_uvm</span><br><span class="line">sudo rmmod nvidia</span><br></pre></td></tr></table></figure>
+<p>问题解决！</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/04/23/深入理解Adam/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/04/23/深入理解Adam/" class="post-title-link" itemprop="url">深入理解Adam</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-04-23 17:07:07" itemprop="dateModified" datetime="2021-04-23T17:07:07+08:00">2021-04-23</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/04/23/深入理解Adam/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/04/23/深入理解Adam/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>基于随机梯度下降（SGD）的优化算法在科研和工程的很多领域里都是极其核心的。很多理论或工程问题都可以转化为对目标函数进行最小化的数学问题。</p>
+<p>按吴恩达老师所说的，梯度下降（Gradient Descent）就好比一个人想从高山上奔跑到山谷最低点，用最快的方式（steepest）奔向最低的位置（minimum）。</p>
+<p><strong>SGD基本公式</strong></p>
+<p>$\theta = \theta - \eta \cdot \nabla_{\theta} J (\theta; x;y) $</p>
+<p><strong>动量(Momentum)</strong></p>
+<p>$v<em>t = \gamma v</em>{t-1} + \eta \nabla_{\theta} J(\theta)$</p>
+<p>$\theta = \theta - v_t$</p>
+<p>基本的mini-batch SGD优化算法在深度学习取得很多不错的成绩。然而也存在一些问题需解决：</p>
+<ol>
+<li><p>选择恰当的初始学习率很困难。</p>
+</li>
+<li><p>学习率调整策略受限于预先指定的调整规则。</p>
+</li>
+<li><p>相同的学习率被应用于各个参数。</p>
+</li>
+<li><p>高度非凸的误差函数的优化过程，如何避免陷入大量的局部次优解或鞍点。</p>
+</li>
+</ol>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2021/04/23/深入理解Adam/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/04/21/LSGAN-最小二乘GAN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/04/21/LSGAN-最小二乘GAN/" class="post-title-link" itemprop="url">LSGAN-最小二乘GAN</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-04-21 20:20:18" itemprop="dateModified" datetime="2021-04-21T20:20:18+08:00">2021-04-21</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/GAN/" itemprop="url" rel="index"><span itemprop="name">GAN</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/04/21/LSGAN-最小二乘GAN/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/04/21/LSGAN-最小二乘GAN/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="LSGAN原理"><a href="#LSGAN原理" class="headerlink" title="LSGAN原理"></a>LSGAN原理</h1><p>GAN是以对抗的方式逼近概率分布。但是直接使用该方法，<strong>会随着判别器越来越好而生成器无法与其对抗，进而形成梯度消失的问题。所以不论是WGAN，还是本节中的LSGAN，都是试图使用不同的距离度量（loss值）</strong>，从而构建一个不仅稳定，同时还收敛迅速的生成对抗网络。</p>
+<p>WGAN使用的是Wasserstein理论来构建度量距离。而<strong>LSGAN使用了另一个方法，即使用了更加平滑和非饱和梯度的损失函数——最小二乘来代替原来的Sigmoid交叉熵</strong>。这是由于L2正则独有的特性，在数据偏离目标时会有一个与其偏离距离成比例的惩罚，再将其拉回来，从而使数据的偏离不会越来越远。</p>
+<p>相对于WGAN而言，LSGAN的loss简单很多。直接将传统的GAN中的loss变为平方差即可。</p>
+<blockquote>
+<p> <mark>即LSGan的核心就是损失函数变为D的loss是真实样本和1作差的平方+模拟样本和0作差的平方；G的loss是模拟样本和1作差的平方（L2正则化）</mark></p>
+<p><mark> 而WGan的核心是损失函数变为真实值和虚拟值的差（L1正则化）</mark></p>
+<p><mark> 原始GAN的损失函数是D的loss都是真实样本和1作交叉熵，模拟样本和0作交叉熵；G的loss是模拟样本和1作交叉熵。（交叉熵）</mark></p>
+</blockquote>
+<p>判别器的损失：</p>
+<p>$\mathrm{D<em>{loss}} = \mathrm{tf.reduce_sum(\mathrm{tf.square(\mathrm{D(X</em>{real})-1)}}} + \mathrm{tf.square(\mathrm{D}(X_{fake}))})/2$</p>
+<p>生成器的损失：</p>
+<p>$\mathrm{G<em>{loss}} = \mathrm{tf.reduce_sum} ( \mathrm{tf.square(\mathrm{D}(X</em>{fake}})))/2$</p>
+<p> 为什么要除以2？和以前的原理一样，在对平方求导时会得到一个系数2，与事先的1/2运算正好等于1。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2021/04/21/LSGAN-最小二乘GAN/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/04/13/面试总结-腾讯、百度、字节/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/04/13/面试总结-腾讯、百度、字节/" class="post-title-link" itemprop="url">面试总结-腾讯、百度、字节</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-04-21 19:11:15" itemprop="dateModified" datetime="2021-04-21T19:11:15+08:00">2021-04-21</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Interview/" itemprop="url" rel="index"><span itemprop="name">Interview</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/04/13/面试总结-腾讯、百度、字节/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/04/13/面试总结-腾讯、百度、字节/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="腾讯"><a href="#腾讯" class="headerlink" title="腾讯"></a>腾讯</h1><p>知识蒸馏：</p>
+<blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/90049906" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/90049906</a></p>
+</blockquote>
+<p>置信度学习：</p>
+<blockquote>
+<p>如何判断样本标注的靠谱程度？置信度学习 (CL) 简述</p>
+<p><a href="https://www.pianshen.com/article/19761107982/" target="_blank" rel="noopener">https://www.pianshen.com/article/19761107982/</a></p>
+</blockquote>
+<p>主动学习：</p>
+<blockquote>
+<p>什么是主动学习？(Active Learning)</p>
+<p><a href="https://www.zhihu.com/question/352299820" target="_blank" rel="noopener">https://www.zhihu.com/question/352299820</a></p>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/04/13/基于K-Means的异常值检测/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/04/13/基于K-Means的异常值检测/" class="post-title-link" itemprop="url">基于K-Means的异常值检测</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-04-13 16:10:18" itemprop="dateModified" datetime="2021-04-13T16:10:18+08:00">2021-04-13</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/04/13/基于K-Means的异常值检测/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/04/13/基于K-Means的异常值检测/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#使用kmeans算法聚类消费行为特征数据</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="comment">#参数可视化</span></span><br><span class="line">inputfile = <span class="string">''</span> <span class="comment">#销量及其他属性数据</span></span><br><span class="line">k = <span class="number">3</span>  <span class="comment">#聚类类别</span></span><br><span class="line">threshold = <span class="number">2</span> <span class="comment">#离群点阈值</span></span><br><span class="line">iteration = <span class="number">500</span> <span class="comment">#聚类最大循环次数</span></span><br><span class="line">data = pd.read_excel(inputfile,index_col=<span class="string">"Id"</span>) <span class="comment">#读取数据</span></span><br><span class="line">data_zs = <span class="number">1.0</span>*(data-data.mean())/data.std() <span class="comment">#数据标准化</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line">model = KMeans(n_clusters=k,n_jobs=<span class="number">4</span>,max_iter=iteration) <span class="comment">#分为k类，并发数4</span></span><br><span class="line">model.fit(data_zs) <span class="comment">#开始聚类</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#标准化数据及其类别</span></span><br><span class="line">r = pd.concat([data_zs,pd.Series(model.labels_,index=data.index)],axis=<span class="number">1</span>)</span><br><span class="line">r.columns = list(data.columns)+[<span class="string">"聚类类别"</span>] <span class="comment">#重命名表头</span></span><br><span class="line"></span><br><span class="line">norm = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(k):<span class="comment">#逐一处理</span></span><br><span class="line">    norm_tmp =r[[<span class="string">'R'</span>,<span class="string">'F'</span>,<span class="string">'M'</span>]][r[<span class="string">'聚类类别'</span>]==i]-model.cluster_centers_[i]</span><br><span class="line">    norm_tmp = norm_tmp.apply(np.linalg.norm,axis=<span class="number">1</span>) <span class="comment">#求出绝对距离</span></span><br><span class="line">    norm.append(norm_tmp/norm_tmp.median()) <span class="comment">#求相对距离并添加</span></span><br><span class="line"></span><br><span class="line">norm = pd.concat(norm) <span class="comment">#合并</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">plt.rcParams[<span class="string">'font.sans-serif'</span>] = [<span class="string">'SimHei'</span>] <span class="comment">#用来正常显示中文标签</span></span><br><span class="line">plt.rcParams[<span class="string">'axes.unicode_minus'</span>] = <span class="literal">False</span> <span class="comment">#用来正常显示负号</span></span><br><span class="line">norm[norm &lt;= threshold].plot(style = <span class="string">'go'</span>) <span class="comment">#正常点</span></span><br><span class="line"></span><br><span class="line">discrete_points = norm[norm&gt;threshold] <span class="comment">#离群点</span></span><br><span class="line">discrete_points.plot(style=<span class="string">'ro'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(discrete_points)): <span class="comment">#离群点做标记</span></span><br><span class="line">  id = discrete_points.index[i]</span><br><span class="line">  n = discrete_points.iloc[i]</span><br><span class="line">  plt.annotate(<span class="string">'(%s, %0.2f)'</span>%(id, n), xy = (id, n), xytext = (id, n))</span><br><span class="line"></span><br><span class="line">plt.xlabel(<span class="string">u'编号'</span>)</span><br><span class="line">plt.ylabel(<span class="string">u'相对距离'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/04/11/剑指offer-丑数/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1356,1138 +2300,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/04/08/C-运算符优先级/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2021/04/08/C-运算符优先级/" class="post-title-link" itemprop="url">C++运算符优先级</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2021-04-08 16:29:04" itemprop="dateModified" datetime="2021-04-08T16:29:04+08:00">2021-04-08</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/04/08/C-运算符优先级/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/04/08/C-运算符优先级/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在使用逻辑和算数运算符时，需要注意运算符的优先级，不然会出现意想不到的错误。</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">优先级</th>
-<th style="text-align:center">运算符</th>
-<th style="text-align:center">说明</th>
-<th style="text-align:center">结合性</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">::</td>
-<td style="text-align:center">范围解析</td>
-<td style="text-align:center">自左向右</td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">++  —</td>
-<td style="text-align:center">后缀自增/后缀自减</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">()</td>
-<td style="text-align:center">括号</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">[]</td>
-<td style="text-align:center">数组下标</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">.</td>
-<td style="text-align:center">成员选择（对象）</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">−&gt;</td>
-<td style="text-align:center">成员选择（指针）</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">++  —</td>
-<td style="text-align:center">前缀自增/前缀自减</td>
-<td style="text-align:center">自右向左</td>
-</tr>
-<tr>
-<td style="text-align:center">+  −</td>
-<td style="text-align:center">加/减</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">!  ~</td>
-<td style="text-align:center">逻辑非/按位取反</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">(type)</td>
-<td style="text-align:center">强制类型转换</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">*</td>
-<td style="text-align:center">取指针指向的值</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">&amp;</td>
-<td style="text-align:center">某某的地址</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">sizeof</td>
-<td style="text-align:center">某某的大小</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">new,new[]</td>
-<td style="text-align:center">动态内存分配/动态数组内存分配</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">delete,delete[]</td>
-<td style="text-align:center">动态内存释放/动态数组内存释放</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">.<em>  -&gt;</em></td>
-<td style="text-align:center">成员对象选择/成员指针选择</td>
-<td style="text-align:center">自左向右</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">*  /   %</td>
-<td style="text-align:center">乘法/除法/取余</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">6</td>
-<td style="text-align:center">+  −</td>
-<td style="text-align:center">加号/减号</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">7</td>
-<td style="text-align:center">&lt;&lt;  &gt;&gt;</td>
-<td style="text-align:center">位左移/位右移</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">8</td>
-<td style="text-align:center">&lt;  &lt;=</td>
-<td style="text-align:center">小于/小于等于</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">&gt;  &gt;=</td>
-<td style="text-align:center">大于/大于等于</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">9</td>
-<td style="text-align:center">==  !=</td>
-<td style="text-align:center">等于/不等于</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">10</td>
-<td style="text-align:center">&amp;</td>
-<td style="text-align:center">按位与</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">11</td>
-<td style="text-align:center">^</td>
-<td style="text-align:center">按位异或</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">12</td>
-<td style="text-align:center">\</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">按位或</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">13</td>
-<td style="text-align:center">&amp;&amp;</td>
-<td style="text-align:center">与运算</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">14</td>
-<td style="text-align:center">\</td>
-<td style="text-align:center">\</td>
-<td style="text-align:center"></td>
-<td>或运算</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">15</td>
-<td style="text-align:center">?:</td>
-<td style="text-align:center">三目运算符</td>
-<td style="text-align:center">自右向左</td>
-</tr>
-<tr>
-<td style="text-align:center">16</td>
-<td style="text-align:center">=</td>
-<td style="text-align:center">赋值</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">+=  −=</td>
-<td style="text-align:center">相加后赋值/相减后赋值</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">*=  /=   %=</td>
-<td style="text-align:center">相乘后赋值/相除后赋值/取余后赋值</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">&lt;&lt;=  &gt;&gt;=</td>
-<td style="text-align:center">位左移赋值/位右移赋值</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">&amp;=  ^=  \</td>
-<td style="text-align:center">=</td>
-<td style="text-align:center">位与运算后赋值/位异或运算后赋值/位或运算后赋值</td>
-<td style="text-align:center"></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">17</td>
-<td style="text-align:center">throw</td>
-<td style="text-align:center">抛出异常</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">18</td>
-<td style="text-align:center">,</td>
-<td style="text-align:center">逗号</td>
-<td style="text-align:center">自左向右</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>如果记不清楚的话，加一个括号总是没错的！(●’◡’●)</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/04/08/C-STL中的sort-排序稳定吗？/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2021/04/08/C-STL中的sort-排序稳定吗？/" class="post-title-link" itemprop="url">C++ STL中的sort()排序稳定吗？</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2021-04-08 16:01:18" itemprop="dateModified" datetime="2021-04-08T16:01:18+08:00">2021-04-08</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/04/08/C-STL中的sort-排序稳定吗？/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/04/08/C-STL中的sort-排序稳定吗？/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h1><p><code>sort()</code>排序<strong>当然不是稳定排序</strong>，sort是主要用到了快速排序（平均时间复杂度为O(nlogn)），还结合了插入排序（时间复杂度为O(n2)）和堆排序（时间复杂度为O(nlogn)）。</p>
-<p><img src="https://pic1.zhimg.com/80/v2-8fa032e195365f77fb6b980a4ed71958_720w.jpg" alt></p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2021/04/08/C-STL中的sort-排序稳定吗？/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/04/08/Latex基本表格绘制/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2021/04/08/Latex基本表格绘制/" class="post-title-link" itemprop="url">Latex基本表格绘制</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2021-04-08 13:08:22" itemprop="dateModified" datetime="2021-04-08T13:08:22+08:00">2021-04-08</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/04/08/Latex基本表格绘制/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/04/08/Latex基本表格绘制/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>————————————————<br>版权声明：本文为CSDN博主「派大星爱摸鱼」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a href="https://blog.csdn.net/JueChenYi/article/details/77116011" target="_blank" rel="noopener">https://blog.csdn.net/JueChenYi/article/details/77116011</a></p>
-</blockquote>
-<h1 id="1-基本格式"><a href="#1-基本格式" class="headerlink" title="1. 基本格式"></a>1. 基本格式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">\documentclass&#123;article&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;tabular&#125;&#123;cc&#125;%一个c表示有一列，格式为居中显示(center)</span><br><span class="line">(1,1)&amp;(1,2)\\%第一行第一列和第二列  中间用&amp;连接</span><br><span class="line">(2,1)&amp;(2,2)\\%第二行第一列和第二列  中间用&amp;连接</span><br><span class="line">\end&#123;tabular&#125;</span><br><span class="line"></span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="https://img-blog.csdn.net/20170812124223652?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvSnVlQ2hlbllp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt></p>
-<h1 id="2-添加竖线和横线"><a href="#2-添加竖线和横线" class="headerlink" title="2. 添加竖线和横线"></a>2. 添加竖线和横线</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">\documentclass&#123;article&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;tabular&#125;&#123;|c|c|&#125;% 通过添加 | 来表示是否需要绘制竖线</span><br><span class="line">\hline  % 在表格最上方绘制横线</span><br><span class="line">(1,1)&amp;(1,2)\\</span><br><span class="line">\hline  %在第一行和第二行之间绘制横线</span><br><span class="line">(2,1)&amp;(2,2)\\</span><br><span class="line">\hline % 在表格最下方绘制横线</span><br><span class="line">\end&#123;tabular&#125;</span><br><span class="line"></span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="https://img-blog.csdn.net/20170812124527902?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvSnVlQ2hlbllp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt></p>
-<h1 id="3-设置每一列的单元格格式"><a href="#3-设置每一列的单元格格式" class="headerlink" title="3. 设置每一列的单元格格式"></a>3. 设置每一列的单元格格式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">\documentclass&#123;article&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;tabular&#125;&#123;|l|c|r|&#125; %l(left)居左显示 r(right)居右显示 c居中显示</span><br><span class="line">\hline </span><br><span class="line">Name&amp;Steve&amp;Bill\\</span><br><span class="line">\hline  </span><br><span class="line">Matlab&amp;Mathmatica&amp;Maple\\</span><br><span class="line">\hline </span><br><span class="line">\end&#123;tabular&#125;</span><br><span class="line"></span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="https://img-blog.csdn.net/20170812125307589?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvSnVlQ2hlbllp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt></p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2021/04/08/Latex基本表格绘制/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/04/06/C-中头文件-bits-stdc-h/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2021/04/06/C-中头文件-bits-stdc-h/" class="post-title-link" itemprop="url">C++中头文件bits/stdc++.h</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2021-04-12 22:28:25" itemprop="dateModified" datetime="2021-04-12T22:28:25+08:00">2021-04-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/04/06/C-中头文件-bits-stdc-h/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/04/06/C-中头文件-bits-stdc-h/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在刷题的过程中，发现有<code>bits/stdc++.h</code>这样一个头文件。</p>
-<p>发现它是部分C++中支持的一个几乎万能的头文件，包含所有的可用到的C++库函数，如istream, ostream, stack, queue.</p>
-<p>该头文件的详细内容如下</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2021/04/06/C-中头文件-bits-stdc-h/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/04/04/笔试经验总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2021/04/04/笔试经验总结/" class="post-title-link" itemprop="url">笔试经验总结</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2021-04-04 15:35:41" itemprop="dateModified" datetime="2021-04-04T15:35:41+08:00">2021-04-04</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Interview/" itemprop="url" rel="index"><span itemprop="name">Interview</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/04/04/笔试经验总结/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/04/04/笔试经验总结/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>已经有过几次笔试的经验了，也经历了不少的失败和挫折，做一个总结：</p>
-<ol>
-<li>ACM格式比LeetCode要难，因为要自己处理输入输出，需要保证处理的正确而且速度快；另外，需要自己考虑到所有的corner case。<strong>在LeetCode上会提示测试通不过的样例，不要看！</strong>这是一个很不好的习惯，会形成依赖。要在脑海中自己把问题考虑周全。</li>
-<li>要先把题目看一遍，<strong>如果某个题短时间内不能有一个</strong><font color="orange"><strong>清晰直接</strong></font><strong>的思路，多半是自己搞错了</strong>。不要浪费时间！</li>
-<li>要熟练掌握C++中的STL和常用函数。</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2536,7 +2348,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">175</span>
+                    <span class="site-state-item-count">179</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2595,9 +2407,7 @@
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -3478,7 +3288,35 @@
                     
                       
                     
-                    <span class="site-state-item-count">432</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">446</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -4022,11 +3860,11 @@
       
     
       
-    
-      
-    
-      
         
+      
+    
+      
+    
       
     
       

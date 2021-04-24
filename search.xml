@@ -1,6 +1,222 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Failed to initialize NVML</title>
+    <url>/2021/04/24/Failed-to-initialize-NVML/</url>
+    <content><![CDATA[<p>在使用<code>nvidia-smi</code>命令时报错，</p>
+<blockquote>
+<p>Failed to initialize NVML: Driver/library version mismatch</p>
+</blockquote>
+<p>原因：</p>
+<p>Nvidia 驱动器内核版本错误</p>
+<p>解决方案：</p>
+<ol>
+<li><p><code>lsmod | grep nvidia</code></p>
+</li>
+<li><p>执行以下命令：</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo rmmod nvidia_drm</span><br><span class="line">sudo rmmod nvidia_modeset</span><br><span class="line">sudo rmmod nvidia_uvm</span><br><span class="line">sudo rmmod nvidia</span><br></pre></td></tr></table></figure>
+<p>问题解决！</p>
+]]></content>
+      <categories>
+        <category>Others</category>
+        <category>Tool</category>
+      </categories>
+      <tags>
+        <tag>nvidia-smi</tag>
+        <tag>NVIDIA</tag>
+        <tag>NVML</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深入理解Adam</title>
+    <url>/2021/04/23/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Adam/</url>
+    <content><![CDATA[<p>基于随机梯度下降（SGD）的优化算法在科研和工程的很多领域里都是极其核心的。很多理论或工程问题都可以转化为对目标函数进行最小化的数学问题。</p>
+<p>按吴恩达老师所说的，梯度下降（Gradient Descent）就好比一个人想从高山上奔跑到山谷最低点，用最快的方式（steepest）奔向最低的位置（minimum）。</p>
+<p><strong>SGD基本公式</strong></p>
+<p>$\theta = \theta - \eta \cdot \nabla_{\theta} J (\theta; x;y) $</p>
+<p><strong>动量(Momentum)</strong></p>
+<p>$v<em>t = \gamma v</em>{t-1} + \eta \nabla_{\theta} J(\theta)$</p>
+<p>$\theta = \theta - v_t$</p>
+<p>基本的mini-batch SGD优化算法在深度学习取得很多不错的成绩。然而也存在一些问题需解决：</p>
+<ol>
+<li><p>选择恰当的初始学习率很困难。</p>
+</li>
+<li><p>学习率调整策略受限于预先指定的调整规则。</p>
+</li>
+<li><p>相同的学习率被应用于各个参数。</p>
+</li>
+<li><p>高度非凸的误差函数的优化过程，如何避免陷入大量的局部次优解或鞍点。</p>
+</li>
+</ol>
+<a id="more"></a>
+<h2 id="自适应优化"><a href="#自适应优化" class="headerlink" title="自适应优化"></a>自适应优化</h2><p>针对简单的SGD及Momentum存在的问题，2011年<strong>John Duchi</strong>等发布了AdaGrad优化算法(Adaptive Gradient，自适应梯度)，它能够对每个不同的参数调整不同的学习率，对频繁变化的参数以更小的步长进行更新，而稀疏的参数以更大的步长进行更新。</p>
+<p>公式：</p>
+<script type="math/tex; mode=display">
+g_t = \nabla_\theta J(\theta_{t-1}) \\
+\theta_{t+1} = \theta_{t} - \alpha \cdot g_t / \sqrt{\sum_{i=1}^tg_{t,i}^2}</script><p>gt表示第t时间步的梯度（向量，包含各个参数对应的偏导数，gt,i表示第i个参数t时刻偏导数）</p>
+<p>gt2表示第t时间步的梯度平方（向量，由gt各元素自己进行平方运算所得，即Element-wise）</p>
+<p>与SGD的核心区别在于计算更新步长时，增加了分母：<strong>梯度平方累积和的平方根</strong>。此项能够累积各个参数gt,i的历史梯度平方，频繁更新的梯度，则累积的分母项逐渐偏大，那么更新的步长(stepsize)相对就会变小，而稀疏的梯度，则导致累积的分母项中对应值比较小，那么更新的步长则相对比较大。</p>
+<p>AdaGrad能够自动为不同参数适应不同的学习率（平方根的分母项相当于对学习率α进进行了自动调整，然后再乘以本次梯度），大多数的框架实现采用默认学习率α=0.01即可完成比较好的收敛。</p>
+<p>优势：在数据分布稀疏的场景，能更好利用稀疏梯度的信息，比标准的SGD算法更有效地收敛。</p>
+<p>缺点：主要缺陷来自分母项的对梯度平方不断累积，随之时间步地增加，分母项越来越大，最终导致学习率收缩到太小无法进行有效更新。</p>
+<h2 id="RMSProp"><a href="#RMSProp" class="headerlink" title="RMSProp"></a>RMSProp</h2><p>RMSProp是Geoffrey Hinton教授在教案中提到的算法，结合梯度平方的指数移动平均数来调节学习率的变化。能够在不稳定（Non-Stationary）的目标函数情况下进行很好地收敛。</p>
+<p>Hinton教授讲述RMSProp算法的材料：</p>
+<p><a href="http://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf" target="_blank" rel="noopener">http://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf</a></p>
+<p>计算t时间步的梯度：</p>
+<script type="math/tex; mode=display">
+g_t = \nabla_\theta J(\theta_{t-1})</script><p>计算梯度平方的指数移动平均数（Exponential Moving Average），γ是遗忘因子（或称为指数衰减率），依据经验，默认设置为0.9。</p>
+<script type="math/tex; mode=display">
+v_t = \gamma(v_{t-1}) + (1-\gamma)g_t^2</script><p>梯度更新时候，与AdaGrad类似，只是更新的梯度平方的期望（指数移动均值），其中ε=10^-8，避免除数为0。默认学习率α=0.001。</p>
+<script type="math/tex; mode=display">
+\theta_t = \theta_{t-1} - \alpha \cdot g_t / (\sqrt{v_t} + \epsilon)</script><p>优势：能够克服AdaGrad梯度急剧减小的问题，在很多应用中都展示出优秀的学习率自适应能力。尤其在不稳定(Non-Stationary)的目标函数下，比基本的SGD、Momentum、AdaGrad表现更良好。</p>
+<h2 id="Adam优化器"><a href="#Adam优化器" class="headerlink" title="Adam优化器"></a>Adam优化器</h2><p>2014年12月，Kingma和Lei Ba两位学者提出了Adam优化器，结合AdaGrad和RMSProp两种优化算法的优点。对梯度的一阶矩估计（First Moment Estimation，即梯度的均值）和二阶矩估计（Second</p>
+<p>Moment Estimation，即梯度的未中心化的方差）进行综合考虑，计算出更新步长。</p>
+<p>主要包含以下几个显著的优点：</p>
+<ol>
+<li><p>实现简单，计算高效，对内存需求少</p>
+</li>
+<li><p>参数的更新不受梯度的伸缩变换影响</p>
+</li>
+<li><p>超参数具有很好的解释性，且通常无需调整或仅需很少的微调</p>
+</li>
+<li><p>更新的步长能够被限制在大致的范围内（初始学习率）</p>
+</li>
+<li><p>能自然地实现步长退火过程（自动调整学习率）</p>
+</li>
+<li><p>很适合应用于大规模的数据及参数的场景</p>
+</li>
+<li><p>适用于不稳定目标函数</p>
+</li>
+<li><p>适用于梯度稀疏或梯度存在很大噪声的问题</p>
+</li>
+</ol>
+<p>综合Adam在很多情况下算作默认工作性能比较优秀的优化器。</p>
+<h4 id="Adam实现原理"><a href="#Adam实现原理" class="headerlink" title="Adam实现原理"></a>Adam实现原理</h4><p>算法伪代码：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/10046814-c2db68e06531e759.png?imageMogr2/auto-orient/strip|imageView2/2/w/897/format/webp" alt></p>
+<h4 id="Adam更新规则"><a href="#Adam更新规则" class="headerlink" title="Adam更新规则"></a>Adam更新规则</h4><p>计算t时间步的梯度：</p>
+<script type="math/tex; mode=display">
+g_t = \nabla_\theta J(\theta_{t-1})</script><p>首先，计算梯度的指数移动平均数，m0 初始化为0。</p>
+<p>类似于Momentum算法，综合考虑之前时间步的梯度动量。</p>
+<p>β1 系数为指数衰减率，控制权重分配（动量与当前梯度），通常取接近于1的值。</p>
+<p>默认为0.9</p>
+<script type="math/tex; mode=display">
+m_t = \beta_1 m_{t-1} + (1 - \beta_1)g_t</script><p>下图简单展示出时间步1~20时，各个时间步的梯度随着时间的累积占比情况。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/10046814-ee46996a8c36bdc7.png?imageMogr2/auto-orient/strip|imageView2/2/w/1048/format/webp" alt></p>
+<p>其次，计算梯度平方的指数移动平均数，v0初始化为0。</p>
+<p>β2 系数为指数衰减率，控制之前的梯度平方的影响情况。</p>
+<p>类似于RMSProp算法，对梯度平方进行加权均值。</p>
+<p>默认为0.999</p>
+<script type="math/tex; mode=display">
+v_t = \beta_2 v_{t-1} + (1-\beta_2) g_t^2</script><p>第三，由于m0初始化为0，会导致mt偏向于0，尤其在训练初期阶段。</p>
+<p>所以，此处需要对梯度均值mt进行偏差纠正，降低偏差对训练初期的影响。</p>
+<script type="math/tex; mode=display">
+\hat{m_t} = m_t / (1-\beta_1^t)</script><p>第四，与m0 类似，因为v0初始化为0导致训练初始阶段vt偏向0，对其进行纠正。</p>
+<script type="math/tex; mode=display">
+\hat{v_t} = v_t / (1 - \beta_2^t)</script><p>第五，更新参数，初始的学习率α乘以梯度均值与梯度方差的平方根之比。</p>
+<p>其中默认学习率α=0.001</p>
+<p>ε=10^-8，避免除数变为0。</p>
+<p>由表达式可以看出，对更新的步长计算，能够从梯度均值及梯度平方两个角度进行自适应地调节，而不是直接由当前梯度决定。</p>
+<script type="math/tex; mode=display">
+\theta_t = \theta_{t-1} - \alpha \cdot \hat{m_t} / (\sqrt{\hat{v_t}} + \epsilon)</script><p>代码地址：<a href="https://link.jianshu.com/?t=https%3A%2F%2Fgithub.com%2Fdream-catcher%2Flearning_blogs%2Fblob%2Fmaster%2FAdam_Optimizer%2Fadam_optimizer.py" target="_blank" rel="noopener">https://github.com/dream-catcher/learning_blogs/blob/master/Adam_Optimizer/adam_optimizer.py</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.jianshu.com/p/aebcaf8af76e" target="_blank" rel="noopener">简单认识Adam优化器 </a></p>
+<p><a href="http://ruder.io/optimizing-gradient-descent/" target="_blank" rel="noopener">http://ruder.io/optimizing-gradient-descent/</a></p>
+<p><a href="http://ruder.io/deep-learning-optimization-2017/index.html" target="_blank" rel="noopener">http://ruder.io/deep-learning-optimization-2017/index.html</a></p>
+]]></content>
+      <categories>
+        <category>Machine Learning</category>
+      </categories>
+      <tags>
+        <tag>SGD</tag>
+        <tag>Adam</tag>
+        <tag>Momentum</tag>
+        <tag>AdaGrad</tag>
+        <tag>RMSProp</tag>
+        <tag>optimizer</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LSGAN-最小二乘GAN</title>
+    <url>/2021/04/21/LSGAN-%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98GAN/</url>
+    <content><![CDATA[<h1 id="LSGAN原理"><a href="#LSGAN原理" class="headerlink" title="LSGAN原理"></a>LSGAN原理</h1><p>GAN是以对抗的方式逼近概率分布。但是直接使用该方法，<strong>会随着判别器越来越好而生成器无法与其对抗，进而形成梯度消失的问题。所以不论是WGAN，还是本节中的LSGAN，都是试图使用不同的距离度量（loss值）</strong>，从而构建一个不仅稳定，同时还收敛迅速的生成对抗网络。</p>
+<p>WGAN使用的是Wasserstein理论来构建度量距离。而<strong>LSGAN使用了另一个方法，即使用了更加平滑和非饱和梯度的损失函数——最小二乘来代替原来的Sigmoid交叉熵</strong>。这是由于L2正则独有的特性，在数据偏离目标时会有一个与其偏离距离成比例的惩罚，再将其拉回来，从而使数据的偏离不会越来越远。</p>
+<p>相对于WGAN而言，LSGAN的loss简单很多。直接将传统的GAN中的loss变为平方差即可。</p>
+<blockquote>
+<p> <mark>即LSGan的核心就是损失函数变为D的loss是真实样本和1作差的平方+模拟样本和0作差的平方；G的loss是模拟样本和1作差的平方（L2正则化）</mark></p>
+<p><mark> 而WGan的核心是损失函数变为真实值和虚拟值的差（L1正则化）</mark></p>
+<p><mark> 原始GAN的损失函数是D的loss都是真实样本和1作交叉熵，模拟样本和0作交叉熵；G的loss是模拟样本和1作交叉熵。（交叉熵）</mark></p>
+</blockquote>
+<p>判别器的损失：</p>
+<p>$\mathrm{D<em>{loss}} = \mathrm{tf.reduce_sum(\mathrm{tf.square(\mathrm{D(X</em>{real})-1)}}} + \mathrm{tf.square(\mathrm{D}(X_{fake}))})/2$</p>
+<p>生成器的损失：</p>
+<p>$\mathrm{G<em>{loss}} = \mathrm{tf.reduce_sum} ( \mathrm{tf.square(\mathrm{D}(X</em>{fake}})))/2$</p>
+<p> 为什么要除以2？和以前的原理一样，在对平方求导时会得到一个系数2，与事先的1/2运算正好等于1。</p>
+<a id="more"></a>
+<h1 id="知识点-皮尔逊卡方检验"><a href="#知识点-皮尔逊卡方检验" class="headerlink" title="知识点 - 皮尔逊卡方检验"></a>知识点 - 皮尔逊卡方检验</h1><p>$\mathcal{X}^2$拟合优度检验的主要思想是这样的，针对每个指定的值，理论计算出来的频率与实际收集到的数据统计出来的频率之间总是存在一些偏差，把每一个指定值的偏差以平方的形式加起来，如果这个值比较小，则说明分布拟合得较好，如果这个值很大，则说明实际收集到的数据与目标分布并不相同，需要去寻找其它恰当的分布。</p>
+<p>为此，卡尔·皮尔逊引入了一个重要的统计量——$\mathcal{X} ^2$统计量。</p>
+<script type="math/tex; mode=display">
+\mathcal{X}^2 = \sum_{i=1}^n \frac{(f_i - F_i) ^2}{F_i}</script><p>其中，$f_i$是实际观察到的量，$F_i$是运用目标分布计算出的量。卡尔-皮尔逊证明了当样本大小趋于无穷时，统计量收敛于$\mathcal{X}^2$分布。</p>
+<p>更多细节可以参考：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/25165318" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/25165318</a></p>
+]]></content>
+      <categories>
+        <category>Neural Networks</category>
+        <category>GAN</category>
+      </categories>
+      <tags>
+        <tag>GAN</tag>
+        <tag>Neural Networks</tag>
+        <tag>Adversarial</tag>
+        <tag>Generative</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>面试总结-腾讯、百度、字节</title>
+    <url>/2021/04/13/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93-%E8%85%BE%E8%AE%AF%E3%80%81%E7%99%BE%E5%BA%A6%E3%80%81%E5%AD%97%E8%8A%82/</url>
+    <content><![CDATA[<h1 id="腾讯"><a href="#腾讯" class="headerlink" title="腾讯"></a>腾讯</h1><p>知识蒸馏：</p>
+<blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/90049906" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/90049906</a></p>
+</blockquote>
+<p>置信度学习：</p>
+<blockquote>
+<p>如何判断样本标注的靠谱程度？置信度学习 (CL) 简述</p>
+<p><a href="https://www.pianshen.com/article/19761107982/" target="_blank" rel="noopener">https://www.pianshen.com/article/19761107982/</a></p>
+</blockquote>
+<p>主动学习：</p>
+<blockquote>
+<p>什么是主动学习？(Active Learning)</p>
+<p><a href="https://www.zhihu.com/question/352299820" target="_blank" rel="noopener">https://www.zhihu.com/question/352299820</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Others</category>
+        <category>Interview</category>
+      </categories>
+      <tags>
+        <tag>百度</tag>
+        <tag>Baidu</tag>
+        <tag>腾讯</tag>
+        <tag>Tencent</tag>
+        <tag>字节跳动</tag>
+        <tag>ByteDance</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基于K-Means的异常值检测</title>
+    <url>/2021/04/13/%E5%9F%BA%E4%BA%8EK-Means%E7%9A%84%E5%BC%82%E5%B8%B8%E5%80%BC%E6%A3%80%E6%B5%8B/</url>
+    <content><![CDATA[<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#使用kmeans算法聚类消费行为特征数据</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="comment">#参数可视化</span></span><br><span class="line">inputfile = <span class="string">''</span> <span class="comment">#销量及其他属性数据</span></span><br><span class="line">k = <span class="number">3</span>  <span class="comment">#聚类类别</span></span><br><span class="line">threshold = <span class="number">2</span> <span class="comment">#离群点阈值</span></span><br><span class="line">iteration = <span class="number">500</span> <span class="comment">#聚类最大循环次数</span></span><br><span class="line">data = pd.read_excel(inputfile,index_col=<span class="string">"Id"</span>) <span class="comment">#读取数据</span></span><br><span class="line">data_zs = <span class="number">1.0</span>*(data-data.mean())/data.std() <span class="comment">#数据标准化</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line">model = KMeans(n_clusters=k,n_jobs=<span class="number">4</span>,max_iter=iteration) <span class="comment">#分为k类，并发数4</span></span><br><span class="line">model.fit(data_zs) <span class="comment">#开始聚类</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#标准化数据及其类别</span></span><br><span class="line">r = pd.concat([data_zs,pd.Series(model.labels_,index=data.index)],axis=<span class="number">1</span>)</span><br><span class="line">r.columns = list(data.columns)+[<span class="string">"聚类类别"</span>] <span class="comment">#重命名表头</span></span><br><span class="line"></span><br><span class="line">norm = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(k):<span class="comment">#逐一处理</span></span><br><span class="line">    norm_tmp =r[[<span class="string">'R'</span>,<span class="string">'F'</span>,<span class="string">'M'</span>]][r[<span class="string">'聚类类别'</span>]==i]-model.cluster_centers_[i]</span><br><span class="line">    norm_tmp = norm_tmp.apply(np.linalg.norm,axis=<span class="number">1</span>) <span class="comment">#求出绝对距离</span></span><br><span class="line">    norm.append(norm_tmp/norm_tmp.median()) <span class="comment">#求相对距离并添加</span></span><br><span class="line"></span><br><span class="line">norm = pd.concat(norm) <span class="comment">#合并</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">plt.rcParams[<span class="string">'font.sans-serif'</span>] = [<span class="string">'SimHei'</span>] <span class="comment">#用来正常显示中文标签</span></span><br><span class="line">plt.rcParams[<span class="string">'axes.unicode_minus'</span>] = <span class="literal">False</span> <span class="comment">#用来正常显示负号</span></span><br><span class="line">norm[norm &lt;= threshold].plot(style = <span class="string">'go'</span>) <span class="comment">#正常点</span></span><br><span class="line"></span><br><span class="line">discrete_points = norm[norm&gt;threshold] <span class="comment">#离群点</span></span><br><span class="line">discrete_points.plot(style=<span class="string">'ro'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(discrete_points)): <span class="comment">#离群点做标记</span></span><br><span class="line">  id = discrete_points.index[i]</span><br><span class="line">  n = discrete_points.iloc[i]</span><br><span class="line">  plt.annotate(<span class="string">'(%s, %0.2f)'</span>%(id, n), xy = (id, n), xytext = (id, n))</span><br><span class="line"></span><br><span class="line">plt.xlabel(<span class="string">u'编号'</span>)</span><br><span class="line">plt.ylabel(<span class="string">u'相对距离'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Machine Learning</category>
+      </categories>
+      <tags>
+        <tag>K-Means</tag>
+        <tag>异常值检测</tag>
+        <tag>outliers</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>剑指offer-丑数</title>
     <url>/2021/04/11/%E5%89%91%E6%8C%87offer-%E4%B8%91%E6%95%B0/</url>
     <content><![CDATA[<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">GetUglyNumber_Solution</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (index &lt; <span class="number">7</span>)<span class="keyword">return</span> index;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res(index);</span><br><span class="line">        res[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> t2 = <span class="number">0</span>, t3 = <span class="number">0</span>, t5 = <span class="number">0</span>, i;</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt; index; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            res[i] = min(res[t2] * <span class="number">2</span>, min(res[t3] * <span class="number">3</span>, res[t5] * <span class="number">5</span>));</span><br><span class="line">            <span class="keyword">if</span> (res[i] == res[t2] * <span class="number">2</span>)t2++;</span><br><span class="line">            <span class="keyword">if</span> (res[i] == res[t3] * <span class="number">3</span>)t3++;</span><br><span class="line">            <span class="keyword">if</span> (res[i] == res[t5] * <span class="number">5</span>)t5++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res[index - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -486,34 +702,6 @@
       </tags>
   </entry>
   <entry>
-    <title>C++中头文件bits/stdc++.h</title>
-    <url>/2021/04/06/C-%E4%B8%AD%E5%A4%B4%E6%96%87%E4%BB%B6-bits-stdc-h/</url>
-    <content><![CDATA[<p>在刷题的过程中，发现有<code>bits/stdc++.h</code>这样一个头文件。</p>
-<p>发现它是部分C++中支持的一个几乎万能的头文件，包含所有的可用到的C++库函数，如istream, ostream, stack, queue.</p>
-<p>该头文件的详细内容如下</p>
-<a id="more"></a>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// C++ includes used for precompiling -*- C++ -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Copyright (C) 2003-2013 Free Software Foundation, Inc.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// This file is part of the GNU ISO C++ Library.  This library is free</span></span><br><span class="line"><span class="comment">// software; you can redistribute it and/or modify it under the</span></span><br><span class="line"><span class="comment">// terms of the GNU General Public License as published by the</span></span><br><span class="line"><span class="comment">// Free Software Foundation; either version 3, or (at your option)</span></span><br><span class="line"><span class="comment">// any later version.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// This library is distributed in the hope that it will be useful,</span></span><br><span class="line"><span class="comment">// but WITHOUT ANY WARRANTY; without even the implied warranty of</span></span><br><span class="line"><span class="comment">// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></span><br><span class="line"><span class="comment">// GNU General Public License for more details.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Under Section 7 of GPL version 3, you are granted additional</span></span><br><span class="line"><span class="comment">// permissions described in the GCC Runtime Library Exception, version</span></span><br><span class="line"><span class="comment">// 3.1, as published by the Free Software Foundation.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// You should have received a copy of the GNU General Public License and</span></span><br><span class="line"><span class="comment">// a copy of the GCC Runtime Library Exception along with this program;</span></span><br><span class="line"><span class="comment">// see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see</span></span><br><span class="line"><span class="comment">// &lt;Licenses - GNU Project - Free Software Foundation&gt;.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/** @file stdc++.h</span></span><br><span class="line"><span class="comment"> *  This is an implementation file for a precompiled header.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 17.4.1.2 Headers</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// C</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _GLIBCXX_NO_ASSERT</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cassert&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cctype&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cerrno&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cfloat&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ciso646&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;climits&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;clocale&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;csetjmp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;csignal&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdarg&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstddef&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctime&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> __cplusplus &gt;= 201103L</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ccomplex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cfenv&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cinttypes&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdalign&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdbool&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdint&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctgmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cwchar&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cwctype&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// C++</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bitset&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;complex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;deque&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;exception&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iomanip&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ios&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iosfwd&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;istream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iterator&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;limits&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;list&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;locale&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;new&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;numeric&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;set&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdexcept&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;streambuf&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;typeinfo&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;utility&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;valarray&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> __cplusplus &gt;= 201103L</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;array&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;atomic&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;chrono&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;condition_variable&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;forward_list&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;future&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;initializer_list&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;mutex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;random&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ratio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;regex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;scoped_allocator&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;system_error&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;tuple&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;typeindex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;type_traits&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unordered_map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unordered_set&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-<h1 id="bits-stdc-h的缺点"><a href="#bits-stdc-h的缺点" class="headerlink" title="bits/stdc++.h的缺点"></a><code>bits/stdc++.h</code>的缺点</h1><ul>
-<li>bits/stdc++.h 不是GNU C++库的标准头文件，所以如果你在一些编译器（除了GCC）上编译你的代码，可能会失败，比如MSVC没有这个头文件。</li>
-<li>使用它会包含很多不必要的东西，并且会增加编译时间</li>
-<li>这个头文件不是C++标准的一部分，所以是不可移植的，应该尽量避免。</li>
-<li>尽管标准中有一些通用的头文件，但还是应该避免使用它来代替特定的头文件，因为编译器在每次编译转换单元时都实际地读取并解析每个包含的头文件(包括递归包含的头文件)。</li>
-</ul>
-<h1 id="bits-stdc-h的优点"><a href="#bits-stdc-h的优点" class="headerlink" title="bits/stdc++.h的优点"></a><code>bits/stdc++.h</code>的优点</h1><ul>
-<li>在比赛中,使用这个文件是一个好主意,当你想减少时间浪费在做选择的时候;特别是当你的排名对时间很敏感的时候。</li>
-<li>这还减少了编写所有必要头文件的所有杂务。</li>
-<li>你不必为使用的每个函数都记住GNU c++的所有STL。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-        <tag>STL</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>笔试经验总结</title>
     <url>/2021/04/04/%E7%AC%94%E8%AF%95%E7%BB%8F%E9%AA%8C%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<p>已经有过几次笔试的经验了，也经历了不少的失败和挫折，做一个总结：</p>
@@ -723,6 +911,7 @@ x_{new} = x + \mathrm{rand}（0,1）*|x - x_n|</script><p>很直白很容易理�
 <p>这节的核心就是<strong>句子概率越大，语言模型越好，迷惑度越小。</strong></p>
 ]]></content>
       <categories>
+        <category>NLP</category>
         <category>Pretrained Language Model</category>
       </categories>
       <tags>
@@ -1918,8 +2107,8 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
         <category>Distant Supervision</category>
       </categories>
       <tags>
-        <tag>distant supervision</tag>
         <tag>relation extraction</tag>
+        <tag>distant supervision</tag>
         <tag>batch_size</tag>
         <tag>batch</tag>
         <tag>auc</tag>
@@ -1997,8 +2186,8 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
         <category>Tool</category>
       </categories>
       <tags>
-        <tag>LaTeX</tag>
         <tag>IJCAI</tag>
+        <tag>LaTeX</tag>
       </tags>
   </entry>
   <entry>
@@ -2527,8 +2716,8 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
       </categories>
       <tags>
         <tag>DISTRE</tag>
-        <tag>relation extraction</tag>
         <tag>source code</tag>
+        <tag>relation extraction</tag>
       </tags>
   </entry>
   <entry>
@@ -7296,8 +7485,8 @@ D = \frac{9}{4} \times \frac{1}{2} = \frac{9}{8}</script><p><br></p>
         <tag>GAN</tag>
         <tag>Loss Function</tag>
         <tag>Neural Networks</tag>
-        <tag>Wasserstein Loss</tag>
         <tag>WGAN</tag>
+        <tag>Wasserstein Loss</tag>
         <tag>TensorFlow</tag>
       </tags>
   </entry>
@@ -7348,9 +7537,9 @@ D = \frac{9}{4} \times \frac{1}{2} = \frac{9}{8}</script><p><br></p>
         <category>Others</category>
       </categories>
       <tags>
+        <tag>NVIDIA</tag>
         <tag>cuda</tag>
         <tag>cudnn</tag>
-        <tag>NVIDIA</tag>
       </tags>
   </entry>
   <entry>
@@ -7522,8 +7711,8 @@ y_i^{[l]} = \gamma \hat{z}_i ^{[l]} + \beta</script><p><strong>这是普通的�
       </categories>
       <tags>
         <tag>tensorboard</tag>
-        <tag>projector</tag>
         <tag>可视化</tag>
+        <tag>projector</tag>
       </tags>
   </entry>
   <entry>
@@ -8196,9 +8385,9 @@ SIM(S, T) = \frac{|S \cap T|}{ |S \cup T|}</script><p>​        不考虑微博
       </categories>
       <tags>
         <tag>Freebase</tag>
-        <tag>Knowledge Graph</tag>
         <tag>知识图谱</tag>
         <tag>SPARQL</tag>
+        <tag>Knowledge Graph</tag>
         <tag>search</tag>
       </tags>
   </entry>
@@ -8345,9 +8534,9 @@ SIM(S, T) = \frac{|S \cap T|}{ |S \cup T|}</script><p>​        不考虑微博
       </categories>
       <tags>
         <tag>Freebase</tag>
+        <tag>Knowledeg Graph</tag>
         <tag>知识图谱</tag>
         <tag>SPARQL</tag>
-        <tag>Knowledeg Graph</tag>
         <tag>ontology</tag>
       </tags>
   </entry>
@@ -8427,8 +8616,8 @@ Loss_{focal} =
       </categories>
       <tags>
         <tag>tensorboard</tag>
-        <tag>可视化</tag>
         <tag>visualisation</tag>
+        <tag>可视化</tag>
       </tags>
   </entry>
   <entry>
@@ -8855,9 +9044,9 @@ D_{KL} (P||Q) = \sum _i P(i)\log(\frac{P(i)}{Q(i)}) = \sum_i\{P(i)\log P(i) - P(
       </categories>
       <tags>
         <tag>神经网络</tag>
+        <tag>Neural Networks</tag>
         <tag>正则化</tag>
         <tag>Normalization</tag>
-        <tag>Neural Networks</tag>
       </tags>
   </entry>
   <entry>

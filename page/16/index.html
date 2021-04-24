@@ -415,6 +415,755 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/03/深入理解Batch-Normalization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/10/03/深入理解Batch-Normalization/" class="post-title-link" itemprop="url">深入理解Batch Normalization</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-03 23:10:31" itemprop="dateModified" datetime="2020-10-03T23:10:31+08:00">2020-10-03</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/10/03/深入理解Batch-Normalization/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/03/深入理解Batch-Normalization/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Batch Normalization具有可以增强神经网络的稳定性，加速神经网络训练等优点，但一直没有深入详细地了解过其原理与实现。通过<a href>coursera</a>的<font color="#0077dd">Generative Adversarial Networks (GANs)</font>专项课程，较为深入的学习了Batch Normalization，在此记录。</p>
+<p>&lt;/br&gt;</p>
+<h3 id="1-原理"><a href="#1-原理" class="headerlink" title="1. 原理"></a>1. 原理</h3><p>假设有一个很简单的神经网络，输入为向量$[x_1, x_2]$，输出为一只猫的概率。</p>
+<p><img src="/images/blog/2020/BN/network.PNG" alt></p>
+<p>而$x_1,x_2$两个维度的分布是不同的，假设两者均服从正态分布，$x_2$的$\mu$值更大，$\sigma$更小：</p>
+<p><img src="/images/blog/2020/BN/x1.PNG" alt></p>
+<p>这导致损失函数被拉长，</p>
+<blockquote>
+<p>So that changes to the weights relating to each of the inputs will have kind of </p>
+<p>a different effect of varying impact on this cost function.</p>
+</blockquote>
+<p>并且导致训练变得困难，网络收敛更慢而且更依赖参数初始化的效果。</p>
+<p><img src="/images/blog/2020/BN/costfunction.PNG" alt></p>
+<hr>
+<p>另外，由于测试集与训练集可能存在数据分布的不一致，即：</p>
+<p><img src="/images/blog/2020/BN/shift.PNG" alt></p>
+<p>会导致损失函数的变化：</p>
+<p><img src="/images/blog/2020/BN/costshift.PNG" alt></p>
+<p>这种现象叫做<strong>covariate shift</strong>。<font color="orange">如果对$[x_1, x_2]$进行规范化，那么数据分布会较为平衡，并且损失函数更顺滑，训练神经网络会更简单、更快速。</font>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/10/03/深入理解Batch-Normalization/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/03/模拟退火算法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/10/03/模拟退火算法/" class="post-title-link" itemprop="url">模拟退火算法</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-03 16:00:58" itemprop="dateModified" datetime="2020-10-03T16:00:58+08:00">2020-10-03</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/10/03/模拟退火算法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/03/模拟退火算法/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>总是在一些深度学习相关的博客、文章中看到<strong>模拟退火</strong>算法，这个名字让人感觉云里雾里，不明白是什么意思，今天查询了一下，做一个记录，以备以后用到。<font color="orange">简单粗暴，直接给出伪代码</font>：</p>
+<hr>
+<p>寻找能量$E(s)$最低的状态$s$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">s = s0, e = E(s)  <span class="comment"># 设定目前状态为s0，能量为E(s0)</span></span><br><span class="line">k = <span class="number">0</span>  <span class="comment"># 评估次数k</span></span><br><span class="line"><span class="keyword">while</span> k &lt; kmax <span class="keyword">and</span> e &gt; emin:  <span class="comment"># 若还有时间 (k &gt; kmax) 而且结果还不够好 (e &gt; emin) 则：</span></span><br><span class="line">    sn = neighbour(s)  <span class="comment"># 随机选取一临近状态sn</span></span><br><span class="line">    en = E(sn)  <span class="comment"># sn的能量为E(sn)</span></span><br><span class="line">    <span class="keyword">if</span> random() &lt; P(e, en, temp(k / kmax)):  <span class="comment"># 决定是否移至临近状态sn</span></span><br><span class="line">        s = sn  <span class="comment"># 移至临近状态sn</span></span><br><span class="line">        e = en</span><br><span class="line">    k = k + <span class="number">1</span>  <span class="comment"># 评估完成，次数k加一</span></span><br><span class="line"><span class="keyword">return</span> s  <span class="comment"># 回传状态s</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p>重点应该是$neighbor()$函数、$temp()$函数以及$P(e, en , temp(k / kmax))$概率分布函数。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/26/利用Freebase远程监督-SPARQL查询/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/09/26/利用Freebase远程监督-SPARQL查询/" class="post-title-link" itemprop="url">利用Freebase远程监督-SPARQL查询</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-26 16:35:36" itemprop="dateModified" datetime="2020-09-26T16:35:36+08:00">2020-09-26</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/09/26/利用Freebase远程监督-SPARQL查询/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/26/利用Freebase远程监督-SPARQL查询/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在DisFeb实验中，需要利用远程监督生成数据，因此记录一下<a href>Freebase</a>的查询方法：</p>
+<p>在个人实验中，采用下面5种关系作为demo：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/business/company/place_founded</span><br><span class="line">/location/administrative_division/country</span><br><span class="line">/location/country/capital</span><br><span class="line">/people/deceased_person/place_of_death</span><br><span class="line">/people/person/children</span><br></pre></td></tr></table></figure>
+<p>以<code>/location/country/capital</code>为例，介绍查询过程：</p>
+<h4 id="1-查询头尾实体"><a href="#1-查询头尾实体" class="headerlink" title="1. 查询头尾实体"></a>1. 查询头尾实体</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">select *</span><br><span class="line">where</span><br><span class="line">&#123;</span><br><span class="line">	?s &lt;http://rdf.freebase.com/ns/location.country.capital&gt; ?o</span><br><span class="line">&#125;</span><br><span class="line">limit 100</span><br></pre></td></tr></table></figure>
+<p>得到结果：</p>
+<p><img src="/images/blog/2020/head_tail.PNG" alt></p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/09/26/利用Freebase远程监督-SPARQL查询/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/23/生成对抗网络-GAN-初探/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/09/23/生成对抗网络-GAN-初探/" class="post-title-link" itemprop="url">生成对抗网络(GAN)初探</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-23 21:34:15" itemprop="dateModified" datetime="2020-09-23T21:34:15+08:00">2020-09-23</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/GAN/" itemprop="url" rel="index"><span itemprop="name">GAN</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/09/23/生成对抗网络-GAN-初探/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/23/生成对抗网络-GAN-初探/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>一直对GAN即生成对抗网络很感兴趣，随着科研的进展，近期可能会用到GAN来做文本数据的增强和去噪，所以简单尝试了一下，真的很有意思！😄</p>
+<p>推荐两个GAN的GitHub代码库：</p>
+<p><a href="https://github.com/eriklindernoren/PyTorch-GAN" target="_blank" rel="noopener">https://github.com/eriklindernoren/PyTorch-GAN</a></p>
+<p><a href="https://github.com/eriklindernoren/Keras-GAN" target="_blank" rel="noopener">https://github.com/eriklindernoren/Keras-GAN</a></p>
+<p>下面用<strong>MNIST</strong>来做实验，使用的是generator和discriminator均为多层感知机的最简单的GAN网络，代码非常易读，就不过多解释了：
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/09/23/生成对抗网络-GAN-初探/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/21/tensorboard-projector-不显示问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1566,771 +2315,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/07/Focal-Loss/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/09/07/Focal-Loss/" class="post-title-link" itemprop="url">Focal Loss</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-09-08 14:44:52" itemprop="dateModified" datetime="2020-09-08T14:44:52+08:00">2020-09-08</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/09/07/Focal-Loss/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/07/Focal-Loss/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="1-总述"><a href="#1-总述" class="headerlink" title="1. 总述"></a>1. 总述</h2><p>Focal Loss是由何恺明大神在论文<a href="https://arxiv.org/abs/1708.02002" target="_blank" rel="noopener">Focal Loss for Dense Object Detection</a>中提出的。</p>
-<p>Focal Loss主要是为了解决one-stage目标检测中正负样本比例严重失衡的问题。该损失函数降低了大量负样本在训练中所占的权重，也可以理解为一种困难样本挖掘。</p>
-<h2 id="2-损失函数形式"><a href="#2-损失函数形式" class="headerlink" title="2. 损失函数形式"></a>2. 损失函数形式</h2><p>Focal Loss是在交叉熵损失函数基础上进行的修改，首先回顾二分类交叉熵损失：</p>
-<script type="math/tex; mode=display">
-Loss = - [y\log y^{'} + (1-y) \log (1-y^{'})] = 
-\left\{\begin{aligned}
--\log y^{'}\quad \quad y=1 \\
--\log (1-y^{'}) \quad y=0
-\end{aligned}
-\right.</script><p>$y^{‘}$是经过激活函数的输出，介于0-1之间。可见普通的交叉熵对于正样本而言，输出概率越大损失越小。对于负样本而言，输出概率越小则损失越小。此时的损失函数在大量简单样本的迭代过程中收敛比较缓慢而且可能无法优化到最优。那么Focal Loss是怎么改进的呢？</p>
-<script type="math/tex; mode=display">
-Loss_{focal} = 
-\left\{
-\begin{aligned}
--(1-y^{'})^\gamma \log y^{'}  & \quad & y=1\\
--y^{'\gamma} \log (1-y^{'}) & \quad & y=0
-\end{aligned}
-\right.</script><p>首先在原有的基础上添加了$(1-y^{‘})$和$y^{‘}$项，可以看作当前样本在损失函数中所占的权重。当$y=1$时，预测结果$y^{‘}$越接近$1$，说明当前样本置信度越高、越容易分类，对应的权重$(1-y^{‘})$就越低。$y=0$时类似。</p>
-<p>而$\gamma$用于控制惩罚力度，$\gamma$越大，惩罚力度越小：</p>
-<p><img src="/images/blog/2020/focalloss.png" alt></p>
-<h2 id="3-补充"><a href="#3-补充" class="headerlink" title="3. 补充"></a>3. 补充</h2><p>对于正负样本类别不平衡，可以在上式基础上继续添加平衡因子$\alpha$，形式变为：</p>
-<script type="math/tex; mode=display">
-Loss_{focal} = 
-\left\{
-\begin{aligned}
--\alpha(1-y^{'})^\gamma \log y^{'} \quad & \quad & y=1\\
--(1-\alpha)y^{'\gamma} \log (1-y^{'}) & \quad & y=0
-\end{aligned}
-\right.</script><p>在文中负样本比重较大，论文中取$\alpha=0.25$</p>
-<p>在论文中实验发现$\gamma$取$2.0$效果最优</p>
-<p>对于不同的数据集，最优参数不同，可以通过grid-search的方法选择适合自己实验的参数。
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/09/07/Focal-Loss/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/05/tensorboard显示空白问题/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/09/05/tensorboard显示空白问题/" class="post-title-link" itemprop="url">tensorboard显示空白问题</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-09-05 19:49:48" itemprop="dateModified" datetime="2020-09-05T19:49:48+08:00">2020-09-05</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/09/05/tensorboard显示空白问题/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/05/tensorboard显示空白问题/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>在服务器上执行pytorch代码训练深度神经网络，用<a href="https://github.com/huggingface/transformers/tree/master/examples/language-modeling" target="_blank" rel="noopener">run_language_modeling.py</a>在<code>bert-base-uncased</code>基础上基于Amazon情感分析语料进行fine-tuning，服务器上版本为：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python==3.6.10</span><br><span class="line">tensorboard==2.1.1</span><br><span class="line">pytorch==1.5.1</span><br></pre></td></tr></table></figure>
-<p>得到结果记录保存在runs文件夹中，在个人电脑上，执行：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tensorboard --logdir runs</span><br></pre></td></tr></table></figure>
-<p>然后打开本地服务器<a href="http://localhost:6006，结果页面显示空白。" target="_blank" rel="noopener">http://localhost:6006，结果页面显示空白。</a></p>
-<p>在网上查询了相关资料，最后问题定位为tensorboard版本问题，由于tensorboard升级后对某些原有的API不再支持，所以使用pytorch的SummaryWriter旧API写得的记录文件不能直接显示。</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>将tensorboard降级为2.0.0版本：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install tensorboard==2.0.0</span><br></pre></td></tr></table></figure>
-<p>再次尝试，看到页面可以正常显示了。</p>
-<p><img src="/images/blog/2020/scalars.PNG" alt></p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/09/05/tensorboard显示空白问题/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/04/Pytorch多GPU训练/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/09/04/Pytorch多GPU训练/" class="post-title-link" itemprop="url">Pytorch多GPU训练</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-09-05 16:17:28" itemprop="dateModified" datetime="2020-09-05T16:17:28+08:00">2020-09-05</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/09/04/Pytorch多GPU训练/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/04/Pytorch多GPU训练/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在数据越来越多的时代，随着模型参数规模增多，以及数据量不断提升，使用多GPU训练是不可避免的事情。Pytorch在0.4.0及以后的版本中提供了多GPU的训练方式，本文简单讲解使用Pytorch多GPU训练的方式以及一些注意的地方。</p>
-<p>在此我们主要讨论单机多GPU方式训练，而不是多机多卡分布式训练，在实际的任务中，两者存在部分交集。</p>
-<h2 id="1-使用方式"><a href="#1-使用方式" class="headerlink" title="1. 使用方式"></a>1. 使用方式</h2><p>在设备存在多个显卡的情况下，最简单的方法是使用<strong>torch.nn.DataParallel</strong>将模型包装一下即可。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model = torch.nn.DataParallel(model)</span><br></pre></td></tr></table></figure>
-<p>这时，默认所有存在的显卡都会被使用，如果想要指定某几张显卡，可以：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model = torch.nn.DataParallel(model, device_ids=[<span class="number">0</span>, <span class="number">2</span>])</span><br></pre></td></tr></table></figure>
-<p>就指定了0号和2号显卡作为训练使用。</p>
-<h2 id="2-进阶方式"><a href="#2-进阶方式" class="headerlink" title="2. 进阶方式"></a>2. 进阶方式</h2><p>另一种方法，使用<strong>torch.nn.parallel.DistributedDataParallel</strong>，虽然用于分布式训练，但是单机训练同样可以使用。只不过使用起来相对麻烦一些。</p>
-<p>在<a href="https://pytorch.org/docs/stable/generated/torch.nn.DataParallel.html#torch.nn.DataParallel" target="_blank" rel="noopener">Pytorch官方文档</a>中，有一段值得注意的话：</p>
-<p><img src="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/Pytorch%E5%A4%9AGPU%E8%AE%AD%E7%BB%83/warning.PNG" alt></p>
-<p>Pytorch推荐使用<strong>DistributedDataParallel</strong>代替<strong>DataParallel</strong>。</p>
-<p><img src="https://raw.githubusercontent.com/Hao-Kailong/blog-image/master/Pytorch%E5%A4%9AGPU%E8%AE%AD%E7%BB%83/instead.PNG" alt></p>
-<p>概括来说，就是<strong>DistributedDataParallel</strong>使用多进程，每个GPU单独占有一个进程；<strong>DataParallel</strong>使用多线程，会受到Python解释器中GIL的影响，效率较低。</p>
-<p>下面介绍一下具体的使用方法：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m torch.distributed.launch --nproc_per_node=你的GPU数量 YOUR_TRAINING_SCRIPT.py --arg1 --arg2 and all other arguments of your training script</span><br></pre></td></tr></table></figure>
-<p>上述命令和我们平常的命令稍有区别，用到了torch.distributed.launch这个模块，我们选择的运行方式变为<code>python -m</code>，相当于使用torch.distributed.launch.py去运行我们的YOUR_TRAINING_SCRIPT.py，其中torch.distributed.launch会向我们的运行程序传递一些变量。
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/09/04/Pytorch多GPU训练/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/01/pytorch优化器传入两个模型的参数/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/09/01/pytorch优化器传入两个模型的参数/" class="post-title-link" itemprop="url">pytorch优化器传入两个模型的参数</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-09-01 10:38:34" itemprop="dateModified" datetime="2020-09-01T10:38:34+08:00">2020-09-01</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/09/01/pytorch优化器传入两个模型的参数/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/01/pytorch优化器传入两个模型的参数/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="1-传入两个模型参数"><a href="#1-传入两个模型参数" class="headerlink" title="1. 传入两个模型参数"></a>1. 传入两个模型参数</h2><p>举例说明：model_one只是一个提取特征的网络，得到features，model_two对features进行处理，求loss，而且model_two有需要学习的参数。平时我们一般使用如下的方式：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">optimizer = torch.optim.SGD(model.parameters(), lr)</span><br></pre></td></tr></table></figure>
-<p>传入两个模型的参数为：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">optimizer = torch.optim.SGD([</span><br><span class="line">	&#123;<span class="string">'params'</span>: model.parameters()&#125;,</span><br><span class="line">	&#123;<span class="string">'params'</span>: lossnet.parameters(), <span class="string">'lr'</span>: <span class="number">1e-4</span>&#125;</span><br><span class="line">], lr, momentum=<span class="number">0.99</span>)</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/09/01/pytorch优化器传入两个模型的参数/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2379,7 +2363,7 @@ Loss_{focal} =
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">175</span>
+                    <span class="site-state-item-count">179</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2438,9 +2422,7 @@ Loss_{focal} =
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -3321,7 +3303,35 @@ Loss_{focal} =
                     
                       
                     
-                    <span class="site-state-item-count">432</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">446</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -3863,11 +3873,11 @@ Loss_{focal} =
   
     
       
-    
-      
-    
-      
         
+      
+    
+      
+    
       
     
       

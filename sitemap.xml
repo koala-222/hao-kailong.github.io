@@ -2,9 +2,44 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://haokailong.top/2021/04/06/C-%E4%B8%AD%E5%A4%B4%E6%96%87%E4%BB%B6-bits-stdc-h/</loc>
+    <loc>http://haokailong.top/2021/04/24/Failed-to-initialize-NVML/</loc>
     
-    <lastmod>2021-04-12T14:28:25.871Z</lastmod>
+    <lastmod>2021-04-24T12:15:11.439Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://haokailong.top/2021/04/23/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Adam/</loc>
+    
+    <lastmod>2021-04-23T09:07:07.054Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://haokailong.top/2021/03/29/%E9%80%9A%E4%BF%97%E7%90%86%E8%A7%A3%E5%9B%B0%E6%83%91%E5%BA%A6-Perplexity/</loc>
+    
+    <lastmod>2021-04-23T08:49:53.870Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://haokailong.top/2021/04/21/LSGAN-%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98GAN/</loc>
+    
+    <lastmod>2021-04-21T12:20:18.423Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://haokailong.top/2021/04/13/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93-%E8%85%BE%E8%AE%AF%E3%80%81%E7%99%BE%E5%BA%A6%E3%80%81%E5%AD%97%E8%8A%82/</loc>
+    
+    <lastmod>2021-04-21T11:11:15.256Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://haokailong.top/2021/04/13/%E5%9F%BA%E4%BA%8EK-Means%E7%9A%84%E5%BC%82%E5%B8%B8%E5%80%BC%E6%A3%80%E6%B5%8B/</loc>
+    
+    <lastmod>2021-04-13T08:10:18.035Z</lastmod>
     
   </url>
   
@@ -110,13 +145,6 @@
     <loc>http://haokailong.top/2021/03/29/SMOTE%E4%B8%8A%E9%87%87%E6%A0%B7%E6%96%B9%E6%B3%95/</loc>
     
     <lastmod>2021-03-29T11:52:59.801Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://haokailong.top/2021/03/29/%E9%80%9A%E4%BF%97%E7%90%86%E8%A7%A3%E5%9B%B0%E6%83%91%E5%BA%A6-Perplexity/</loc>
-    
-    <lastmod>2021-03-29T06:24:31.498Z</lastmod>
     
   </url>
   

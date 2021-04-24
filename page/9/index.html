@@ -415,6 +415,767 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/20/DISTRE-debug-记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/12/20/DISTRE-debug-记录/" class="post-title-link" itemprop="url">DISTRE debug 记录</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-20 20:10:27" itemprop="dateModified" datetime="2020-12-20T20:10:27+08:00">2020-12-20</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/Distant-Supervision/" itemprop="url" rel="index"><span itemprop="name">Distant Supervision</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/12/20/DISTRE-debug-记录/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/20/DISTRE-debug-记录/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="1-en-core-web-sm"><a href="#1-en-core-web-sm" class="headerlink" title="1. en_core_web_sm"></a>1. en_core_web_sm</h1><p>在Spacy中需要用到这个，但是在服务器上使用代理，会报错：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"/data/klhao/.conda/klhao-allennlp/lib/python3.6/site-packages/urllib3/connectionpool.py"</span>, line 696, <span class="keyword">in</span> urlopen</span><br><span class="line">    self._prepare_proxy(conn)</span><br><span class="line">  File <span class="string">"/data/klhao/.conda/klhao-allennlp/lib/python3.6/site-packages/urllib3/connectionpool.py"</span>, line 964, <span class="keyword">in</span> _prepare_proxy</span><br><span class="line">    conn.connect()</span><br><span class="line">  File <span class="string">"/data/klhao/.conda/klhao-allennlp/lib/python3.6/site-packages/urllib3/connection.py"</span>, line 366, <span class="keyword">in</span> connect</span><br><span class="line">    self._tunnel()</span><br><span class="line">  File <span class="string">"/data/klhao/.conda/klhao-allennlp/lib/python3.6/http/client.py"</span>, line 930, <span class="keyword">in</span> _tunnel</span><br><span class="line">    (version, code, message) = response._read_status()</span><br><span class="line">  File <span class="string">"/data/klhao/.conda/klhao-allennlp/lib/python3.6/http/client.py"</span>, line 280, <span class="keyword">in</span> _read_status</span><br><span class="line">    raise RemoteDisconnected(<span class="string">"Remote end closed connection without"</span></span><br><span class="line">http.client.RemoteDisconnected: Remote end closed connection without response</span><br></pre></td></tr></table></figure>
+<p><a href="https://stackoom.com/question/3mGaI/%E7%94%B1%E4%BA%8E%E4%BB%A3%E7%90%86%E9%97%AE%E9%A2%98-%E6%97%A0%E6%B3%95%E7%82%B9%E7%82%B9%E5%AE%89%E8%A3%85spacy-%E6%A8%A1%E5%9E%8B" target="_blank" rel="noopener">文档中</a>建议可以直接下载：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.1.0/en_core_web_sm-2.1.0.tar.gz</span><br></pre></td></tr></table></figure>
+<p>ok, it worked! ✨</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/12/20/DISTRE-debug-记录/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/20/AllenNLP-Jsonnet-模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/12/20/AllenNLP-Jsonnet-模式/" class="post-title-link" itemprop="url">AllenNLP Jsonnet 模式</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-20 16:31:50" itemprop="dateModified" datetime="2020-12-20T16:31:50+08:00">2020-12-20</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/12/20/AllenNLP-Jsonnet-模式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/20/AllenNLP-Jsonnet-模式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>这篇文章是对官方教程的翻译：</p>
+<p><a href="https://github.com/allenai/allennlp/blob/v0.6.1/tutorials/getting_started/using_as_a_library_pt1.md" target="_blank" rel="noopener">https://github.com/allenai/allennlp/blob/v0.6.1/tutorials/getting_started/using_as_a_library_pt1.md</a></p>
+<p>正如前文中所提到的，Allennlp的基本使用流程是需要自定义两个文件：<code>datareader</code>；<code>model</code>;<br> 同时，如果存在已经定义好的<code>datareader</code>我们也是可以直接拿来就用。接下来要介绍的这个例子呢，主要起到了两个作用：①熟悉allennlp的基本框架和逻辑②学习如何自定义自己的模型。模型全部都定义完成了之后，需要写一个json文件用来完成对模型的基本配置。</p>
+<p>  在这篇博客完成之后，我们将会能够构建一个对学术论文进行分类的模型，并且会使用该模型在其他的数据集上进行测试。目的是通过这篇博客让你对如何修改代码，如何训练模型，如何进行预测等等基本操作过程有一个大致的了解。在最后我们会贴出来源代码。</p>
+<h4 id="3-2-构建自己的代码库"><a href="#3-2-构建自己的代码库" class="headerlink" title="3.2 构建自己的代码库"></a>3.2 构建自己的代码库</h4><p>  正如前面所提到的，要想自己利用<code>AllenNLP</code>实现一个模型，那么就需要写两部分的代码：DatasetReader/Model。所以呢，我们的下一步就是要把我们自己写的代码放在python能够找到的位置，这样我们的<code>AllenNLP</code>才能够调用这些模块呀。假设我们自己的代码库基础包名叫<code>my_library</code>，当然啦，你想起啥名字都行，只要这个库符合两个条件：①位于<code>python</code>的查找包的路径上②这个库里包含你写的<code>models</code>以及<code>dataset_readers</code></p>
+<h4 id="3-3-编写你自己的DatasetReader"><a href="#3-3-编写你自己的DatasetReader" class="headerlink" title="3.3 编写你自己的DatasetReader"></a>3.3 编写你自己的DatasetReader</h4><p>  现在我们自己的代码库已经建立好啦，要开始写代码啦！当然啦，我们首先需要有一些数据。在这个教程中，我们想要预测某一篇学术论文的发表场合。具体一点说，就是给出一篇论文的标题和摘要，我们想要判断它到底是在”自然语言处理领域“，“机器学习领域”还是”人工智能领域”的论文。</p>
+<p>  我们使用的数据是从<code>Semantic Scholar</code>搜索引擎上下载的，每篇文章都标注好了所属的领域。下载下来的数据文件是JSON格式的，每个文件都应该至少包含标题（<code>title</code>），摘要(<code>paperAbstract</code>)，以及所属领域（<code>venue</code>）这样三部分内容。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"title"</span>: <span class="string">"A review of Web searching studies and a framework for future research"</span>,</span><br><span class="line">  <span class="attr">"paperAbstract"</span>: <span class="string">"Research on Web searching is at an incipient stage. ..."</span>,</span><br><span class="line">  <span class="attr">"venue"</span>: <span class="string">"&#123;AI|ML|ACL&#125;"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/12/20/AllenNLP-Jsonnet-模式/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/19/Allennlp-入门/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/12/19/Allennlp-入门/" class="post-title-link" itemprop="url">Allennlp 入门</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-20 13:28:40" itemprop="dateModified" datetime="2020-12-20T13:28:40+08:00">2020-12-20</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/12/19/Allennlp-入门/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/19/Allennlp-入门/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在最近的实验中，对比方法里有一个需要用到AllenNLP，因此，对AllenNLP进行一个入门的了解。</p>
+<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>Allennlp将NLP任务处理流程中的各个阶段都做了一定程度的抽象，在软件设计上讲就是，实现了高内聚，低耦合，让我们能够专注于特定模块的逻辑，而无需其他流程的改动，极大程度上减少了工作量。</p>
+<p>那基础且重要的处理流程有：</p>
+<ul>
+<li>DatasetReader：从文件中读取数据，转化为Instance集合</li>
+<li>Model：模型主体</li>
+<li>Iterator：迭代数据，提取batch数据</li>
+<li>Trainer：模型训练器，并记录metric</li>
+<li>Predictor：使用训练好的模型来预测数据</li>
+</ul>
+<p>以上每个流程是松耦合的，没有强关联，需要全局配置的东西非常少。比如在NLP处理中最常见的一个：num_embedding/vocab_size 需要提前全局给定，或者使用单独的配置来存储，只不过带来的问题就是这个配置在很多地方都可能会使用到，故参数的传递就又会增加代码的冗杂度，使用起来很不方便。在Allennlp中会有一个vocabulary全局存储，无需单独配置，且提供函数接口调用获取，非常简单。
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/12/19/Allennlp-入门/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/19/pip-安装路径/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/12/19/pip-安装路径/" class="post-title-link" itemprop="url">pip 安装路径</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-19 22:21:09" itemprop="dateModified" datetime="2020-12-19T22:21:09+08:00">2020-12-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/12/19/pip-安装路径/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/19/pip-安装路径/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>今天在服务器上安装包时，提示空间已满，原因是/home目录磁盘满了。</p>
+<h1 id="查看pip默认安装路径"><a href="#查看pip默认安装路径" class="headerlink" title="查看pip默认安装路径"></a>查看pip默认安装路径</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip show numpy</span><br></pre></td></tr></table></figure>
+<p>结果显示如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Name: numpy</span><br><span class="line">Version: 1.19.4</span><br><span class="line">Summary: NumPy is the fundamental package <span class="keyword">for</span> array computing with Python.</span><br><span class="line">Home-page: https://www.numpy.org</span><br><span class="line">Author: Travis E. Oliphant et al.</span><br><span class="line">Author-email: None</span><br><span class="line">License: BSD</span><br><span class="line">Location: /home/klhao/.conda/envs/klhao-allennlp/lib/python3.6/site-packages</span><br><span class="line">Requires: </span><br><span class="line">Required-by: thinc, tensorboardX, spacy, scipy, msgpack-numpy</span><br></pre></td></tr></table></figure>
+<p>可以看到，由于我们是在conda创建的虚拟环境中安装，所以pip安装的位置是conda默认的位置。为了使空间充足，需要在创建conda环境时指定安装目录。
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/12/19/pip-安装路径/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/12/TARE-debug-记录/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1535,747 +2296,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/05/多分类计算-P-N-方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/05/多分类计算-P-N-方法/" class="post-title-link" itemprop="url">多分类计算 P@N 方法</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-05 14:54:21" itemprop="dateModified" datetime="2020-12-05T14:54:21+08:00">2020-12-05</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/05/多分类计算-P-N-方法/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/05/多分类计算-P-N-方法/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在多分类方法中，有时候会用到P@N的评价指标，具体可以实现如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getPscore</span><span class="params">(self, sess, data, label=<span class="string">'P@N Evaluation'</span>)</span>:</span></span><br><span class="line">	<span class="string">"""</span></span><br><span class="line"><span class="string">	Computes P@N for N = 100, 200, and 300</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	Parameters</span></span><br><span class="line"><span class="string">	----------</span></span><br><span class="line"><span class="string">	data:		Data for P@N evaluation</span></span><br><span class="line"><span class="string">	label:		Log label to be used while logging</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	Returns</span></span><br><span class="line"><span class="string">	-------</span></span><br><span class="line"><span class="string">	P@100		Precision @ 100</span></span><br><span class="line"><span class="string">	P@200		Precision @ 200</span></span><br><span class="line"><span class="string">	P@300		Precision @ 300</span></span><br><span class="line"><span class="string">	"""</span></span><br><span class="line">	test_loss, test_acc, y, y_pred, logit_list, y_hot = self.predict(sess, data, label)</span><br><span class="line"></span><br><span class="line">       <span class="comment"># 去除 NA 类别</span></span><br><span class="line">	y_true   = np.array([e[<span class="number">1</span>:] <span class="keyword">for</span> e <span class="keyword">in</span> y_hot]).  	 reshape((<span class="number">-1</span>))</span><br><span class="line">	y_scores = np.array([e[<span class="number">1</span>:] <span class="keyword">for</span> e <span class="keyword">in</span> logit_list]).reshape((<span class="number">-1</span>))</span><br><span class="line"></span><br><span class="line">	allprob = np.reshape(np.array(y_scores), (<span class="number">-1</span>))  <span class="comment"># 拉成一维数组</span></span><br><span class="line">	allans  = np.reshape(y_true, (<span class="number">-1</span>))</span><br><span class="line">	order   = np.argsort(-allprob)  <span class="comment"># 排序后的 index</span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">p_score</span><span class="params">(n)</span>:</span></span><br><span class="line">		corr_num = <span class="number">0.0</span></span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> order[:n]:</span><br><span class="line">			corr_num += <span class="number">1.0</span> <span class="keyword">if</span> (allans[i] == <span class="number">1</span>) <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line">		<span class="keyword">return</span> corr_num / n</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> p_score(<span class="number">100</span>), p_score(<span class="number">200</span>), p_score(<span class="number">300</span>)</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/04/Rule-Mining-Wikidata-PPDB-WordNet/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/04/Rule-Mining-Wikidata-PPDB-WordNet/" class="post-title-link" itemprop="url">Rule Mining - Wikidata PPDB WordNet</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-12 21:18:00" itemprop="dateModified" datetime="2020-12-12T21:18:00+08:00">2020-12-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/Distant-Supervision/" itemprop="url" rel="index"><span itemprop="name">Distant Supervision</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/04/Rule-Mining-Wikidata-PPDB-WordNet/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/04/Rule-Mining-Wikidata-PPDB-WordNet/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>使用一些额外信息，可以辅助关系抽取的进行。</p>
-<h1 id="Wikidata"><a href="#Wikidata" class="headerlink" title="Wikidata"></a>Wikidata</h1><p>在Wikidata中，property存在alias信息，可以用来寻找关系 (属性) 的同名关系，具体可参考我之前的文章。</p>
-<p><strong>FIGER provides a mapping from types provides by Freebase to its 113 categories.</strong></p>
-<h1 id="PPDB"><a href="#PPDB" class="headerlink" title="PPDB"></a>PPDB</h1><p>PPDB (The Paraphase Database)，有一个在线网站：</p>
-<p><a href="http://paraphrase.org/#/" target="_blank" rel="noopener">PPDB (paraphrase.org)</a></p>
-<p>例如，输入短语“capital of”，可以查到19个近似短语：
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/12/04/Rule-Mining-Wikidata-PPDB-WordNet/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/03/绘制PR曲线，惯例做法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/03/绘制PR曲线，惯例做法/" class="post-title-link" itemprop="url">绘制PR曲线，惯例做法</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-05 15:21:43" itemprop="dateModified" datetime="2020-12-05T15:21:43+08:00">2020-12-05</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/03/绘制PR曲线，惯例做法/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/03/绘制PR曲线，惯例做法/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在远程监督关系抽取评价时，通常会采用PR曲线的方式，需要深入理解。</p>
-<p>本文的PR绘制方法主要参考了RESIDE，有兴趣可以直接查看源码：</p>
-<p><a href="https://github.com/malllabiisc/RESIDE" target="_blank" rel="noopener">https://github.com/malllabiisc/RESIDE</a></p>
-<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><p>绘制需要用到scikit-learn工具，以及matplotlib包。</p>
-<h1 id="计算函数"><a href="#计算函数" class="headerlink" title="计算函数"></a>计算函数</h1><p>核心功能就下面几行：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> precision_recall_curve, average_precision_score</span><br><span class="line"></span><br><span class="line">y_true, y_scores = loadData(<span class="string">'./results/&#123;&#125;/precision_recall.pkl'</span>.format(args.name))</span><br><span class="line">precision,recall,threshold = precision_recall_curve(y_true,y_scores)</span><br><span class="line">rea_under = average_precision_score(y_true, y_scores)</span><br><span class="line">baselines_path = <span class="string">'./baselines_pr/&#123;&#125;/'</span>.format(dataset)</span><br><span class="line">print(<span class="string">'Area under the curve: &#123;:.3&#125;'</span>.format(area_under))</span><br><span class="line"></span><br><span class="line">plt.plot(recall[:], precision[:], label=<span class="string">'RESIDE'</span>, color =<span class="string">'red'</span>, lw=<span class="number">1</span>, marker = <span class="string">'o'</span>, markevery = <span class="number">0.1</span>, ms = <span class="number">6</span>)</span><br></pre></td></tr></table></figure>
-<p>关于precision_recall_curve(), average_precision_score()，强烈推荐去看文档：</p>
-<p><a href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_recall_curve.html" target="_blank" rel="noopener">https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_recall_curve.html</a></p>
-<p><a href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.average_precision_score.html" target="_blank" rel="noopener">https://scikit-learn.org/stable/modules/generated/sklearn.metrics.average_precision_score.html</a></p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/12/03/绘制PR曲线，惯例做法/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/03/pip下载速度过慢的问题/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/03/pip下载速度过慢的问题/" class="post-title-link" itemprop="url">pip下载速度过慢的问题</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-03 21:01:23" itemprop="dateModified" datetime="2020-12-03T21:01:23+08:00">2020-12-03</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/03/pip下载速度过慢的问题/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/03/pip下载速度过慢的问题/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在服务器上下载tensorflow-gpu 1.15时，下载速度太慢，只有35KB/s，太慢了…啊( •̀ ω •́ )✧</p>
-<p>可以在下载时指定下载源，如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple tensorflow-gpu==1.15</span><br></pre></td></tr></table></figure>
-<p>下载速度飙升到12MB/s，起飞⛷🤺</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2324,7 +2344,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">175</span>
+                    <span class="site-state-item-count">179</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2383,9 +2403,7 @@
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -3266,7 +3284,35 @@
                     
                       
                     
-                    <span class="site-state-item-count">432</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">446</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

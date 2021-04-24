@@ -415,6 +415,759 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/13/Contrastive-Loss/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/13/Contrastive-Loss/" class="post-title-link" itemprop="url">Contrastive Loss</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-13 23:43:35" itemprop="dateModified" datetime="2020-11-13T23:43:35+08:00">2020-11-13</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/13/Contrastive-Loss/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/13/Contrastive-Loss/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>部分内容参考以下文章：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/93917636" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/93917636</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/149748513" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/149748513</a></p>
+</blockquote>
+<p><br></p>
+<h1 id="1-什么是对比损失？"><a href="#1-什么是对比损失？" class="headerlink" title="1. 什么是对比损失？"></a>1. 什么是对比损失？</h1><p>最近Kaiming He, Haoqi Fan, Yuxin Wu, Saining Xie 与 Ross Girshick在图像处理任务上使用自监督预训练从图像中提取特征，在7个下游任务中超过监督学习的特征提取表现。使用的核心技术是对比损失(Contrastive Loss Function)，如何理解这个对比损失呢？这篇文章记录个人的直观理解。</p>
+<p>先说大家熟悉的损失函数，categorical crossentropy, 它计算了类概率与标准答案的距离。softmax 用作最后一层的激活函数，计算归一化的类概率。每个类的标准答案是 one-hot 表示。比如在猫，狗，猪三分类任务中, one-hot 表示为，</p>
+<p>=(1, 0, 0)</p>
+<p>=(0, 1, 0)</p>
+<p>=(0, 0, 1)</p>
+<p>这对应3维空间沿 x-轴， y-轴，z-轴的3个单位基向量。</p>
+<p>这样做没有任何问题。但是如果我们添加更多类别，比如额外添加 树，花和草，将这6种生物放在6维空间的单位基向量上，softmax 函数会将他们一视同仁，不会认为猫和狗之间的距离应该小于猫与草的距离，虽然前2者同属动物。</p>
+<p>最直接的想法是我们假设存在一个损失函数，它满足如下的基本准则</p>
+<ol>
+<li>近似样本之间的距离越小越好</li>
+<li>不似样本之间的距离越大越好</li>
+</ol>
+<p>如果一个损失函数只要求满足条件 1，那么相当于说我只要同一个类的样本都放在同一个点即可。神经网络将猫都放在(1, 0, 0)之后，就算将狗和猪也放在（1，0， 0），仍然不会破坏条件1。这样，神经网络只要对所有样本作出一样的预测就可以了。</p>
+<p>如果再加上条件2，是不是就好了呢？优化的时候，神经网络将猫放在(1, 0, 0)，第一轮将狗放在（0，1， 0），第二轮将狗放在（0，2， 0），然后一轮轮训练下去，狗的坐标被放的越来越远，不相似样本之间的距离越来越大，但训练的目标却仿佛永远无法达到 。。。</p>
+<p><strong>这是因为训练目标没有边界。</strong>来到 <strong>LeCun 和他的合作者们在2006年提出的对比损失（Contrastive Loss Function)</strong>。这个损失函数定下的基本准则是：
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/11/13/Contrastive-Loss/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/13/IJCAI-2021-投稿安排/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/13/IJCAI-2021-投稿安排/" class="post-title-link" itemprop="url">IJCAI 2021 投稿安排</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-13 15:07:07" itemprop="dateModified" datetime="2020-11-13T15:07:07+08:00">2020-11-13</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/13/IJCAI-2021-投稿安排/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/13/IJCAI-2021-投稿安排/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>IJCAI（国际人工智能联合会议）曾被誉为人工智能界的女神，但因近几年的审稿翻车事件，女神高不可攀的形象，似乎跌落了一些，<strong>组委会不得不做出紧急反应</strong>，开始改革。IJCAI新提出的快速淘汰机制，2020第一轮审稿就拒绝了将近一半，最后的录取率又一次探了底，直降到<strong>12.6%</strong>，被称为“灭霸式审稿”也不为过。</p>
+<p>更让人感慨唏嘘的是，一场突来的全球疫情，使得本该线下交流的大会，被迫延期到2021年1月，大家都不禁猜测，组委会在此形势下，会不会干脆取消下一届的举办。但就在近日，官网更新了IJCAI 2021的会议安排，终于打消了大家的疑虑。</p>
+<p>根据官方声明，<strong>这次会议计划于2021.8.21-26期间，在加拿大蒙特利尔召开</strong>，最受投稿者关注的论文接收流程，也已经公布，下面将介绍一下行程安排。</p>
+<p><strong>【IJCAI 2021重要时间节点】</strong></p>
+<font color="orange">*以下为官方时间（UTC-12），非北京时间（UTC+8），两者相差20个小时*</font>
+
+<p><div align="center"> <img src="/images/blog/2020/ijcai.jpg" alt></div></p>
+<p>对应于北京时间：
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/11/13/IJCAI-2021-投稿安排/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/12/fastText原理及实践/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/12/fastText原理及实践/" class="post-title-link" itemprop="url">fastText原理及实践</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-12 19:45:55" itemprop="dateModified" datetime="2020-11-12T19:45:55+08:00">2020-11-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/12/fastText原理及实践/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/12/fastText原理及实践/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1. 简介"></a>1. 简介</h1><p><a href="https://github.com/facebookresearch/fastText" target="_blank" rel="noopener">fastText</a>是一个快速文本分类算法，与基于神经网络的分类算法相比有两大优点：<br>1、fastText在保持高精度的情况下加快了训练速度和测试速度<br>2、fastText不需要预训练好的词向量，fastText会自己训练词向量<br>3、fastText两个重要的优化：Hierarchical Softmax、N-gram</p>
+<h1 id="2-模型架构"><a href="#2-模型架构" class="headerlink" title="2. 模型架构"></a>2. 模型架构</h1><p>word2vec将上下文关系转化为多分类任务，进而训练逻辑回归模型，这里的类别数量|V|词库大小。通常的文本数据中，词库少则数万，多则百万，在训练中直接训练多分类逻辑回归并不现实。word2vec中提供了两种针对大规模多分类问题的优化手段， negative sampling 和hierarchical softmax。在优化中，negative sampling 只更新少量负面类，从而减轻了计算量。hierarchical softmax 将词库表示成前缀树，从树根到叶子的路径可以表示为一系列二分类器，一次多分类计算的复杂度从|V|降低到了树的高度
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/11/12/fastText原理及实践/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/11/关系抽取数据集/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/11/关系抽取数据集/" class="post-title-link" itemprop="url">关系抽取数据集</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-11 15:51:32" itemprop="dateModified" datetime="2020-11-11T15:51:32+08:00">2020-11-11</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/11/关系抽取数据集/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/11/关系抽取数据集/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>本篇文章部分引用以下博客：</p>
+<p><a href="https://blog.csdn.net/qq_41372972/article/details/104677655" target="_blank" rel="noopener">https://blog.csdn.net/qq_41372972/article/details/104677655</a></p>
+<p><a href="https://blog.csdn.net/CSDN_wujian/article/details/100136621" target="_blank" rel="noopener">https://blog.csdn.net/CSDN_wujian/article/details/100136621</a></p>
+</blockquote>
+<p><br></p>
+<p>最近由于实验需要，收集整理了关系抽取方向的数据集，主要包括SemEval、Wiki80、NYT10。目前来说全监督的关系抽取任务一般在SemEval上做，远程监督的关系抽取任务一般在NYT10上做。</p>
+<h1 id="SemEval"><a href="#SemEval" class="headerlink" title="SemEval"></a>SemEval</h1><h2 id="数据集来源"><a href="#数据集来源" class="headerlink" title="数据集来源"></a>数据集来源</h2><p>SemEval数据集来自于2010年的国际语义评测大会中Task 8:” Multi-Way Classification of Semantic Relations Between Pairs of Nominals “</p>
+<h2 id="数据集介绍"><a href="#数据集介绍" class="headerlink" title="数据集介绍"></a>数据集介绍</h2><p>任务：对于给定了的句子和两个做了标注的名词，从给定的关系清单中选出最合适的关系。<br>数据集中一共包含9+1个关系，各类数据的占比如下图所示：</p>
+<p><img src="/images/blog/2020/semeval.png" alt></p>
+<p>数据官网：<a href="http://semeval2.fbk.eu/semeval2.php?location=tasks#T11" target="_blank" rel="noopener">http://semeval2.fbk.eu/semeval2.php?location=tasks#T11</a></p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/11/11/关系抽取数据集/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/10/LeetCode-2-动态规划与背包问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1512,803 +2265,6 @@ l(y) = \max(0, 1-y \cdot \hat y)</script><p>上式是Hinge loss在二分类问�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/04/LeetCode-1-素数分解/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/11/04/LeetCode-1-素数分解/" class="post-title-link" itemprop="url">LeetCode-1-素数分解</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-11-04 23:11:30" itemprop="dateModified" datetime="2020-11-04T23:11:30+08:00">2020-11-04</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/11/04/LeetCode-1-素数分解/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/04/LeetCode-1-素数分解/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1. 问题描述"></a>1. 问题描述</h2><p>有10^8个村庄排在一条公路上，依次编号为0~10^8-1，相邻村庄距离为1，其中有n个村庄居住着牛牛，居住牛牛的村庄依次为a0~an-1，保证a0=0.</p>
-<p>现在需要 建设车站，有两个要求：</p>
-<ol>
-<li>每个有牛牛的村庄必须修建车站</li>
-<li>相邻车站距离必须为1或者某个质数</li>
-</ol>
-<p>现给出n和a数组，求需要建设的车站的最小数量。</p>
-<h2 id="2-分析"><a href="#2-分析" class="headerlink" title="2. 分析"></a>2. 分析</h2><p>需要解决两个关键问题：</p>
-<ol>
-<li>给出一个数的最少的素数分解</li>
-<li>判断一个数是否为素数</li>
-</ol>
-<h2 id="3-解决"><a href="#3-解决" class="headerlink" title="3. 解决"></a>3. 解决</h2><h3 id="3-1-问题1"><a href="#3-1-问题1" class="headerlink" title="3.1 问题1"></a>3.1 问题1</h3><p>哥德巴赫猜想：任一大于2的整数都可以写作三个质数之和。</p>
-<p><a href="https://baike.baidu.com/item/%E5%93%A5%E5%BE%B7%E5%B7%B4%E8%B5%AB%E7%8C%9C%E6%83%B3/72364?fr=aladdin" target="_blank" rel="noopener">哥德巴赫猜想的欧拉版本</a>：任一大于2的偶数都可以写成两个质数之和。</p>
-<p>其实，也有一部分奇数可以用两个素数的和表示，大多数的奇数无法用两个素数的和表示，例如15=2+13，而23、25等则无法用两素数的和表示。</p>
-<p><br></p>
-<p><font color="orange">emmm，这样看来，不能直接利用哥德巴赫猜想解决问题。</font>但是，由于<strong>哥德巴赫猜想的欧拉版本</strong>已经被计算机验证到了很大的天文数字，所以可以减少我们一半的工作量。如果两个相邻车站间距离为偶数，我们有理由相信只需要在其中安插一个车站，就可以把距离变为两个质数；因此，只需要考虑两个相邻车站间距离为奇数的情况。</p>
-<p><br></p>
-<p>根据哥德巴赫猜想，奇数可以最少可以被拆分为两个或三个质数的和。没有更好的办法，<strong>只能通过遍历的方式，看能否被分为两个质数之和</strong>，如果不能，则必然可以被分为三个质数之和。而判断一个数是否为素数，就要通过3.2节的方法。
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/11/04/LeetCode-1-素数分解/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/02/向量可视化/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/11/02/向量可视化/" class="post-title-link" itemprop="url">向量可视化</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-11-05 13:55:13" itemprop="dateModified" datetime="2020-11-05T13:55:13+08:00">2020-11-05</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/11/02/向量可视化/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/02/向量可视化/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>近期在实验中，需要对特征空间的向量进行可视化，观察向量的空间分布是否符合预期，对向量可视化进行了一些简单的探索。</p>
-<h2 id="1-使用tensorboard"><a href="#1-使用tensorboard" class="headerlink" title="1. 使用tensorboard"></a>1. 使用tensorboard</h2><p>使用tensorboard可以对向量进行可视化，可以动态的拖拽、缩放，非常的方便。使用tensorboard可视化主要用到下面的函数：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">visualisation</span><span class="params">(words, embeddings, log_path)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    :param words: 词list</span></span><br><span class="line"><span class="string">    :param embeddings: np.array 词向量矩阵</span></span><br><span class="line"><span class="string">    :param log_path:</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="comment"># Set up a logs directory, so Tensorboard knows where to look for files</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(log_path):</span><br><span class="line">        os.makedirs(log_path)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Save Labels separately on a line-by-line manner.</span></span><br><span class="line">    <span class="keyword">with</span> open(os.path.join(log_path, <span class="string">'metadata.tsv'</span>), <span class="string">"w"</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="keyword">for</span> subwords <span class="keyword">in</span> words:</span><br><span class="line">            f.write(<span class="string">"&#123;&#125;\n"</span>.format(subwords))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Save the weights we want to analyse as a variable. Note that the first</span></span><br><span class="line">    <span class="comment"># value represents any unknown word, which is not in the metadata, so</span></span><br><span class="line">    <span class="comment"># we will remove that value.</span></span><br><span class="line">    weights = tf.Variable(embeddings)</span><br><span class="line">    <span class="comment"># Create a checkpoint from embedding, the filename and key are</span></span><br><span class="line">    <span class="comment"># name of the tensor.</span></span><br><span class="line">    checkpoint = tf.train.Checkpoint(embedding=weights)</span><br><span class="line">    checkpoint.save(os.path.join(log_path, <span class="string">"embedding.ckpt"</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Set up config</span></span><br><span class="line">    config = projector.ProjectorConfig()</span><br><span class="line">    embedding = config.embeddings.add()</span><br><span class="line">    <span class="comment"># The name of the tensor will be suffixed by `/.ATTRIBUTES/VARIABLE_VALUE`</span></span><br><span class="line">    embedding.tensor_name = <span class="string">'embedding/.ATTRIBUTES/VARIABLE_VALUE'</span></span><br><span class="line">    embedding.metadata_path = <span class="string">'metadata.tsv'</span></span><br><span class="line">    projector.visualize_embeddings(log_path, config)</span><br></pre></td></tr></table></figure>
-<p>主要参考了TensorFlow的官方指南<a href="https://www.tensorflow.org/tensorboard/tensorboard_projector_plugin" target="_blank" rel="noopener">https://www.tensorflow.org/tensorboard/tensorboard_projector_plugin</a></p>
-<p>这里<code>embedding.tensor_name = &#39;embedding/.ATTRIBUTES/VARIABLE_VALUE&#39;</code>是不能随意改动的，不明白为什么…不过暂时不再深入探究了，不是关键问题。</p>
-<p><br></p>
-<p>补充：关于<code>/.ATTRIBUTES/VARIABLE_VALUE/</code>问题，<a href="https://github.com/tensorflow/tensorboard/issues/2471" target="_blank" rel="noopener">https://github.com/tensorflow/tensorboard/issues/2471</a></p>
-<blockquote>
-<p>The tensor name change is a bit trickier. I looked into this a bit, and<br>it’s due to changes in the TensorFlow checkpoint code itself, as you<br>suggest; the tokens <a href="https://github.com/tensorflow/tensorflow/blob/5b4fe5470852d1aea737b194e03727cdedddebca/tensorflow/python/training/tracking/graph_view.py#L45-L48" target="_blank" rel="noopener"><code>.ATTRIBUTES</code></a> and <a href="https://github.com/tensorflow/tensorflow/blob/5b4fe5470852d1aea737b194e03727cdedddebca/tensorflow/python/training/tracking/base.py#L40-L44" target="_blank" rel="noopener"><code>VARIABLE_VALUE</code></a> are<br>hard-coded, and you need to supply them on any checkpoint-related<br>methods (e.g., <code>read_tensor</code>).</p>
-</blockquote>
-<p>也就是说，由于TensorFlow的一些原因，必须加上这个名称后缀，就这样做就是了，没有什么值得探究。</p>
-<p><br></p>
-<p>可视化效果如图：</p>
-<p><img src="/images/blog/2020/visual/feature_space.png" alt></p>
-<p>并不像预期的那样不同的类别泾渭分明😥甚至看不出明显的界限，全部混杂在了一起。猜想原因可能是有两个：</p>
-<ul>
-<li>训练不充分，学习效果不够好</li>
-<li>可视化的数据太多
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/11/02/向量可视化/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </li></ul></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/01/pytorch-loss-backward-的理解/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/11/01/pytorch-loss-backward-的理解/" class="post-title-link" itemprop="url">pytorch loss.backward()的理解</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-11-01 15:16:51" itemprop="dateModified" datetime="2020-11-01T15:16:51+08:00">2020-11-01</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/GAN/" itemprop="url" rel="index"><span itemprop="name">GAN</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/11/01/pytorch-loss-backward-的理解/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/01/pytorch-loss-backward-的理解/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>部分引用以下文章：</p>
-<p><a href="https://blog.csdn.net/douhaoexia/article/details/78821428" target="_blank" rel="noopener">https://blog.csdn.net/douhaoexia/article/details/78821428</a></p>
-<p><a href="https://blog.csdn.net/a845717607/article/details/104598278" target="_blank" rel="noopener">https://blog.csdn.net/a845717607/article/details/104598278</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/84890656" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/84890656</a></p>
-</blockquote>
-<p><br></p>
-<p>最近一直在用pytorch做GAN相关的实验。<br>这两天遇到了一些模型参数寻优的问题，才发现自己对pytorch的自动求导和寻优功能没有深刻理解，导致无法灵活的进行实验。于是查阅资料，同时自己做了一点小实验，做了一些总结，虽然好像都是一些显而易见的结论，但是如果不能清晰的理解，对于实验复杂的网络模型程序会造成困扰。</p>
-<ul>
-<li><p>相关标志位/函数</p>
-<ul>
-<li>1<ul>
-<li>requires_grad</li>
-<li>volatile</li>
-<li>detach()/detach_()</li>
-</ul>
-</li>
-<li>2<ul>
-<li>retain_graph</li>
-<li>retain_variables</li>
-<li>create_graph</li>
-</ul>
-</li>
-</ul>
-<p>前三个标志位中，最关键的就是 requires_grad，另外两个都可以转化为 requires_grad 来理解。<br>后三个标志位，与计算图的保持与建立有关系。其中 retain_variables 与 retain_graph等价，retain_variables 在pytorch 新版本中被取消掉。</p>
-</li>
-<li><p>requires_grad 的含义及标志位说明</p>
-<ul>
-<li>如果对于某Variable 变量 x ，其 <code>x.requires_grad == True</code> , 则表示 它可以参与求导，也可以从它向后求导。<br>默认情况下，一个新的Variables 的 requires_grad 和 volatile 都等于 False 。</li>
-<li><code>requires_grad == True</code> 具有传递性，如果：<br><code>x.requires_grad == True</code> ，<code>y.requires_grad == False</code> ， <code>z=f(x,y)</code><br>则， <code>z.requires_grad == True</code></li>
-<li>凡是参与运算的变量（包括 输入量，中间输出量，输出量，网络权重参数等），都可以设置 requires_grad 。</li>
-<li><code>volatile==True</code> 就等价于 <code>requires_grad==False</code> 。 <code>volatile==True</code> 同样具有传递性。一般只用在inference过程中。若是某个过程，从 x 开始 都只需做预测，不需反传梯度的话，那么只需设置<code>x.volatile=True</code> ,那么 x 以后的运算过程的输出均为 <code>volatile==True</code> ,即 <code>requires_grad==False</code> 。<br>虽然inference 过程不必backward(),所以requires_grad 的值为False 或 True，对结果是没有影响的，但是对程序的运算效率有直接影响；所以使用<code>volatile=True</code> ,就不必把运算过程中所有参数都手动设一遍<code>requires_grad=False</code> 了，方便快捷。</li>
-<li><code>detach()</code> ，如果 x 为中间输出，<code>x&#39; = x.detach</code> 表示创建一个与 x 相同，但<code>requires_grad==False</code> 的variable, (实际上是把x’ 以前的计算图 grad<em>fn 都消除了)，x’ 也就成了叶节点。原先反向传播时，回传到x时还会继续，而现在回到x’处后，就结束了，不继续回传求到了。另外值得注意, x (variable类型) 和 x’ (variable类型)都指向同一个Tensor ,即 x.data<br>而`detach</em>()` 表示不创建新变量，而是直接修改 x 本身。</li>
-<li><code>retain_graph</code> ，每次 backward() 时，默认会把整个计算图free掉。一般情况下是每次迭代，只需一次 forward() 和一次 backward() ,前向运算forward() 和反向传播backward()是成对存在的，一般一次backward()也是够用的。但是不排除，由于自定义loss等的复杂性，需要一次forward()，多个不同loss的backward()来累积同一个网络的grad,来更新参数。于是，若在当前backward()后，不执行forward() 而可以执行另一个backward()，需要在当前backward()时，指定保留计算图，即backward(retain_graph)。</li>
-<li>create_graph ，这个标志位用于自动增加梯度对应的计算图，可用于计算二阶导数以及更高阶导数。
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/11/01/pytorch-loss-backward-的理解/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </li></ul></li></ul></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/27/PyTorch之requires-grad/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/27/PyTorch之requires-grad/" class="post-title-link" itemprop="url">PyTorch之requires_grad</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-27 15:29:37" itemprop="dateModified" datetime="2020-10-27T15:29:37+08:00">2020-10-27</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/10/27/PyTorch之requires-grad/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/27/PyTorch之requires-grad/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>requires_grad是Pytorch中通用数据结构Tensor的一个属性，用于说明当前量是否需要在计算中保留对应的梯度信息，以线性回归为例，容易知道权重w和偏差b为需要训练的对象，为了得到最合适的参数值，我们需要设置一个相关的损失函数，根据梯度回传的思路进行训练。</p>
-<p>官方文档中的说明如下：</p>
-<blockquote>
-<p>If there’s a single input to an operation that requires gradient, its output will also require gradient.</p>
-</blockquote>
-<p>只要某一个输入需要相关梯度值，则输出也需要保存相关梯度信息，这样就保证了这个输入的梯度回传。<br>而反之，若所有的输入都不需要保存梯度，那么输出的requires_grad会自动设置为False。既然没有了相关的梯度值，自然进行反向传播时会将这部分子图从计算中剔除。</p>
-<p>对于那些要求梯度的tensor，PyTorch会存储他们相关梯度信息和产生他们的操作，这产生额外内存消耗，为了优化内存使用，默认产生的tensor是不需要梯度的。<br>而我们在使用神经网络时，这些<strong>全连接层卷积层等结构的参数都是默认需要梯度的。</strong>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/10/27/PyTorch之requires-grad/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2357,7 +2313,7 @@ l(y) = \max(0, 1-y \cdot \hat y)</script><p>上式是Hinge loss在二分类问�
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">175</span>
+                    <span class="site-state-item-count">179</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2416,9 +2372,7 @@ l(y) = \max(0, 1-y \cdot \hat y)</script><p>上式是Hinge loss在二分类问�
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -3299,7 +3253,35 @@ l(y) = \max(0, 1-y \cdot \hat y)</script><p>上式是Hinge loss在二分类问�
                     
                       
                     
-                    <span class="site-state-item-count">432</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">446</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

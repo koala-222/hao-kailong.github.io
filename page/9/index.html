@@ -415,6 +415,573 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/23/对GAN再次学习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/12/23/对GAN再次学习/" class="post-title-link" itemprop="url">对GAN再次学习</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-24 15:11:56" itemprop="dateModified" datetime="2020-12-24T15:11:56+08:00">2020-12-24</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/12/23/对GAN再次学习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/23/对GAN再次学习/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <ol>
+<li>Z是噪声，也就是G的输入，可以是高斯噪声，一般为均匀噪声；</li>
+<li>从贝叶斯的角度上做，生成模型可以认为是都是属于ML(最大化似然）的过程，因为，ML就是找到能使样本数据的类条件概率最大化的分布参数。那如果经过训练集训练，我们找到该参数,此时我们的模型是有最大可能生成和样本训练数据具有同样分布的数据，这个也是生成模型的一个目标。当然这个方法的前提就是对数据的分布进行一个假设，然后才能求参数。比如假设数据分布是符合高斯分布的。</li>
+</ol>
+<p><img src="/images/blog/2020/generative_model.webp" alt></p>
+<ol>
+<li>GoodFellow的论文证明了Gans 全局最小点的充分必要条件是:</li>
+</ol>
+<script type="math/tex; mode=display">
+p_g = p_{real}</script><p>pg表示generate 生成数据的分布函数</p>
+<p>pdata表示真实data的分布函数</p>
+<ol>
+<li>我们知道，G和D是一个对抗的过程，而这个对抗是，G不断的学习，D也不断的学习，而且需要保证两者学习速率基本一致，也就是都能不断的从对方那里学习到“知识”来提升自己。否则，就是这两者哪一个学习的过快，或过慢，以至于双方的实力不再均衡，就会导致实力差的那一方的“loss”不再能“下降”，也就不在学到“知识”。一般的对抗模型中的G和D的网络框架大小基本上是相似(可能存在较小的差异)，而且，训练的过程就是先训练G一次，再训练D一次，这也是为了稳定训练的一个保证。当然这并不能完全稳定训练，所以，对抗网络的稳定训练，依然是一个研究的热点和方向。</li>
+<li>这是DCGAN的生成网络模型的架构 (5层反卷积)，对于LSUN，Imagenet-1k大小的数据集，我们可以使用这个架构，但并不是说对于任何数据集，都可以，比如，更大，或者更小的，那对应的卷积架构就需要进行改变。<strong>比如，对于mnist数据集，G和D的网络架构都相应地减小了，否则不能拟合</strong>，产生不了好的结果(亲测)。</li>
+<li>因为“反卷积”存在于卷积的反向传播中。<font color="red">其中反向传播的滤波器矩阵，是前向传播(卷积)的转置</font> (<strong>如何理解？</strong>)，所以，这就是它的名字的由来。只不过我们把反向传播的操作拿到了前向传播来做，就产生了所谓的反卷积一说。但是transport-convolution只能还原信号的大小，不能还原其value，所以，不能叫做反卷积，不是真正的逆操作。</li>
+</ol>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/12/23/对GAN再次学习/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/21/RESIDE-实体类型-Entity-Type-质量考察/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/12/21/RESIDE-实体类型-Entity-Type-质量考察/" class="post-title-link" itemprop="url">RESIDE 实体类型 (Entity Type) 质量考察</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-21 22:45:58" itemprop="dateModified" datetime="2020-12-21T22:45:58+08:00">2020-12-21</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/Distant-Supervision/" itemprop="url" rel="index"><span itemprop="name">Distant Supervision</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/12/21/RESIDE-实体类型-Entity-Type-质量考察/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/21/RESIDE-实体类型-Entity-Type-质量考察/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="Entity-Type"><a href="#Entity-Type" class="headerlink" title="Entity Type"></a>Entity Type</h1><h2 id="发现1-RESIDE更详细"><a href="#发现1-RESIDE更详细" class="headerlink" title="发现1. RESIDE更详细"></a>发现1. RESIDE更详细</h2><p>例如对于m.01wgcvn，我识别出类型为people.person，而RESIDE更全面：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">"/person/actor"</span>, <span class="string">"/person"</span>, <span class="string">"/person/artist"</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="发现2-RESIDE准确率很高"><a href="#发现2-RESIDE准确率很高" class="headerlink" title="发现2. RESIDE准确率很高"></a>发现2. RESIDE准确率很高</h2><p>随机采样我个人生成的实体类别，在people, location, organization, sports_team, religion, language中随机采样若干样本，与RESIDE比较，发现一致率在95%以上。</p>
+<h2 id="发现3-可以补充RESIDE"><a href="#发现3-可以补充RESIDE" class="headerlink" title="发现3. 可以补充RESIDE"></a>发现3. 可以补充RESIDE</h2><p>对于m.05qv655，RESIDE为空，而我们可以正确识别出religion.religion</p>
+<h2 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h2><font color="orange">如果RESIDE对应mid的Type为空，则对其进行补充；否则维持原状。</font>
+
+<p>在对RESIDE进行补充的时候，按照以下方式映射：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    '': '', </span><br><span class="line">    'film.film_festival': '/art/film', </span><br><span class="line">    'people.family': ['/people/family', '/person'], </span><br><span class="line">    'organization.organization': '/organization',</span><br><span class="line">    'people.person': '/person', </span><br><span class="line">    'people.ethnicity': '/people/ethnicity', </span><br><span class="line">    'location.location': '/location', </span><br><span class="line">    'religion.religion': '/religion/religion', </span><br><span class="line">    'sports.sports_team': '/organization/sports_team', </span><br><span class="line">    'film.film': '/art/film', </span><br><span class="line">    'language.human_language': '/language', </span><br><span class="line">    'people.profession': '/title'</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最终得到的实体类型type2id为：
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/12/21/RESIDE-实体类型-Entity-Type-质量考察/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/21/利用预训练语言模型计算句子相似度/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/12/21/利用预训练语言模型计算句子相似度/" class="post-title-link" itemprop="url">利用预训练语言模型计算句子相似度</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-31 16:38:50" itemprop="dateModified" datetime="2020-12-31T16:38:50+08:00">2020-12-31</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/Pretrained-Language-Model/" itemprop="url" rel="index"><span itemprop="name">Pretrained Language Model</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/12/21/利用预训练语言模型计算句子相似度/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/21/利用预训练语言模型计算句子相似度/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>使用huggingface的BertForMaskedLM做预训练后的二次预训练，即fine-tuning，在NYT数据集上。</p>
+<p>具体的代码实现可以参考官方的<a href="https://github.com/huggingface/transformers/tree/master/examples" target="_blank" rel="noopener">github</a>, 有很多的例子可以学习，非常不错~</p>
+<h1 id="插曲"><a href="#插曲" class="headerlink" title="插曲"></a>插曲</h1><p>在询问学长后得知，使用wwm，即whole-word-masking，可以比较显著的提高效果。但是，在<a href="https://huggingface.co/transformers/pretrained_models.html" target="_blank" rel="noopener">huggingface的网站</a>上，目前只有bert-large-cased-whole-word-masking，考虑到对比的方法目前用到的是bert-base和gpt，而且预训练语言模型不是我们的创新点，<strong>所以最终采用bert-base-cased，暂时不用wwm</strong></p>
+<p>另外，在训练的时候整个进度条显示的是全部训练需要花费的时间，举个栗子，如果训练epoch数为3，则显示的为3个epoch对应的所有步数。</p>
+<p><img src="/images/blog/2020/run_mlm.png" alt></p>
+<p>在150MB的文本语料上训练，利用两个RTX 24GB显卡，batch_size设为16，epoch为3，每张卡显存占用为11GB左右，整个训练过程耗时9个小时。</p>
+<h1 id="run-mlm-py"><a href="#run-mlm-py" class="headerlink" title="run_mlm.py"></a>run_mlm.py</h1><p>我们采用<a href="https://github.com/huggingface/transformers/tree/master/examples/language-modeling" target="_blank" rel="noopener">run_mlm.py</a>来进行bert的fine-tuning过程。</p>
+<h2 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h2><p>在进行MLM任务之前，是否需要对文本进行预处理呢？常见的预处理技术有转换为小写、去除标点、去除停用词、提取词干等等，<font color="orange">但是，考虑到预训练语言模型词表足够大，见过的语料足够多，能力足够强</font>，所以，<strong>不进行任何的文本预处理工作</strong>，直接丢给BERT。</p>
+<h2 id="sh"><a href="#sh" class="headerlink" title=".sh"></a>.sh</h2><p>使用以下命令运行程序：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">python run_mlm.py \</span><br><span class="line">  --model_name_or_path /data/klhao/BERT/bert-base-cased \</span><br><span class="line">  --train_file nyt_corpus_train.txt \</span><br><span class="line">  --validation_file nyt_corpus_valid.txt \</span><br><span class="line">  --do_train \</span><br><span class="line">  --do_eval \</span><br><span class="line">  --output_dir output \</span><br><span class="line">  --line_by_line \</span><br><span class="line">  --max_seq_length 500</span><br></pre></td></tr></table></figure>
+<p>程序开始愉快的运行了！~</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/12/21/利用预训练语言模型计算句子相似度/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/20/DISTRE-debug-记录/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1721,586 +2288,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/07/关于DSGAN的细节/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/07/关于DSGAN的细节/" class="post-title-link" itemprop="url">关于DSGAN的细节</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-18 21:00:46" itemprop="dateModified" datetime="2020-12-18T21:00:46+08:00">2020-12-18</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/Distant-Supervision/" itemprop="url" rel="index"><span itemprop="name">Distant Supervision</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/07/关于DSGAN的细节/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/07/关于DSGAN的细节/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="clean数据"><a href="#clean数据" class="headerlink" title="clean数据"></a>clean数据</h1><p><a href="https://github.com/Panda0406/Adversarial-Learning-Distant-Supervision-RE/issues/2" target="_blank" rel="noopener">https://github.com/Panda0406/Adversarial-Learning-Distant-Supervision-RE/issues/2</a></p>
-<p>DSGAN得到的干净数据分布是不平衡的，作者手动调整了生成数据的比例，去掉了一些过高的比例的类别的数据，以避免不必要的偏置。</p>
-<blockquote>
-<p> <a href="https://github.com/thunlp/NRE/blob/master/PCNN%2BATT/out/pr.txt" target="_blank" rel="noopener"> Their repo</a> do not perform as you present. I have tested it.</p>
-<p> Because we remove many sentence bags of positive entity pairs, it causes the proportion change of positive set and negative set. So we correspondingly add some positive sentence sets based on the learned filter network. These positive sentence sets are the subset of cleaned positive sentence sets. This part is explained in the code.</p>
-</blockquote>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/12/07/关于DSGAN的细节/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/07/Windows10蓝牙设备删除失败/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/07/Windows10蓝牙设备删除失败/" class="post-title-link" itemprop="url">Windows10蓝牙设备删除失败</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-07 16:15:01" itemprop="dateModified" datetime="2020-12-07T16:15:01+08:00">2020-12-07</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/07/Windows10蓝牙设备删除失败/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/07/Windows10蓝牙设备删除失败/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在win10蓝牙设备总是会出现删除失败的问题，真是坑爹…是win10的一个bug:</p>
-<p><a href="https://answers.microsoft.com/zh-hans/windows/forum/windows_10-hardware/win10%E8%93%9D%E7%89%99%E8%AE%BE%E5%A4%87%E6%97%A0/dd641a9b-ca95-491a-8cd9-90747b36fe2c" target="_blank" rel="noopener">https://answers.microsoft.com/zh-hans/windows/forum/windows_10-hardware/win10%E8%93%9D%E7%89%99%E8%AE%BE%E5%A4%87%E6%97%A0/dd641a9b-ca95-491a-8cd9-90747b36fe2c</a></p>
-<p>在网上找到了解决方案：</p>
-<ol>
-<li>下载 <a href="http://bluetoothinstaller.com/bluetooth-command-line-tools/" target="_blank" rel="noopener">修复工具</a>，一路默认选项完成安装。防止链接失效，附上 <a href="https://pan.baidu.com/s/1CJ-7laoysT8r-iPnGvB1GA" target="_blank" rel="noopener">百度网盘链接</a></li>
-<li>打开 Powershell，命令行输入 <code>btpair -u</code>，回车执行</li>
-<li>等待，会发现已配对的蓝牙设备 <strong>终于</strong> <strong>成功</strong> <strong>彻底</strong> 被删除了</li>
-<li>喜极而泣</li>
-</ol>
-<blockquote>
-<p><a href="https://blog.csdn.net/u014595375/article/details/85730427" target="_blank" rel="noopener">https://blog.csdn.net/u014595375/article/details/85730427</a></p>
-</blockquote>
-<p>呜呜呜┭┮﹏┭┮</p>
-<p>要是都还不管用，就试一下插拔蓝牙、重启电脑、开关电源……<strong>重启大法好!</strong></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/06/远程监督关系抽取的inference/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/06/远程监督关系抽取的inference/" class="post-title-link" itemprop="url">远程监督关系抽取的inference</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-06 21:11:47" itemprop="dateModified" datetime="2020-12-06T21:11:47+08:00">2020-12-06</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/Distant-Supervision/" itemprop="url" rel="index"><span itemprop="name">Distant Supervision</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/06/远程监督关系抽取的inference/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/06/远程监督关系抽取的inference/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="sentence-level-or-bag-level"><a href="#sentence-level-or-bag-level" class="headerlink" title="sentence-level or bag-level?"></a>sentence-level or bag-level?</h1><p>关于远程监督关系抽取的测试阶段，网上的一个讨论值得深思：</p>
-<p><a href="https://github.com/malllabiisc/RESIDE/issues/51" target="_blank" rel="noopener">https://github.com/malllabiisc/RESIDE/issues/51</a></p>
-<blockquote>
-<p>Hi <a href="https://github.com/juanluis17" target="_blank" rel="noopener">@juanluis17</a>,<br>In the distantly-supervised setting, the evaluation is performed at the bag-level only because the label on individual instances might be wrong. In both the benchmark datasets, the labels are available at the bag-level only so at the instance-level, we do not have the ground truth to evaluate the performance.</p>
-</blockquote>
-<p>Hi,<br>I understand that problem in distant supervision. The need to evaluate at the instance level is given because I have a dataset where I know which label is wrong. What I came up with with this implementation is to place each instance of the bag with the predicted label for the bag and thus perform the evaluation.<br>Another alternative is to use each instance as a bag.</p>
-<h1 id="single-label-or-multi-label"><a href="#single-label-or-multi-label" class="headerlink" title="single-label or multi-label?"></a>single-label or multi-label?</h1><p>到底是单分类还是多分类，也是一个不够统一的做法，在RESIDE中，是这样操作的：</p>
-<p><a href="https://github.com/malllabiisc/RESIDE/issues/23" target="_blank" rel="noopener">https://github.com/malllabiisc/RESIDE/issues/23</a></p>
-<h3 id="speedcell4-commented-on-2-Apr-2019-•-edited"><a href="#speedcell4-commented-on-2-Apr-2019-•-edited" class="headerlink" title="speedcell4 commented on 2 Apr 2019 • edited"></a><strong>speedcell4</strong> commented <a href="https://github.com/malllabiisc/RESIDE/issues/23#issue-428050708" target="_blank" rel="noopener">on 2 Apr 2019</a> • edited</h3><h3 id="svjan5-commented-on-2-Apr-2019-•-edited"><a href="#svjan5-commented-on-2-Apr-2019-•-edited" class="headerlink" title="svjan5 commented on 2 Apr 2019 • edited"></a><strong>svjan5</strong> commented <a href="https://github.com/malllabiisc/RESIDE/issues/23#issuecomment-479066990" target="_blank" rel="noopener">on 2 Apr 2019</a> • edited</h3><h1 id="Old-School-PR-Curve"><a href="#Old-School-PR-Curve" class="headerlink" title="Old-School PR Curve"></a>Old-School PR Curve</h1><p>一些传统方法的PR曲线，例如Mintz, Riedel, Hoffmann,等：</p>
-<p><a href="https://github.com/thunlp/OpenNRE/tree/4d6d321c9b369615ca07508705d921d30d8286d4/data" target="_blank" rel="noopener">https://github.com/thunlp/OpenNRE/tree/4d6d321c9b369615ca07508705d921d30d8286d4/data</a></p>
-<p>不得不说，OpenNRE🐮🍺</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2344,7 +2336,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">179</span>
+                    <span class="site-state-item-count">182</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3312,7 +3304,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">446</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">448</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -3854,6 +3850,8 @@
   
     
       
+        
+      
     
       
     
@@ -3875,6 +3873,46 @@
     
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
   
 
 

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://haokailong.top/"/>
-  <updated>2021-04-24T12:15:11.439Z</updated>
+  <updated>2021-05-10T11:50:16.030Z</updated>
   <id>http://haokailong.top/</id>
   
   <author>
@@ -15,6 +15,104 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Latex算法排版</title>
+    <link href="http://haokailong.top/2021/05/10/Latex%E7%AE%97%E6%B3%95%E6%8E%92%E7%89%88/"/>
+    <id>http://haokailong.top/2021/05/10/Latex算法排版/</id>
+    <published>2021-05-10T11:42:56.000Z</published>
+    <updated>2021-05-10T11:50:16.030Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="方式一："><a href="#方式一：" class="headerlink" title="方式一："></a>方式一：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">\usepackage[noend]&#123;algpseudocode&#125;</span><br><span class="line">\usepackage&#123;algorithmicx,algorithm&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;algorithm&#125;[t]</span><br><span class="line">\caption&#123;algorithm caption&#125; %算法的名字</span><br><span class="line">\hspace*&#123;0.02in&#125; &#123;\bf Input:&#125; %算法的输入， \hspace*&#123;0.02in&#125;用来控制位置，同时利用 \\ 进行换行</span><br><span class="line">input parameters A, B, C\\</span><br><span class="line">\hspace*&#123;0.02in&#125; &#123;\bf Output:&#125; %算法的结果输出</span><br><span class="line">output result</span><br><span class="line">\begin&#123;algorithmic&#125;[1]</span><br><span class="line">\State some description % \State 后写一般语句</span><br><span class="line">\For&#123;condition&#125; % For 语句，需要和EndFor对应</span><br><span class="line">　　\State ...</span><br><span class="line">　　\If&#123;condition&#125; % If 语句，需要和EndIf对应</span><br><span class="line">　　　　\State ...</span><br><span class="line">　　\Else</span><br><span class="line">　　　　\State ...</span><br><span class="line">　　\EndIf</span><br><span class="line">\EndFor</span><br><span class="line">\While&#123;condition&#125; % While语句，需要和EndWhile对应</span><br><span class="line">　　\State ...</span><br><span class="line">\EndWhile</span><br><span class="line">\State \Return result</span><br><span class="line">\end&#123;algorithmic&#125;</span><br><span class="line">\end&#123;algorithm&#125;</span><br></pre></td></tr></table></figure><p>结果：</p><p><img src="/images/blog/2021/algorithm1.png" alt></p><p> <strong>注意</strong></p><p><strong>1. 关键字的大小写问题，否则会出现 Undefined control sequence.</strong></p><p><strong>2. 控制流要前后对应。如果有 While，但没有 EndWhile，否则会出现 Some blocks are not closed。</strong></p><a id="more"></a><h2 id="方式二："><a href="#方式二：" class="headerlink" title="方式二："></a>方式二：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">\usepackage[ruled]&#123;algorithm2e&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;algorithm&#125;[H]</span><br><span class="line">\caption&#123;algorithm caption&#125;%算法名字</span><br><span class="line">\LinesNumbered %要求显示行号</span><br><span class="line">\KwIn&#123;input parameters A, B, C&#125;%输入参数</span><br><span class="line">\KwOut&#123;output result&#125;%输出</span><br><span class="line">some description\; %\;用于换行</span><br><span class="line">\For&#123;condition&#125;&#123;</span><br><span class="line">　　only if\;</span><br><span class="line">　　\If&#123;condition&#125;&#123;</span><br><span class="line">　　　　1\;</span><br><span class="line">　　&#125;</span><br><span class="line">&#125;</span><br><span class="line">\While&#123;not at end of this document&#125;&#123;</span><br><span class="line">　　if and else\;</span><br><span class="line">　　\eIf&#123;condition&#125;&#123;</span><br><span class="line">　　　　1\;</span><br><span class="line">　　&#125;&#123;</span><br><span class="line">　　　　2\;</span><br><span class="line">　　&#125;</span><br><span class="line">&#125;</span><br><span class="line">\ForEach&#123;condition&#125;&#123;</span><br><span class="line">　　\If&#123;condition&#125;&#123;</span><br><span class="line">　　　　1\;</span><br><span class="line">　　&#125;</span><br><span class="line">&#125;</span><br><span class="line">\end&#123;algorithm&#125;</span><br></pre></td></tr></table></figure><p>结果：</p><p><img src="/images/blog/2021/algorithm2.png" alt></p><h2 id="方式三："><a href="#方式三：" class="headerlink" title="方式三："></a>方式三：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">\usepackage[ruled,vlined]&#123;algorithm2e&#125;</span><br><span class="line"></span><br><span class="line">%...同方式二</span><br></pre></td></tr></table></figure><p>结果：</p><p><img src="/images/blog/2021/algorithm3.png" alt></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;方式一：&quot;&gt;&lt;a href=&quot;#方式一：&quot; class=&quot;headerlink&quot; title=&quot;方式一：&quot;&gt;&lt;/a&gt;方式一：&lt;/h2&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;25&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;\usepackage[noend]&amp;#123;algpseudocode&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;\usepackage&amp;#123;algorithmicx,algorithm&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;\begin&amp;#123;algorithm&amp;#125;[t]&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;\caption&amp;#123;algorithm caption&amp;#125; %算法的名字&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;\hspace*&amp;#123;0.02in&amp;#125; &amp;#123;\bf Input:&amp;#125; %算法的输入， \hspace*&amp;#123;0.02in&amp;#125;用来控制位置，同时利用 \\ 进行换行&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;input parameters A, B, C\\&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;\hspace*&amp;#123;0.02in&amp;#125; &amp;#123;\bf Output:&amp;#125; %算法的结果输出&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;output result&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;\begin&amp;#123;algorithmic&amp;#125;[1]&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;\State some description % \State 后写一般语句&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;\For&amp;#123;condition&amp;#125; % For 语句，需要和EndFor对应&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　\State ...&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　\If&amp;#123;condition&amp;#125; % If 语句，需要和EndIf对应&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　　　\State ...&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　\Else&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　　　\State ...&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　\EndIf&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;\EndFor&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;\While&amp;#123;condition&amp;#125; % While语句，需要和EndWhile对应&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　\State ...&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;\EndWhile&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;\State \Return result&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;\end&amp;#123;algorithmic&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;\end&amp;#123;algorithm&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;结果：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/blog/2021/algorithm1.png&quot; alt&gt;&lt;/p&gt;
+&lt;p&gt; &lt;strong&gt;注意&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1. 关键字的大小写问题，否则会出现 Undefined control sequence.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2. 控制流要前后对应。如果有 While，但没有 EndWhile，否则会出现 Some blocks are not closed。&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Others" scheme="http://haokailong.top/categories/Others/"/>
+    
+      <category term="Tool" scheme="http://haokailong.top/categories/Others/Tool/"/>
+    
+    
+      <category term="Latex" scheme="http://haokailong.top/tags/Latex/"/>
+    
+      <category term="Algorithm" scheme="http://haokailong.top/tags/Algorithm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Latex中公式过长</title>
+    <link href="http://haokailong.top/2021/04/27/Latex%E4%B8%AD%E5%85%AC%E5%BC%8F%E8%BF%87%E9%95%BF/"/>
+    <id>http://haokailong.top/2021/04/27/Latex中公式过长/</id>
+    <published>2021-04-27T09:42:38.000Z</published>
+    <updated>2021-04-27T09:47:17.984Z</updated>
+    
+    <content type="html"><![CDATA[<p>Latex中公式过长，解决方法主要有以下几种：</p><h2 id="解决方案1"><a href="#解决方案1" class="headerlink" title="解决方案1"></a>解决方案1</h2><p>使用amsmath package的split环境</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;equation&#125;</span><br><span class="line">\begin&#123;split&#125;</span><br><span class="line">F = \&#123;F_&#123;x&#125; \in  F_&#123;c&#125; &amp;: (|S| &gt; |C|) \\</span><br><span class="line">&amp;\quad \cap (\text&#123;minPixels&#125; &lt; |S| &lt; \text&#123;maxPixels&#125;) \\</span><br><span class="line">&amp;\quad \cap (|S_&#123;\text&#123;conected&#125;&#125;| &gt; |S| - \epsilon) \&#125;</span><br><span class="line">\end&#123;split&#125;</span><br><span class="line">\end&#123;equation&#125;</span><br></pre></td></tr></table></figure><h2 id="解决方案2"><a href="#解决方案2" class="headerlink" title="解决方案2"></a>解决方案2</h2><p>使用 \! 命令，在等号、加号等两侧进行微调</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;eqnarray&#125;</span><br><span class="line">\dot&#123;x&#125;(t)\！=\！\bar&#123;A&#125;_&#123;i&#125;x(t)+\bar&#123;B&#125;_&#123;i_&#123;1&#125;&#125;x(t)+\bar&#123;B&#125;_&#123;i_&#123;2&#125;&#125;x(t)+\bar&#123;B&#125;_&#123;i_&#123;3&#125;&#125;[a_&#123;i&#125;(t)\！+\！b_&#123;i&#125;(t)].</span><br><span class="line">\end&#123;eqnarray&#125;</span><br></pre></td></tr></table></figure><a id="more"></a><h2 id="解决方案3"><a href="#解决方案3" class="headerlink" title="解决方案3"></a>解决方案3</h2><p>缩小公式：</p><ul><li>编号不缩小</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;equation&#125;</span><br><span class="line">\resizebox&#123;.9\hsize&#125;&#123;!&#125;&#123;$A+B+C+D+E+F+G+H+I+J+K+L+M+N+O+P+Q+R+S+T+U+V+W+X+Y+Z$&#125;</span><br><span class="line">\end&#123;equation&#125;</span><br></pre></td></tr></table></figure><ul><li>编号缩小</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;small&#125;</span><br><span class="line">\begin&#123;equation&#125;</span><br><span class="line">\ldots</span><br><span class="line">\end&#123;equation&#125;</span><br><span class="line">\end&#123;small&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Latex中公式过长，解决方法主要有以下几种：&lt;/p&gt;
+&lt;h2 id=&quot;解决方案1&quot;&gt;&lt;a href=&quot;#解决方案1&quot; class=&quot;headerlink&quot; title=&quot;解决方案1&quot;&gt;&lt;/a&gt;解决方案1&lt;/h2&gt;&lt;p&gt;使用amsmath package的split环境&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;\begin&amp;#123;equation&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;\begin&amp;#123;split&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;F = \&amp;#123;F_&amp;#123;x&amp;#125; \in  F_&amp;#123;c&amp;#125; &amp;amp;: (|S| &amp;gt; |C|) \\&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;amp;\quad \cap (\text&amp;#123;minPixels&amp;#125; &amp;lt; |S| &amp;lt; \text&amp;#123;maxPixels&amp;#125;) \\&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;amp;\quad \cap (|S_&amp;#123;\text&amp;#123;conected&amp;#125;&amp;#125;| &amp;gt; |S| - \epsilon) \&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;\end&amp;#123;split&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;\end&amp;#123;equation&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;解决方案2&quot;&gt;&lt;a href=&quot;#解决方案2&quot; class=&quot;headerlink&quot; title=&quot;解决方案2&quot;&gt;&lt;/a&gt;解决方案2&lt;/h2&gt;&lt;p&gt;使用 \! 命令，在等号、加号等两侧进行微调&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;\begin&amp;#123;eqnarray&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;\dot&amp;#123;x&amp;#125;(t)\！=\！\bar&amp;#123;A&amp;#125;_&amp;#123;i&amp;#125;x(t)+\bar&amp;#123;B&amp;#125;_&amp;#123;i_&amp;#123;1&amp;#125;&amp;#125;x(t)+\bar&amp;#123;B&amp;#125;_&amp;#123;i_&amp;#123;2&amp;#125;&amp;#125;x(t)+\bar&amp;#123;B&amp;#125;_&amp;#123;i_&amp;#123;3&amp;#125;&amp;#125;[a_&amp;#123;i&amp;#125;(t)\！+\！b_&amp;#123;i&amp;#125;(t)].&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;\end&amp;#123;eqnarray&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+      <category term="Others" scheme="http://haokailong.top/categories/Others/"/>
+    
+      <category term="Tool" scheme="http://haokailong.top/categories/Others/Tool/"/>
+    
+    
+      <category term="Latex" scheme="http://haokailong.top/tags/Latex/"/>
+    
+      <category term="LaTeX" scheme="http://haokailong.top/tags/LaTeX/"/>
+    
+      <category term="equation" scheme="http://haokailong.top/tags/equation/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>LaTeX在双栏模式下插入跨栏图表</title>
+    <link href="http://haokailong.top/2021/04/27/LaTeX%E5%9C%A8%E5%8F%8C%E6%A0%8F%E6%A8%A1%E5%BC%8F%E4%B8%8B%E6%8F%92%E5%85%A5%E8%B7%A8%E6%A0%8F%E5%9B%BE%E8%A1%A8/"/>
+    <id>http://haokailong.top/2021/04/27/LaTeX在双栏模式下插入跨栏图表/</id>
+    <published>2021-04-27T07:46:20.000Z</published>
+    <updated>2021-04-27T07:52:59.798Z</updated>
+    
+    <content type="html"><![CDATA[<p>Latex中插入图片的命令是：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;figure&#125;</span><br><span class="line">\centering</span><br><span class="line">\includegraphics[width=8cm]&#123;picture.png&#125;</span><br><span class="line">\caption&#123;this is a picture&#125;</span><br><span class="line">\label&#123;fig:picture01&#125;</span><br><span class="line">\end&#123;figure&#125;</span><br></pre></td></tr></table></figure><p>在双栏编辑模式下，图片只能在一栏中显示，而且如果图片的宽度超过单栏文本宽度，则只能显示其中一部分，剩下的部分会”溢出“。</p><p><strong>在双栏模式下插入跨栏图，方法其实很简单，将环境改为带*即可</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;figure*&#125;</span><br><span class="line">...</span><br><span class="line">\end&#123;figure*&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Latex中插入图片的命令是：&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;
+      
+    
+    </summary>
+    
+    
+      <category term="Others" scheme="http://haokailong.top/categories/Others/"/>
+    
+      <category term="Tool" scheme="http://haokailong.top/categories/Others/Tool/"/>
+    
+    
+      <category term="Latex" scheme="http://haokailong.top/tags/Latex/"/>
+    
+      <category term="LaTeX" scheme="http://haokailong.top/tags/LaTeX/"/>
+    
+      <category term="figure" scheme="http://haokailong.top/tags/figure/"/>
+    
+  </entry>
   
   <entry>
     <title>Failed to initialize NVML</title>
@@ -658,105 +756,6 @@
       <category term="os" scheme="http://haokailong.top/tags/os/"/>
     
       <category term="split" scheme="http://haokailong.top/tags/split/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>python遍历文件夹获取文件</title>
-    <link href="http://haokailong.top/2021/03/29/python%E9%81%8D%E5%8E%86%E6%96%87%E4%BB%B6%E5%A4%B9%E8%8E%B7%E5%8F%96%E6%96%87%E4%BB%B6/"/>
-    <id>http://haokailong.top/2021/03/29/python遍历文件夹获取文件/</id>
-    <published>2021-03-29T15:28:45.000Z</published>
-    <updated>2021-03-30T04:43:47.594Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="1-手写递归"><a href="#1-手写递归" class="headerlink" title="1. 手写递归"></a>1. 手写递归</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getallfile</span><span class="params">(path)</span>:</span></span><br><span class="line">    allfilelist=os.listdir(path)</span><br><span class="line">    <span class="keyword">for</span> file <span class="keyword">in</span> allfilelist:</span><br><span class="line">        filepath=os.path.join(path,file)</span><br><span class="line">        <span class="comment">#判断是不是文件夹</span></span><br><span class="line">        <span class="keyword">if</span> os.path.isdir(filepath):</span><br><span class="line">            getallfile(filepath)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">        allfile.append(filepath)</span><br><span class="line">    <span class="keyword">return</span> allfile</span><br></pre></td></tr></table></figure><h2 id="2-os-walk"><a href="#2-os-walk" class="headerlink" title="2. os.walk()"></a>2. os.walk()</h2><p><code>os.walk(top, topdown=True, οnerrοr=None, followlinks=False)</code><br>返回一个3个元素的元祖，(dirpath, dirnames, filenames),<br>dirpath：要列出指定目录的路径<br>dirnames：目录下的所有文件夹<br>filenames：目录下的所有文件</p><a id="more"></a><p>参数一：top – 根目录下的每一个文件夹(包含它自己), 产生3-元组 (dirpath, dirnames, filenames)【文件夹路径, 文件夹名字, 文件名】。</p><p>参数二：topdown –可选，为True或者没有指定, 一个目录的的3-元组将比它的任何子文件夹的3-元组先产生 (目录自上而下)。如果topdown为 False, 一个目录的3-元组将比它的任何子文件夹的3-元组后产生 (目录自下而上)。</p><p>参数三：onerror – 可选，是一个函数; 它调用时有一个参数, 一个OSError实例。报告这错误后，继续walk,或者抛出exception终止walk。</p><p>参数四：followlinks – 设置为 true，则通过软链接访问目录。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getallfiles</span><span class="params">(path)</span>:</span></span><br><span class="line">    allfile=[]</span><br><span class="line">    <span class="keyword">for</span> dirpath,dirnames,filenames <span class="keyword">in</span> os.walk(path):</span><br><span class="line">        <span class="keyword">for</span> dir <span class="keyword">in</span> dirnames:</span><br><span class="line">            allfile.append(os.path.join(dirpath,dir))</span><br><span class="line">        <span class="keyword">for</span> name <span class="keyword">in</span> filenames:</span><br><span class="line">            allfile.append(os.path.join(dirpath, name))</span><br><span class="line">    <span class="keyword">return</span> allfile</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;1-手写递归&quot;&gt;&lt;a href=&quot;#1-手写递归&quot; class=&quot;headerlink&quot; title=&quot;1. 手写递归&quot;&gt;&lt;/a&gt;1. 手写递归&lt;/h2&gt;&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;getallfile&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(path)&lt;/span&gt;:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    allfilelist=os.listdir(path)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; file &lt;span class=&quot;keyword&quot;&gt;in&lt;/span&gt; allfilelist:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        filepath=os.path.join(path,file)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;comment&quot;&gt;#判断是不是文件夹&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; os.path.isdir(filepath):&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            getallfile(filepath)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;else&lt;/span&gt;:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        	allfile.append(filepath)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; allfile&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h2 id=&quot;2-os-walk&quot;&gt;&lt;a href=&quot;#2-os-walk&quot; class=&quot;headerlink&quot; title=&quot;2. os.walk()&quot;&gt;&lt;/a&gt;2. os.walk()&lt;/h2&gt;&lt;p&gt;&lt;code&gt;os.walk(top, topdown=True, οnerrοr=None, followlinks=False)&lt;/code&gt;&lt;br&gt;返回一个3个元素的元祖，(dirpath, dirnames, filenames),&lt;br&gt;dirpath：要列出指定目录的路径&lt;br&gt;dirnames：目录下的所有文件夹&lt;br&gt;filenames：目录下的所有文件&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Others" scheme="http://haokailong.top/categories/Others/"/>
-    
-      <category term="Tool" scheme="http://haokailong.top/categories/Others/Tool/"/>
-    
-    
-      <category term="python" scheme="http://haokailong.top/tags/python/"/>
-    
-      <category term="walk" scheme="http://haokailong.top/tags/walk/"/>
-    
-      <category term="os" scheme="http://haokailong.top/tags/os/"/>
-    
-      <category term="recursive" scheme="http://haokailong.top/tags/recursive/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>直观理解线性变换</title>
-    <link href="http://haokailong.top/2021/03/29/%E7%9B%B4%E8%A7%82%E7%90%86%E8%A7%A3%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2/"/>
-    <id>http://haokailong.top/2021/03/29/直观理解线性变换/</id>
-    <published>2021-03-29T12:41:54.000Z</published>
-    <updated>2021-03-29T12:47:03.315Z</updated>
-    
-    <content type="html"><![CDATA[<p>直观一点理解，线性变换是一种运动，即让每一个输入向量都<strong>移动</strong>到对应输出向量的位置。</p><p>那么这样，线性变换这个关于向量的移动，就可以直观地变成了坐标系上点的运动。</p><p>简单来说，线性变换可以看作是坐标系“<strong>整体、均匀</strong>”的变换。</p><p>更详细地参见以下这个视频：</p><p><a href="https://www.bilibili.com/video/av6043439" target="_blank" rel="noopener">https://www.bilibili.com/video/av6043439</a></p><p>而<strong>仿射变换 (Affine Transformation)</strong>会改变原点的位置，而<strong>线性变换 (Linear Transformation)</strong>不改变原点的位置。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;直观一点理解，线性变换是一种运动，即让每一个输入向量都&lt;strong&gt;移动&lt;/strong&gt;到对应输出向量的位置。&lt;/p&gt;
-&lt;p&gt;那么这样，线性变换这个关于向量的移动，就可以直观地变成了坐标系上点的运动。&lt;/p&gt;
-&lt;p&gt;简单来说，线性变换可以看作是坐标系“&lt;strong&gt;整
-      
-    
-    </summary>
-    
-    
-      <category term="Mathmatic" scheme="http://haokailong.top/categories/Mathmatic/"/>
-    
-    
-      <category term="Linear Transformation" scheme="http://haokailong.top/tags/Linear-Transformation/"/>
-    
-      <category term="Affine Transformation" scheme="http://haokailong.top/tags/Affine-Transformation/"/>
-    
-      <category term="线性变换" scheme="http://haokailong.top/tags/%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SMOTE上采样方法</title>
-    <link href="http://haokailong.top/2021/03/29/SMOTE%E4%B8%8A%E9%87%87%E6%A0%B7%E6%96%B9%E6%B3%95/"/>
-    <id>http://haokailong.top/2021/03/29/SMOTE上采样方法/</id>
-    <published>2021-03-29T11:17:23.000Z</published>
-    <updated>2021-03-29T11:52:59.801Z</updated>
-    
-    <content type="html"><![CDATA[<p>SMOTE or <strong>Synthetic Minority Oversampling Technique</strong></p><p>经典的上采样方法是直接将少数类别的样本重复若干次。但是这种方法没有带来新的信息。</p><blockquote><p>SMOTE works by utilizing a <strong>k-nearest neighbor</strong> algorithm to create synthetic data. SMOTE first start by choosing random data from the minority class, then k-nearest neighbors from the data are set. Synthetic data would then made between the random data and the randomly selected k-nearest neighbor. Let me show you the example below.</p></blockquote><h2 id="1-SMOTE使用"><a href="#1-SMOTE使用" class="headerlink" title="1. SMOTE使用"></a>1. SMOTE使用</h2><p>SMOTE适用于特征值为连续值而不是离散值。这样才可以进行插值，产生新的训练数据。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> seaborns <span class="keyword">as</span> sns</span><br><span class="line"><span class="comment">#I read the csv churn data into variable called df. Here I would only use two continuous features CreditScore and Age with the target Exited</span></span><br><span class="line">df_example = df[[<span class="string">'CreditScore'</span>, <span class="string">'Age'</span>, <span class="string">'Exited'</span>]]</span><br><span class="line">sns.scatterplot(data = df, x =<span class="string">'CreditScore'</span>, y = <span class="string">'Age'</span>, hue = <span class="string">'Exited'</span>)</span><br></pre></td></tr></table></figure><p><img src="https://miro.medium.com/max/487/1*53v1-PbF5uCiSZnLKDJZ5w.png" alt></p><p>然后使用SMOTE上采样，查看采样之后的结果：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -U imbalanced-learn</span><br></pre></td></tr></table></figure><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Importing SMOTE</span></span><br><span class="line"><span class="keyword">from</span> imblearn.over_sampling <span class="keyword">import</span> SMOTE</span><br><span class="line"><span class="comment">#Oversampling the data</span></span><br><span class="line">smote = SMOTE(random_state = <span class="number">101</span>)</span><br><span class="line">X, y = smote.fit_resample(df[[<span class="string">'CreditScore'</span>, <span class="string">'Age'</span>]], df[<span class="string">'Exited'</span>])</span><br><span class="line"><span class="comment">#Creating a new Oversampling Data Frame</span></span><br><span class="line">df_oversampler = pd.DataFrame(X, columns = [<span class="string">'CreditScore'</span>, <span class="string">'Age'</span>])</span><br><span class="line">df_oversampler[<span class="string">'Exited'</span>]</span><br><span class="line">sns.countplot(df_oversampler[<span class="string">'Exited'</span>])</span><br><span class="line">sns.scatterplot(data = df_oversampler, x =<span class="string">'CreditScore'</span>, y = <span class="string">'Age'</span>, hue = <span class="string">'Exited'</span>)</span><br></pre></td></tr></table></figure><a id="more"></a><p><img src="https://miro.medium.com/max/498/1*BVlx5Mo-1L3pbnKCT_N9Nw.png" alt></p><h2 id="2-SMOTE原理"><a href="#2-SMOTE原理" class="headerlink" title="2. SMOTE原理"></a>2. SMOTE原理</h2><p>算法流程：</p><ol><li>对于少数类中每一个样本$x$，以欧氏距离为标准计算它到少数类样本集$S_{min}$所有样本的距离，得到其k近邻。</li><li>根据样本不平衡比例设置一个采样比例以确定采样倍率N，对于每一个少数类样本$x$，从其k近邻中随机选择若干个样本，假设选择的近邻为$x_n$</li><li>对于每一个随机选出的近邻$x_n$，分别与原样本按照如下的公式构建新的样本</li></ol><script type="math/tex; mode=display">x_{new} = x + \mathrm{rand}（0,1）*|x - x_n|</script><p>很直白很容易理解，就是用某个样本与其近邻做插值。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;SMOTE or &lt;strong&gt;Synthetic Minority Oversampling Technique&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;经典的上采样方法是直接将少数类别的样本重复若干次。但是这种方法没有带来新的信息。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;SMOTE works by utilizing a &lt;strong&gt;k-nearest neighbor&lt;/strong&gt; algorithm to create synthetic data. SMOTE first start by choosing random data from the minority class, then k-nearest neighbors from the data are set. Synthetic data would then made between the random data and the randomly selected k-nearest neighbor. Let me show you the example below.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;1-SMOTE使用&quot;&gt;&lt;a href=&quot;#1-SMOTE使用&quot; class=&quot;headerlink&quot; title=&quot;1. SMOTE使用&quot;&gt;&lt;/a&gt;1. SMOTE使用&lt;/h2&gt;&lt;p&gt;SMOTE适用于特征值为连续值而不是离散值。这样才可以进行插值，产生新的训练数据。&lt;/p&gt;
-&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;import&lt;/span&gt; pandas &lt;span class=&quot;keyword&quot;&gt;as&lt;/span&gt; pd&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;import&lt;/span&gt; seaborns &lt;span class=&quot;keyword&quot;&gt;as&lt;/span&gt; sns&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;#I read the csv churn data into variable called df. Here I would only use two continuous features CreditScore and Age with the target Exited&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;df_example = df[[&lt;span class=&quot;string&quot;&gt;&#39;CreditScore&#39;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&#39;Age&#39;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&#39;Exited&#39;&lt;/span&gt;]]&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sns.scatterplot(data = df, x =&lt;span class=&quot;string&quot;&gt;&#39;CreditScore&#39;&lt;/span&gt;, y = &lt;span class=&quot;string&quot;&gt;&#39;Age&#39;&lt;/span&gt;, hue = &lt;span class=&quot;string&quot;&gt;&#39;Exited&#39;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;&lt;img src=&quot;https://miro.medium.com/max/487/1*53v1-PbF5uCiSZnLKDJZ5w.png&quot; alt&gt;&lt;/p&gt;
-&lt;p&gt;然后使用SMOTE上采样，查看采样之后的结果：&lt;/p&gt;
-&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;pip install -U imbalanced-learn&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;#Importing SMOTE&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;from&lt;/span&gt; imblearn.over_sampling &lt;span class=&quot;keyword&quot;&gt;import&lt;/span&gt; SMOTE&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;#Oversampling the data&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;smote = SMOTE(random_state = &lt;span class=&quot;number&quot;&gt;101&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;X, y = smote.fit_resample(df[[&lt;span class=&quot;string&quot;&gt;&#39;CreditScore&#39;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&#39;Age&#39;&lt;/span&gt;]], df[&lt;span class=&quot;string&quot;&gt;&#39;Exited&#39;&lt;/span&gt;])&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;#Creating a new Oversampling Data Frame&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;df_oversampler = pd.DataFrame(X, columns = [&lt;span class=&quot;string&quot;&gt;&#39;CreditScore&#39;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&#39;Age&#39;&lt;/span&gt;])&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;df_oversampler[&lt;span class=&quot;string&quot;&gt;&#39;Exited&#39;&lt;/span&gt;]&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sns.countplot(df_oversampler[&lt;span class=&quot;string&quot;&gt;&#39;Exited&#39;&lt;/span&gt;])&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sns.scatterplot(data = df_oversampler, x =&lt;span class=&quot;string&quot;&gt;&#39;CreditScore&#39;&lt;/span&gt;, y = &lt;span class=&quot;string&quot;&gt;&#39;Age&#39;&lt;/span&gt;, hue = &lt;span class=&quot;string&quot;&gt;&#39;Exited&#39;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-    
-    </summary>
-    
-    
-      <category term="Machine Learning" scheme="http://haokailong.top/categories/Machine-Learning/"/>
-    
-    
-      <category term="SMOTE" scheme="http://haokailong.top/tags/SMOTE/"/>
-    
-      <category term="oversampling" scheme="http://haokailong.top/tags/oversampling/"/>
     
   </entry>
   

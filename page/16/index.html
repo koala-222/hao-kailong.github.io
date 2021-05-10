@@ -415,6 +415,555 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/08/Wasserstein-GAN-implementation-in-TensorFlow-and-Pytorch/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/10/08/Wasserstein-GAN-implementation-in-TensorFlow-and-Pytorch/" class="post-title-link" itemprop="url">Wasserstein GAN implementation in TensorFlow and Pytorch</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-08 13:23:29" itemprop="dateModified" datetime="2020-10-08T13:23:29+08:00">2020-10-08</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/GAN/" itemprop="url" rel="index"><span itemprop="name">GAN</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/10/08/Wasserstein-GAN-implementation-in-TensorFlow-and-Pytorch/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/08/Wasserstein-GAN-implementation-in-TensorFlow-and-Pytorch/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>本文译自：<a href="https://wiseodd.github.io/techblog/2017/02/04/wasserstein-gan/" target="_blank" rel="noopener">https://wiseodd.github.io/techblog/2017/02/04/wasserstein-gan/</a></p>
+</blockquote>
+<p>GAN现在是机器学习中非常受欢迎的研究主题。 GAN有两种类型的研究，一种将GAN应用到有趣的问题中，另一种试图稳定训练。</p>
+<p>确实，稳定GAN培训在该领域非常重要。原始GAN遇到许多困难，例如模式崩溃，即生成器陷入非常狭窄的分布，仅涵盖数据分布中的单个模式。模式崩溃的含义是，生成器只能生成非常相似的样本（例如MNIST中的一位数字），即生成的样本区别不大。这个问题当然违反了GAN的精神。</p>
+<p>GAN中的另一个问题是，没有度量标准可以告诉我们有关收敛的信息。生成器和鉴别器的损失并没有告诉我们任何有关此的信息。当然，我们可以不时查看发生器生成的数据来监视培训进度。但是，这是一个严格的手动过程。因此，拥有一个可解释的指标来告诉我们有关培训进度的信息将非常棒。</p>
+<p>Note, code could be found here: <a href="https://github.com/wiseodd/generative-models" target="_blank" rel="noopener">https://github.com/wiseodd/generative-models</a></p>
+<h2 id="Wasserstein-GAN"><a href="#Wasserstein-GAN" class="headerlink" title="Wasserstein GAN"></a>Wasserstein GAN</h2><p>Wasserstein GAN (WGAN) 是新提出的 GAN 算法旨在解决上面提到的两个问题。</p>
+<p>For the intuition and theoritical background behind WGAN, redirect to <a href="https://paper.dropbox.com/doc/Wasserstein-GAN-GvU0p2V9ThzdwY3BbhoP7" target="_blank" rel="noopener">this excellent summary</a> (credits to the author).</p>
+<p>算法如下：</p>
+<p><img src="/images/blog/2020/WGAN.PNG" alt></p>
+<p>可以看到这个算法非常接近原始的 GAN。但是，值得注意下面几点：</p>
+<ol>
+<li>Loss 函数中没有 log，$D$ (判别器) 的输出不再是概率，因此在输出层不使用 sigmoid 函数</li>
+<li>Clip the weight of $D$</li>
+<li>Train $D$ more than $G$</li>
+<li>Use RMSProp instead of ADAM</li>
+<li>Lower learning rate, the paper uses $\alpha = 0.00005$
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/10/08/Wasserstein-GAN-implementation-in-TensorFlow-and-Pytorch/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </li></ol></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/06/DCGAN的实现及效果/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/10/06/DCGAN的实现及效果/" class="post-title-link" itemprop="url">DCGAN的实现及效果</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-06 17:17:09" itemprop="dateModified" datetime="2020-10-06T17:17:09+08:00">2020-10-06</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/10/06/DCGAN的实现及效果/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/06/DCGAN的实现及效果/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><a href="https://arxiv.org/abs/1511.06434" target="_blank" rel="noopener">DCGAN (Deep Convolutional Generative Adversarial Networks)</a> 是最简单的GAN模型了，也是在GAN之后最早出现的变种，只是把GAN中的MLP换作了卷积层以及转置卷积层 (Tranposed Convolution)，一份简洁的，使用<a href="https://github.com/tensorlayer/tensorlayer" target="_blank" rel="noopener">TensorLayer</a> 实现的网络结构为：</p>
+<h3 id="1-代码"><a href="#1-代码" class="headerlink" title="1. 代码"></a>1. 代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> tensorlayer <span class="keyword">as</span> tl</span><br><span class="line"><span class="keyword">from</span> tensorlayer.layers <span class="keyword">import</span> Input, Dense, DeConv2d, Reshape, BatchNorm2d, Conv2d, Flatten</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_generator</span><span class="params">(shape, gf_dim=<span class="number">64</span>)</span>:</span> <span class="comment"># Dimension of gen filters in first conv layer. [64]</span></span><br><span class="line">    image_size = <span class="number">64</span></span><br><span class="line">    s16 = image_size // <span class="number">16</span></span><br><span class="line">    <span class="comment"># w_init = tf.glorot_normal_initializer()</span></span><br><span class="line">    w_init = tf.random_normal_initializer(stddev=<span class="number">0.02</span>)  <span class="comment"># 正态初始化</span></span><br><span class="line">    gamma_init = tf.random_normal_initializer(<span class="number">1.</span>, <span class="number">0.02</span>)</span><br><span class="line">    </span><br><span class="line">    ni = Input(shape)</span><br><span class="line">    nn = Dense(n_units=(gf_dim * <span class="number">8</span> * s16 * s16), W_init=w_init, b_init=<span class="literal">None</span>)(ni)</span><br><span class="line">    nn = Reshape(shape=[<span class="number">-1</span>, s16, s16, gf_dim*<span class="number">8</span>])(nn)</span><br><span class="line">    nn = BatchNorm2d(decay=<span class="number">0.9</span>, act=tf.nn.relu, gamma_init=gamma_init, name=<span class="literal">None</span>)(nn)</span><br><span class="line">    <span class="comment"># n_filter, filter_size, strides</span></span><br><span class="line">    nn = DeConv2d(gf_dim * <span class="number">4</span>, (<span class="number">5</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">2</span>), W_init=w_init, b_init=<span class="literal">None</span>)(nn)</span><br><span class="line">    nn = BatchNorm2d(decay=<span class="number">0.9</span>, act=tf.nn.relu, gamma_init=gamma_init)(nn)</span><br><span class="line">    nn = DeConv2d(gf_dim * <span class="number">2</span>, (<span class="number">5</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">2</span>), W_init=w_init, b_init=<span class="literal">None</span>)(nn)</span><br><span class="line">    nn = BatchNorm2d(decay=<span class="number">0.9</span>, act=tf.nn.relu, gamma_init=gamma_init)(nn)</span><br><span class="line">    nn = DeConv2d(gf_dim, (<span class="number">5</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">2</span>), W_init=w_init, b_init=<span class="literal">None</span>)(nn)</span><br><span class="line">    nn = BatchNorm2d(decay=<span class="number">0.9</span>, act=tf.nn.relu, gamma_init=gamma_init)(nn)</span><br><span class="line">    nn = DeConv2d(<span class="number">3</span>, (<span class="number">5</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">2</span>), act=tf.nn.tanh, W_init=w_init)(nn)</span><br><span class="line">    <span class="keyword">return</span> tl.models.Model(inputs=ni, outputs=nn, name=<span class="string">'generator'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_discriminator</span><span class="params">(shape, df_dim=<span class="number">64</span>)</span>:</span> <span class="comment"># Dimension of discrim filters in first conv layer. [64]</span></span><br><span class="line">    <span class="comment"># w_init = tf.glorot_normal_initializer()</span></span><br><span class="line">    w_init = tf.random_normal_initializer(stddev=<span class="number">0.02</span>)</span><br><span class="line">    gamma_init = tf.random_normal_initializer(<span class="number">1.</span>, <span class="number">0.02</span>)</span><br><span class="line">    lrelu = <span class="keyword">lambda</span> x : tf.nn.leaky_relu(x, <span class="number">0.2</span>)</span><br><span class="line"></span><br><span class="line">    ni = Input(shape)</span><br><span class="line">    nn = Conv2d(df_dim, (<span class="number">5</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">2</span>), act=lrelu, W_init=w_init)(ni)</span><br><span class="line">    nn = Conv2d(df_dim*<span class="number">2</span>, (<span class="number">5</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">2</span>), W_init=w_init, b_init=<span class="literal">None</span>)(nn)</span><br><span class="line">    nn = BatchNorm2d(decay=<span class="number">0.9</span>, act=lrelu, gamma_init=gamma_init)(nn)</span><br><span class="line">    nn = Conv2d(df_dim*<span class="number">4</span>, (<span class="number">5</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">2</span>), W_init=w_init, b_init=<span class="literal">None</span>)(nn)</span><br><span class="line">    nn = BatchNorm2d(decay=<span class="number">0.9</span>, act=lrelu, gamma_init=gamma_init)(nn)</span><br><span class="line">    nn = Conv2d(df_dim*<span class="number">8</span>, (<span class="number">5</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">2</span>), W_init=w_init, b_init=<span class="literal">None</span>)(nn)</span><br><span class="line">    nn = BatchNorm2d(decay=<span class="number">0.9</span>, act=lrelu, gamma_init=gamma_init)(nn)</span><br><span class="line">    nn = Flatten()(nn)</span><br><span class="line">    nn = Dense(n_units=<span class="number">1</span>, act=tf.identity, W_init=w_init)(nn)  </span><br><span class="line">    <span class="keyword">return</span> tl.models.Model(inputs=ni, outputs=nn, name=<span class="string">'discriminator'</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="2-实验设置"><a href="#2-实验设置" class="headerlink" title="2. 实验设置"></a>2. 实验设置</h3><p>使用celeba数据集，是名人 (celebrity) 人脸图片数据集，可以在Google Driver中下载：</p>
+<p><a href="https://drive.google.com/drive/folders/0B7EVK8r0v71pWEZsZE9oNnFzTm8" target="_blank" rel="noopener">https://drive.google.com/drive/folders/0B7EVK8r0v71pWEZsZE9oNnFzTm8</a></p>
+<p>使用Nvidia TITAN RTX显卡，显存为24G，batch_size设为64；每个epoch有3165 steps，共训练25个epoch，每个epoch耗时284秒，训练共耗时2h 3min。
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/10/06/DCGAN的实现及效果/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/05/服务器CuDNN版本升级/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/10/05/服务器CuDNN版本升级/" class="post-title-link" itemprop="url">服务器CuDNN版本升级</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-05 21:12:02" itemprop="dateModified" datetime="2020-10-05T21:12:02+08:00">2020-10-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/10/05/服务器CuDNN版本升级/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/05/服务器CuDNN版本升级/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近在用到tensorlayer跑代码时，遇到了CuDNN版本问题，编译时的版本与运行时版本不同，导致报错。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2019-12-24 05:34:15.862520: E tensorflow/stream_executor/cuda/cuda_dnn.cc:319] Loaded runtime CuDNN library: 7.4.1 but source was compiled with: 7.6.0. CuDNN library major and minor version needs to match or have higher minor version in case of CuDNN 7.0 or later version. If using a binary install, upgrade your CuDNN library. If building from sources, make sure the library loaded at runtime is compatible with the version specified during compile configuration.</span><br></pre></td></tr></table></figure>
+<p>在服务器上，<strong>没有root权限</strong>，也可以升级CuDNN版本，具体操作下面给出。</p>
+<h3 id="1-下载CuDNN"><a href="#1-下载CuDNN" class="headerlink" title="1. 下载CuDNN"></a>1. 下载CuDNN</h3><p>网址为：<a href="https://developer.nvidia.com/cudnn" target="_blank" rel="noopener">https://developer.nvidia.com/cudnn</a></p>
+<p>需要先注册，之后选择<font color="#4fff60">cnDNN Library for Linux</font></p>
+<h3 id="2-解压安装"><a href="#2-解压安装" class="headerlink" title="2. 解压安装"></a>2. 解压安装</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xzvf cudnn*</span><br></pre></td></tr></table></figure>
+<p>得到一个名为cuda的文件夹</p>
+<h3 id="3-配置环境变量"><a href="#3-配置环境变量" class="headerlink" title="3. 配置环境变量"></a>3. 配置环境变量</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.bashrc</span><br></pre></td></tr></table></figure>
+<p>在末尾加上：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/home/xxx/cuda/lib64"</span><br></pre></td></tr></table></figure>
+<p>最后激活：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source ~/.bashrc</span><br></pre></td></tr></table></figure>
+<p>到这里就大功告成了！</p>
+<h3 id="4-验证"><a href="#4-验证" class="headerlink" title="4. 验证"></a>4. 验证</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo $LD_LIBRARY_PATH</span><br></pre></td></tr></table></figure>
+<p>输出中包含<code>/home/xxx/cuda/lib64</code>，证明激活成功。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/03/深入理解Batch-Normalization/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1747,579 +2296,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/19/局部敏感哈希-LSH/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/09/19/局部敏感哈希-LSH/" class="post-title-link" itemprop="url">局部敏感哈希(LSH)</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-09-19 13:34:26" itemprop="dateModified" datetime="2020-09-19T13:34:26+08:00">2020-09-19</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Data-Mining/" itemprop="url" rel="index"><span itemprop="name">Data Mining</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/09/19/局部敏感哈希-LSH/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/19/局部敏感哈希-LSH/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="1-引入"><a href="#1-引入" class="headerlink" title="1. 引入"></a>1. 引入</h2><p>​        在做微博文本挖掘的时候，会发现很多微博是高度相似的，因为大量的微博都是转发其他人的微博，并且没有添加评论，导致很多数据是重复或者高度相似的。这给我们进行数据处理带来很大的困扰，我们得想办法把找出这些相似的微博，再对其进行去重处理。</p>
-<p>　　如果只是要找到重复的微博，我们可以用两两比较所有的微博，对相同的微博值保留一条即可；但这只能在数据量很小的情况下才有可能，当我们有1000万条微博时，需要两两比较的微博有10^6亿（n*(n-1)/2）对，这个计算量是惊人的，即便你用map-reduce，拥有强大的集群，那也顶不住数据再增加一两个数量级。一种稍微好一点的办法是对所以微博进行一次hash，再对桶内的微博进行比较，利用hash可以过滤了绝大多数不相同的微博，避免了无谓的比较，时间复杂度O(n)，显著提高效率。Hash的一个基本特性就是随机性，它将一个字符串随机的hash到一个桶中，对于相同的两个字符串，hash值总是相同的，但两个hash值只要相差一点，hash值就就可能大相径庭，可谓差之毫厘谬以千里：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; s1 = <span class="string">"我是一个字符串"</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; s2 = <span class="string">"我是一个字符串"</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="built_in">hash</span>(s1)</span></span><br><span class="line">2006838971</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="built_in">hash</span>(s2)</span></span><br><span class="line">2006838971</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; s3 = <span class="string">"我就是一个字符串"</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="built_in">hash</span>(s3)</span></span><br><span class="line">-1823451294</span><br></pre></td></tr></table></figure>
-<p>　    如果能有一种hash算法，能将相似的字符串hash得到相似的hash值，那就能在接近线性的时间解决海量微博中的去重问题。幸好，这样的hash已经有大牛发明了，它叫局部敏感哈希（Locality Sensitive Hashing，简称LSH）。接下来我们通过海量微博文本相似项发现的例子来探讨这个神奇的hash。
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/09/19/局部敏感哈希-LSH/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/15/Freebase-Search-Cookbook/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/09/15/Freebase-Search-Cookbook/" class="post-title-link" itemprop="url">Freebase Search Cookbook</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-09-15 19:29:55" itemprop="dateModified" datetime="2020-09-15T19:29:55+08:00">2020-09-15</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Knowledge-Graph/" itemprop="url" rel="index"><span itemprop="name">Knowledge Graph</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/09/15/Freebase-Search-Cookbook/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/15/Freebase-Search-Cookbook/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>内容来自于：<a href="https://developers.google.com/freebase/v1/search-cookbook" target="_blank" rel="noopener">https://developers.google.com/freebase/v1/search-cookbook</a></p>
-</blockquote>
-<h1 id="Search-Cookbook"><a href="#Search-Cookbook" class="headerlink" title="Search Cookbook"></a>Search Cookbook</h1><p>This page contains a list of recipes for different ways to constrain search queries using the <a href="https://developers.google.com/freebase/v1/search-overview" target="_blank" rel="noopener">Search Service</a>.</p>
-<h2 id="Textual-constraints"><a href="#Textual-constraints" class="headerlink" title="Textual constraints"></a>Textual constraints</h2><p>Textual data for a Freebase entity comes first from its name and its aliases, then from its keys and other textual properties, and finally from its Wikipedia anchor data if it was reconciled with a language-specific Wikipedia topic.</p>
-<p>Textual constraints are language-specific; currently, 18 languages are supported. English has by far the most coverage and is the default language.</p>
-<p>For a list of all currently supported language codes, visit the following:</p>
-<p><a href="https://www.googleapis.com/freebase/v1/search?help=langs&amp;indent=true" target="_blank" rel="noopener">https://www.googleapis.com/freebase/v1/search?help=langs&amp;indent=true</a></p>
-<p>A textual constraint is specified with the <code>query</code> parameter. Its language is specified with the <code>lang</code> parameter. For example:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;gore&quot;</span><br><span class="line">query: &quot;gore&quot; lang: &quot;fr&quot;</span><br><span class="line">query: &quot;gore&quot; lang: &quot;de&quot;</span><br></pre></td></tr></table></figure>
-<p>During indexing, <strong>textual data is normalized</strong> in a language-specific way. For example, in English, text is converted to lowercase and accents are removed. At query time, the same language-specific normalization is performed on the query text. For example:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;beyoncé&quot;</span><br><span class="line">query: &quot;beyonce&quot;</span><br></pre></td></tr></table></figure>
-<p>Several parameters control how a textual constraint is matched. Setting the <code>prefixed</code> parameter to <code>true</code> triggers a prefix match on name and aliases only (and a regular match on other textual data). For example:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">query: &quot;bob dy&quot; prefixed: true</span><br></pre></td></tr></table></figure>
-<p>Setting <code>stemmed</code> to <code>true</code> triggers a stemmed match on name and aliases only (and a regular match on other textual data). Stemmed matches may be used to paste over language-specific suffix differences introduced by plurals or other grammatical forms. For example:
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/09/15/Freebase-Search-Cookbook/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/09/15/Freebase介绍/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/09/15/Freebase介绍/" class="post-title-link" itemprop="url">Freebase介绍</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-09-15 15:39:40" itemprop="dateModified" datetime="2020-09-15T15:39:40+08:00">2020-09-15</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Knowledge-Graph/" itemprop="url" rel="index"><span itemprop="name">Knowledge Graph</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/09/15/Freebase介绍/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/15/Freebase介绍/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>内容来自于Freebase官方文档：<a href="https://developers.google.com/freebase/guide/basic_concepts" target="_blank" rel="noopener">https://developers.google.com/freebase/guide/basic_concepts</a></p>
-</blockquote>
-<h1 id="Basic-Concepts"><a href="#Basic-Concepts" class="headerlink" title="Basic Concepts"></a>Basic Concepts</h1><p>If you are new to Freebase, this section covers the basic terminology and concepts required to understand how Freebase works.</p>
-<h2 id="Graphs"><a href="#Graphs" class="headerlink" title="Graphs"></a>Graphs</h2><p>Freebase data is stored in a data structure called a <a href="http://en.wikipedia.org/wiki/Graph_(abstract_data_type" target="_blank" rel="noopener">graph</a>). A graph is composed on nodes connected by edges. In Freebase, the nodes are defined using <a href="http://www.freebase.com/type/object" target="_blank" rel="noopener">/type/object</a> and edges are defined using <a href="http://www.freebase.com/type/link" target="_blank" rel="noopener">/type/link</a>. By storing the data as a graph, Freebase can quickly traverse arbitrary connections between topics and easily add new schema without having to change structure of the data.</p>
-<h2 id="Topics"><a href="#Topics" class="headerlink" title="Topics"></a>Topics</h2><p>Freebase has over 39 million topics about real-world entities like people, places and things. Since Freebase data is represented a graph, these topics correspond to the nodes in the graph. However, not every node is a topic. See the section on <a href="https://developers.google.com/freebase/guide/basic_concepts#cvts" target="_blank" rel="noopener">CVTs</a> to as an example of nodes that are not topics.</p>
-<p>Examples of the types of topics found in Freebase:</p>
-<ul>
-<li>Physical entities, e.g., <a href="http://www.freebase.com/en/bob_dylan" target="_blank" rel="noopener">Bob Dylan</a>, <a href="http://www.freebase.com/en/louvre" target="_blank" rel="noopener">the Louvre Museum</a>, the <a href="http://www.freebase.com/en/saturn" target="_blank" rel="noopener">Saturn planet</a>, to</li>
-<li>Artistic/media creations, e.g., <a href="http://www.freebase.com/en/the_dark_knight" target="_blank" rel="noopener">The Dark Knight (film)</a>, <a href="http://http//www.freebase.com/guid/9202a8c04000641f80000000002e46af" target="_blank" rel="noopener">Hotel California (song)</a>, to</li>
-<li>Classifications, e.g., <a href="http://www.freebase.com/en/noble_gas" target="_blank" rel="noopener">noble gas</a>, <a href="http://www.freebase.com/en/chordate" target="_blank" rel="noopener">Chordate</a>, to</li>
-<li>Abstract concepts, e.g., <a href="http://www.freebase.com/en/love" target="_blank" rel="noopener">love</a>, to</li>
-<li>Schools of thoughts or artistic movements, e.g., <a href="http://www.freebase.com/en/impressionism" target="_blank" rel="noopener">Impressionism</a>.</li>
-</ul>
-<p>Some topics are notable because they hold a lot of data (e.g., <a href="http://www.freebase.com/en/wal-mart" target="_blank" rel="noopener">Wal-Mart</a>), and some are notable because they link to many other topics, potentially in different domains of information. For example, abstract topics like love, poverty, chivalry, etc. don’t have many properties associated with them but they appear often as book subjects, poetry subjects, film subjects, etc. making them more notable.</p>
-<h2 id="Types-and-Properties"><a href="#Types-and-Properties" class="headerlink" title="Types and Properties"></a>Types and Properties</h2><p>Any given topic can be seen for many different perspectives for example:</p>
-<ul>
-<li>Bob Dylan was a song writer, singer, performer, book author, and film actor;</li>
-<li>Leonardo da Vinci was a painter, a sculptor, an anatomist, an architect, an engineer, …;</li>
-<li>Love is a book subject, film subject, play subject, poetry subject, …;</li>
-<li>Any city is a location, potentially a tourist destination, and an employer of civil servants.
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/09/15/Freebase介绍/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </li></ul></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/15/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/17/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/15/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/17/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2363,7 +2344,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">179</span>
+                    <span class="site-state-item-count">182</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3331,7 +3312,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">446</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">448</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

@@ -415,6 +415,555 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/15/深度子域适应网络/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/01/15/深度子域适应网络/" class="post-title-link" itemprop="url">深度子域适应网络</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-01-15 21:31:18" itemprop="dateModified" datetime="2021-01-15T21:31:18+08:00">2021-01-15</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/Transfer-Learning/" itemprop="url" rel="index"><span itemprop="name">Transfer Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/01/15/深度子域适应网络/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/15/深度子域适应网络/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h1><p>深度学习需要大量的标签样本，为解决标签问题提出了迁移学习，即从相关的source domain 去学习标签好的数据。但由于不同域间的数据分布也不同，所以学习得到的模型泛化能力不高。<br>在训练、测试数据的分布有变动的情况下去学习一个判别模型叫做domain adaptation 或transfer distributions。<br>在深度特征学习中嵌入domain adaptation模块去提取固定特征 已经证明能带来新的优势。之前的domain adaptation都是在全局域上做迁移，导致一个域内不同类别的数据会被混淆，因此不能学习到好的特征结构。</p>
+<h1 id="2、方法"><a href="#2、方法" class="headerlink" title="2、方法"></a>2、方法</h1><h2 id="2-1新方法的概念"><a href="#2-1新方法的概念" class="headerlink" title="2.1新方法的概念"></a>2.1新方法的概念</h2><p>提出DSAN网络：在DANs网络的基础上对其子域来增强特征的表现能力。<br>为了实现正确的对齐，早期使用的方法是MMD：把source和target用一个相同的映射映射在一个再生核希尔伯特空间（RKHS）中，然后求映射后两部分数据的均值差异。现设计了一个局部最大平均差（LMMD）（它在考虑不同样本权重的情况下，测量源域和目标域中相关子域的经验分布的核平均嵌入之间的Hilbert-Schmidt范数）LMMD方法可以在大多数前馈网络模型中实现，并且可以使用标准反向传播进行有效的训练。</p>
+<h2 id="2-2方法的实现"><a href="#2-2方法的实现" class="headerlink" title="2.2方法的实现"></a>2.2方法的实现</h2><h3 id="2-2-1网络的结构"><a href="#2-2-1网络的结构" class="headerlink" title="2.2.1网络的结构"></a>2.2.1网络的结构</h3><p><img src="/images/blog/2021/DSAN.png" alt></p>
+<p>在ResNet的基础上添加LMMD模块来使得相关子域更相近。LMMD计算公式如下:</p>
+<script type="math/tex; mode=display">
+\hat{d}_\mathcal{H}(p,q) = \frac{1}{C} \sum_{c=1}^C||\sum_{\mathbf{x}_i^s \in \mathcal{D}_s} w_i^{sc}\phi(\mathbf{x}_i^s) - \sum_{\mathbf{x}_j^t \in \mathcal{D}_t} w_j^{tc}\phi(\mathbf{x}_j^t)||_\mathcal{H}^2</script><script type="math/tex; mode=display">
+w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</script>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2021/01/15/深度子域适应网络/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/15/什么是KL散度？/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/01/15/什么是KL散度？/" class="post-title-link" itemprop="url">什么是KL散度？</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-01-15 19:55:59" itemprop="dateModified" datetime="2021-01-15T19:55:59+08:00">2021-01-15</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/01/15/什么是KL散度？/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/15/什么是KL散度？/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><code>Kullback-Leibler Divergence</code>，即<code>K-L散度</code>，是一种<strong>量化两种概率分布P和Q之间差异</strong>的方式，又叫<code>相对熵</code>。在概率学和统计学上，我们经常会使用一种<code>更简单的、近似的分布</code>来替代<code>观察数据</code>或<code>太复杂的分布</code>。K-L散度能帮助我们度量使用一个分布来近似另一个分布时所损失的信息量。</p>
+<blockquote>
+<p>假设我们是一群太空科学家，经过遥远的旅行，来到了一颗新发现的星球。在这个星球上，生存着一种长有牙齿的蠕虫，引起了我们的研究兴趣。我们发现这种蠕虫生有10颗牙齿，但是因为不注意口腔卫生，又喜欢嚼东西，许多蠕虫会掉牙。收集大量样本之后，我们得到关于蠕虫牙齿数量的经验分布，如下图所示</p>
+</blockquote>
+<p><img src="/images/blog/2021/teeth-distribution.webp" alt></p>
+<p>显然我们的原始数据并非均分布的，但也不是我们已知的分布，至少不是常见的分布。作为备选，我们想到的另一种简单模型是<code>二项式分布binomial distribution</code>。蠕虫嘴里面共有<code>n=10</code>个牙槽，每个牙槽出现牙齿与否为独立事件，且概率均为<code>p</code>。则蠕虫牙齿数量即为期望值<code>E[x]=n*p</code>，真实期望值即为观察数据的平均值，比如说<code>5.7</code>，则<code>p=0.57</code>，得到如下图所示的二项式分布：<br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2021/01/15/什么是KL散度？/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/12/sklearn-metrics-precision-recall-curve-源码阅读/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/01/12/sklearn-metrics-precision-recall-curve-源码阅读/" class="post-title-link" itemprop="url">sklearn.metrics.precision_recall_curve()源码阅读</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-01-12 13:54:36" itemprop="dateModified" datetime="2021-01-12T13:54:36+08:00">2021-01-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/01/12/sklearn-metrics-precision-recall-curve-源码阅读/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/12/sklearn-metrics-precision-recall-curve-源码阅读/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="主函数"><a href="#主函数" class="headerlink" title="主函数"></a>主函数</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@_deprecate_positional_args</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">precision_recall_curve</span><span class="params">(y_true, probas_pred, *, pos_label=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                           sample_weight=None)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    ----------</span></span><br><span class="line"><span class="string">    y_true : ndarray of shape (n_samples,)</span></span><br><span class="line"><span class="string">        True binary labels. If labels are not either &#123;-1, 1&#125; or &#123;0, 1&#125;, then</span></span><br><span class="line"><span class="string">        pos_label should be explicitly given.</span></span><br><span class="line"><span class="string">    probas_pred : ndarray of shape (n_samples,)</span></span><br><span class="line"><span class="string">        Estimated probabilities or output of a decision function.</span></span><br><span class="line"><span class="string">    pos_label : int or str, default=None</span></span><br><span class="line"><span class="string">        The label of the positive class.</span></span><br><span class="line"><span class="string">        When ``pos_label=None``, if y_true is in &#123;-1, 1&#125; or &#123;0, 1&#125;,</span></span><br><span class="line"><span class="string">        ``pos_label`` is set to 1, otherwise an error will be raised.</span></span><br><span class="line"><span class="string">    sample_weight : array-like of shape (n_samples,), default=None</span></span><br><span class="line"><span class="string">        Sample weights.</span></span><br><span class="line"><span class="string">    Returns</span></span><br><span class="line"><span class="string">    -------</span></span><br><span class="line"><span class="string">    precision : ndarray of shape (n_thresholds + 1,)</span></span><br><span class="line"><span class="string">        Precision values such that element i is the precision of</span></span><br><span class="line"><span class="string">        predictions with score &gt;= thresholds[i] and the last element is 1.</span></span><br><span class="line"><span class="string">    recall : ndarray of shape (n_thresholds + 1,)</span></span><br><span class="line"><span class="string">        Decreasing recall values such that element i is the recall of</span></span><br><span class="line"><span class="string">        predictions with score &gt;= thresholds[i] and the last element is 0.</span></span><br><span class="line"><span class="string">    thresholds : ndarray of shape (n_thresholds,)</span></span><br><span class="line"><span class="string">        Increasing thresholds on the decision function used to compute</span></span><br><span class="line"><span class="string">        precision and recall. n_thresholds &lt;= len(np.unique(probas_pred)).</span></span><br><span class="line"><span class="string">    See Also</span></span><br><span class="line"><span class="string">    --------</span></span><br><span class="line"><span class="string">    plot_precision_recall_curve : Plot Precision Recall Curve for binary</span></span><br><span class="line"><span class="string">        classifiers.</span></span><br><span class="line"><span class="string">    PrecisionRecallDisplay : Precision Recall visualization.</span></span><br><span class="line"><span class="string">    average_precision_score : Compute average precision from prediction scores.</span></span><br><span class="line"><span class="string">    det_curve: Compute error rates for different probability thresholds.</span></span><br><span class="line"><span class="string">    roc_curve : Compute Receiver operating characteristic (ROC) curve.</span></span><br><span class="line"><span class="string">    Examples</span></span><br><span class="line"><span class="string">    --------</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; import numpy as np</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; from sklearn.metrics import precision_recall_curve</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; y_true = np.array([0, 0, 1, 1])</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; y_scores = np.array([0.1, 0.4, 0.35, 0.8])</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; precision, recall, thresholds = precision_recall_curve(</span></span><br><span class="line"><span class="string">    ...     y_true, y_scores)</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; precision</span></span><br><span class="line"><span class="string">    array([0.66666667, 0.5       , 1.        , 1.        ])</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; recall</span></span><br><span class="line"><span class="string">    array([1. , 0.5, 0.5, 0. ])</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; thresholds</span></span><br><span class="line"><span class="string">    array([0.35, 0.4 , 0.8 ])</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    fps, tps, thresholds = _binary_clf_curve(y_true, probas_pred,</span><br><span class="line">                                             pos_label=pos_label,</span><br><span class="line">                                             sample_weight=sample_weight)</span><br><span class="line"></span><br><span class="line">    precision = tps / (tps + fps)</span><br><span class="line">    precision[np.isnan(precision)] = <span class="number">0</span></span><br><span class="line">    recall = tps / tps[<span class="number">-1</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># stop when full recall attained</span></span><br><span class="line">    <span class="comment"># and reverse the outputs so recall is decreasing</span></span><br><span class="line">    last_ind = tps.searchsorted(tps[<span class="number">-1</span>])</span><br><span class="line">    sl = slice(last_ind, <span class="literal">None</span>, <span class="number">-1</span>)</span><br><span class="line">    <span class="keyword">return</span> np.r_[precision[sl], <span class="number">1</span>], np.r_[recall[sl], <span class="number">0</span>], thresholds[sl]</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2021/01/12/sklearn-metrics-precision-recall-curve-源码阅读/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/11/箱线图/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1720,593 +2269,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/06/How-to-Fine-Tune-BERT-for-Text-Classification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2021/01/06/How-to-Fine-Tune-BERT-for-Text-Classification/" class="post-title-link" itemprop="url">How to Fine-Tune BERT for Text Classification</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2021-01-06 18:34:34" itemprop="dateModified" datetime="2021-01-06T18:34:34+08:00">2021-01-06</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/Pretrained-Language-Model/" itemprop="url" rel="index"><span itemprop="name">Pretrained Language Model</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/01/06/How-to-Fine-Tune-BERT-for-Text-Classification/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/06/How-to-Fine-Tune-BERT-for-Text-Classification/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h3><p>文本分类是NLP中的一个经典任务， 通常在大型的数据集进行一些预训练的模型在文本分类上可以取得很不错的成绩。例如word2vec， CoVe(contextualized<br>word embeddings)和ELMo都取得了不错的成绩。Bert是基于双向transformer使用masked word prediction和NSP(next sentence prediction)的任务进行预训练，然后在下游任务上进行微调。Bert的出世，横扫了各大榜单。但是他的潜能已经被完全开发了吗？本文针对文本分类基于Bert探索了几种可以优化效果的方法。</p>
-<p>这几种方法分别是：</p>
-<ul>
-<li>Fine-tune策略</li>
-<li>深度预训练</li>
-<li>多任务Fine-tune</li>
-</ul>
-<h3 id="策略介绍"><a href="#策略介绍" class="headerlink" title="策略介绍"></a>策略介绍</h3><h4 id="Fine-tune策略"><a href="#Fine-tune策略" class="headerlink" title="Fine-tune策略"></a>Fine-tune策略</h4><p>神经网络的不同层可以捕获不同的语法和语义信息。使用Bert去训练下游任务需要考虑几个问题：</p>
-<ol>
-<li>预训练的长本文，Bert的最长文本序列是512</li>
-<li>层数选择，正如上文所述哦，每一层都会捕获不同的信息，因此我们需要选择最适合的层数</li>
-<li>过拟合问题，因此需要考虑合适的学习率。<br>Bert的底层会学习到更多的通用的信息，文中对Bert的不同层使用了不同的学习率。 每一层的参数迭代可以如下所示：</li>
-</ol>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2021/01/06/How-to-Fine-Tune-BERT-for-Text-Classification/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/06/GPT1和GPT2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2021/01/06/GPT1和GPT2/" class="post-title-link" itemprop="url">GPT1和GPT2</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2021-01-06 14:09:45" itemprop="dateModified" datetime="2021-01-06T14:09:45+08:00">2021-01-06</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/Pretrained-Language-Model/" itemprop="url" rel="index"><span itemprop="name">Pretrained Language Model</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/01/06/GPT1和GPT2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/06/GPT1和GPT2/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>本片文章转载于：总结GPT1和GPT2</p>
-<p><a href="https://blog.csdn.net/beilizhang/article/details/109282032" target="_blank" rel="noopener">https://blog.csdn.net/beilizhang/article/details/109282032</a></p>
-</blockquote>
-<p>参考链接：</p>
-<ol>
-<li><a href="https://blog.csdn.net/hyzhyzhyz12345/article/details/104181606" target="_blank" rel="noopener">https://blog.csdn.net/hyzhyzhyz12345/article/details/104181606</a></li>
-<li><a href="https://www.jianshu.com/p/a68288613a0f" target="_blank" rel="noopener">https://www.jianshu.com/p/a68288613a0f</a></li>
-<li><a href="https://blog.csdn.net/u012526436/article/details/87882985" target="_blank" rel="noopener">https://blog.csdn.net/u012526436/article/details/87882985</a></li>
-<li><a href="https://www.jianshu.com/p/6c2bfa1848f2" target="_blank" rel="noopener">https://www.jianshu.com/p/6c2bfa1848f2</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/57251615" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/57251615</a></li>
-<li><a href="https://www.jiqizhixin.com/articles/2019-08-26-12" target="_blank" rel="noopener">https://www.jiqizhixin.com/articles/2019-08-26-12</a></li>
-</ol>
-<h2 id="GPT1"><a href="#GPT1" class="headerlink" title="GPT1"></a>GPT1</h2><p>全称：Generative Pre-Training 1.0<br>论文：<a href="https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf" target="_blank" rel="noopener">《Improving Language Understanding by Generative Pre-Training》</a></p>
-<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>GPT1采用了NLP中常用的“预训练+微调（generative pre-training + discriminative fine-tuning）”的模式。</p>
-<p>由于LSTM等结构在捕获长期依赖的局限性，<strong>GPT1的模型是Transformer的Decoder部分</strong>，其采用的self-attention机制较好地弥补了LSTM的弊端。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2021/01/06/GPT1和GPT2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/05/fine-tuning-GPT2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2021/01/05/fine-tuning-GPT2/" class="post-title-link" itemprop="url">fine-tuning GPT2</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2021-01-06 14:11:55" itemprop="dateModified" datetime="2021-01-06T14:11:55+08:00">2021-01-06</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/Pretrained-Language-Model/" itemprop="url" rel="index"><span itemprop="name">Pretrained Language Model</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/01/05/fine-tuning-GPT2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/05/fine-tuning-GPT2/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="GPT2"><a href="#GPT2" class="headerlink" title="GPT2"></a>GPT2</h1><h2 id="abstract"><a href="#abstract" class="headerlink" title="abstract"></a>abstract</h2><p><em>GPT-2 is a large transformer-based language model with 1.5 billion parameters, trained on a dataset[1] of 8 million web pages. GPT-2 is trained with a simple objective: predict the next word, given all of the previous words within some text. The diversity of the dataset causes this simple goal to contain naturally occurring demonstrations of many tasks across diverse domains. GPT-2 is a direct scale-up of GPT, with more than 10X the parameters and trained on more than 10X the amount of data.</em></p>
-<h1 id="fine-tuning"><a href="#fine-tuning" class="headerlink" title="fine-tuning"></a>fine-tuning</h1><p>参考<a href="https://github.com/huggingface/transformers/tree/master/examples/language-modeling" target="_blank" rel="noopener">transformers官方代码</a></p>
-<p>使用如下命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CUDA_VISIBLE_DEVICES=0 python run_clm.py --model_name_or_path ../gpt2 --train_file nyt_corpus.txt --do_train --output_dir output --num_train_epochs 5 --save_steps 10000 --save_total_limit 2 --seed 666 --block_size 512</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2021/01/05/fine-tuning-GPT2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2350,7 +2317,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">179</span>
+                    <span class="site-state-item-count">182</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3318,7 +3285,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">446</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">448</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -3860,11 +3831,11 @@
   
     
       
-    
-      
-    
-      
         
+      
+    
+      
+    
       
     
       

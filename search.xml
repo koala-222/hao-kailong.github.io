@@ -1,6 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Latex算法排版</title>
+    <url>/2021/05/10/Latex%E7%AE%97%E6%B3%95%E6%8E%92%E7%89%88/</url>
+    <content><![CDATA[<h2 id="方式一："><a href="#方式一：" class="headerlink" title="方式一："></a>方式一：</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\usepackage[noend]&#123;algpseudocode&#125;</span><br><span class="line">\usepackage&#123;algorithmicx,algorithm&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;algorithm&#125;[t]</span><br><span class="line">\caption&#123;algorithm caption&#125; %算法的名字</span><br><span class="line">\hspace*&#123;0.02in&#125; &#123;\bf Input:&#125; %算法的输入， \hspace*&#123;0.02in&#125;用来控制位置，同时利用 \\ 进行换行</span><br><span class="line">input parameters A, B, C\\</span><br><span class="line">\hspace*&#123;0.02in&#125; &#123;\bf Output:&#125; %算法的结果输出</span><br><span class="line">output result</span><br><span class="line">\begin&#123;algorithmic&#125;[1]</span><br><span class="line">\State some description % \State 后写一般语句</span><br><span class="line">\For&#123;condition&#125; % For 语句，需要和EndFor对应</span><br><span class="line">　　\State ...</span><br><span class="line">　　\If&#123;condition&#125; % If 语句，需要和EndIf对应</span><br><span class="line">　　　　\State ...</span><br><span class="line">　　\Else</span><br><span class="line">　　　　\State ...</span><br><span class="line">　　\EndIf</span><br><span class="line">\EndFor</span><br><span class="line">\While&#123;condition&#125; % While语句，需要和EndWhile对应</span><br><span class="line">　　\State ...</span><br><span class="line">\EndWhile</span><br><span class="line">\State \Return result</span><br><span class="line">\end&#123;algorithmic&#125;</span><br><span class="line">\end&#123;algorithm&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<p><img src="/images/blog/2021/algorithm1.png" alt></p>
+<p> <strong>注意</strong></p>
+<p><strong>1. 关键字的大小写问题，否则会出现 Undefined control sequence.</strong></p>
+<p><strong>2. 控制流要前后对应。如果有 While，但没有 EndWhile，否则会出现 Some blocks are not closed。</strong></p>
+<a id="more"></a>
+<h2 id="方式二："><a href="#方式二：" class="headerlink" title="方式二："></a>方式二：</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\usepackage[ruled]&#123;algorithm2e&#125;</span><br><span class="line"></span><br><span class="line">\begin&#123;algorithm&#125;[H]</span><br><span class="line">\caption&#123;algorithm caption&#125;%算法名字</span><br><span class="line">\LinesNumbered %要求显示行号</span><br><span class="line">\KwIn&#123;input parameters A, B, C&#125;%输入参数</span><br><span class="line">\KwOut&#123;output result&#125;%输出</span><br><span class="line">some description\; %\;用于换行</span><br><span class="line">\For&#123;condition&#125;&#123;</span><br><span class="line">　　only if\;</span><br><span class="line">　　\If&#123;condition&#125;&#123;</span><br><span class="line">　　　　1\;</span><br><span class="line">　　&#125;</span><br><span class="line">&#125;</span><br><span class="line">\While&#123;not at end of this document&#125;&#123;</span><br><span class="line">　　if and else\;</span><br><span class="line">　　\eIf&#123;condition&#125;&#123;</span><br><span class="line">　　　　1\;</span><br><span class="line">　　&#125;&#123;</span><br><span class="line">　　　　2\;</span><br><span class="line">　　&#125;</span><br><span class="line">&#125;</span><br><span class="line">\ForEach&#123;condition&#125;&#123;</span><br><span class="line">　　\If&#123;condition&#125;&#123;</span><br><span class="line">　　　　1\;</span><br><span class="line">　　&#125;</span><br><span class="line">&#125;</span><br><span class="line">\end&#123;algorithm&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<p><img src="/images/blog/2021/algorithm2.png" alt></p>
+<h2 id="方式三："><a href="#方式三：" class="headerlink" title="方式三："></a>方式三：</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\usepackage[ruled,vlined]&#123;algorithm2e&#125;</span><br><span class="line"></span><br><span class="line">%...同方式二</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<p><img src="/images/blog/2021/algorithm3.png" alt></p>
+]]></content>
+      <categories>
+        <category>Others</category>
+        <category>Tool</category>
+      </categories>
+      <tags>
+        <tag>Latex</tag>
+        <tag>Algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Latex中公式过长</title>
+    <url>/2021/04/27/Latex%E4%B8%AD%E5%85%AC%E5%BC%8F%E8%BF%87%E9%95%BF/</url>
+    <content><![CDATA[<p>Latex中公式过长，解决方法主要有以下几种：</p>
+<h2 id="解决方案1"><a href="#解决方案1" class="headerlink" title="解决方案1"></a>解决方案1</h2><p>使用amsmath package的split环境</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\begin&#123;equation&#125;</span><br><span class="line">\begin&#123;split&#125;</span><br><span class="line">F = \&#123;F_&#123;x&#125; \in  F_&#123;c&#125; &amp;: (|S| &gt; |C|) \\</span><br><span class="line">&amp;\quad \cap (\text&#123;minPixels&#125; &lt; |S| &lt; \text&#123;maxPixels&#125;) \\</span><br><span class="line">&amp;\quad \cap (|S_&#123;\text&#123;conected&#125;&#125;| &gt; |S| - \epsilon) \&#125;</span><br><span class="line">\end&#123;split&#125;</span><br><span class="line">\end&#123;equation&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="解决方案2"><a href="#解决方案2" class="headerlink" title="解决方案2"></a>解决方案2</h2><p>使用 \! 命令，在等号、加号等两侧进行微调</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\begin&#123;eqnarray&#125;</span><br><span class="line">\dot&#123;x&#125;(t)\！=\！\bar&#123;A&#125;_&#123;i&#125;x(t)+\bar&#123;B&#125;_&#123;i_&#123;1&#125;&#125;x(t)+\bar&#123;B&#125;_&#123;i_&#123;2&#125;&#125;x(t)+\bar&#123;B&#125;_&#123;i_&#123;3&#125;&#125;[a_&#123;i&#125;(t)\！+\！b_&#123;i&#125;(t)].</span><br><span class="line">\end&#123;eqnarray&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="解决方案3"><a href="#解决方案3" class="headerlink" title="解决方案3"></a>解决方案3</h2><p>缩小公式：</p>
+<ul>
+<li>编号不缩小</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\begin&#123;equation&#125;</span><br><span class="line">\resizebox&#123;.9\hsize&#125;&#123;!&#125;&#123;$A+B+C+D+E+F+G+H+I+J+K+L+M+N+O+P+Q+R+S+T+U+V+W+X+Y+Z$&#125;</span><br><span class="line">\end&#123;equation&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>编号缩小</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\begin&#123;small&#125;</span><br><span class="line">\begin&#123;equation&#125;</span><br><span class="line">\ldots</span><br><span class="line">\end&#123;equation&#125;</span><br><span class="line">\end&#123;small&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Others</category>
+        <category>Tool</category>
+      </categories>
+      <tags>
+        <tag>Latex</tag>
+        <tag>LaTeX</tag>
+        <tag>equation</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LaTeX在双栏模式下插入跨栏图表</title>
+    <url>/2021/04/27/LaTeX%E5%9C%A8%E5%8F%8C%E6%A0%8F%E6%A8%A1%E5%BC%8F%E4%B8%8B%E6%8F%92%E5%85%A5%E8%B7%A8%E6%A0%8F%E5%9B%BE%E8%A1%A8/</url>
+    <content><![CDATA[<p>Latex中插入图片的命令是：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\begin&#123;figure&#125;</span><br><span class="line">\centering</span><br><span class="line">\includegraphics[width=8cm]&#123;picture.png&#125;</span><br><span class="line">\caption&#123;this is a picture&#125;</span><br><span class="line">\label&#123;fig:picture01&#125;</span><br><span class="line">\end&#123;figure&#125;</span><br></pre></td></tr></table></figure>
+<p>在双栏编辑模式下，图片只能在一栏中显示，而且如果图片的宽度超过单栏文本宽度，则只能显示其中一部分，剩下的部分会”溢出“。</p>
+<p><strong>在双栏模式下插入跨栏图，方法其实很简单，将环境改为带*即可</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\begin&#123;figure*&#125;</span><br><span class="line">...</span><br><span class="line">\end&#123;figure*&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Others</category>
+        <category>Tool</category>
+      </categories>
+      <tags>
+        <tag>Latex</tag>
+        <tag>LaTeX</tag>
+        <tag>figure</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Failed to initialize NVML</title>
     <url>/2021/04/24/Failed-to-initialize-NVML/</url>
     <content><![CDATA[<p>在使用<code>nvidia-smi</code>命令时报错，</p>
@@ -2186,8 +2260,8 @@ w_i^c = \frac{y_{ic}}{\sum_{(\mathbf{x}_j,\mathbf{y}_j)\in\mathcal{D}}y_{jc}}</s
         <category>Tool</category>
       </categories>
       <tags>
-        <tag>IJCAI</tag>
         <tag>LaTeX</tag>
+        <tag>IJCAI</tag>
       </tags>
   </entry>
   <entry>
@@ -3454,10 +3528,10 @@ L_I(G,Q) = E_{c \sim P(c), x \sim G(z,c)} [\log  Q(c|x)] + H(c)</script><p>很�
         <tag>Relation Extraction</tag>
         <tag>Distant Supervision</tag>
         <tag>RE</tag>
+        <tag>Wikidata</tag>
         <tag>Entity Type</tag>
         <tag>NER</tag>
         <tag>Relation Aliases</tag>
-        <tag>Wikidata</tag>
       </tags>
   </entry>
   <entry>
@@ -7711,8 +7785,8 @@ y_i^{[l]} = \gamma \hat{z}_i ^{[l]} + \beta</script><p><strong>这是普通的�
       </categories>
       <tags>
         <tag>tensorboard</tag>
-        <tag>可视化</tag>
         <tag>projector</tag>
+        <tag>可视化</tag>
       </tags>
   </entry>
   <entry>
@@ -8051,11 +8125,11 @@ SIM(S, T) = \frac{|S \cap T|}{ |S \cup T|}</script><p>​        不考虑微博
         <category>Data Mining</category>
       </categories>
       <tags>
+        <tag>Algorithm</tag>
         <tag>局部敏感哈希</tag>
         <tag>Local Sensitive Hashing</tag>
         <tag>LSH</tag>
         <tag>Data Mining</tag>
-        <tag>Algorithm</tag>
       </tags>
   </entry>
   <entry>
@@ -8385,9 +8459,9 @@ SIM(S, T) = \frac{|S \cap T|}{ |S \cup T|}</script><p>​        不考虑微博
       </categories>
       <tags>
         <tag>Freebase</tag>
+        <tag>Knowledge Graph</tag>
         <tag>知识图谱</tag>
         <tag>SPARQL</tag>
-        <tag>Knowledge Graph</tag>
         <tag>search</tag>
       </tags>
   </entry>
@@ -8534,9 +8608,9 @@ SIM(S, T) = \frac{|S \cap T|}{ |S \cup T|}</script><p>​        不考虑微博
       </categories>
       <tags>
         <tag>Freebase</tag>
-        <tag>Knowledeg Graph</tag>
         <tag>知识图谱</tag>
         <tag>SPARQL</tag>
+        <tag>Knowledeg Graph</tag>
         <tag>ontology</tag>
       </tags>
   </entry>
@@ -8616,8 +8690,8 @@ Loss_{focal} =
       </categories>
       <tags>
         <tag>tensorboard</tag>
-        <tag>visualisation</tag>
         <tag>可视化</tag>
+        <tag>visualisation</tag>
       </tags>
   </entry>
   <entry>

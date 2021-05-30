@@ -415,6 +415,369 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/25/ReLU家族/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/10/25/ReLU家族/" class="post-title-link" itemprop="url">ReLU家族</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-26 12:14:13" itemprop="dateModified" datetime="2020-10-26T12:14:13+08:00">2020-10-26</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/10/25/ReLU家族/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/25/ReLU家族/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>ReLU是常用的激活函数，也有很多变种，比如：<a href="https://pytorch.org/docs/stable/generated/torch.nn.ReLU.html#torch.nn.ReLU" target="_blank" rel="noopener">relu</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.LeakyReLU.html#torch.nn.LeakyReLU" target="_blank" rel="noopener">leaky_relu</a>, <a href="https://pytorch.org/docs/stable/nn.functional.html#gelu" target="_blank" rel="noopener">gelu</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.CELU.html#torch.nn.CELU" target="_blank" rel="noopener">celu</a>, 等等，下面选取几种典型的、常用的介绍。</p>
+<h2 id="1-ReLU"><a href="#1-ReLU" class="headerlink" title="1. ReLU"></a>1. ReLU</h2><script type="math/tex; mode=display">
+ReLU(x) = \max (0, x)</script><p><img src="/images/blog/2020/relu/relu.png" alt></p>
+<h2 id="2-LeakyReLU"><a href="#2-LeakyReLU" class="headerlink" title="2. LeakyReLU"></a>2. LeakyReLU</h2><script type="math/tex; mode=display">
+LeakyReLU(x) = \max(0, x) + \gamma * \min (0,x)</script><p>其中$\gamma$为负斜率，下图可以看出，但是负斜率太小了，不太明显。</p>
+<p><img src="/images/blog/2020/relu/leakyrelu.png" alt></p>
+<p>在我个人的PCNN实验中，使用leaky_relu作为激活函数，速度比tanh快了近三倍。
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/10/25/ReLU家族/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/22/Glove-word-embedding添加特殊字符/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/10/22/Glove-word-embedding添加特殊字符/" class="post-title-link" itemprop="url">Glove word embedding添加特殊字符</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-22 19:34:50" itemprop="dateModified" datetime="2020-10-22T19:34:50+08:00">2020-10-22</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/10/22/Glove-word-embedding添加特殊字符/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/22/Glove-word-embedding添加特殊字符/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="1-问题引入"><a href="#1-问题引入" class="headerlink" title="1. 问题引入"></a>1. 问题引入</h2><p>对于一些特殊字符，例如[CLS], [SEP], [PAD], [UNK]等，在GLOVE词向量中没有对应的值。另外，在进行词嵌入时，难免会有OOV (out of vocabulary) 的现象，需要特殊处理。</p>
+<p>在阅读<a href="https://github.com/INK-USC/NERO" target="_blank" rel="noopener">NERO</a>源码时，注意到作者在对未登录词处理时，并没有按照其他词的分布来生成，通过统计，GLOVE词向量均值应该为0附近，<strong>但是作者采用的是$N(-1., 1.)$的正态分布，均值是-1</strong>，不明白这样做是出于什么特殊的原因吗？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">token2id</span><span class="params">(config, counter, embedding_dict)</span>:</span></span><br><span class="line">    <span class="string">"""添加 &lt;PAD&gt;, &lt;UNK&gt;, 实体遮罩 的词嵌入"""</span></span><br><span class="line">    vec_size = len(list(embedding_dict.values())[<span class="number">0</span>])</span><br><span class="line">    masks = entity_masks()</span><br><span class="line">    token2idx_dict = &#123;&#125;</span><br><span class="line">    token2idx_dict[constant.PAD_TOKEN] = constant.PAD_ID</span><br><span class="line">    token2idx_dict[constant.UNK_TOKEN] = constant.UNK_ID</span><br><span class="line">    embedding_dict[constant.PAD_TOKEN] = [<span class="number">0.</span> <span class="keyword">for</span> _ <span class="keyword">in</span> range(vec_size)]  <span class="comment"># 初始化为零向量</span></span><br><span class="line">    embedding_dict[constant.UNK_TOKEN] = [<span class="number">0.</span> <span class="keyword">for</span> _ <span class="keyword">in</span> range(vec_size)]</span><br><span class="line">    <span class="keyword">for</span> token <span class="keyword">in</span> list(embedding_dict.keys()) + masks:</span><br><span class="line">        <span class="keyword">if</span> token <span class="keyword">not</span> <span class="keyword">in</span> token2idx_dict:</span><br><span class="line">            token2idx_dict[token] = len(token2idx_dict)</span><br><span class="line">        <span class="keyword">if</span> token <span class="keyword">not</span> <span class="keyword">in</span> embedding_dict:</span><br><span class="line">            embedding_dict[token] = [np.random.normal(<span class="number">-1.</span>, <span class="number">1.</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> range(vec_size)]  <span class="comment"># <span class="doctag">TODO:</span> why loc = -1.</span></span><br><span class="line">    idx2emb_dict = &#123;idx: embedding_dict[token] <span class="keyword">for</span> token, idx <span class="keyword">in</span> token2idx_dict.items()&#125;</span><br><span class="line">    word_emb = np.array([idx2emb_dict[idx] <span class="keyword">for</span> idx <span class="keyword">in</span> range(len(token2idx_dict))], dtype=np.float32)</span><br><span class="line">    <span class="keyword">return</span> token2idx_dict, word_emb</span><br></pre></td></tr></table></figure>
+<h2 id="2-阅读源码"><a href="#2-阅读源码" class="headerlink" title="2. 阅读源码"></a>2. 阅读源码</h2><p>pytorch中nn.Embedding.weight初始化分布是满足$N(0., 1.)$的，参考<a href="https://blog.csdn.net/weixin_30788619/article/details/99645247" target="_blank" rel="noopener">https://blog.csdn.net/weixin_30788619/article/details/99645247</a> ，pytorch源码：
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/10/22/Glove-word-embedding添加特殊字符/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/21/Piecewise-CNN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1890,382 +2253,6 @@ P_t(w) = \frac{\exp (\sigma s_w)}{\sum_{w^{'} \in V} \exp(\sigma s_{w^{'}})}</sc
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/10/Conditional-GAN/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/10/Conditional-GAN/" class="post-title-link" itemprop="url">Conditional GAN</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-10 16:17:26" itemprop="dateModified" datetime="2020-10-10T16:17:26+08:00">2020-10-10</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/GAN/" itemprop="url" rel="index"><span itemprop="name">GAN</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/10/10/Conditional-GAN/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/10/Conditional-GAN/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Conditional GAN可以控制生成的图像类别，是非常实用的一种模型。废话不多说，先上效果图：</p>
-<p><img src="/images/blog/2020/CGAN/101.png" alt></p>
-<p>使用MNIST数据集，生成的均为数字7类别。</p>
-<h2 id="TensorFlow代码"><a href="#TensorFlow代码" class="headerlink" title="TensorFlow代码"></a>TensorFlow代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib</span><br><span class="line">matplotlib.use(<span class="string">'Agg'</span>)</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> matplotlib.gridspec <span class="keyword">as</span> gridspec</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mnist = input_data.read_data_sets(<span class="string">'../../MNIST_data'</span>, one_hot=<span class="literal">True</span>)</span><br><span class="line">mb_size = <span class="number">64</span></span><br><span class="line">Z_dim = <span class="number">100</span></span><br><span class="line">X_dim = mnist.train.images.shape[<span class="number">1</span>]</span><br><span class="line">y_dim = mnist.train.labels.shape[<span class="number">1</span>]</span><br><span class="line">h_dim = <span class="number">128</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">xavier_init</span><span class="params">(size)</span>:</span></span><br><span class="line">    in_dim = size[<span class="number">0</span>]</span><br><span class="line">    xavier_stddev = <span class="number">1.</span> / tf.sqrt(in_dim / <span class="number">2.</span>)</span><br><span class="line">    <span class="keyword">return</span> tf.random_normal(shape=size, stddev=xavier_stddev)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="string">""" Discriminator Net model """</span></span><br><span class="line">X = tf.placeholder(tf.float32, shape=[<span class="literal">None</span>, <span class="number">784</span>])</span><br><span class="line">y = tf.placeholder(tf.float32, shape=[<span class="literal">None</span>, y_dim])</span><br><span class="line"></span><br><span class="line">D_W1 = tf.Variable(xavier_init([X_dim + y_dim, h_dim]))</span><br><span class="line">D_b1 = tf.Variable(tf.zeros(shape=[h_dim]))</span><br><span class="line"></span><br><span class="line">D_W2 = tf.Variable(xavier_init([h_dim, <span class="number">1</span>]))</span><br><span class="line">D_b2 = tf.Variable(tf.zeros(shape=[<span class="number">1</span>]))</span><br><span class="line"></span><br><span class="line">theta_D = [D_W1, D_W2, D_b1, D_b2]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">discriminator</span><span class="params">(x, y)</span>:</span></span><br><span class="line">    inputs = tf.concat(axis=<span class="number">1</span>, values=[x, y])  <span class="comment"># 1. D 添加监督信息</span></span><br><span class="line">    D_h1 = tf.nn.relu(tf.matmul(inputs, D_W1) + D_b1)</span><br><span class="line">    D_logit = tf.matmul(D_h1, D_W2) + D_b2</span><br><span class="line">    D_prob = tf.nn.sigmoid(D_logit)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> D_prob, D_logit</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="string">""" Generator Net model """</span></span><br><span class="line">Z = tf.placeholder(tf.float32, shape=[<span class="literal">None</span>, Z_dim])</span><br><span class="line"></span><br><span class="line">G_W1 = tf.Variable(xavier_init([Z_dim + y_dim, h_dim]))</span><br><span class="line">G_b1 = tf.Variable(tf.zeros(shape=[h_dim]))</span><br><span class="line"></span><br><span class="line">G_W2 = tf.Variable(xavier_init([h_dim, X_dim]))</span><br><span class="line">G_b2 = tf.Variable(tf.zeros(shape=[X_dim]))</span><br><span class="line"></span><br><span class="line">theta_G = [G_W1, G_W2, G_b1, G_b2]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generator</span><span class="params">(z, y)</span>:</span></span><br><span class="line">    inputs = tf.concat(axis=<span class="number">1</span>, values=[z, y])  <span class="comment"># 2. G 添加监督信息</span></span><br><span class="line">    G_h1 = tf.nn.relu(tf.matmul(inputs, G_W1) + G_b1)</span><br><span class="line">    G_log_prob = tf.matmul(G_h1, G_W2) + G_b2</span><br><span class="line">    G_prob = tf.nn.sigmoid(G_log_prob)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> G_prob</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sample_Z</span><span class="params">(m, n)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> np.random.uniform(<span class="number">-1.</span>, <span class="number">1.</span>, size=[m, n])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">plot</span><span class="params">(samples)</span>:</span></span><br><span class="line">    fig = plt.figure(figsize=(<span class="number">4</span>, <span class="number">4</span>))</span><br><span class="line">    gs = gridspec.GridSpec(<span class="number">4</span>, <span class="number">4</span>)</span><br><span class="line">    gs.update(wspace=<span class="number">0.05</span>, hspace=<span class="number">0.05</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i, sample <span class="keyword">in</span> enumerate(samples):</span><br><span class="line">        ax = plt.subplot(gs[i])</span><br><span class="line">        plt.axis(<span class="string">'off'</span>)</span><br><span class="line">        ax.set_xticklabels([])</span><br><span class="line">        ax.set_yticklabels([])</span><br><span class="line">        ax.set_aspect(<span class="string">'equal'</span>)</span><br><span class="line">        plt.imshow(sample.reshape(<span class="number">28</span>, <span class="number">28</span>), cmap=<span class="string">'Greys_r'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> fig</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">G_sample = generator(Z, y)</span><br><span class="line">D_real, D_logit_real = discriminator(X, y)</span><br><span class="line">D_fake, D_logit_fake = discriminator(G_sample, y)</span><br><span class="line"></span><br><span class="line">D_loss_real = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=D_logit_real, labels=tf.ones_like(D_logit_real)))</span><br><span class="line">D_loss_fake = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=D_logit_fake, labels=tf.zeros_like(D_logit_fake)))</span><br><span class="line">D_loss = D_loss_real + D_loss_fake</span><br><span class="line">G_loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=D_logit_fake, labels=tf.ones_like(D_logit_fake)))</span><br><span class="line"></span><br><span class="line">D_solver = tf.train.AdamOptimizer().minimize(D_loss, var_list=theta_D)</span><br><span class="line">G_solver = tf.train.AdamOptimizer().minimize(G_loss, var_list=theta_G)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sess = tf.Session()</span><br><span class="line">sess.run(tf.global_variables_initializer())</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">'out/'</span>):</span><br><span class="line">    os.makedirs(<span class="string">'out/'</span>)</span><br><span class="line"></span><br><span class="line">i = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> it <span class="keyword">in</span> range(<span class="number">1000000</span>):</span><br><span class="line">    <span class="keyword">if</span> it % <span class="number">1000</span> == <span class="number">0</span>:</span><br><span class="line">        n_sample = <span class="number">16</span></span><br><span class="line"></span><br><span class="line">        Z_sample = sample_Z(n_sample, Z_dim)</span><br><span class="line">        y_sample = np.zeros(shape=[n_sample, y_dim])</span><br><span class="line">        y_sample[:, <span class="number">7</span>] = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        samples = sess.run(G_sample, feed_dict=&#123;Z: Z_sample, y:y_sample&#125;)</span><br><span class="line"></span><br><span class="line">        fig = plot(samples)</span><br><span class="line">        plt.savefig(<span class="string">'out/&#123;&#125;.png'</span>.format(str(i).zfill(<span class="number">3</span>)), bbox_inches=<span class="string">'tight'</span>)</span><br><span class="line">        i += <span class="number">1</span></span><br><span class="line">        plt.close(fig)</span><br><span class="line"></span><br><span class="line">    X_mb, y_mb = mnist.train.next_batch(mb_size)</span><br><span class="line"></span><br><span class="line">    Z_sample = sample_Z(mb_size, Z_dim)</span><br><span class="line">    _, D_loss_curr = sess.run([D_solver, D_loss], feed_dict=&#123;X: X_mb, Z: Z_sample, y:y_mb&#125;)</span><br><span class="line">    _, G_loss_curr = sess.run([G_solver, G_loss], feed_dict=&#123;Z: Z_sample, y:y_mb&#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> it % <span class="number">1000</span> == <span class="number">0</span>:</span><br><span class="line">        print(<span class="string">'Iter: &#123;&#125;'</span>.format(it))</span><br><span class="line">        print(<span class="string">'D loss: &#123;:.4&#125;'</span>. format(D_loss_curr))</span><br><span class="line">        print(<span class="string">'G_loss: &#123;:.4&#125;'</span>.format(G_loss_curr))</span><br><span class="line">        print()</span><br></pre></td></tr></table></figure>
-<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p><img src="/images/blog/2020/CGAN/000.png" alt></p>
-<p>0个step</p>
-<p><img src="/images/blog/2020/CGAN/010.png" alt></p>
-<p>10 * 1000个step</p>
-<p><img src="/images/blog/2020/CGAN/028.png" alt></p>
-<p>28 * 1000个step</p>
-<p><img src="/images/blog/2020/CGAN/999.png" alt></p>
-<p>999 * 1000个step</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Conditional GAN的思想以及实现都是很简单的，值得借鉴。往往经典的模型都是简单优雅的。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/09/WGAN使用Pytorch简单实现/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/09/WGAN使用Pytorch简单实现/" class="post-title-link" itemprop="url">WGAN使用Pytorch简单实现</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-09 15:02:54" itemprop="dateModified" datetime="2020-10-09T15:02:54+08:00">2020-10-09</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/GAN/" itemprop="url" rel="index"><span itemprop="name">GAN</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/10/09/WGAN使用Pytorch简单实现/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/09/WGAN使用Pytorch简单实现/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>上一篇文章介绍了 WGAN 的原理，这篇文章给出使用Pytorch的简单实现：</p>
-<h2 id="环境配置："><a href="#环境配置：" class="headerlink" title="环境配置："></a>环境配置：</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tensorflow: &gt;= 2.0.0</span><br><span class="line">pytorch: &gt;= 1.5.0</span><br><span class="line">numpy</span><br><span class="line">matplotlib</span><br></pre></td></tr></table></figure>
-<h2 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch.nn</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib</span><br><span class="line">matplotlib.use(<span class="string">'Agg'</span>)</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> matplotlib.gridspec <span class="keyword">as</span> gridspec</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> torch.autograd <span class="keyword">import</span> Variable</span><br><span class="line"><span class="keyword">import</span> tensorflow</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mnist, _ = tensorflow.keras.datasets.mnist.load_data(path=<span class="string">'mnist.npz'</span>)</span><br><span class="line">mb_size = <span class="number">32</span></span><br><span class="line">z_dim = <span class="number">10</span></span><br><span class="line">X_dim = int(pow(mnist[<span class="number">0</span>][<span class="number">0</span>].shape[<span class="number">1</span>], <span class="number">2</span>))</span><br><span class="line">y_dim = <span class="number">10</span>  <span class="comment"># 手写数字 0~9</span></span><br><span class="line">h_dim = <span class="number">128</span></span><br><span class="line">cnt = <span class="number">0</span></span><br><span class="line">lr = <span class="number">1e-4</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">G = torch.nn.Sequential(</span><br><span class="line">    torch.nn.Linear(z_dim, h_dim),</span><br><span class="line">    torch.nn.ReLU(),</span><br><span class="line">    torch.nn.Linear(h_dim, X_dim),</span><br><span class="line">    torch.nn.Sigmoid()</span><br><span class="line">).float()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">D = torch.nn.Sequential(</span><br><span class="line">    torch.nn.Linear(X_dim, h_dim),</span><br><span class="line">    torch.nn.ReLU(),</span><br><span class="line">    torch.nn.Linear(h_dim, <span class="number">1</span>),  <span class="comment"># 1. 不用 sigmoid</span></span><br><span class="line">).float()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">reset_grad</span><span class="params">()</span>:</span></span><br><span class="line">    G.zero_grad()</span><br><span class="line">    D.zero_grad()</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">G_solver = optim.RMSprop(G.parameters(), lr=lr)  <span class="comment"># 2. 采用 RMSprop 优化器</span></span><br><span class="line">D_solver = optim.RMSprop(D.parameters(), lr=lr)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sample_batch</span><span class="params">(mb_size)</span>:</span></span><br><span class="line">    rand_indexes = np.random.randint(<span class="number">0</span>, mnist[<span class="number">0</span>].shape[<span class="number">0</span>], mb_size)</span><br><span class="line">    <span class="keyword">return</span> mnist[<span class="number">0</span>][rand_indexes]</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/10/09/WGAN使用Pytorch简单实现/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2314,7 +2301,7 @@ P_t(w) = \frac{\exp (\sigma s_w)}{\sum_{w^{'} \in V} \exp(\sigma s_{w^{'}})}</sc
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">182</span>
+                    <span class="site-state-item-count">184</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3286,7 +3273,13 @@ P_t(w) = \frac{\exp (\sigma s_w)}{\sum_{w^{'} \in V} \exp(\sigma s_{w^{'}})}</sc
                     
                       
                     
-                    <span class="site-state-item-count">448</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">451</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -3828,9 +3821,9 @@ P_t(w) = \frac{\exp (\sigma s_w)}{\sum_{w^{'} \in V} \exp(\sigma s_{w^{'}})}</sc
   
     
       
-    
-      
         
+      
+    
       
     
       

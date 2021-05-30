@@ -415,6 +415,374 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/09/pytorch的几种坐标选择函数/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/09/pytorch的几种坐标选择函数/" class="post-title-link" itemprop="url">pytorch的几种坐标选择函数</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-09 21:16:39" itemprop="dateModified" datetime="2020-11-09T21:16:39+08:00">2020-11-09</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/09/pytorch的几种坐标选择函数/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/09/pytorch的几种坐标选择函数/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在pytorch中，有多种选择函数，能够明确区分它们之间的区别，才能更好的运用✅</p>
+<h2 id="1-torch-masked-select"><a href="#1-torch-masked-select" class="headerlink" title="1. torch.masked_select()"></a>1. torch.masked_select()</h2><blockquote>
+<p>Returns a new 1-D tensor which indexes the <code>input</code> tensor according to the boolean mask <code>mask</code> which is a BoolTensor.</p>
+</blockquote>
+<p>返回的是1维的向量。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">vectors = torch.tensor([</span><br><span class="line">    [<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>],</span><br><span class="line">    [<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>],</span><br><span class="line">    [<span class="number">3</span>,<span class="number">3</span>,<span class="number">3</span>]</span><br><span class="line">])</span><br><span class="line"><span class="comment"># 想要选择第一个和第三个向量</span></span><br><span class="line">masks = torch.tensor([<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>], dtype=torch.bool).unsqueeze(<span class="number">1</span>)</span><br><span class="line">r = torch.masked_select(vectors, masks)</span><br><span class="line">print(r)</span><br><span class="line">print(r.shape)</span><br><span class="line"></span><br><span class="line">================================================================</span><br><span class="line">tensor([<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">3</span>])</span><br><span class="line">torch.Size([<span class="number">6</span>])</span><br></pre></td></tr></table></figure>
+<h2 id="2-torch-index-select"><a href="#2-torch-index-select" class="headerlink" title="2. torch.index_select()"></a>2. torch.index_select()</h2><p>沿着张量的某个<code>dim</code>方向，按照<code>index</code>规定的选取指定的低一维度张量元素整体，在拼接成一个张量。</p>
+<p>先简单看两个示例：<br><strong>示例1</strong>：沿着<code>dim=0</code>的方向进行</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">a = torch.tensor([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]])</span><br><span class="line"><span class="comment"># a为tensor([[1, 2, 3],</span></span><br><span class="line"><span class="comment">#        [4, 5, 6]])</span></span><br><span class="line"></span><br><span class="line">b = torch.index_select(a, dim=<span class="number">0</span>, index=torch.tensor([<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>]))</span><br><span class="line"><span class="comment"># b为tensor([[1, 2, 3],</span></span><br><span class="line"><span class="comment">#        [4, 5, 6],</span></span><br><span class="line"><span class="comment">#        [1, 2, 3],</span></span><br><span class="line"><span class="comment">#        [4, 5, 6]])</span></span><br></pre></td></tr></table></figure>
+<p><img src="/images/blog/2020/select/1.png" alt></p>
+<p>显然，对于二维张量，<code>dim=0</code>意味着按照<code>index</code>的编号选取指定的行，拼接成目标张量。其返回值仍保持和原始张量相同的<code>ndim</code>。
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/11/09/pytorch的几种坐标选择函数/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/09/PyTorch中expand-与repeat-的区别/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/11/09/PyTorch中expand-与repeat-的区别/" class="post-title-link" itemprop="url">PyTorch中expand()与repeat()的区别</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-09 20:04:04" itemprop="dateModified" datetime="2020-11-09T20:04:04+08:00">2020-11-09</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/11/09/PyTorch中expand-与repeat-的区别/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/09/PyTorch中expand-与repeat-的区别/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>二者都是用来扩展某维的数据的尺寸。</p>
+<p><strong>一、expand()</strong><br>       返回当前张量在某维扩展更大后的张量。扩展（expand）张量不会分配新的内存，只是在存在的张量上创建一个新的视图（view），<strong>只能扩展为1的维度</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line">print(<span class="string">'扩展前a的shape:'</span>, a.shape)</span><br><span class="line">a = a.expand(<span class="number">8</span>, <span class="number">4</span>)</span><br><span class="line">print(<span class="string">'扩展后a的shape:'</span>, a.shape)</span><br><span class="line">print(a)</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">扩展前a的shape: torch.Size([<span class="number">4</span>])</span><br><span class="line">扩展后a的shape: torch.Size([<span class="number">8</span>, <span class="number">4</span>])</span><br><span class="line">tensor([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]])</span><br></pre></td></tr></table></figure>
+<p><br></p>
+<p><strong>二、repeat()</strong>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/11/09/PyTorch中expand-与repeat-的区别/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/08/Python-random模块的随机采样函数/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1937,369 +2305,6 @@ l(y) = \max(0, 1-y \cdot \hat y)</script><p>上式是Hinge loss在二分类问�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/25/ReLU家族/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/25/ReLU家族/" class="post-title-link" itemprop="url">ReLU家族</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-26 12:14:13" itemprop="dateModified" datetime="2020-10-26T12:14:13+08:00">2020-10-26</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/10/25/ReLU家族/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/25/ReLU家族/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>ReLU是常用的激活函数，也有很多变种，比如：<a href="https://pytorch.org/docs/stable/generated/torch.nn.ReLU.html#torch.nn.ReLU" target="_blank" rel="noopener">relu</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.LeakyReLU.html#torch.nn.LeakyReLU" target="_blank" rel="noopener">leaky_relu</a>, <a href="https://pytorch.org/docs/stable/nn.functional.html#gelu" target="_blank" rel="noopener">gelu</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.CELU.html#torch.nn.CELU" target="_blank" rel="noopener">celu</a>, 等等，下面选取几种典型的、常用的介绍。</p>
-<h2 id="1-ReLU"><a href="#1-ReLU" class="headerlink" title="1. ReLU"></a>1. ReLU</h2><script type="math/tex; mode=display">
-ReLU(x) = \max (0, x)</script><p><img src="/images/blog/2020/relu/relu.png" alt></p>
-<h2 id="2-LeakyReLU"><a href="#2-LeakyReLU" class="headerlink" title="2. LeakyReLU"></a>2. LeakyReLU</h2><script type="math/tex; mode=display">
-LeakyReLU(x) = \max(0, x) + \gamma * \min (0,x)</script><p>其中$\gamma$为负斜率，下图可以看出，但是负斜率太小了，不太明显。</p>
-<p><img src="/images/blog/2020/relu/leakyrelu.png" alt></p>
-<p>在我个人的PCNN实验中，使用leaky_relu作为激活函数，速度比tanh快了近三倍。
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/10/25/ReLU家族/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/10/22/Glove-word-embedding添加特殊字符/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/22/Glove-word-embedding添加特殊字符/" class="post-title-link" itemprop="url">Glove word embedding添加特殊字符</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-22 19:34:50" itemprop="dateModified" datetime="2020-10-22T19:34:50+08:00">2020-10-22</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/10/22/Glove-word-embedding添加特殊字符/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/22/Glove-word-embedding添加特殊字符/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="1-问题引入"><a href="#1-问题引入" class="headerlink" title="1. 问题引入"></a>1. 问题引入</h2><p>对于一些特殊字符，例如[CLS], [SEP], [PAD], [UNK]等，在GLOVE词向量中没有对应的值。另外，在进行词嵌入时，难免会有OOV (out of vocabulary) 的现象，需要特殊处理。</p>
-<p>在阅读<a href="https://github.com/INK-USC/NERO" target="_blank" rel="noopener">NERO</a>源码时，注意到作者在对未登录词处理时，并没有按照其他词的分布来生成，通过统计，GLOVE词向量均值应该为0附近，<strong>但是作者采用的是$N(-1., 1.)$的正态分布，均值是-1</strong>，不明白这样做是出于什么特殊的原因吗？</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">token2id</span><span class="params">(config, counter, embedding_dict)</span>:</span></span><br><span class="line">    <span class="string">"""添加 &lt;PAD&gt;, &lt;UNK&gt;, 实体遮罩 的词嵌入"""</span></span><br><span class="line">    vec_size = len(list(embedding_dict.values())[<span class="number">0</span>])</span><br><span class="line">    masks = entity_masks()</span><br><span class="line">    token2idx_dict = &#123;&#125;</span><br><span class="line">    token2idx_dict[constant.PAD_TOKEN] = constant.PAD_ID</span><br><span class="line">    token2idx_dict[constant.UNK_TOKEN] = constant.UNK_ID</span><br><span class="line">    embedding_dict[constant.PAD_TOKEN] = [<span class="number">0.</span> <span class="keyword">for</span> _ <span class="keyword">in</span> range(vec_size)]  <span class="comment"># 初始化为零向量</span></span><br><span class="line">    embedding_dict[constant.UNK_TOKEN] = [<span class="number">0.</span> <span class="keyword">for</span> _ <span class="keyword">in</span> range(vec_size)]</span><br><span class="line">    <span class="keyword">for</span> token <span class="keyword">in</span> list(embedding_dict.keys()) + masks:</span><br><span class="line">        <span class="keyword">if</span> token <span class="keyword">not</span> <span class="keyword">in</span> token2idx_dict:</span><br><span class="line">            token2idx_dict[token] = len(token2idx_dict)</span><br><span class="line">        <span class="keyword">if</span> token <span class="keyword">not</span> <span class="keyword">in</span> embedding_dict:</span><br><span class="line">            embedding_dict[token] = [np.random.normal(<span class="number">-1.</span>, <span class="number">1.</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> range(vec_size)]  <span class="comment"># <span class="doctag">TODO:</span> why loc = -1.</span></span><br><span class="line">    idx2emb_dict = &#123;idx: embedding_dict[token] <span class="keyword">for</span> token, idx <span class="keyword">in</span> token2idx_dict.items()&#125;</span><br><span class="line">    word_emb = np.array([idx2emb_dict[idx] <span class="keyword">for</span> idx <span class="keyword">in</span> range(len(token2idx_dict))], dtype=np.float32)</span><br><span class="line">    <span class="keyword">return</span> token2idx_dict, word_emb</span><br></pre></td></tr></table></figure>
-<h2 id="2-阅读源码"><a href="#2-阅读源码" class="headerlink" title="2. 阅读源码"></a>2. 阅读源码</h2><p>pytorch中nn.Embedding.weight初始化分布是满足$N(0., 1.)$的，参考<a href="https://blog.csdn.net/weixin_30788619/article/details/99645247" target="_blank" rel="noopener">https://blog.csdn.net/weixin_30788619/article/details/99645247</a> ，pytorch源码：
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/10/22/Glove-word-embedding添加特殊字符/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2348,7 +2353,7 @@ LeakyReLU(x) = \max(0, x) + \gamma * \min (0,x)</script><p>其中$\gamma$为负�
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">182</span>
+                    <span class="site-state-item-count">184</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3320,7 +3325,13 @@ LeakyReLU(x) = \max(0, x) + \gamma * \min (0,x)</script><p>其中$\gamma$为负�
                     
                       
                     
-                    <span class="site-state-item-count">448</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">451</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -3864,11 +3875,11 @@ LeakyReLU(x) = \max(0, x) + \gamma * \min (0,x)</script><p>其中$\gamma$为负�
       
     
       
+    
+      
+    
+      
         
-      
-    
-      
-    
       
     
       

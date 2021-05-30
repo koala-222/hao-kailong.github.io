@@ -415,6 +415,380 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/09/Linux-Bash-常用经典命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/12/09/Linux-Bash-常用经典命令/" class="post-title-link" itemprop="url">Linux Bash 常用经典命令</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-25 15:51:17" itemprop="dateModified" datetime="2020-12-25T15:51:17+08:00">2020-12-25</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/12/09/Linux-Bash-常用经典命令/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/09/Linux-Bash-常用经典命令/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="递归查找文件"><a href="#递归查找文件" class="headerlink" title="递归查找文件"></a>递归查找文件</h1><p>想要查找一个文件夹下的所有.log文件，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find 目录 -name <span class="string">"*.log"</span></span><br></pre></td></tr></table></figure>
+<p>结果为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(klhao-pytorch) klhao@Bobby:~/Adidas/outputs$ find . -name <span class="string">"*.log"</span></span><br><span class="line">====================================================================</span><br><span class="line">./sent_att_blstm_422_NYT/log.log</span><br><span class="line">./sent_pcnn_422_NYT/log.log</span><br><span class="line">./sent_cnn_422/log.log</span><br><span class="line">./sent_crcnn_422/log.log</span><br><span class="line">./sent_pcnn_422/log.log</span><br><span class="line">./sent_crcnn_422_NYT/log.log</span><br><span class="line">./bag_cnn_one_422/log.log</span><br><span class="line">./sent_att_blstm_422/log.log</span><br><span class="line">./bag_pcnn_att_422/log.log</span><br><span class="line">./sent_cnn_422_NYT/log.log</span><br></pre></td></tr></table></figure>
+<p>如果想要将这些文件执行进一步的操作，可以使用<code>xargs</code>命令，例如删除：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find 目录 -name <span class="string">"*.log"</span> | xargs rm</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/12/09/Linux-Bash-常用经典命令/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/08/Byte-Pair-Embedding-vs-Word-Embedding/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/12/08/Byte-Pair-Embedding-vs-Word-Embedding/" class="post-title-link" itemprop="url">Byte Pair Embedding vs Word Embedding</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-19 20:05:24" itemprop="dateModified" datetime="2020-12-19T20:05:24+08:00">2020-12-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/Pretrained-Language-Model/" itemprop="url" rel="index"><span itemprop="name">Pretrained Language Model</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/12/08/Byte-Pair-Embedding-vs-Word-Embedding/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/08/Byte-Pair-Embedding-vs-Word-Embedding/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>众所周知，BERT 在进行 tokenization 的时候，使用的是Byte Pair Embedding，后面简称为BPE；而传统的tokenization 是以 word 为单位，简称为 WE。在一些任务中，使用 BPE 会有一些不方便，比如序列标注任务，因为 BPE 会改变位置，导致处理数据非常的麻烦。但是，不采用 BERT 自带的 tokenization 方法，又会担心结果变差，影响实验效果，到底会不会呢，今天做个实验，以绝后患🤭</p>
+<h1 id="实验设计"><a href="#实验设计" class="headerlink" title="实验设计"></a>实验设计</h1><p>在 IMDB 数据集上进行，这是一个二分类数据集，判断情感是正向还是负向，我们分别采用 BPE 和 WE 方法，对比实验效果的差异。
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/12/08/Byte-Pair-Embedding-vs-Word-Embedding/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/07/关于DSGAN的细节/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1910,389 +2284,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/30/Pytorch用于序列卷积的Conv1d-和Conv2d-区别/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/11/30/Pytorch用于序列卷积的Conv1d-和Conv2d-区别/" class="post-title-link" itemprop="url">Pytorch用于序列卷积的Conv1d()和Conv2d()区别</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-01 15:54:15" itemprop="dateModified" datetime="2020-12-01T15:54:15+08:00">2020-12-01</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/11/30/Pytorch用于序列卷积的Conv1d-和Conv2d-区别/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/30/Pytorch用于序列卷积的Conv1d-和Conv2d-区别/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>对于PCNN的实现，有两种方式，一种是使用Conv1d()，一种是使用Conv2d()，到底两种方式有没有区别？今天做了个实验进行探究。</p>
-<h1 id="1-卷积层超参数"><a href="#1-卷积层超参数" class="headerlink" title="1. 卷积层超参数"></a>1. 卷积层超参数</h1><p>Conv2d():</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">self.conv = nn.Conv2d(</span><br><span class="line">    in_channels=<span class="number">1</span>,</span><br><span class="line">    out_channels=self.filter_num,</span><br><span class="line">    kernel_size=(self.window, self.dim),</span><br><span class="line">    stride=(<span class="number">1</span>, <span class="number">1</span>),</span><br><span class="line">    bias=<span class="literal">True</span>,</span><br><span class="line">    padding=(<span class="number">1</span>, <span class="number">0</span>),  <span class="comment"># same padding</span></span><br><span class="line">    padding_mode=<span class="string">'zeros'</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>Conv1d():</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">self.conv1d = nn.Conv1d(</span><br><span class="line">    in_channels=self.dim,</span><br><span class="line">    out_channels=self.filter_num,</span><br><span class="line">    kernel_size=self.window,</span><br><span class="line">    stride=<span class="number">1</span>,</span><br><span class="line">    bias=<span class="literal">True</span>,</span><br><span class="line">    padding=<span class="number">1</span>,</span><br><span class="line">    padding_mode=<span class="string">'zeros'</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<h1 id="2-卷积过程"><a href="#2-卷积过程" class="headerlink" title="2. 卷积过程"></a>2. 卷积过程</h1><p>Conv2d():</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">convolution</span><span class="params">(self, x, mask)</span>:</span></span><br><span class="line">    x = x.unsqueeze(dim=<span class="number">1</span>)  <span class="comment"># (N, C, H, W) &lt;- (N, 1, seq_len, dim)</span></span><br><span class="line">    x = self.conv(x)</span><br><span class="line">    x = x.view(<span class="number">-1</span>, self.filter_num, self.max_len)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># mask, remove the effect of 'PAD'</span></span><br><span class="line">    mask = mask.unsqueeze(dim=<span class="number">1</span>)</span><br><span class="line">    mask = mask.expand(mask.shape[<span class="number">0</span>], self.filter_num, mask.shape[<span class="number">-1</span>])</span><br><span class="line">    x = x.masked_fill_(mask.eq(<span class="number">0</span>), float(<span class="string">'-inf'</span>))</span><br><span class="line">    x = x.unsqueeze(dim=<span class="number">-1</span>)</span><br><span class="line">    <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
-<p>Conv1d():</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">convolution1d</span><span class="params">(self, x, mask)</span>:</span></span><br><span class="line">    x = x.transpose(<span class="number">1</span>, <span class="number">2</span>)  <span class="comment"># (N, C, L) &lt;- (N, dim, seq_len)</span></span><br><span class="line">    x = self.conv1d(x)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># mask, remove the effect of 'PAD'</span></span><br><span class="line">    mask = mask.unsqueeze(dim=<span class="number">1</span>)</span><br><span class="line">    mask = mask.expand(mask.shape[<span class="number">0</span>], self.filter_num, mask.shape[<span class="number">-1</span>])</span><br><span class="line">    x = x.masked_fill_(mask.eq(<span class="number">0</span>), float(<span class="string">'-inf'</span>))</span><br><span class="line">    x = x.unsqueeze(dim=<span class="number">-1</span>)</span><br><span class="line">    <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
-<h1 id="3-实验结果"><a href="#3-实验结果" class="headerlink" title="3. 实验结果"></a>3. 实验结果</h1><p>固定随机数种子，两种不同的实现方式结果完全一样，也就是说，<font color="orange"> <strong>两种方式没有区别！</strong> </font> 终于可以放心了！</p>
-<p>Conv2d():</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[Mon 30 Nov 2020 14:05:47]-INFO-run.py-208-1425: Epoch: 10, DEV non_na_macro_f1: 0.5618245545712591</span><br><span class="line">[Mon 30 Nov 2020 14:06:01]-INFO-evaluate.py-85-1425: ***** Running evaluation E-11_S-1513 *****</span><br><span class="line">[Mon 30 Nov 2020 14:06:01]-INFO-evaluate.py-86-1425:   Num examples = 10262</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-345-1425: ***** dev Eval results E-11_S-1513 *****</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   acc = 0.7189631650750341</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   auc = 0.6220957891050019</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   dsgt_f1 = 0.5959275473368374</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   dsgt_p = 0.6370019755980496</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   dsgt_r = 0.6031188145161877</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   macro-f1 = 0.5959275473368374</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   macro-precision = 0.6370019755980497</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   macro-recall = 0.6031188145161875</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   max_f1 = 0.7331908070550509</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   mean_prec = 0.17543470520760482</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   micro-f1 = 0.7189631650750341</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   micro-precision = 0.7189631650750341</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   micro-recall = 0.7189631650750341</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   non_na_auc = 0.7465032659070302</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   non_na_macro_f1 = 0.5959275473368374</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   non_na_macro_precision = 0.6370019755980496</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   non_na_macro_recall = 0.6031188145161877</span><br></pre></td></tr></table></figure>
-<p>Conv1d():</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[Mon 30 Nov 2020 14:05:47]-INFO-run.py-208-1425: Epoch: 10, DEV non_na_macro_f1: 0.5618245545712591</span><br><span class="line">[Mon 30 Nov 2020 14:06:01]-INFO-evaluate.py-85-1425: ***** Running evaluation E-11_S-1513 *****</span><br><span class="line">[Mon 30 Nov 2020 14:06:01]-INFO-evaluate.py-86-1425:   Num examples = 10262</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-345-1425: ***** dev Eval results E-11_S-1513 *****</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   acc = 0.7189631650750341</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   auc = 0.6220957891050019</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   dsgt_f1 = 0.5959275473368374</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   dsgt_p = 0.6370019755980496</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   dsgt_r = 0.6031188145161877</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   macro-f1 = 0.5959275473368374</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   macro-precision = 0.6370019755980497</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   macro-recall = 0.6031188145161875</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   max_f1 = 0.7331908070550509</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   mean_prec = 0.17543470520760482</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   micro-f1 = 0.7189631650750341</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   micro-precision = 0.7189631650750341</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   micro-recall = 0.7189631650750341</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   non_na_auc = 0.7465032659070302</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   non_na_macro_f1 = 0.5959275473368374</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   non_na_macro_precision = 0.6370019755980496</span><br><span class="line">[Mon 30 Nov 2020 14:06:05]-INFO-evaluate.py-347-1425:   non_na_macro_recall = 0.6031188145161877</span><br></pre></td></tr></table></figure>
-<h1 id="4-torch-max-和maxpooling-的区别？"><a href="#4-torch-max-和maxpooling-的区别？" class="headerlink" title="4. torch.max()和maxpooling()的区别？"></a>4. torch.max()和maxpooling()的区别？</h1><p>在卷积后往往需要进行最大池化操作，但是使用maxpooling()和直接使用torch.max()有没有什么区别呢？不想去读源码，直接做实验尝试一下~</p>
-<p><strong>在固定随机数种子的情况下，两种方式完全一致，说明maxpooling()就是取max()的过程，没有差别。</strong></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/11/26/sparql查询的速度/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/11/26/sparql查询的速度/" class="post-title-link" itemprop="url">sparql查询的速度</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-11-26 21:29:59" itemprop="dateModified" datetime="2020-11-26T21:29:59+08:00">2020-11-26</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/11/26/sparql查询的速度/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/26/sparql查询的速度/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>最近在实验过程中，需要使用python查询mid对应的实体类型，尝试了使用<a href="https://sparqlwrapper.readthedocs.io/en/latest/SPARQLWrapper.Wrapper.html?highlight=setQuery#SPARQLWrapper.Wrapper.SPARQLWrapper.setQuery" target="_blank" rel="noopener">RDFLib</a>提供的API接口，但是效率实在太低了，我<strong>查询1个实体需要用时9s左右</strong>，这样下来，查询10万个实体，就需要耗时250小时……不可接受</p>
-<h1 id="1-使用RDFLib"><a href="#1-使用RDFLib" class="headerlink" title="1. 使用RDFLib"></a>1. 使用RDFLib</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Wrapper</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        super().__init__()</span><br><span class="line">        self.sparql = SPARQLWrapper(<span class="string">"http://210.28.132.62:8900/sparql"</span>)</span><br><span class="line">        self.sparql.setReturnFormat(JSON)</span><br><span class="line">        self.query_string = <span class="string">"select ?o where &#123;&lt;http://rdf.freebase.com/ns/%s&gt; &lt;http://rdf.freebase.com/ns/type.object.type&gt; ?o&#125;"</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">query</span><span class="params">(self, mid)</span>:</span></span><br><span class="line">        self.sparql.setQuery(self.query_string % mid)</span><br><span class="line">        results =  self.sparql.query().convert()</span><br><span class="line">        data = [result[<span class="string">"o"</span>][<span class="string">"value"</span>] <span class="keyword">for</span> result <span class="keyword">in</span> results[<span class="string">"results"</span>][<span class="string">"bindings"</span>]]</span><br><span class="line">        <span class="keyword">return</span> data</span><br></pre></td></tr></table></figure>
-<h1 id="2-使用urllib"><a href="#2-使用urllib" class="headerlink" title="2. 使用urllib"></a>2. 使用urllib</h1><p>尝试直接使用urllib发送请求，不再用现有的封装工具：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">query</span><span class="params">(mid)</span>:</span></span><br><span class="line">    <span class="string">"""使用urllib查询SPARQL"""</span></span><br><span class="line">    params = &#123;<span class="string">'query'</span>:<span class="string">'select ?o where &#123;&lt;http://rdf.freebase.com/ns/m.071cn&gt; &lt;http://rdf.freebase.com/ns/type.object.type&gt; ?o&#125;'</span>,</span><br><span class="line">    <span class="string">'format'</span>: <span class="string">'application/sparql-results+json'</span>&#125;</span><br><span class="line">    params = bytes(urllib.parse.urlencode(params), encoding=<span class="string">'utf8'</span>)</span><br><span class="line">    result = json.loads(urllib.request.urlopen(<span class="string">'http://210.28.132.62:8900/sparql'</span>, data=params).read().decode(<span class="string">'utf-8'</span>))</span><br><span class="line">    result = [r[<span class="string">"o"</span>][<span class="string">"value"</span>] <span class="keyword">for</span> r <span class="keyword">in</span> result[<span class="string">"results"</span>][<span class="string">"bindings"</span>]]</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
-<p>这样查询了10个实体，耗时90s……还是太慢了，并没有什么效率上的提升。</p>
-<h1 id="3-使用grequests并发请求"><a href="#3-使用grequests并发请求" class="headerlink" title="3. 使用grequests并发请求"></a>3. 使用grequests并发请求</h1><p>估计是因为串行导致效率太低，在网上查询后，推荐<a href="https://github.com/spyoungtech/grequests" target="_blank" rel="noopener">grequests</a></p>
-<p>改写函数如下：
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/11/26/sparql查询的速度/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2341,7 +2332,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">182</span>
+                    <span class="site-state-item-count">184</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3313,7 +3304,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">448</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">451</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

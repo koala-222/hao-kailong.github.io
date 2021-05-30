@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://haokailong.top/"/>
-  <updated>2021-05-10T11:50:16.030Z</updated>
+  <updated>2021-05-30T12:28:12.769Z</updated>
   <id>http://haokailong.top/</id>
   
   <author>
@@ -15,6 +15,68 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>搞懂七和弦</title>
+    <link href="http://haokailong.top/2021/05/30/%E6%90%9E%E6%87%82%E4%B8%83%E5%92%8C%E5%BC%A6/"/>
+    <id>http://haokailong.top/2021/05/30/搞懂七和弦/</id>
+    <published>2021-05-30T12:04:01.000Z</published>
+    <updated>2021-05-30T12:28:12.769Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="/images/blog/2021/seven.jpg" alt></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;img src=&quot;/images/blog/2021/seven.jpg&quot; alt&gt;&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+      <category term="Others" scheme="http://haokailong.top/categories/Others/"/>
+    
+      <category term="Music" scheme="http://haokailong.top/categories/Others/Music/"/>
+    
+    
+      <category term="chord" scheme="http://haokailong.top/tags/chord/"/>
+    
+      <category term="guitar" scheme="http://haokailong.top/tags/guitar/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>BibTeX</title>
+    <link href="http://haokailong.top/2021/05/15/BibTeX/"/>
+    <id>http://haokailong.top/2021/05/15/BibTeX/</id>
+    <published>2021-05-15T10:00:12.000Z</published>
+    <updated>2021-05-15T10:12:29.971Z</updated>
+    
+    <content type="html"><![CDATA[<ul><li>‘’’@article’’’<br>:期刊杂志的论文<br>:<em>必要域: author, title, journal, year.<br>:</em>可选域: volume, number, pages, month, note.<br><em>‘’’@book’’’<br>:公开出版的图书<br>:</em>必要域: author/editor, title, publisher, year.<br>:*可选域: volume/number, series, address, edition, month, note.</li></ul><ul><li>‘’’@booklet’’’<br>:无出版商或作者的图书<br>:<em>必要域: title.<br>:</em>可选域: author, howpublished, address, month, year, note.</li><li>‘’’@conference’’’<br>:等价于 inproceedings<br>:<em> 必要域: author, title, booktitle, year.<br>:</em> 可选域: editor, volume/number, series, pages, address, month, organization, publisher, note.</li><li>‘’’@inbook’’’<br>:书籍的一部分章节<br>:<em> 必要域: author/editor, title, chapter and/or pages, publisher, year.<br>:</em> 可选域: volume/number, series, type, address, edition, month, note.</li><li>‘’’@incollection’’’<br>:书籍中带独立标题的章节<br>:<em> 必要域: author, title, booktitle, publisher, year.<br>:</em> 可选域: editor, volume/number, series, type, chapter, pages, address, edition, month, note.</li><li>‘’’@inproceedings’’’<br>:会议论文集中的一篇<br>:<em>必要域: author, title, booktitle, year.<br>:</em>可选域: editor, volume/number, series, pages, address, month, organization, publisher, note.</li><li>‘’’@manual’’’<br>:技术文档<br>:<em>必要域: title.<br>:</em>可选域: author, organization, address, edition, month, year, note.</li><li>‘’’@mastersthesis’’’<br>:硕士论文<br>:<em>必要域: author, title, school, year.<br>:</em>可选域: type, address, month, note.</li><li>‘’’@misc’’’<br>:其他<br>:<em>必要域: none<br>:</em>可选域: author, title, howpublished, month, year, note.</li><li>‘’’@phdthesis’’’<br>:博士论文<br>:<em>必要域: author, title, year, school.<br>:</em>可选域: address, month, keywords, note.</li><li>‘’’@proceedings’’’<br>:会议论文集<br>:<em> 必要域: title, year.<br>:</em> 可选域: editor, volume/number, series, address, month, organization, publisher, note.</li><li>‘’’@techreport’’’<br>:教育，商业机构的技术报告<br>:<em>必要域: author, title, institution, year.<br>:</em>可选域: type, number, address, month, note.</li><li>‘’’@unpublished’’’<br>:未出版的论文，图书<br>:<em>必要域: author, title, note.<br>:</em>可选域: month, year.</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;ul&gt;
+&lt;li&gt;‘’’@article’’’&lt;br&gt;:期刊杂志的论文&lt;br&gt;:&lt;em&gt;必要域: author, title, journal, year.&lt;br&gt;:&lt;/em&gt;可选域: volume, number, pages, month, note.&lt;br&gt;&lt;em&gt;‘’’@
+      
+    
+    </summary>
+    
+    
+      <category term="Others" scheme="http://haokailong.top/categories/Others/"/>
+    
+      <category term="Tool" scheme="http://haokailong.top/categories/Others/Tool/"/>
+    
+    
+      <category term="Latex" scheme="http://haokailong.top/tags/Latex/"/>
+    
+      <category term="Bibtex" scheme="http://haokailong.top/tags/Bibtex/"/>
+    
+  </entry>
   
   <entry>
     <title>Latex算法排版</title>
@@ -683,79 +745,6 @@
       <category term="整型" scheme="http://haokailong.top/tags/%E6%95%B4%E5%9E%8B/"/>
     
       <category term="integer" scheme="http://haokailong.top/tags/integer/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>快速排序</title>
-    <link href="http://haokailong.top/2021/04/01/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/"/>
-    <id>http://haokailong.top/2021/04/01/快速排序/</id>
-    <published>2021-04-01T12:10:48.000Z</published>
-    <updated>2021-04-01T12:52:42.118Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="一、算法思想"><a href="#一、算法思想" class="headerlink" title="一、算法思想"></a>一、算法思想</h1><p>快速排序的基本思想：通过一趟排序将待排记录分隔成独立的两部分，其中一部分记录的关键字均比另一部分的关键字小，则可分别对这两部分记录继续进行排序，以达到整个序列有序。</p><h1 id="二、实现原理"><a href="#二、实现原理" class="headerlink" title="二、实现原理"></a>二、实现原理</h1><p>2.1、设置两个变量 low、high，<strong>排序开始时：low=0，high=size-1。</strong><br>2.2、整个数组找基准正确位置，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面</p><ul><li>默认数组的第一个数为基准数据，赋值给key，即key=array[low]。</li><li>因为默认数组的第一个数为基准，<strong>所以从后面开始向前搜索（high—）</strong>，找到第一个<strong>小于</strong>key的array[high]，就将 array[high] 赋给 array[low]，即 array[low] = array[high]。（循环条件是 array[high] &gt;= key；结束时 array[high] &lt; key）</li><li>此时从前面开始向后搜索（low++），找到第一个<strong>大于</strong>key的array[low]，就将 array[low] 赋给 array[high]，即 array[high] = array[low]。（循环条件是 array[low] &lt;= key；结束时 array[low] &gt; key）</li><li>循环 2-3 步骤，直到 low=high，该位置就是基准位置。</li><li>把基准数据赋给当前位置。</li></ul><p>2.3、第一趟找到的基准位置，作为下一趟的分界点。<br>2.4、递归调用（recursive）分界点前和分界点后的子数组排序，重复2.2、2.3、2.4的步骤。<br>2.5、最终就会得到排序好的数组。</p><a id="more"></a><h1 id="三、稳定性"><a href="#三、稳定性" class="headerlink" title="三、稳定性"></a>三、稳定性</h1><p>快速排序算法是不稳定的。也就是说，相同大小的元素可能在排序前后位置有所调换。</p><p>可以将排序算法实现为稳定算法，但是可能会带来性能的下降。</p><blockquote><p>参考CSDN博客：</p><p><a href="https://blog.csdn.net/gaoxueyi551/article/details/89413936" target="_blank" rel="noopener">https://blog.csdn.net/gaoxueyi551/article/details/89413936</a></p></blockquote><h1 id="四、C-实现"><a href="#四、C-实现" class="headerlink" title="四、C++实现"></a>四、C++实现</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">quicksort</span><span class="params">(<span class="keyword">int</span>* a, <span class="keyword">int</span> s, <span class="keyword">int</span> e)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">if</span> (s &gt;= e)  <span class="comment">// 终止条件 </span></span><br><span class="line"><span class="keyword">return</span>;</span><br><span class="line"><span class="keyword">int</span> pivot = a[s];</span><br><span class="line"><span class="keyword">int</span> high = e;</span><br><span class="line"><span class="keyword">int</span> low = s;</span><br><span class="line"><span class="keyword">while</span> (low &lt; high) &#123;</span><br><span class="line"><span class="keyword">while</span> (low &lt; high &amp;&amp; a[high] &gt;= pivot) --high;</span><br><span class="line">a[low] = a[high];</span><br><span class="line"><span class="keyword">while</span> (low &lt; high &amp;&amp; a[low] &lt;= pivot) ++low;</span><br><span class="line">a[high] = a[low];</span><br><span class="line">&#125;</span><br><span class="line">a[low] = pivot;  <span class="comment">// low == high</span></span><br><span class="line">quicksort(a, s, low - <span class="number">1</span>);</span><br><span class="line">quicksort(a, low + <span class="number">1</span>, e);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">int</span> a[<span class="number">10</span>] = &#123;<span class="number">0</span>,<span class="number">5</span>,<span class="number">5</span>,<span class="number">5</span>,<span class="number">5</span>,<span class="number">5</span>,<span class="number">5</span>,<span class="number">9</span>,<span class="number">4</span>,<span class="number">8</span>&#125;;</span><br><span class="line">quicksort(a, <span class="number">0</span>, <span class="number">10</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;++i)</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; a[i] &lt;&lt; <span class="string">' '</span>;</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;一、算法思想&quot;&gt;&lt;a href=&quot;#一、算法思想&quot; class=&quot;headerlink&quot; title=&quot;一、算法思想&quot;&gt;&lt;/a&gt;一、算法思想&lt;/h1&gt;&lt;p&gt;快速排序的基本思想：通过一趟排序将待排记录分隔成独立的两部分，其中一部分记录的关键字均比另一部分的关键字小，则可分别对这两部分记录继续进行排序，以达到整个序列有序。&lt;/p&gt;
-&lt;h1 id=&quot;二、实现原理&quot;&gt;&lt;a href=&quot;#二、实现原理&quot; class=&quot;headerlink&quot; title=&quot;二、实现原理&quot;&gt;&lt;/a&gt;二、实现原理&lt;/h1&gt;&lt;p&gt;2.1、设置两个变量 low、high，&lt;strong&gt;排序开始时：low=0，high=size-1。&lt;/strong&gt;&lt;br&gt;2.2、整个数组找基准正确位置，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;默认数组的第一个数为基准数据，赋值给key，即key=array[low]。&lt;/li&gt;
-&lt;li&gt;因为默认数组的第一个数为基准，&lt;strong&gt;所以从后面开始向前搜索（high—）&lt;/strong&gt;，找到第一个&lt;strong&gt;小于&lt;/strong&gt;key的array[high]，就将 array[high] 赋给 array[low]，即 array[low] = array[high]。（循环条件是 array[high] &amp;gt;= key；结束时 array[high] &amp;lt; key）&lt;/li&gt;
-&lt;li&gt;此时从前面开始向后搜索（low++），找到第一个&lt;strong&gt;大于&lt;/strong&gt;key的array[low]，就将 array[low] 赋给 array[high]，即 array[high] = array[low]。（循环条件是 array[low] &amp;lt;= key；结束时 array[low] &amp;gt; key）&lt;/li&gt;
-&lt;li&gt;循环 2-3 步骤，直到 low=high，该位置就是基准位置。&lt;/li&gt;
-&lt;li&gt;把基准数据赋给当前位置。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;2.3、第一趟找到的基准位置，作为下一趟的分界点。&lt;br&gt;2.4、递归调用（recursive）分界点前和分界点后的子数组排序，重复2.2、2.3、2.4的步骤。&lt;br&gt;2.5、最终就会得到排序好的数组。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Others" scheme="http://haokailong.top/categories/Others/"/>
-    
-      <category term="Interview" scheme="http://haokailong.top/categories/Others/Interview/"/>
-    
-    
-      <category term="C++" scheme="http://haokailong.top/tags/C/"/>
-    
-      <category term="sort" scheme="http://haokailong.top/tags/sort/"/>
-    
-      <category term="quick sort" scheme="http://haokailong.top/tags/quick-sort/"/>
-    
-      <category term="algorithm" scheme="http://haokailong.top/tags/algorithm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>文件路径分割</title>
-    <link href="http://haokailong.top/2021/03/30/%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84%E5%88%86%E5%89%B2/"/>
-    <id>http://haokailong.top/2021/03/30/文件路径分割/</id>
-    <published>2021-03-30T05:11:58.000Z</published>
-    <updated>2021-03-30T05:13:58.676Z</updated>
-    
-    <content type="html"><![CDATA[<p>直接垒代码</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">file_path = <span class="string">"E:/tt/abc.py"</span></span><br><span class="line">filepath,fullflname = os.path.split(file_path)</span><br><span class="line">fname,ext = os.path.splitext(fullflname)</span><br></pre></td></tr></table></figure><p>运行结果:<br>filepath为文件的目录,即E:/tt<br>fullflname为文件名的全名，即abc.py<br>fname为文件的名字,即abc<br>ext为文件的扩展名,即.py</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;直接垒代码&lt;/p&gt;
-&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;
-      
-    
-    </summary>
-    
-    
-      <category term="Others" scheme="http://haokailong.top/categories/Others/"/>
-    
-      <category term="Tool" scheme="http://haokailong.top/categories/Others/Tool/"/>
-    
-    
-      <category term="python" scheme="http://haokailong.top/tags/python/"/>
-    
-      <category term="os" scheme="http://haokailong.top/tags/os/"/>
-    
-      <category term="split" scheme="http://haokailong.top/tags/split/"/>
     
   </entry>
   

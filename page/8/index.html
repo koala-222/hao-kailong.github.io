@@ -415,6 +415,537 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/03/PR曲线横纵坐标轴的数据来源/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/01/03/PR曲线横纵坐标轴的数据来源/" class="post-title-link" itemprop="url">PR曲线横纵坐标轴的数据来源</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-01-03 23:04:26" itemprop="dateModified" datetime="2021-01-03T23:04:26+08:00">2021-01-03</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/" itemprop="url" rel="index"><span itemprop="name">Information Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/" itemprop="url" rel="index"><span itemprop="name">Relation Extraction</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Information-Extraction/Relation-Extraction/Distant-Supervision/" itemprop="url" rel="index"><span itemprop="name">Distant Supervision</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/01/03/PR曲线横纵坐标轴的数据来源/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/03/PR曲线横纵坐标轴的数据来源/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">test_loss, test_acc, y, y_pred, logit_list, y_hot = self.predict(sess, self.data[<span class="string">'test'</span>])</span><br></pre></td></tr></table></figure>
+<p>查看predict()函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict</span><span class="params">(self, sess, data, wLabels=True, shuffle=False, label=<span class="string">'Evaluating on Test'</span>)</span>:</span></span><br><span class="line">	<span class="string">"""</span></span><br><span class="line"><span class="string">	Evaluate model on valid/test data</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	Parameters</span></span><br><span class="line"><span class="string">	----------</span></span><br><span class="line"><span class="string">	sess:		Session of tensorflow</span></span><br><span class="line"><span class="string">	data:		Data to evaluate on</span></span><br><span class="line"><span class="string">	wLabels:	Does data include labels or not</span></span><br><span class="line"><span class="string">	shuffle:	Shuffle data while before creates batches</span></span><br><span class="line"><span class="string">	label:		Log label to be used while logging</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	Returns</span></span><br><span class="line"><span class="string">	-------</span></span><br><span class="line"><span class="string">	losses:		Loss over the entire data</span></span><br><span class="line"><span class="string">	accuracies:	Overall Accuracy</span></span><br><span class="line"><span class="string">	y: 		Actual label</span></span><br><span class="line"><span class="string">	y_pred:		Predicted labels</span></span><br><span class="line"><span class="string">	logit_list:	Logit list for each bag in the data</span></span><br><span class="line"><span class="string">	y_actual_hot:	One hot represetnation of actual label for each bag in the data</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	"""</span></span><br><span class="line">	losses, accuracies, y_pred, y, logit_list, y_actual_hot = [], [], [], [], [], []</span><br><span class="line">	bag_cnt = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> step, batch <span class="keyword">in</span> enumerate(self.getBatches(data, shuffle)):</span><br><span class="line">		<span class="comment"># nn_out =&gt; logits &#125; =&gt; loss</span></span><br><span class="line">		<span class="comment">#           y</span></span><br><span class="line">		<span class="comment"># nn_out =&gt; y_pred   &#125; =&gt; accuracy</span></span><br><span class="line">		<span class="comment">#           y_actual</span></span><br><span class="line">		loss, logits, accuracy = sess.run([self.loss, self.logits, self.accuracy], feed_dict = self.create_feed_dict(batch, split=<span class="string">'test'</span>))</span><br><span class="line">		losses.    append(loss)</span><br><span class="line">		accuracies.append(accuracy)</span><br><span class="line"></span><br><span class="line">		<span class="comment"># <span class="doctag">TODO:</span> 只预测一个标签, 对真实标签也是只取第一个</span></span><br><span class="line">		pred_ind      = logits.argmax(axis=<span class="number">1</span>)  <span class="comment"># (batch, )</span></span><br><span class="line">		y_pred += pred_ind.tolist()  <span class="comment"># (batch, )</span></span><br><span class="line"></span><br><span class="line">		y_actual_hot += self.getOneHot(batch[<span class="string">'Y'</span>], self.num_class).tolist()  <span class="comment"># 保留所有 gold label</span></span><br><span class="line">		y 	     += np.argmax(self.getOneHot(batch[<span class="string">'Y'</span>], self.num_class), <span class="number">1</span>).tolist()  <span class="comment"># 只取第一个 gold label</span></span><br><span class="line"></span><br><span class="line">		logit_list += logits.tolist()</span><br><span class="line">		bag_cnt      += len(batch[<span class="string">'sent_num'</span>])</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> step % <span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">			self.logger.info(<span class="string">'&#123;&#125; (&#123;&#125;/&#123;&#125;):\t&#123;:.5&#125;\t&#123;:.5&#125;\t&#123;&#125;'</span>.format(label, bag_cnt, len(self.data[<span class="string">'test'</span>]), np.mean(accuracies)*<span class="number">100</span>, np.mean(losses), self.p.name))</span><br><span class="line"></span><br><span class="line">	self.logger.info(<span class="string">'Test Accuracy: &#123;&#125;'</span>.format(accuracy))</span><br><span class="line">	<span class="keyword">return</span> np.mean(losses), np.mean(accuracies)*<span class="number">100</span>, y, y_pred, logit_list, y_actual_hot</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2021/01/03/PR曲线横纵坐标轴的数据来源/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/01/03/matplotlib-plot/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/01/03/matplotlib-plot/" class="post-title-link" itemprop="url">matplotlib.plot()</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-01-03 21:09:15" itemprop="dateModified" datetime="2021-01-03T21:09:15+08:00">2021-01-03</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/01/03/matplotlib-plot/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/03/matplotlib-plot/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>alpha</td>
+<td>float</td>
+</tr>
+<tr>
+<td>animated</td>
+<td>[True \</td>
+<td>False]</td>
+</tr>
+<tr>
+<td>antialiased or aa</td>
+<td>[True \</td>
+<td>False]</td>
+</tr>
+<tr>
+<td>clip_box</td>
+<td>a matplotlib.transform.Bbox instance</td>
+</tr>
+<tr>
+<td>clip_on</td>
+<td>[True \</td>
+<td>False]</td>
+</tr>
+<tr>
+<td>clip_path</td>
+<td>a Path instance and a Transform instance, a Patch</td>
+</tr>
+<tr>
+<td>color or c</td>
+<td>any matplotlib color</td>
+</tr>
+<tr>
+<td>contains</td>
+<td>the hit testing function</td>
+</tr>
+<tr>
+<td>dash_capstyle</td>
+<td>[<code>&#39;butt&#39;</code></td>
+<td><code>&#39;round&#39;</code></td>
+<td><code>&#39;projecting&#39;</code>]</td>
+</tr>
+<tr>
+<td>dash_joinstyle</td>
+<td>[<code>&#39;miter&#39;</code></td>
+<td><code>&#39;round&#39;</code></td>
+<td><code>&#39;bevel&#39;</code>]</td>
+</tr>
+<tr>
+<td>dashes</td>
+<td>sequence of on/off ink in points</td>
+</tr>
+<tr>
+<td>data</td>
+<td>(np.array xdata, np.array ydata)</td>
+</tr>
+<tr>
+<td>figure</td>
+<td>a matplotlib.figure.Figure instance</td>
+</tr>
+<tr>
+<td>label</td>
+<td>any string</td>
+</tr>
+<tr>
+<td>linestyle or ls</td>
+<td>[ <code>&#39;-&#39;</code></td>
+<td><code>&#39;--&#39;</code></td>
+<td><code>&#39;-.&#39;</code></td>
+<td><code>&#39;:&#39;</code></td>
+<td><code>&#39;steps&#39;</code> \</td>
+<td>…]</td>
+</tr>
+<tr>
+<td>linewidth or lw</td>
+<td>float value in points</td>
+</tr>
+<tr>
+<td>marker</td>
+<td>[ <code>&#39;+&#39;</code></td>
+<td><code>&#39;,&#39;</code></td>
+<td><code>&#39;.&#39;</code></td>
+<td><code>&#39;1&#39;</code></td>
+<td><code>&#39;2&#39;</code></td>
+<td><code>&#39;3&#39;</code></td>
+<td><code>&#39;4&#39;</code> ]</td>
+</tr>
+<tr>
+<td>markeredgecolor or mec</td>
+<td>any matplotlib color</td>
+</tr>
+<tr>
+<td>markeredgewidth or mew</td>
+<td>float value in points</td>
+</tr>
+<tr>
+<td>markerfacecolor or mfc</td>
+<td>any matplotlib color</td>
+</tr>
+<tr>
+<td>markersize or ms</td>
+<td>float</td>
+</tr>
+<tr>
+<td>markevery</td>
+<td>[ None \</td>
+<td>integer \</td>
+<td>(startind, stride) ]</td>
+</tr>
+<tr>
+<td>picker</td>
+<td>used in interactive line selection</td>
+</tr>
+<tr>
+<td>pickradius</td>
+<td>the line pick selection radius</td>
+</tr>
+<tr>
+<td>solid_capstyle</td>
+<td>[<code>&#39;butt&#39;</code></td>
+<td><code>&#39;round&#39;</code></td>
+<td><code>&#39;projecting&#39;</code>]</td>
+</tr>
+<tr>
+<td>solid_joinstyle</td>
+<td>[<code>&#39;miter&#39;</code></td>
+<td><code>&#39;round&#39;</code></td>
+<td><code>&#39;bevel&#39;</code>]</td>
+</tr>
+<tr>
+<td>transform</td>
+<td>a matplotlib.transforms.Transform instance</td>
+</tr>
+<tr>
+<td>visible</td>
+<td>[True \</td>
+<td>False]</td>
+</tr>
+<tr>
+<td>xdata</td>
+<td>np.array</td>
+</tr>
+<tr>
+<td>ydata</td>
+<td>np.array</td>
+</tr>
+<tr>
+<td>zorder</td>
+<td>any number</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/31/两个句子之间的注意力机制/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1893,385 +2424,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/24/用BERT计算语义相似度/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/24/用BERT计算语义相似度/" class="post-title-link" itemprop="url">用BERT计算语义相似度</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-27 16:57:44" itemprop="dateModified" datetime="2020-12-27T16:57:44+08:00">2020-12-27</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/Pretrained-Language-Model/" itemprop="url" rel="index"><span itemprop="name">Pretrained Language Model</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/24/用BERT计算语义相似度/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/24/用BERT计算语义相似度/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>最近在实验中需要计算句子之间的相似度，偶然看到了一篇文章，有以下说法：</p>
-<blockquote>
-<p>自2018年BERT惊艳众人之后，基于预训练模型对下游任务进行微调已成为炼丹的标配。然而近两年的研究却发现，没有经过微调，直接由BERT得到的句子表示在语义文本相似性方面明显薄弱，甚至会弱于GloVe得到的表示。此篇论文中首先从理论上探索了masked language model 跟语义相似性任务上的联系，并通过实验分析了BERT的句子表示，最后提出了BERT-Flow来解决上述问题。</p>
-</blockquote>
-<h1 id="为什么BERT的句子Embeddings表现弱？"><a href="#为什么BERT的句子Embeddings表现弱？" class="headerlink" title="为什么BERT的句子Embeddings表现弱？"></a>为什么BERT的句子Embeddings表现弱？</h1><font color="orange">由于Reimers等人之前已实验证明 context embeddings 取平均要优于[CLS] token的embedding。因而在文章中，**作者都以最后几层文本嵌入向量的平均值来作为BERT句子的表示向量**。</font>
-
-<p><a href="*https://arxiv.org/pdf/2011.05864.pdf*"><strong><em>On the Sentence Embeddings from Pre-trained Language Models</em></strong></a></p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/12/24/用BERT计算语义相似度/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/23/pip虚拟环境-使用virtualenv/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/23/pip虚拟环境-使用virtualenv/" class="post-title-link" itemprop="url">pip虚拟环境-使用virtualenv</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-23 22:24:43" itemprop="dateModified" datetime="2020-12-23T22:24:43+08:00">2020-12-23</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/23/pip虚拟环境-使用virtualenv/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/23/pip虚拟环境-使用virtualenv/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在开发Python应用程序的时候，系统安装的Python3只有一个版本：3.4。所有第三方的包都会被<code>pip</code>安装到Python3的<code>site-packages</code>目录下。</p>
-<p>如果我们要同时开发多个应用程序，那这些应用程序都会共用一个Python，就是安装在系统的Python 3。如果应用A需要jinja 2.7，而应用B需要jinja 2.6怎么办？</p>
-<p>这种情况下，每个应用可能需要各自拥有一套“独立”的Python运行环境。virtualenv就是用来为一个应用创建一套“隔离”的Python运行环境。</p>
-<p>首先，我们用<code>pip</code>安装virtualenv：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip3 install virtualenv</span><br></pre></td></tr></table></figure>
-<p>然后，假定我们要开发一个新的项目，需要一套独立的Python运行环境，可以这么做：
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/12/23/pip虚拟环境-使用virtualenv/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2320,7 +2472,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">182</span>
+                    <span class="site-state-item-count">184</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3292,7 +3444,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">448</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">451</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -3834,11 +3992,11 @@
   
     
       
+    
+      
+    
+      
         
-      
-    
-      
-    
       
     
       

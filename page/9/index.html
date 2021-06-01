@@ -415,6 +415,198 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/26/将GAN用于Domain-Adaption/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/12/26/将GAN用于Domain-Adaption/" class="post-title-link" itemprop="url">将GAN用于Domain Adaptation</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-27 17:20:33" itemprop="dateModified" datetime="2020-12-27T17:20:33+08:00">2020-12-27</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/" itemprop="url" rel="index"><span itemprop="name">Neural Networks</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Neural-Networks/GAN/" itemprop="url" rel="index"><span itemprop="name">GAN</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/12/26/将GAN用于Domain-Adaption/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/26/将GAN用于Domain-Adaption/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="SimGAN"><a href="#SimGAN" class="headerlink" title="SimGAN"></a>SimGAN</h1><p><img src="/images/blog/2020/DCGAN/simgan.png" alt></p>
+<p>理解：将输入的合成图片投入生成器中，首先编码压缩为向量，然后转置卷积，再复原为图片。然后用判别器区分图像是真实图片还是合成图片。最终目的是使判别器无法区分真实图片和合成图片。</p>
+<h2 id="关键点："><a href="#关键点：" class="headerlink" title="关键点："></a>关键点：</h2><ol>
+<li>输入生成器的是合成图片，不再是随机噪音（隐变量）</li>
+<li>添加损失$l_{reg} = || \phi(\widetilde{\mathrm{x}}) - \mathrm{x}||_1$，逐像素误差。使生成的图像保留标注信息。</li>
+</ol>
+<h2 id="生成器结构"><a href="#生成器结构" class="headerlink" title="生成器结构"></a>生成器结构</h2><p>以gaze的实验为例，refiner网络<img src="https://private.codecogs.com/gif.latex?R_%5Ctheta" alt="R_\theta">主体是残差结构，4个残差块(residual block)叠加，每个残差块中包含两个卷积层，卷积核大小3<em>3，输出64个特征图。最后的残差块接一个卷积核大小1</em>1的卷积层，输出一张特征图作为refined synthetic image，如下图所示：左侧为自己画的具体结构图，右侧为论文中残差模块的示意图。</p>
+<p>注意：看了一下代码，残差应该是和残差块输入进行了element-wise相加，因此有相同的通道数。所以在残差模块前必须将输入图像batch变换到64个channels。代码里是通过卷积核为3*3，无步幅(因此尺度不变)的卷积实现的，共64个卷积核，因此得到的特征图是64个。然后才输入到四个连续的残差块中。因此下图input后应更改为加入一个卷积层，然后再进入ResNet Block。</p>
+<p><img src="/images/blog/2020/DCGAN/simganrefiner.png" alt></p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/12/26/将GAN用于Domain-Adaption/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/24/用BERT计算语义相似度/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2107,192 +2299,6 @@ p_g = p_{real}</script><p>pg表示generate 生成数据的分布函数</p>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2020/12/12/TARE-debug-记录/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/12/12/TARE-debug-记录/" class="post-title-link" itemprop="url">TARE debug 记录</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-18 21:02:36" itemprop="dateModified" datetime="2020-12-18T21:02:36+08:00">2020-12-18</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2020/12/12/TARE-debug-记录/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/12/TARE-debug-记录/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="1-使用iter将DataLoader转化为迭代器"><a href="#1-使用iter将DataLoader转化为迭代器" class="headerlink" title="1. 使用iter将DataLoader转化为迭代器"></a>1. 使用iter将DataLoader转化为迭代器</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">loader = iter(train_loader)</span><br></pre></td></tr></table></figure>
-<p>内存超出，报错：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RuntimeError: [enforce fail at CPUAllocator.cpp:65] . DefaultCPUAllocator: can<span class="string">'t allocate memory: you tried to allocate 800000000000 bytes. Error code 12 (Cannot allocate memory)</span></span><br></pre></td></tr></table></figure>
-<p>原因是我在数据集长度上设为了 int(1e12) , 导致内存溢出。</p>
-<h1 id="2-模型的-train-或-eval-状态"><a href="#2-模型的-train-或-eval-状态" class="headerlink" title="2. 模型的 train 或 eval 状态"></a>2. 模型的 train 或 eval 状态</h1><p>想要查看模型的状态，使用：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(model.training)</span><br></pre></td></tr></table></figure>
-<p>当使用 model.eval() 设置模型为测试状态时，是否会将模型中的子模块自动设置为测试状态呢？(后来思考了一下，Linear() 就是 Module 子模块啊… 是我制杖了🙄)</p>
-<p>通过下面的代码测试:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">'======================='</span>)</span><br><span class="line">print(model.training)</span><br><span class="line">print(model.classifier.training)</span><br><span class="line">model.eval()</span><br><span class="line">print(model.training)</span><br><span class="line">print(model.classifier.training)</span><br><span class="line">print(<span class="string">'======================='</span>)</span><br></pre></td></tr></table></figure>
-<p>测试结果为True, True, False, False. 说明 Pytorch 是会自动递归对子模块进行对应设置的。
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2020/12/12/TARE-debug-记录/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2341,7 +2347,7 @@ p_g = p_{real}</script><p>pg表示generate 生成数据的分布函数</p>
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">184</span>
+                    <span class="site-state-item-count">185</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3319,7 +3325,15 @@ p_g = p_{real}</script><p>pg表示generate 生成数据的分布函数</p>
                     
                       
                     
-                    <span class="site-state-item-count">451</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">455</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -3865,9 +3879,9 @@ p_g = p_{real}</script><p>pg表示generate 生成数据的分布函数</p>
       
     
       
-        
-      
     
+      
+        
       
     
       

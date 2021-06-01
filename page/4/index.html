@@ -415,6 +415,202 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/03/28/unordered-map使用方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/03/28/unordered-map使用方法/" class="post-title-link" itemprop="url">unordered_map使用方法</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-03-29 00:08:16" itemprop="dateModified" datetime="2021-03-29T00:08:16+08:00">2021-03-29</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/Interview/" itemprop="url" rel="index"><span itemprop="name">Interview</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/03/28/unordered-map使用方法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/28/unordered-map使用方法/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>版权声明：本文为CSDN博主「Cypress1010」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a href="https://blog.csdn.net/Cypress1010/article/details/53669409" target="_blank" rel="noopener">https://blog.csdn.net/Cypress1010/article/details/53669409</a></p>
+</blockquote>
+<h2 id="unordered-map-无序映射"><a href="#unordered-map-无序映射" class="headerlink" title="unordered_map(无序映射)"></a>unordered_map(无序映射)</h2><p>对于map，前面已经提到过，其内部数据结构为红黑树，因此所有元素插入到map里面都会排好序，而且搜索过程为平衡二叉树搜索，因此时间复杂度为O(logN)。我们知道还有一种快速的搜索方法，那边是哈希(又名散列)，利用哈希函数，通过哈希值能快速的查找到所需元素。unordered_map便是采用这种数据结构实现，unordered _map与map的使用基本一样，都是key/value之间的映射，只是他们内部采用的数据结构不一样。</p>
+<blockquote>
+<p>由于unordered_map内部是用散列表来实现快速查找，因此其内部元素完全是一种无序状态。哈希表利用哈希函数，将关键字的哈希值放都一个桶(bucket)里面，具有相同哈希值的放入到同一个桶。</p>
+</blockquote>
+<h2 id="头文件：-include"><a href="#头文件：-include" class="headerlink" title="头文件：#include "></a>头文件：#include <unordered_map></unordered_map></h2><p>构造函数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="built_in">unordered_map</span>&lt;<span class="built_in">string</span>, <span class="built_in">string</span>&gt; stringmap;</span><br><span class="line"></span><br><span class="line">stringmap first;  <span class="comment">// empty</span></span><br><span class="line"><span class="function">stringmap <span class="title">second</span><span class="params">(&#123;&#123;<span class="string">"apple"</span>, <span class="string">"red"</span>&#125;,&#123;<span class="string">"lemon"</span>, <span class="string">"yellow"</span>&#125;&#125;)</span></span>;  <span class="comment">// init list</span></span><br><span class="line"><span class="function">stringmap <span class="title">third</span><span class="params">(&#123;&#123;<span class="string">"orange"</span>, <span class="string">"orange"</span>&#125;,&#123;<span class="string">"strawberry"</span>, <span class="string">"red"</span>&#125;&#125;)</span></span>;</span><br><span class="line"><span class="function">stringmap <span class="title">fourth</span><span class="params">(third)</span></span>;  <span class="comment">// copy</span></span><br><span class="line"><span class="function">stringmap <span class="title">fifth</span><span class="params">(fourth.begin(), fourth.end())</span></span>;  <span class="comment">// range</span></span><br></pre></td></tr></table></figure>
+<p>容器大小</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cout</span> &lt;&lt; second.empty() &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; second.size() &lt;&lt; <span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+<p>获取元素</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cout</span> &lt;&lt; second[<span class="number">0</span>] &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; second.at(<span class="number">0</span>) &lt;&lt; <span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+<p>元素查找</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">unordered_map</span>&lt;<span class="keyword">char</span>, <span class="keyword">int</span>&gt;::iterator it;</span><br><span class="line">it = second.find(<span class="string">"banana"</span>);  <span class="comment">//返回查找到元素的iterator，如未查找到，返回end()</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (it != second.end())</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; (*it).first &lt;&lt; <span class="string">" "</span> &lt;&lt; (*it).second &lt;&lt; <span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+<p>元素修改</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">unordered_map</span>&lt;<span class="keyword">char</span>, <span class="keyword">int</span>&gt; second;</span><br><span class="line">second[<span class="string">'a'</span>] = <span class="number">1</span>;</span><br><span class="line">second[<span class="string">'b'</span>] = <span class="number">2</span>;</span><br><span class="line">second[<span class="string">'c'</span>] = <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//删除元素</span></span><br><span class="line">second.erase ( second.begin() );      <span class="comment">// erasing by iterator</span></span><br><span class="line">second.erase (<span class="string">'a'</span>);             <span class="comment">// erasing by key</span></span><br><span class="line">second.erase ( second.find(<span class="string">'c'</span>), second.end() ); <span class="comment">// erasing by range</span></span><br><span class="line"></span><br><span class="line">second.clear();  <span class="comment">//清空</span></span><br><span class="line">second.swap(first);   <span class="comment">//互换</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; second.bucket_count() &lt;&lt; <span class="built_in">endl</span>;  <span class="comment">//返回桶的数量</span></span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; second.bucket_size() &lt;&lt; <span class="built_in">endl</span>;  <span class="comment">//返回每个桶的大小</span></span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; second.bucket(<span class="string">'a'</span>) &lt;&lt; <span class="built_in">endl</span>; <span class="comment">//返回当前元素在哪个桶</span></span><br><span class="line">second.rehash(<span class="number">10</span>);   <span class="comment">//设置桶的数量</span></span><br></pre></td></tr></table></figure>
+<h2 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h2><p>unordered_map内部使用哈希表进行存储与搜索。由于需要使用hash来进行映射，因此需要判断两个关键字是否相等，对于内部类型，可以直接进行判断，如果是用户自定义类型，则需要重载”==”运算符，指定如何判断两个关键字是否相等。以下是在网上摘录的一段代码，个人觉得比较详细的unordered_map的使用方法，这里只是其中一种使用方法：利用函数对象。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unordered_map&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="built_in">string</span> name;</span><br><span class="line">	<span class="keyword">int</span> age;</span><br><span class="line">	Person(<span class="built_in">string</span> name, <span class="keyword">int</span> age)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">this</span>-&gt;name =  name;</span><br><span class="line">		<span class="keyword">this</span>-&gt;age = age;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* the object of hash function */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">PersonHash</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">size_t</span> <span class="keyword">operator</span>()(<span class="keyword">const</span> Person&amp; per) <span class="keyword">const</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> hash&lt;<span class="built_in">string</span>&gt;()(per.name) ^ hash&lt;<span class="keyword">int</span>&gt;()(per.age);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* the object of compare */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">PersonCmp</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="keyword">const</span> Person&amp; personA, <span class="keyword">const</span> Person&amp; personB)</span> <span class="keyword">const</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> personA.name == personB.name &amp;&amp; personA.age == personB.age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* define the unordered_map type */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="built_in">unordered_map</span>&lt;Person, <span class="keyword">int</span>, PersonHash, PersonCmp&gt; umap;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	umap m;</span><br><span class="line">	<span class="function">Person <span class="title">p1</span><span class="params">(<span class="string">"Tom1"</span>,<span class="number">20</span>)</span></span>;</span><br><span class="line">	<span class="function">Person <span class="title">p2</span><span class="params">(<span class="string">"Tom2"</span>,<span class="number">22</span>)</span></span>;</span><br><span class="line">	<span class="function">Person <span class="title">p3</span><span class="params">(<span class="string">"Tom3"</span>,<span class="number">22</span>)</span></span>;</span><br><span class="line">	<span class="function">Person <span class="title">p4</span><span class="params">(<span class="string">"Tom4"</span>,<span class="number">23</span>)</span></span>;</span><br><span class="line">	<span class="function">Person <span class="title">p5</span><span class="params">(<span class="string">"Tom5"</span>,<span class="number">24</span>)</span></span>;</span><br><span class="line">	m.insert(umap::value_type(p3, <span class="number">100</span>));</span><br><span class="line">	m.insert(umap::value_type(p4, <span class="number">100</span>));</span><br><span class="line">	m.insert(umap::value_type(p5, <span class="number">100</span>));</span><br><span class="line">	m.insert(umap::value_type(p1, <span class="number">100</span>));</span><br><span class="line">	m.insert(umap::value_type(p2, <span class="number">100</span>));		</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* 这里打印出来的顺序于插入顺序并不相同，确切的说是完全无序的 */</span></span><br><span class="line">	<span class="keyword">for</span>(umap::iterator iter = m.begin(); iter != m.end(); iter++)</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; iter-&gt;first.name &lt;&lt; <span class="string">"\t"</span> &lt;&lt; iter-&gt;first.age &lt;&lt; <span class="built_in">endl</span>;		</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/03/28/cin-cin-getline-getline-的用法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2085,202 +2281,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/03/19/ELECTRA预训练模型/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2021/03/19/ELECTRA预训练模型/" class="post-title-link" itemprop="url">ELECTRA预训练模型</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2021-03-19 23:30:16" itemprop="dateModified" datetime="2021-03-19T23:30:16+08:00">2021-03-19</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NLP/Pretrained-Language-Model/" itemprop="url" rel="index"><span itemprop="name">Pretrained Language Model</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/03/19/ELECTRA预训练模型/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/19/ELECTRA预训练模型/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>ELECTRA详解：</p>
-<p><a href="https://zhuanlan.zhihu.com/p/118135466" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/118135466</a></p>
-</blockquote>
-<p><img src="https://pic4.zhimg.com/80/v2-93eaff2a96a1b7d2991417ba10aab35f_720w.jpg" alt></p>
-<h2 id="1-创新点"><a href="#1-创新点" class="headerlink" title="1. 创新点"></a>1. 创新点</h2><ul>
-<li>提出了新的模型预训练的框架，采用generator和discriminator的结合方式，但又不同于GAN</li>
-<li>将Masked Language Model的方式改为了replaced token detection</li>
-<li>因为masked language model 能有效地学习到context的信息，所以能很好地学习embedding，所以使用了weight sharing的方式将generator的embedding的信息共享给discriminator</li>
-<li>dicriminator 预测了generator输出的每个token是不是original的，从而高效地更新transformer的各个参数，使得模型的熟练速度加快</li>
-<li>该模型采用了小的generator以及discriminator的方式共同训练，并且采用了两者loss相加，使得discriminator的学习难度逐渐地提升，学习到更难的token（plausible tokens）</li>
-<li>模型在fine-tuning 的时候，丢弃generator，只使用discrinator</li>
-</ul>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2021/03/19/ELECTRA预训练模型/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2329,7 +2329,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">184</span>
+                    <span class="site-state-item-count">185</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3307,7 +3307,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">451</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">455</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -3867,51 +3875,9 @@
       
     
       
-        
-      
     
   
 
-  
-    
-      <script type="text/x-mathjax-config">
-  
-
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    TeX: {
-      
-      equationNumbers: {
-        autoNumber: 'AMS'
-      }
-    }
-  });
-  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
-    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
-      if (data.display) {
-        var next = data.script.nextSibling;
-        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
-        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
-      }
-    });
-  });
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for (i = 0; i < all.length; i += 1) {
-      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
-    }
-  });
-</script>
-<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-    
   
 
 

@@ -415,6 +415,177 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/04/13/基于K-Means的异常值检测/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dinosaur">
+      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
+      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hold the Torch">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/04/13/基于K-Means的异常值检测/" class="post-title-link" itemprop="url">基于K-Means的异常值检测</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+
+            
+              
+
+              
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-04-13 16:10:18" itemprop="dateModified" datetime="2021-04-13T16:10:18+08:00">2021-04-13</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2021/04/13/基于K-Means的异常值检测/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/04/13/基于K-Means的异常值检测/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#使用kmeans算法聚类消费行为特征数据</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="comment">#参数可视化</span></span><br><span class="line">inputfile = <span class="string">''</span> <span class="comment">#销量及其他属性数据</span></span><br><span class="line">k = <span class="number">3</span>  <span class="comment">#聚类类别</span></span><br><span class="line">threshold = <span class="number">2</span> <span class="comment">#离群点阈值</span></span><br><span class="line">iteration = <span class="number">500</span> <span class="comment">#聚类最大循环次数</span></span><br><span class="line">data = pd.read_excel(inputfile,index_col=<span class="string">"Id"</span>) <span class="comment">#读取数据</span></span><br><span class="line">data_zs = <span class="number">1.0</span>*(data-data.mean())/data.std() <span class="comment">#数据标准化</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line">model = KMeans(n_clusters=k,n_jobs=<span class="number">4</span>,max_iter=iteration) <span class="comment">#分为k类，并发数4</span></span><br><span class="line">model.fit(data_zs) <span class="comment">#开始聚类</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#标准化数据及其类别</span></span><br><span class="line">r = pd.concat([data_zs,pd.Series(model.labels_,index=data.index)],axis=<span class="number">1</span>)</span><br><span class="line">r.columns = list(data.columns)+[<span class="string">"聚类类别"</span>] <span class="comment">#重命名表头</span></span><br><span class="line"></span><br><span class="line">norm = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(k):<span class="comment">#逐一处理</span></span><br><span class="line">    norm_tmp =r[[<span class="string">'R'</span>,<span class="string">'F'</span>,<span class="string">'M'</span>]][r[<span class="string">'聚类类别'</span>]==i]-model.cluster_centers_[i]</span><br><span class="line">    norm_tmp = norm_tmp.apply(np.linalg.norm,axis=<span class="number">1</span>) <span class="comment">#求出绝对距离</span></span><br><span class="line">    norm.append(norm_tmp/norm_tmp.median()) <span class="comment">#求相对距离并添加</span></span><br><span class="line"></span><br><span class="line">norm = pd.concat(norm) <span class="comment">#合并</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">plt.rcParams[<span class="string">'font.sans-serif'</span>] = [<span class="string">'SimHei'</span>] <span class="comment">#用来正常显示中文标签</span></span><br><span class="line">plt.rcParams[<span class="string">'axes.unicode_minus'</span>] = <span class="literal">False</span> <span class="comment">#用来正常显示负号</span></span><br><span class="line">norm[norm &lt;= threshold].plot(style = <span class="string">'go'</span>) <span class="comment">#正常点</span></span><br><span class="line"></span><br><span class="line">discrete_points = norm[norm&gt;threshold] <span class="comment">#离群点</span></span><br><span class="line">discrete_points.plot(style=<span class="string">'ro'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(discrete_points)): <span class="comment">#离群点做标记</span></span><br><span class="line">  id = discrete_points.index[i]</span><br><span class="line">  n = discrete_points.iloc[i]</span><br><span class="line">  plt.annotate(<span class="string">'(%s, %0.2f)'</span>%(id, n), xy = (id, n), xytext = (id, n))</span><br><span class="line"></span><br><span class="line">plt.xlabel(<span class="string">u'编号'</span>)</span><br><span class="line">plt.ylabel(<span class="string">u'相对距离'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/04/11/剑指offer-丑数/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2309,188 +2480,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haokailong.top/2021/04/03/int-long-和-long-long-的区别/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dinosaur">
-      <meta itemprop="description" content="闪耀的群星，颠覆着黑夜">
-      <meta itemprop="image" content="/images/漫画脸1vs1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hold the Torch">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2021/04/03/int-long-和-long-long-的区别/" class="post-title-link" itemprop="url">int long 和 long long 的区别</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-
-            
-              
-
-              
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2021-04-03 17:11:03" itemprop="dateModified" datetime="2021-04-03T17:11:03+08:00">2021-04-03</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2021/04/03/int-long-和-long-long-的区别/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/04/03/int-long-和-long-long-的区别/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><h3 id="int"><a href="#int" class="headerlink" title="int"></a>int</h3><p>(4个字节，32位)</p>
-<p>unsigned int: 0 ~ 4294967295</p>
-<p>int: -2147483648 ~ 2147483647</p>
-<h3 id="int32"><a href="#int32" class="headerlink" title="_int32"></a>_int32</h3><p>(4个字节，32位)<br>unsigned _int32: 0～4294967295<br>_int32: -2147483648 ~ 2147483647</p>
-<h3 id="long"><a href="#long" class="headerlink" title="long"></a>long</h3><p>(4个字节，32位)<br>unsigned long: 0～4294967295<br>long: -2147483648～2147483647</p>
-<h3 id="long-long"><a href="#long-long" class="headerlink" title="long long"></a>long long</h3><p>(8个字节，64位)<br>unsigned long long：0~1844674407370955161<br>long long：-9223372036854775808~9223372036854775807</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2021/04/03/int-long-和-long-long-的区别/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2539,7 +2528,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">184</span>
+                    <span class="site-state-item-count">185</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3517,7 +3506,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">451</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">455</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -4065,9 +4062,9 @@
       
     
       
-        
-      
     
+      
+        
       
     
       

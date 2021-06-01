@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://haokailong.top/"/>
-  <updated>2021-05-30T12:28:12.769Z</updated>
+  <updated>2021-06-01T17:46:30.146Z</updated>
   <id>http://haokailong.top/</id>
   
   <author>
@@ -15,6 +15,48 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>在Windows上WSL安装使用brat</title>
+    <link href="http://haokailong.top/2021/06/01/%E5%9C%A8Windows%E4%B8%8AWSL%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8brat/"/>
+    <id>http://haokailong.top/2021/06/01/在Windows上WSL安装使用brat/</id>
+    <published>2021-06-01T13:13:12.000Z</published>
+    <updated>2021-06-01T17:46:30.146Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="1-安装WSL"><a href="#1-安装WSL" class="headerlink" title="1. 安装WSL"></a>1. 安装WSL</h2><p>按照windows的官方指南安装即可：</p><p><a href="https://docs.microsoft.com/zh-cn/windows/wsl/install-win10#manual-installation-steps" target="_blank" rel="noopener">https://docs.microsoft.com/zh-cn/windows/wsl/install-win10#manual-installation-steps</a></p><p>我选择了手动安装，按照步骤操作即可，安装下来没有遇到什么坑，很顺利~</p><h2 id="2-安装anaconda"><a href="#2-安装anaconda" class="headerlink" title="2. 安装anaconda"></a>2. 安装anaconda</h2><p>安装anaconda可以参考<a href="https://blog.csdn.net/lwgkzl/article/details/89329383" target="_blank" rel="noopener">CSDN博客</a>，首先用wget从国内源下载Anaconda*.sh安装包，然后执行<code>./Anaconda_xxx.sh</code>安装。</p><h3 id="2-1-设置环境变量"><a href="#2-1-设置环境变量" class="headerlink" title="2.1 设置环境变量"></a>2.1 设置环境变量</h3><p>在安装结束后，输入命令<code>conda</code>提示不存在该命令，原来是安装时没有自动配置好环境变量，手动配置一下，很简单：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/profile</span><br></pre></td></tr></table></figure><p>在最后添加下面一行：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=/mnt/f/ubuntu_anaconda/bin:<span class="variable">$PATH</span></span><br></pre></td></tr></table></figure><p>前面的路径是anaconda的安装位置下的bin文件夹。</p><p>然后重启终端即可。</p><a id="more"></a><h3 id="2-2-OSError"><a href="#2-2-OSError" class="headerlink" title="2.2 OSError"></a>2.2 OSError</h3><p>在使用<code>python standalone.py</code>的时候，报错：</p><blockquote><p>OSError: Operation not permitted</p></blockquote><p>具体的可以参考<a href="https://askubuntu.com/questions/1115564/wsl-ubuntu-distro-how-to-solve-operation-not-permitted-on-cloning-repository" target="_blank" rel="noopener">这里</a>，简单来说就是文件系统不匹配，windows原始的是NTFS，而linux是ext4，解决方法只需要两行命令，将brat文件夹对应的磁盘重新挂载就可以了：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo umount /mnt/f</span><br><span class="line">sudo mount -t drvfs F: /mnt/f -o metadata</span><br></pre></td></tr></table></figure><h2 id="3-设置外部访问"><a href="#3-设置外部访问" class="headerlink" title="3. 设置外部访问"></a>3. 设置外部访问</h2><p>在WSL上运行了brat，希望同一局域网下的其他主机也可以访问，需要更改windows防火墙，添加brat对应的端口，方法来源于<a href="https://websetnet.net/zh-CN/allow-server-running-inside-wsl-to-be-accessible-outside-windows-10%E4%B8%BB%E6%9C%BA/?__cf_chl_jschl_tk__=e6570500644706c8a37b509d208e4341a2102720-1622551627-0-AbstkafeSYS5bW_1v69BO1-9GhU9lMv8-OOA5AUM_TfUS7Geg4-t7peNCNPEDpx2nD0hq1681roFsbqv2Ta_EhvZ2KfXXB_EnsODwEPlirg19ymZowEM5MkzHizy8UgF_50xHAK2KY-kTALeirRput3Wi5OkPFi-abAjzWt3x9onMq2gZMCsLS2oDmqtk6RC3X2CsxPPrgDUUiAyuPSFcBj9hnGuMBUwBQ4gvMwMzMRfCDjWE3aow-XciTJ6TwAAgIhJy_AeRwvZ_7vp3xA7PLrpfGsov46rP8O7kPIrQZKwbG07R3-teYl6V-iMmxRlL-qI_twq6dtGbaq-5oJnyIADpl9uzbORM3dMQpGhXRH27QUKj0rgUPbs2qBoKLnBwk5plRkrD1pPGGeN1e_10iWXn8sj6y7g8ldTtEhwEuhBD-JnOb5HLtc9kreuC-_sI7wjZuB5ix7cTHjb2xZy8jqlOZHVgBOmvemBr9UBN0ikJBk27_fw2Ged6RPsEWhIMeIjoQGZ8CafvLQTTSl0JBM" target="_blank" rel="noopener">论坛</a>，按照该方法，添加自己指定的端口。</p><p>然后，由于WSL的ip与宿主机的ip不同，需要通过netsh进行转发，也就是把发送到宿主机指定端口的包转发到WSL虚拟机上面，这里的命令是：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netsh interface portproxy add v4tov4 listenport=8890 connectaddress=172.18.29.217 connectport=8890 listenaddress=* protocol=tcp</span><br></pre></td></tr></table></figure><p>这一步更详细的解释可以参考<a href="https://zhuanlan.zhihu.com/p/123350158" target="_blank" rel="noopener">知乎</a></p><h2 id="4-补充"><a href="#4-补充" class="headerlink" title="4. 补充"></a>4. 补充</h2><p>参考：<a href="https://lengthmin.me/posts/wsl2-network-tricks/" target="_blank" rel="noopener">https://lengthmin.me/posts/wsl2-network-tricks/</a></p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 获取 Windows 和 WSL2 的 ip</span></span><br><span class="line"><span class="variable">$winip</span> = bash.exe -c <span class="string">"ip route | grep default | awk '&#123;print `$3&#125;'"</span></span><br><span class="line"><span class="variable">$wslip</span> = bash.exe -c <span class="string">"hostname -I | awk '&#123;print `$1&#125;'"</span></span><br><span class="line"><span class="variable">$found1</span> = <span class="variable">$winip</span> <span class="nomarkup">-match</span> <span class="string">'\d&#123;1,3&#125;\.\d&#123;1,3&#125;\.\d&#123;1,3&#125;\.\d&#123;1,3&#125;'</span>;</span><br><span class="line"><span class="variable">$found2</span> = <span class="variable">$wslip</span> <span class="nomarkup">-match</span> <span class="string">'\d&#123;1,3&#125;\.\d&#123;1,3&#125;\.\d&#123;1,3&#125;\.\d&#123;1,3&#125;'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>( !(<span class="variable">$found1</span> -and <span class="variable">$found2</span>) )&#123;</span><br><span class="line">  <span class="comment"># 如果没找到 wsl 的 ip, 就退出执行</span></span><br><span class="line">  echo <span class="string">"The Script Exited, the ip address of WSL 2 cannot be found"</span>;</span><br><span class="line">  <span class="keyword">exit</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 你需要映射到局域网中端口</span></span><br><span class="line"><span class="variable">$ports</span>=@(<span class="number">80</span>,<span class="number">443</span>,<span class="number">10000</span>,<span class="number">3000</span>,<span class="number">5000</span>,<span class="number">27701</span>,<span class="number">8080</span>,<span class="number">8890</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment"># 监听的 ip，这么写是可以来自局域网</span></span><br><span class="line"><span class="variable">$addr</span>=<span class="string">'0.0.0.0'</span>;</span><br><span class="line"><span class="comment"># 监听的端口，就是谁来访问自己</span></span><br><span class="line"><span class="variable">$ports_a</span> = <span class="variable">$ports</span> -join <span class="string">","</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 移除旧的防火墙规则</span></span><br><span class="line">iex <span class="string">"Remove-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock' "</span> | <span class="built_in">Out-Null</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 允许防火墙规则通过这些端口</span></span><br><span class="line">iex <span class="string">"New-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock' -Direction Outbound -LocalPort <span class="variable">$ports_a</span> -Action Allow -Protocol TCP"</span>  | <span class="built_in">Out-Null</span></span><br><span class="line">iex <span class="string">"New-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock' -Direction Inbound -LocalPort <span class="variable">$ports_a</span> -Action Allow -Protocol TCP"</span>  | <span class="built_in">Out-Null</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 portproxy 让 Windows 转发端口</span></span><br><span class="line"><span class="comment"># https://docs.microsoft.com/en-us/windows-server/networking/technologies/netsh/netsh-interface-portproxy</span></span><br><span class="line"><span class="keyword">for</span>( <span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> <span class="nomarkup">-lt</span> <span class="variable">$ports</span>.length; <span class="variable">$i</span>++ )&#123;</span><br><span class="line">  <span class="variable">$port</span> = <span class="variable">$ports</span>[<span class="variable">$i</span>];</span><br><span class="line">  iex <span class="string">"netsh interface portproxy delete v4tov4 listenport=<span class="variable">$port</span> listenaddress=<span class="variable">$addr</span>"</span>  | <span class="built_in">Out-Null</span></span><br><span class="line">  iex <span class="string">"netsh interface portproxy add v4tov4 listenport=<span class="variable">$port</span> listenaddress=<span class="variable">$addr</span> connectport=<span class="variable">$port</span> connectaddress=<span class="variable">$wslip</span>"</span>  | <span class="built_in">Out-Null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;1-安装WSL&quot;&gt;&lt;a href=&quot;#1-安装WSL&quot; class=&quot;headerlink&quot; title=&quot;1. 安装WSL&quot;&gt;&lt;/a&gt;1. 安装WSL&lt;/h2&gt;&lt;p&gt;按照windows的官方指南安装即可：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://docs.microsoft.com/zh-cn/windows/wsl/install-win10#manual-installation-steps&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://docs.microsoft.com/zh-cn/windows/wsl/install-win10#manual-installation-steps&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;我选择了手动安装，按照步骤操作即可，安装下来没有遇到什么坑，很顺利~&lt;/p&gt;
+&lt;h2 id=&quot;2-安装anaconda&quot;&gt;&lt;a href=&quot;#2-安装anaconda&quot; class=&quot;headerlink&quot; title=&quot;2. 安装anaconda&quot;&gt;&lt;/a&gt;2. 安装anaconda&lt;/h2&gt;&lt;p&gt;安装anaconda可以参考&lt;a href=&quot;https://blog.csdn.net/lwgkzl/article/details/89329383&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;CSDN博客&lt;/a&gt;，首先用wget从国内源下载Anaconda*.sh安装包，然后执行&lt;code&gt;./Anaconda_xxx.sh&lt;/code&gt;安装。&lt;/p&gt;
+&lt;h3 id=&quot;2-1-设置环境变量&quot;&gt;&lt;a href=&quot;#2-1-设置环境变量&quot; class=&quot;headerlink&quot; title=&quot;2.1 设置环境变量&quot;&gt;&lt;/a&gt;2.1 设置环境变量&lt;/h3&gt;&lt;p&gt;在安装结束后，输入命令&lt;code&gt;conda&lt;/code&gt;提示不存在该命令，原来是安装时没有自动配置好环境变量，手动配置一下，很简单：&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;sudo vim /etc/profile&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;在最后添加下面一行：&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;export&lt;/span&gt; PATH=/mnt/f/ubuntu_anaconda/bin:&lt;span class=&quot;variable&quot;&gt;$PATH&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;前面的路径是anaconda的安装位置下的bin文件夹。&lt;/p&gt;
+&lt;p&gt;然后重启终端即可。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Others" scheme="http://haokailong.top/categories/Others/"/>
+    
+      <category term="Tool" scheme="http://haokailong.top/categories/Others/Tool/"/>
+    
+    
+      <category term="linux" scheme="http://haokailong.top/tags/linux/"/>
+    
+      <category term="windows" scheme="http://haokailong.top/tags/windows/"/>
+    
+      <category term="ubuntu" scheme="http://haokailong.top/tags/ubuntu/"/>
+    
+      <category term="wsl" scheme="http://haokailong.top/tags/wsl/"/>
+    
+      <category term="wsl2" scheme="http://haokailong.top/tags/wsl2/"/>
+    
+  </entry>
   
   <entry>
     <title>搞懂七和弦</title>
@@ -707,44 +749,6 @@
       <category term="春招" scheme="http://haokailong.top/tags/%E6%98%A5%E6%8B%9B/"/>
     
       <category term="笔试" scheme="http://haokailong.top/tags/%E7%AC%94%E8%AF%95/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>int long 和 long long 的区别</title>
-    <link href="http://haokailong.top/2021/04/03/int-long-%E5%92%8C-long-long-%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
-    <id>http://haokailong.top/2021/04/03/int-long-和-long-long-的区别/</id>
-    <published>2021-04-03T08:56:35.000Z</published>
-    <updated>2021-04-03T09:11:03.274Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><h3 id="int"><a href="#int" class="headerlink" title="int"></a>int</h3><p>(4个字节，32位)</p><p>unsigned int: 0 ~ 4294967295</p><p>int: -2147483648 ~ 2147483647</p><h3 id="int32"><a href="#int32" class="headerlink" title="_int32"></a>_int32</h3><p>(4个字节，32位)<br>unsigned _int32: 0～4294967295<br>_int32: -2147483648 ~ 2147483647</p><h3 id="long"><a href="#long" class="headerlink" title="long"></a>long</h3><p>(4个字节，32位)<br>unsigned long: 0～4294967295<br>long: -2147483648～2147483647</p><h3 id="long-long"><a href="#long-long" class="headerlink" title="long long"></a>long long</h3><p>(8个字节，64位)<br>unsigned long long：0~1844674407370955161<br>long long：-9223372036854775808~9223372036854775807</p><a id="more"></a><h3 id="int64"><a href="#int64" class="headerlink" title="_int64"></a>_int64</h3><p>(8个字节，64位)<br>unsigned _int64：0~18446744073709551615<br>_int64：-9223372036854775808~9223372036854775807</p><h2 id="为什么有long和long-long"><a href="#为什么有long和long-long" class="headerlink" title="为什么有long和long long?"></a>为什么有long和long long?</h2><ul><li>早期的操作系统是16位系统</li></ul><p>int用两个字节表示，范围是-32768 ~ 32767</p><p>long用四个字节表示，范围是-2147483648 ~ 2147483647</p><ul><li>后来发展到32位操作系统</li></ul><p>int用四个字节表示，与long相同</p><ul><li>目前操作系统已经发展到64位操作系统，<strong>但因程序编译工艺的不同，两者表现出不同的差别</strong>:</li></ul><p>32位编译系统：int占四字节，与long相同</p><p>64位编译系统：int占四字节，long占八字节，long数据范围变为：$-2^{63} \sim 2^{63}-1$</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;区别&quot;&gt;&lt;a href=&quot;#区别&quot; class=&quot;headerlink&quot; title=&quot;区别&quot;&gt;&lt;/a&gt;区别&lt;/h2&gt;&lt;h3 id=&quot;int&quot;&gt;&lt;a href=&quot;#int&quot; class=&quot;headerlink&quot; title=&quot;int&quot;&gt;&lt;/a&gt;int&lt;/h3&gt;&lt;p&gt;(4个字节，32位)&lt;/p&gt;
-&lt;p&gt;unsigned int: 0 ~ 4294967295&lt;/p&gt;
-&lt;p&gt;int: -2147483648 ~ 2147483647&lt;/p&gt;
-&lt;h3 id=&quot;int32&quot;&gt;&lt;a href=&quot;#int32&quot; class=&quot;headerlink&quot; title=&quot;_int32&quot;&gt;&lt;/a&gt;_int32&lt;/h3&gt;&lt;p&gt;(4个字节，32位)&lt;br&gt;unsigned _int32: 0～4294967295&lt;br&gt;_int32: -2147483648 ~ 2147483647&lt;/p&gt;
-&lt;h3 id=&quot;long&quot;&gt;&lt;a href=&quot;#long&quot; class=&quot;headerlink&quot; title=&quot;long&quot;&gt;&lt;/a&gt;long&lt;/h3&gt;&lt;p&gt;(4个字节，32位)&lt;br&gt;unsigned long: 0～4294967295&lt;br&gt;long: -2147483648～2147483647&lt;/p&gt;
-&lt;h3 id=&quot;long-long&quot;&gt;&lt;a href=&quot;#long-long&quot; class=&quot;headerlink&quot; title=&quot;long long&quot;&gt;&lt;/a&gt;long long&lt;/h3&gt;&lt;p&gt;(8个字节，64位)&lt;br&gt;unsigned long long：0~1844674407370955161&lt;br&gt;long long：-9223372036854775808~9223372036854775807&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="C++" scheme="http://haokailong.top/categories/C/"/>
-    
-    
-      <category term="C++" scheme="http://haokailong.top/tags/C/"/>
-    
-      <category term="int" scheme="http://haokailong.top/tags/int/"/>
-    
-      <category term="long" scheme="http://haokailong.top/tags/long/"/>
-    
-      <category term="long long" scheme="http://haokailong.top/tags/long-long/"/>
-    
-      <category term="整型" scheme="http://haokailong.top/tags/%E6%95%B4%E5%9E%8B/"/>
-    
-      <category term="integer" scheme="http://haokailong.top/tags/integer/"/>
     
   </entry>
   
